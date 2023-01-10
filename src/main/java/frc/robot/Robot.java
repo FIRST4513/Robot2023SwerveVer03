@@ -42,35 +42,6 @@ public class Robot extends TimedRobot {
     public static Timer sysTimer = new Timer();
     public static String MAC = "";
 
-    // Intialize subsystems and run their setupDefaultCommand methods here
-    private void intializeSubsystems() {
-        // drivetrain = new DrivetrainSubSys();
-        swerve = new SwerveSubSys();
-        trajectories = new Trajectories();
-        elevator = new ElevatorSubSys();
-        pilotGamepad = new PilotGamepad();
-        telemetry = new RobotTelemetry();
-        slider = new SliderSubSys();
-
-        // Set Default Commands, this method should exist for each subsystem that has commands
-        //SwerveCmds.setupDefaultCommand();
-        ElevatorCmds.setupDefaultCommand();
-        PilotGamepadCmds.setupDefaultCommand();
-        GrabberCmds.setupDefaultCommand();
-        SliderCmds.setupDefaultCommand();
-        //TrajectoriesCmds.setupDefaultCommand();
-    }
-
-    public static void resetCommandsAndButtons() {
-        CommandScheduler.getInstance().cancelAll(); // Disable any currently running commands
-        CommandScheduler.getInstance().getActiveButtonLoop().clear();
-        LiveWindow.setEnabled(false); // Disable Live Window we don't need that data being sent
-        LiveWindow.disableAllTelemetry();
-
-        // Reset Config for all gamepads and other button bindings
-        pilotGamepad.resetConfig();
-    }
-
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -88,6 +59,25 @@ public class Robot extends TimedRobot {
         MAC = Network.getMACaddress();
         Shuffleboard.getTab("Robot"); // Makes the Robot tab the first tab on the Shuffleboard
         intializeSubsystems();
+    }
+
+    // Intialize subsystems and run their setupDefaultCommand methods here
+    private void intializeSubsystems() {
+        // drivetrain = new DrivetrainSubSys();
+        swerve = new SwerveSubSys();
+        trajectories = new Trajectories();
+        elevator = new ElevatorSubSys();
+        pilotGamepad = new PilotGamepad();
+        telemetry = new RobotTelemetry();
+        slider = new SliderSubSys();
+
+        // Set Default Commands, this method should exist for each subsystem that has commands
+        //SwerveCmds.setupDefaultCommand();
+        ElevatorCmds.setupDefaultCommand();
+        PilotGamepadCmds.setupDefaultCommand();
+        GrabberCmds.setupDefaultCommand();
+        SliderCmds.setupDefaultCommand();
+        //TrajectoriesCmds.setupDefaultCommand();
     }
 
     /**
@@ -167,4 +157,15 @@ public class Robot extends TimedRobot {
     public void simulationPeriodic() {
         // PhysicsSim.getInstance().run();
     }
+
+    public static void resetCommandsAndButtons() {
+        CommandScheduler.getInstance().cancelAll(); // Disable any currently running commands
+        CommandScheduler.getInstance().getActiveButtonLoop().clear();
+        LiveWindow.setEnabled(false); // Disable Live Window we don't need that data being sent
+        LiveWindow.disableAllTelemetry();
+
+        // Reset Config for all gamepads and other button bindings
+        pilotGamepad.resetConfig();
+    }
+
 }
