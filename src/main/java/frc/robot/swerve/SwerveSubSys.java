@@ -27,9 +27,6 @@ public class SwerveSubSys extends SubsystemBase {
         setName("Swerve");
         config = new SwerveConfig();
 
-        gyro = new Gyro();
-        RobotTelemetry.print("Gyro initilized and Swerve angles");
-
         mSwerveMods =
                 new SwerveModule[] {
                     new SwerveModule(0, config, SwerveConfig.FLMod0.config),
@@ -37,8 +34,12 @@ public class SwerveSubSys extends SubsystemBase {
                     new SwerveModule(2, config, SwerveConfig.BLMod2.config),
                     new SwerveModule(3, config, SwerveConfig.BRMod3.config)
                 };
+
+        gyro = new Gyro();
         odometry = new Odometry(this);
+        
         telemetry = new SwerveTelemetry(this);
+        RobotTelemetry.print("Gyro initilized and Swerve angles");
 
         // Set the initial module states to zero
         drive(0, 0, 0, true, false, new Translation2d());

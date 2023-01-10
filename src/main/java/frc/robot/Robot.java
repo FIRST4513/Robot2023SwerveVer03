@@ -14,7 +14,6 @@ import frc.robot.elevator.ElevatorSubSys;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.grabber.GrabberCmds;
 import frc.robot.grabber.GrabberSubSys;
-import frc.robot.onBoardIO.OnBoardIO;
 import frc.robot.pilotGamepad.PilotGamepad;
 import frc.robot.pilotGamepad.commands.PilotGamepadCmds;
 import frc.robot.slider.SliderCmds;
@@ -33,7 +32,6 @@ public class Robot extends TimedRobot {
     public static RobotTelemetry telemetry;
     public static SwerveSubSys swerve;
     public static Trajectories trajectories;
-    public static OnBoardIO onboardIO;
     public static PilotGamepad pilotGamepad;
     public static ElevatorSubSys elevator;
     public static GrabberSubSys grabber;
