@@ -2,7 +2,6 @@ package frc.robot.swerve.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.RobotTelemetry;
 
 // Uses the Pilot start/menu button to move on to the next method
 public class ConfirmCommand extends CommandBase {

@@ -4,9 +4,6 @@ package frc.robot.elevator;
 
 import edu.wpi.first.wpilibj.shuffleboard.*;
 
-import frc.robot.Robot;
-import frc.lib.telemetry.WidgetsAndLayouts;
-
 // The Shuffleboard Main tab.
 public class ElevatorTelemetry {
     private ElevatorSubSys elevator;
