@@ -33,10 +33,10 @@ public class SwerveTelemetry {
     }
 
     public void logModuleAbsolutePositions() {
-        for (SwerveModule mod : swerve.mSwerveMods) {
+        //for (SwerveModule mod : swerve.mSwerveMods) {
             //Robot.log.logger.recordOutput(
             //        "Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
-        }
+        //}
     }
 
     public ShuffleboardLayout moduleLayout(String name, int moduleNum, ShuffleboardTab tab) {
