@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
-import frc.robot.Robot;
 import java.util.Map;
 
 public class SwerveTelemetry {
@@ -48,27 +47,27 @@ public class SwerveTelemetry {
         SuppliedValueWidget<Double> mod0CancoderAngleWidget =
                 modLayout.addNumber(
                         "Cancoder Angle",
-                        () -> Robot.swerve.mSwerveMods[moduleNum].getAbsoluteAngle().getDegrees());
+                        () -> swerve.mSwerveMods[moduleNum].getAbsoluteAngle().getDegrees());
         mod0CancoderAngleWidget.withPosition(0, 0);
 
         // mod0 Integrated Angle
         SuppliedValueWidget<Double> mod0IntegratedAngleWidget =
                 modLayout.addNumber(
                         "Integrated Angle",
-                        () -> Robot.swerve.mSwerveMods[moduleNum].getFalconAngle());
+                        () -> swerve.mSwerveMods[moduleNum].getFalconAngle());
         mod0IntegratedAngleWidget.withPosition(0, 1);
 
         // mod0 Velocity
         SuppliedValueWidget<Double> mod0VelocityWidget =
                 modLayout.addNumber(
                         "Wheel Velocity",
-                        () -> Robot.swerve.mSwerveMods[moduleNum].getState().speedMetersPerSecond);
+                        () -> swerve.mSwerveMods[moduleNum].getState().speedMetersPerSecond);
         mod0VelocityWidget.withPosition(0, 2);
 
         // mod0 TargetAngle
         SuppliedValueWidget<Double> mod0TargetAngleWidget =
                 modLayout.addNumber(
-                        "Target Angle", () -> Robot.swerve.mSwerveMods[moduleNum].getTargetAngle());
+                        "Target Angle", () -> swerve.mSwerveMods[moduleNum].getTargetAngle());
         mod0TargetAngleWidget.withPosition(0, 3);
         return modLayout;
     }
