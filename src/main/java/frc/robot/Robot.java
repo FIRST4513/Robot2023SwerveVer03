@@ -19,6 +19,7 @@ import frc.robot.pilotGamepad.commands.PilotGamepadCmds;
 import frc.robot.slider.SliderCmds;
 import frc.robot.slider.SliderSubSys;
 import frc.robot.swerve.SwerveSubSys;
+import frc.robot.swerve.commands.SwerveCmds;
 import frc.robot.trajectories.Trajectories;
 
 /**
@@ -61,21 +62,20 @@ public class Robot extends TimedRobot {
 
     // Intialize subsystems and run their setupDefaultCommand methods here
     private void intializeSubsystems() {
-        // drivetrain = new DrivetrainSubSys();
         swerve = new SwerveSubSys();
         trajectories = new Trajectories();
         elevator = new ElevatorSubSys();
         pilotGamepad = new PilotGamepad();
+        grabber = new GrabberSubSys();
         telemetry = new RobotTelemetry();
         slider = new SliderSubSys();
 
         // Set Default Commands, this method should exist for each subsystem that has commands
-        //SwerveCmds.setupDefaultCommand();
+        SwerveCmds.setupDefaultCommand();
         ElevatorCmds.setupDefaultCommand();
         PilotGamepadCmds.setupDefaultCommand();
         GrabberCmds.setupDefaultCommand();
         SliderCmds.setupDefaultCommand();
-        //TrajectoriesCmds.setupDefaultCommand();
     }
 
     /**
