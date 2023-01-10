@@ -1,7 +1,6 @@
 package frc.lib.preferences;
 
 import frc.robot.RobotConfig;
-import frc.robot.RobotConfig.*;
 
 //Based on FRC#6328 software
 /**
