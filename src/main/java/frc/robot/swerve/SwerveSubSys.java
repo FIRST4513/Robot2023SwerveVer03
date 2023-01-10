@@ -52,6 +52,9 @@ public class SwerveSubSys extends SubsystemBase {
         telemetry.logModuleAbsolutePositions();
     }
 
+    // -------------------------------------------------------------------
+    // ----------------------  Swerve Drive Methods  ---------------------
+    // -------------------------------------------------------------------
     /**
      * Used to drive the swerve robot, should be called from commands that require swerve.
      *
@@ -62,6 +65,8 @@ public class SwerveSubSys extends SubsystemBase {
      * @param isOpenLoop If the robot should drive in open loop
      * @param centerOfRotationMeters The center of rotation in meters
      */
+
+     // This drive method used with DriveByJoystick command, Autonomous drive commands
     public void drive(
             double fwdPositive,
             double leftPositive,
@@ -72,8 +77,7 @@ public class SwerveSubSys extends SubsystemBase {
 
         ChassisSpeeds speeds;
         if (fieldRelative) {
-            speeds =
-                    ChassisSpeeds.fromFieldRelativeSpeeds(
+            speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                             fwdPositive, leftPositive, omegaRadiansPerSecond, getHeading());
         } else {
             speeds = new ChassisSpeeds(fwdPositive, leftPositive, omegaRadiansPerSecond);
@@ -91,12 +95,71 @@ public class SwerveSubSys extends SubsystemBase {
         }
     }
 
+     /**
+     * Used by SwerveFollowCommand in Auto, assumes closed loop control
+     *
+     * @param desiredStates Meters per second and radians per second
+     */
+    public void setModuleStates(SwerveModuleState[] desiredStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConfig.maxVelocity);
+
+        SwerveModDesiredStates = desiredStates;
+        for (SwerveModule mod : mSwerveMods) {
+            mod.setDesiredState(desiredStates[mod.moduleNumber], false);
+        }
+    }
+
+
+     /**
+     * Used to drive wheel speeds manually
+     *
+     * @param leftVolts +- 12 volots
+     * @param rightVolts +- 12 volots
+     */    
+    public void tankDriveVolts(double leftVolts, double rightVolts) {
+        mSwerveMods[0].setVoltage(leftVolts);
+        mSwerveMods[2].setVoltage(leftVolts);
+        mSwerveMods[1].setVoltage(rightVolts);
+        mSwerveMods[3].setVoltage(rightVolts);
+    }
+
+   /**
+     * Stop the drive and angle motor of each module And set desired states to 0 meters per second
+     * and current module angles
+     */
+    public void stop() {
+        SwerveModuleState[] states = new SwerveModuleState[4];
+        for (SwerveModule mod : mSwerveMods) {
+            mod.stop();
+            states[mod.moduleNumber] =
+                    new SwerveModuleState(0, Rotation2d.fromDegrees(mod.getTargetAngle()));
+        }
+        SwerveModDesiredStates = states;
+    }
+
+    /**
+     * Set both the drive and angle motor on each module to brake mode if enabled = true
+     *
+     * @param enabled true = brake mode, false = coast mode
+     */
+    public void setBrakeMode(boolean enabled) {
+        for (SwerveModule mod : mSwerveMods) {
+            mod.setBrakeMode(enabled);
+        }
+    }
+
+
     /** Reset AngleMotors to Absolute This is used to reset the angle motors to absolute position */
     public void resetSteeringToAbsolute() {
         for (SwerveModule mod : mSwerveMods) {
             mod.resetToAbsolute();
         }
     }
+
+
+    // -------------------------------------------------------------
+    // ----------------------  Odometry Calls  ---------------------
+    // -------------------------------------------------------------
 
     /**
      * Reset the Heading to any angle
@@ -138,44 +201,9 @@ public class SwerveSubSys extends SubsystemBase {
         return odometry.getTranslationMeters();
     }
 
-    /**
-     * Used by SwerveFollowCommand in Auto, assumes closed loop control
-     *
-     * @param desiredStates Meters per second and radians per second
-     */
-    public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConfig.maxVelocity);
-
-        SwerveModDesiredStates = desiredStates;
-        for (SwerveModule mod : mSwerveMods) {
-            mod.setDesiredState(desiredStates[mod.moduleNumber], false);
-        }
-    }
-
-    /**
-     * Set both the drive and angle motor on each module to brake mode if enabled = true
-     *
-     * @param enabled true = brake mode, false = coast mode
-     */
-    public void setBrakeMode(boolean enabled) {
-        for (SwerveModule mod : mSwerveMods) {
-            mod.setBrakeMode(enabled);
-        }
-    }
-
-    /**
-     * Stop the drive and angle motor of each module And set desired states to 0 meters per second
-     * and current module angles
-     */
-    public void stop() {
-        SwerveModuleState[] states = new SwerveModuleState[4];
-        for (SwerveModule mod : mSwerveMods) {
-            mod.stop();
-            states[mod.moduleNumber] =
-                    new SwerveModuleState(0, Rotation2d.fromDegrees(mod.getTargetAngle()));
-        }
-        SwerveModDesiredStates = states;
-    }
+    // -------------------------------------------------------------
+    // ----------------- Get Swerve Module States ------------------
+    // -------------------------------------------------------------
 
     /**
      * Gets the states of the modules from the modules directly, called once a loop
@@ -207,10 +235,5 @@ public class SwerveSubSys extends SubsystemBase {
         return positions;
     }
 
-    public void tankDriveVolts(double leftVolts, double rightVolts) {
-        mSwerveMods[0].setVoltage(leftVolts);
-        mSwerveMods[2].setVoltage(leftVolts);
-        mSwerveMods[1].setVoltage(rightVolts);
-        mSwerveMods[3].setVoltage(rightVolts);
-    }
+
 }
