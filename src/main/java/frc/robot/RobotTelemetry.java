@@ -35,11 +35,7 @@ public class RobotTelemetry extends TelemetrySubsystem {
     public static ComplexWidget m_autonPositionWidget;
     public static ComplexWidget m_autonColorWidget;
 
-
     // Alerts
-    private static Alert PracticeRobotAlert = new Alert("PRACTICE ROBOT", AlertType.INFO);
-    private static Alert CompetitionRobotAlert = new Alert("COMPETITION ROBOT", AlertType.INFO);
-    private static Alert SimRobotAlert = new Alert("SIM ROBOT", AlertType.INFO);
     private static Alert batteryAlert = new Alert("Low Battery < 12v", AlertType.WARNING);
     private static Alert FMSConnectedAlert = new Alert("FMS Connected", AlertType.INFO);
 

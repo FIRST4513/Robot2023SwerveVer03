@@ -17,12 +17,10 @@ import frc.robot.grabber.GrabberSubSys;
 import frc.robot.onBoardIO.OnBoardIO;
 import frc.robot.pilotGamepad.PilotGamepad;
 import frc.robot.pilotGamepad.commands.PilotGamepadCmds;
-//import frc.robot.pose.Pose;
 import frc.robot.slider.SliderCmds;
 import frc.robot.slider.SliderSubSys;
 import frc.robot.swerve.SwerveSubSys;
 import frc.robot.trajectories.Trajectories;
-import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -34,7 +32,6 @@ public class Robot extends TimedRobot {
     public static RobotConfig config;
     public static RobotTelemetry telemetry;
     public static SwerveSubSys swerve;
-    //public static Pose pose;
     public static Trajectories trajectories;
     public static OnBoardIO onboardIO;
     public static PilotGamepad pilotGamepad;
@@ -49,12 +46,10 @@ public class Robot extends TimedRobot {
     private void intializeSubsystems() {
         // drivetrain = new DrivetrainSubSys();
         swerve = new SwerveSubSys();
-        //pose = new Pose();
         trajectories = new Trajectories();
         elevator = new ElevatorSubSys();
         pilotGamepad = new PilotGamepad();
         telemetry = new RobotTelemetry();
-
         slider = new SliderSubSys();
 
         // Set Default Commands, this method should exist for each subsystem that has commands

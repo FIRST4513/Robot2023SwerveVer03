@@ -9,6 +9,8 @@ import frc.lib.telemetry.WidgetsAndLayouts;
 
 // The Shuffleboard Main tab.
 public class ElevatorTelemetry {
+    private ElevatorSubSys elevator;
+
     // ---------------------//
     // NetworkTableEntries //
 
@@ -21,8 +23,9 @@ public class ElevatorTelemetry {
 
     // --------------//
     // Constructor //
-    public ElevatorTelemetry() {
+    public ElevatorTelemetry(ElevatorSubSys s) {
         m_tab = Shuffleboard.getTab("Elevator");
+        elevator = s;
     }
 
     // ---------------------//
@@ -31,11 +34,11 @@ public class ElevatorTelemetry {
     // instances are made
     public void initialize() {
         m_tab.addNumber("Elev-Motor Pwr", 
-                        ()-> Robot.elevator.m_motor.get()).withPosition(0,0);
+                        ()-> elevator.m_motor.get()).withPosition(0,0);
         m_tab.addNumber("Elev Encoder Raw", 
-                        ()-> Robot.elevator.m_encoder.get()).withPosition(0,1);
+                        ()-> elevator.m_encoder.get()).withPosition(0,1);
         //m_tab.addNumber("Elev Encoder Height", 
-        //                ()-> Robot.elevator.m_encoder.get()).withPosition(0,1);
+        //                ()-> elevator.m_encoder.get()).withPosition(0,1);
     }
 
     // --------//

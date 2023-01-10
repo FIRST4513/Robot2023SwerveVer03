@@ -66,28 +66,6 @@ public class PilotGamepad extends Gamepad {
             -getDriveLeftPositive());
     }
 
-
-    // Return the angle created by the right stick in radians, 0 is up, pi/2 is left
-    // public double getRightStickAngle() {
-    //     return gamepad.rightStick.getDirectionRadians(
-    //             gamepad.rightStick.getY(),
-    //             gamepad.rightStick.getX());
-    // }
-
-    // // Return the angle created by the right stick in radians, 0 is up, pi/2 is left
-    // public double getRightStickAngle() {
-    //     return gamepad.rightStick.getDirectionRadians(
-    //             gamepad.rightStick.getY(), gamepad.rightStick.getX());
-    // }
-    // 	public static double getDriveY(){
-    // 		return throttleCurve.calculateMappedVal(driver.leftStick.getY());
-    // 	}
-
-    // 	public static double getDriveX(){
-    // 		return throttleCurve.calculateMappedVal(driver.leftStick.getX());
-    // 	}
-
-
     public void rumble(double intensity) {
         this.gamepad.setRumble(intensity, intensity);
      }

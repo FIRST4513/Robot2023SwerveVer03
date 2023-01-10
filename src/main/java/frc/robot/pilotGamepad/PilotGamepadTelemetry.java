@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import frc.lib.telemetry.CustomLayout;
 import frc.robot.Robot;
 
-public class GamepadPilotTelemetry {
+public class PilotGamepadTelemetry {
 
     //---------------------//
     // NetworkTableEntries //
@@ -26,7 +26,7 @@ public class GamepadPilotTelemetry {
 
     //--------------//
     // Constructor  //
-    public GamepadPilotTelemetry() {
+    public PilotGamepadTelemetry() {
         m_tab = Shuffleboard.getTab("Gamepad Pilot");
     }
 
@@ -35,9 +35,7 @@ public class GamepadPilotTelemetry {
     // Create all View Widgets, ones you can't edit, created after subsystem instances are made
     public void initialize() {
         driver = new gamepadLayout("Driver 0", m_tab, Robot.pilotGamepad);
-        //operator = new gamepadLayout("Operator 1", m_tab, Gamepads.operator);
         driver.initialize();
-        //operator.initialize();
         m_EnableWidget = m_tab.add("Update Enable", false).withWidget(BuiltInWidgets.kToggleButton).withPosition(5, 0);
     }
 
@@ -47,7 +45,6 @@ public class GamepadPilotTelemetry {
     public void update() {
         if (m_EnableWidget.getEntry().getBoolean(false)) {
             driver.update();
-            //operator.update();
         }
     }
 
