@@ -3,6 +3,7 @@ package frc.robot.pilotGamepad;
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
 import frc.robot.elevator.commands.ElevatorCmds;
+import frc.robot.slider.SliderCmds;
 
 /** Used to add buttons to the pilot gamepad and configure the joysticks */
 public class PilotGamepad extends Gamepad {
@@ -30,14 +31,27 @@ public class PilotGamepad extends Gamepad {
     }
 
     public void setupTeleopButtons() {
-        gamepad.aButton.whileTrue(ElevatorCmds.goToHeight(30));
+        //gamepad.aButton.whileTrue(ElevatorCmds.goToPIDPosCmd(30.0));
+        // Setup Elevator button Assignments
+
+        //final JoystickButton xboxButton1 = new JoystickButton(gamepad, XboxController.Button.kA.value);        
+        //xboxButton1.whileTrue(SliderCmds.sliderLeftCmd().withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+        gamepad.Dpad.Left.whileTrue(SliderCmds.sliderLeftCmd());
+        gamepad.Dpad.Right.whileTrue(SliderCmds.sliderRightCmd());
+        
+        gamepad.Dpad.Down.whileTrue(ElevatorCmds.lowerCmd());
+        gamepad.Dpad.Up.whileTrue(ElevatorCmds.raiseCmd());
+
+        // Reset Gyro/Encoders/Pose Data
+        //gamepad.selectButton.whenPressed(DrivetrainCmds.resetPoseCmd());
+
+        // Setup Grabber (Claw) button Assignments
+        //gamepad.leftBumper.whileTrue(GrabberCmds.grabberCloseCmd());
+        //gamepad.rightBumper.whileTrue(GrabberCmds.grabberOpenCmd());
     }
 
     public void setupDisabledButtons() {
-        //gamepad.aButton.whileTrue(LEDCommands.solidColor(Color.kGreen, "Green", 5, 5));
-        //gamepad.bButton.whileTrue(LEDCommands.blink(Color.kBlue, "Blink Blue", 10, 5));
-        //gamepad.xButton.whileTrue(LEDCommands.rainbow("Rainbow", 15, 5));
-        //gamepad.yButton.whileTrue(LEDCommands.snowfall("Snowfall", 20, 5));
     }
 
     public void setupTestButtons() {}

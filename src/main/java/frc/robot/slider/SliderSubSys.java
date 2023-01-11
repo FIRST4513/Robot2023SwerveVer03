@@ -1,22 +1,22 @@
 package frc.robot.slider;
 
-    import edu.wpi.first.wpilibj.Servo;
-    import edu.wpi.first.wpilibj2.command.SubsystemBase;
-    
-    public class SliderSubSys extends SubsystemBase {
-        public SliderConfig config;
-    
-        // Standard classes for controlling the slider
-        public final Servo m_motor;
-        public double sliderServoValue = config.kSliderServoCtr;
-        private boolean enabled;
-    
-        public SliderSubSys() {
-            config = new SliderConfig();
-            m_motor = new Servo(config.kMotorPort);
-            enabled = true;
-        }
-    
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class SliderSubSys extends SubsystemBase {
+    public SliderConfig config;
+
+    // Standard classes for controlling the slider
+    public final Servo m_motor;
+    public double sliderServoValue = config.kSliderServoCtr;
+    private boolean enabled;
+
+    public SliderSubSys() {
+        config = new SliderConfig();
+        m_motor = new Servo(config.kMotorPort);
+        enabled = true;
+    }
+
     // --------------------------------------------
     // ---------    Slider Methods    -------------
     // --------------------------------------------
