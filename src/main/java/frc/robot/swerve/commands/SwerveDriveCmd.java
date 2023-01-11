@@ -11,7 +11,7 @@ import frc.robot.swerve.SwerveSubSys;
 
 import java.util.function.DoubleSupplier;
 
-public class SwerveDrive extends CommandBase {
+public class SwerveDriveCmd extends CommandBase {
 
     private boolean fieldRelative;
     private boolean openLoop;
@@ -30,7 +30,7 @@ public class SwerveDrive extends CommandBase {
      * @param leftPositiveSupplier
      * @param fwdPositiveSupplier
      */
-    public SwerveDrive(
+    public SwerveDriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier,
@@ -47,7 +47,7 @@ public class SwerveDrive extends CommandBase {
         this.centerOfRotationMeters = centerOfRotationMeters;
     }
 
-    public SwerveDrive(
+    public SwerveDriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier,
@@ -62,7 +62,7 @@ public class SwerveDrive extends CommandBase {
                 new Translation2d());
     }
 
-    public SwerveDrive(
+    public SwerveDriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier,
@@ -76,7 +76,7 @@ public class SwerveDrive extends CommandBase {
                 new Translation2d());
     }
 
-    public SwerveDrive(
+    public SwerveDriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier) {

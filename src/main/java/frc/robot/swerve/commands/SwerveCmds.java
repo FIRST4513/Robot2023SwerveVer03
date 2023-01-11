@@ -12,9 +12,19 @@ public class SwerveCmds {
     }
 
     public static Command lockSwerve() {
-        return brakeMode().alongWith(new SetModulesToAngle(225, 135, 315, 45));
+        return brakeMode().alongWith(new SetModulesToAngleCmd(225, 135, 315, 45));
     }
 
+    public static Command testWheelFwdCmd() {
+        return brakeMode().alongWith(new SetModulesToAngleCmd(0, 0, 0, 0));
+    }
+
+    public static Command testWheelFwdLeftCmd() {
+        return brakeMode().alongWith(new SetModulesToAngleCmd(45, 45, 45, 45));
+    }
+    public static Command testWheelFwdRightCmd() {
+        return brakeMode().alongWith(new SetModulesToAngleCmd(-45, -45, -45, -45));
+    }
     public static Command brakeMode() {
         return new StartEndCommand(
                 () -> Robot.swerve.setBrakeMode(true), () -> Robot.swerve.setBrakeMode(false));

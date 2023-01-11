@@ -34,7 +34,7 @@ public class SwerveModule extends SubsystemBase {
                     SwerveConfig.driveKS, SwerveConfig.driveKV, SwerveConfig.driveKA);
 
     public SwerveModule(
-            int moduleNumber, SwerveConfig swerveConfig, SwerveModuleConfig moduleConfig) {
+        int moduleNumber, SwerveConfig swerveConfig, SwerveModuleConfig moduleConfig) {
         this.moduleNumber = moduleNumber;
         this.swerveConfig = swerveConfig;
         angleOffset = moduleConfig.angleOffset;
@@ -55,9 +55,9 @@ public class SwerveModule extends SubsystemBase {
 
     @Override
     public void periodic() {
-        mSwerveModState = getCANState();
-        mSwerveModPosition = getCANPosition();
-        mCANcoderAngle = getCANcoderAngle();
+        mSwerveModState = getCANState();        // Drive Mtr Vel & Angle Motor Angle
+        mSwerveModPosition = getCANPosition();  // Drive Mtr Dist & Angle Motor Angle
+        mCANcoderAngle = getCANcoderAngle();    // CanCoder Absolute Position
     }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {

@@ -5,11 +5,11 @@ import frc.robot.Robot;
 import frc.robot.RobotTelemetry;
 
 // Uses the Pilot start/menu button to move on to the next method
-public class ConfirmCommand extends CommandBase {
+public class ConfirmCmd extends CommandBase {
     private String text;
 
     /** Creates a new ConfirmCommand. */
-    public ConfirmCommand(String text) {
+    public ConfirmCmd(String text) {
         this.text = text;
     }
 

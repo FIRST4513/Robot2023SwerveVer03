@@ -10,16 +10,16 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.swerve.SwerveConfig;
 
-public class SetModulesToAngle extends CommandBase {
+public class SetModulesToAngleCmd extends CommandBase {
     SwerveModuleState[] swerveModuleStates;
     SwerveModuleState[] stopModuleStates;
 
-    public SetModulesToAngle(double angle) {
+    public SetModulesToAngleCmd(double angle) {
         this(angle, angle, angle, angle);
     }
 
     /** Creates a new LockSwerve. */
-    public SetModulesToAngle(double angle1, double angle2, double angle3, double angle4) {
+    public SetModulesToAngleCmd(double angle1, double angle2, double angle3, double angle4) {
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(Robot.swerve);
 
