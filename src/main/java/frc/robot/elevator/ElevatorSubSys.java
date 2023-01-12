@@ -81,6 +81,7 @@ public void elevHoldMtr(){
 
 // ------------ Lower Elevator ----------
 public void elevLower() {
+    System.out.println("************** Elevator Lower ***********");
     mCurrElevPwr = config.KLowerSpeedDefault;
     if (isLowerLmtReached()){  		
         stop();
@@ -95,6 +96,7 @@ public void elevLower() {
 
 // ------------ Raise Elevator ----------
 public void elevRaise() {
+    System.out.println("************** Elevator Raise ***********");
     mCurrElevPwr = config.KRaiseSpeedDefault;
     if (isUpperLmtReached()) {
         elevHoldMtr();
