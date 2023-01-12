@@ -3,7 +3,6 @@ package frc.robot.pilotGamepad;
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
 import frc.robot.elevator.commands.ElevatorCmds;
-import frc.robot.slider.SliderCmds;
 
 /** Used to add buttons to the pilot gamepad and configure the joysticks */
 public class PilotGamepad extends Gamepad {
@@ -36,19 +35,13 @@ public class PilotGamepad extends Gamepad {
 
         //final JoystickButton xboxButton1 = new JoystickButton(gamepad, XboxController.Button.kA.value);        
         //xboxButton1.whileTrue(SliderCmds.sliderLeftCmd().withInterruptBehavior(InterruptionBehavior.kCancelSelf));
-
-        gamepad.Dpad.Left.whileTrue(SliderCmds.sliderLeftCmd());
-        gamepad.Dpad.Right.whileTrue(SliderCmds.sliderRightCmd());
-        
+       
         gamepad.Dpad.Down.whileTrue(ElevatorCmds.lowerCmd());
         gamepad.Dpad.Up.whileTrue(ElevatorCmds.raiseCmd());
 
         // Reset Gyro/Encoders/Pose Data
         //gamepad.selectButton.whenPressed(DrivetrainCmds.resetPoseCmd());
 
-        // Setup Grabber (Claw) button Assignments
-        //gamepad.leftBumper.whileTrue(GrabberCmds.grabberCloseCmd());
-        //gamepad.rightBumper.whileTrue(GrabberCmds.grabberOpenCmd());
     }
 
     public void setupDisabledButtons() {

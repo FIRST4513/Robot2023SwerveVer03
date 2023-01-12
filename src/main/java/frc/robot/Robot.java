@@ -12,12 +12,8 @@ import frc.lib.util.Network;
 import frc.robot.auto.AutoSetup;
 import frc.robot.elevator.ElevatorSubSys;
 import frc.robot.elevator.commands.ElevatorCmds;
-import frc.robot.grabber.GrabberSubSys;
-import frc.robot.grabber.commands.GrabberCmds;
 import frc.robot.pilotGamepad.PilotGamepad;
 import frc.robot.pilotGamepad.commands.PilotGamepadCmds;
-import frc.robot.slider.SliderCmds;
-import frc.robot.slider.SliderSubSys;
 import frc.robot.swerve.SwerveSubSys;
 import frc.robot.swerve.commands.SwerveCmds;
 import frc.robot.trajectories.Trajectories;
@@ -35,8 +31,6 @@ public class Robot extends TimedRobot {
     public static Trajectories trajectories;
     public static PilotGamepad pilotGamepad;
     public static ElevatorSubSys elevator;
-    public static GrabberSubSys grabber;
-    public static SliderSubSys slider;
 
     public static Timer sysTimer = new Timer();
     public static String MAC = "";
@@ -66,16 +60,12 @@ public class Robot extends TimedRobot {
         trajectories = new Trajectories();
         elevator = new ElevatorSubSys();
         pilotGamepad = new PilotGamepad();
-        grabber = new GrabberSubSys();
         telemetry = new RobotTelemetry();
-        slider = new SliderSubSys();
 
         // Set Default Commands, this method should exist for each subsystem that has commands
         SwerveCmds.setupDefaultCommand();
         ElevatorCmds.setupDefaultCommand();
         PilotGamepadCmds.setupDefaultCommand();
-        GrabberCmds.setupDefaultCommand();
-        SliderCmds.setupDefaultCommand();
     }
 
     /**

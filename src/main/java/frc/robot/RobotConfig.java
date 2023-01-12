@@ -34,11 +34,7 @@ public final class RobotConfig {
         public final static int BLangleMotorID =     7;       // Can ID Talon SRX
         public final static int BRangleMotorID =     8;       // Can ID Talon SRX
 
-        public final static int elevatorMotor =             7;       // PWM Port 
-        public final static int grabberMotor =              9;       // PWM Port (Servo)
-        public final static int sliderMotor =              10;       // PWM Port (Servo)
-
-        public final int ledOutput =                 3;       // Not Used
+        public final static int elevatorMotor =      7;       // PWM Port 
     }
 
     public final class Encoders {
@@ -47,8 +43,8 @@ public final class RobotConfig {
         public final static int BLcanCoderID =       11;       // Cancorder CAN ID
         public final static int BRcanCoderID =       12;       // Cancorder CAN ID
 
-        public final static int elevMotorEncoderA =          4;   // DIO Port
-        public final static int elevMotorEncoderB =          5;   // DIO Port
+        public final static int elevMotorEncoderA =    4;   // DIO Port
+        public final static int elevMotorEncoderB =    5;   // DIO Port
     }
 
     public final class LimitSwitches {

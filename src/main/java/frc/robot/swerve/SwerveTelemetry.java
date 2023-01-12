@@ -18,6 +18,11 @@ public class SwerveTelemetry {
         tab.addNumber("Heading", () -> swerve.getHeading().getDegrees()).withPosition(0, 0);
         tab.addNumber("Odometry X", () -> swerve.getPoseMeters().getX()).withPosition(0, 1);
         tab.addNumber("Odometry Y", () -> swerve.getPoseMeters().getY()).withPosition(0, 2);
+
+        moduleLayout("Mod 0", 0, tab).withPosition(1, 0);
+        moduleLayout("Mod 1", 1, tab).withPosition(2, 0);
+        moduleLayout("Mod 2", 2, tab).withPosition(3, 0);
+        moduleLayout("Mod 3", 3, tab).withPosition(4, 0);
     }
 
     public void testMode() {
@@ -32,10 +37,10 @@ public class SwerveTelemetry {
     }
 
     public void logModuleAbsolutePositions() {
-        //for (SwerveModule mod : swerve.mSwerveMods) {
-            //Robot.log.logger.recordOutput(
-            //        "Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
-        //}
+        // for (SwerveModule mod : swerve.mSwerveMods) {
+        //      Robot.log.logger.recordOutput(
+        //            "Mod " + mod.moduleNumber + " Absolute", mod.getAbsoluteAngle().getDegrees());
+        // }
     }
 
     public ShuffleboardLayout moduleLayout(String name, int moduleNum, ShuffleboardTab tab) {
