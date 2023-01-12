@@ -48,8 +48,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         // Start the DataLogger and log DS values
-        DataLogManager.start();
-        DriverStation.startDataLog(DataLogManager.getLog());
+        // DataLogManager.start();
+        // DriverStation.startDataLog(DataLogManager.getLog());
 
         sysTimer.reset();			// System timer for Competition run
     	sysTimer.start(); 
