@@ -7,14 +7,14 @@ import edu.wpi.first.wpilibj.SPI;
 
 public class Gyro {
         // Gyro
-        // private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+        private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
     /**
      * Creates a new Gyro, which is a wrapper for the Pigeon IMU and stores an offset so we don't
      * have to directly zero the gyro
      */
     public Gyro() {
-        // gyro.reset();
+        gyro.reset();
     }
 
     /**
@@ -29,19 +29,18 @@ public class Gyro {
     } 
 
 
-    //public Rotation2d getGyroHeadingRotation2d() {
-    //    // this will return a Rotation2d object of the yaw value -180 to +180 degree
-    //    return Rotation2d.fromDegrees(getHeadingDegrees());
-    //}
+    public Rotation2d getGyroHeadingRotation2d() {
+        // this will return a Rotation2d object of the yaw value -180 to +180 degree
+        return Rotation2d.fromDegrees(getHeadingDegrees());
+    }
 
     public void zeroHeading() {
-        // gyro.reset();
+         gyro.reset();
     }
 
     public double getHeadingDegrees() {
         // This will return values from -180CW to +180CCW degrees of yaw
-        // return -Math.IEEEremainder(gyro.getAngle(), 360);
-        return 0;
+        return -Math.IEEEremainder(gyro.getAngle(), 360);
     }
 
 
