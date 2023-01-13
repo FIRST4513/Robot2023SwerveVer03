@@ -6,6 +6,7 @@ import frc.robot.elevator.commands.ElevatorCmds;
 
 /** Used to add buttons to the pilot gamepad and configure the joysticks */
 public class PilotGamepad extends Gamepad {
+    public final PilotGamepadTelemetry telemetry;
     public static ExpCurve forwardSpeedCurve =
             new ExpCurve(
                     PilotGamepadConfig.forwardSpeedExp,
@@ -27,6 +28,7 @@ public class PilotGamepad extends Gamepad {
 
     public PilotGamepad() {
         super("Pilot", PilotGamepadConfig.port);
+        telemetry = new PilotGamepadTelemetry(this);
     }
 
     public void setupTeleopButtons() {

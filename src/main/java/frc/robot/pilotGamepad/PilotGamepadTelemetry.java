@@ -11,7 +11,7 @@ import frc.lib.telemetry.CustomLayout;
 import frc.robot.Robot;
 
 public class PilotGamepadTelemetry {
-
+    private final PilotGamepad gamepad; 
     //---------------------//
     // NetworkTableEntries //
     //---------------------//
@@ -26,8 +26,9 @@ public class PilotGamepadTelemetry {
 
     //--------------//
     // Constructor  //
-    public PilotGamepadTelemetry() {
+    public PilotGamepadTelemetry(PilotGamepad gp) {
         m_tab = Shuffleboard.getTab("Gamepad Pilot");
+        gamepad = gp;
     }
 
     //---------------------//

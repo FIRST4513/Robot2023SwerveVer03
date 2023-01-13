@@ -49,12 +49,10 @@ public class ElevatorTelemetry {
     // ------------   Elevator Telemetry Constructor    --------------
     // ---------------------------------------------------------------
 
-    public ElevatorTelemetry(ElevatorSubSys elevator) {
+    public ElevatorTelemetry(ElevatorSubSys el) {
         // Inialize needed class objects
-        this.elevator = elevator;
-        
+        elevator = el;
         tab = Shuffleboard.getTab("Elevator");
-
         initialize();
     }
 
