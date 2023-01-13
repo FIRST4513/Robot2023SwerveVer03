@@ -100,7 +100,7 @@ public final class SwerveConfig {
         public static final int driveMotorID = Motors.FLdriveMotorID;
         public static final int angleMotorID = Motors.FLangleMotorID;
         public static final int canCoderID = Encoders.FLcanCoderID;
-        public static final double angleOffsetC = 2.54 + 180;
+        public static final double angleOffsetC = 143.4375 - 90;  // 2.54 + 180;
         public static final double angleOffsetP = 184.39;
         public static double angleOffset = angleOffsetC;
         public static final SwerveModuleConfig config =
@@ -114,7 +114,7 @@ public final class SwerveConfig {
         public static final int driveMotorID = Motors.FRdriveMotorID;
         public static final int angleMotorID = Motors.FRangleMotorID;
         public static final int canCoderID = Encoders.FRcanCoderID;
-        public static final double angleOffsetC = -91.31 + 180;
+        public static final double angleOffsetC = 30.5859 - 90;  // -91.31 + 180;
         public static final double angleOffsetP = 99;
         public static double angleOffset = angleOffsetC;
         public static final SwerveModuleConfig config =
@@ -128,7 +128,7 @@ public final class SwerveConfig {
         public static final int driveMotorID = Motors.BLdriveMotorID;
         public static final int angleMotorID = Motors.BLangleMotorID;
         public static final int canCoderID = Encoders.BLcanCoderID;
-        public static final double angleOffsetC = 172.4 + 180;
+        public static final double angleOffsetC = 288.8964 - 90;  // 172.4 + 180;
         public static final double angleOffsetP = 355;
         public static double angleOffset = angleOffsetC;
         public static final SwerveModuleConfig config =
@@ -142,7 +142,7 @@ public final class SwerveConfig {
         public static final int driveMotorID = Motors.BRdriveMotorID;
         public static final int angleMotorID = Motors.BRangleMotorID;
         public static final int canCoderID = Encoders.BRcanCoderID;
-        public static final double angleOffsetC = 170.59 - 180;
+        public static final double angleOffsetC = 322.4707 - 90;  // 170.59 - 180;
         public static final double angleOffsetP = 342;
         public static double angleOffset = angleOffsetC;
         public static final SwerveModuleConfig config =

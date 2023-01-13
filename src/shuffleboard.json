@@ -10,7 +10,23 @@
         "hgap": 16.0,
         "vgap": 16.0,
         "titleType": 0,
-        "tiles": {}
+        "tiles": {
+          "0,0": {
+            "size": [
+              2,
+              4
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_source0": "network_table:///SmartDashboard/Scheduler/Ids",
+              "_title": "Scheduler/Ids",
+              "_glyph": 149,
+              "_showGlyph": false,
+              "Layout/Label position": "BOTTOM",
+              "_children": []
+            }
+          }
+        }
       }
     },
     {
@@ -28,8 +44,8 @@
     }
   ],
   "windowGeometry": {
-    "x": 6.0,
-    "y": 0.0,
+    "x": 3.0,
+    "y": 3.0,
     "width": 1920.0,
     "height": 853.0
   }

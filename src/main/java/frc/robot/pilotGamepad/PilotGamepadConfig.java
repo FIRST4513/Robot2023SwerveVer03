@@ -8,7 +8,7 @@ public class PilotGamepadConfig {
 
 
     // forwardSpeed, sidewaysSpeed, rotation
-    public static final double forwardSpeedExp = 1.2;
+    public static final double forwardSpeedExp = 8;
     public static final double forwardSpeedScaler = -1.0;
     public static final double forwardSpeedDeadband = 0.15;
     public static final double sidewaysSpeedExp = forwardSpeedExp;
