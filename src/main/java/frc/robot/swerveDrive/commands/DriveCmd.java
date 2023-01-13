@@ -31,15 +31,42 @@ public class DriveCmd extends CommandBase {
      * @param fwdPositiveSupplier
      */
 
-    // This is called be the pilotGamepadCmds ie(DriveByJoystick)
-    // FieldRalatve assumed true, openloop assumed false
+    // -------------- Overloaded Constuctor -------------------
+    // openLoop assumed false, center of rotation assummed (0,0)
     public DriveCmd(
-        DoubleSupplier fwdPositiveSupplier,
-        DoubleSupplier leftPositiveSupplier,
-        DoubleSupplier ccwPositiveSupplier) {
-    this(fwdPositiveSupplier, leftPositiveSupplier, ccwPositiveSupplier, true, false);
-}
+            DoubleSupplier fwdPositiveSupplier,
+            DoubleSupplier leftPositiveSupplier,
+            DoubleSupplier ccwPositiveSupplier,
+            boolean fieldRelative) {
+        // call full constructor below
+        this(
+            fwdPositiveSupplier,
+            leftPositiveSupplier,
+            ccwPositiveSupplier,
+            fieldRelative,
+            false,
+            new Translation2d());
+    }
 
+    // -------------- Overloaded Constuctor -------------------
+    // center of rotation assummed (0,0)    
+    public DriveCmd(
+            DoubleSupplier fwdPositiveSupplier,
+            DoubleSupplier leftPositiveSupplier,
+            DoubleSupplier ccwPositiveSupplier,
+            boolean fieldRelative,
+            boolean openLoop) {
+        // call full constructor below
+        this(
+            fwdPositiveSupplier,
+            leftPositiveSupplier,
+            ccwPositiveSupplier,
+            fieldRelative,
+            openLoop,
+            new Translation2d());
+    }
+
+    // -------------- Main Full Constuctor ---------------
     public DriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
@@ -57,36 +84,18 @@ public class DriveCmd extends CommandBase {
         this.centerOfRotationMeters = centerOfRotationMeters;
     }
 
+
+    // -------------- Overloaded Constuctor -------------------
+    // fieldRelative assumed true
+    // openLoop assumed false, center of rotation assummed (0,0)
     public DriveCmd(
-            DoubleSupplier fwdPositiveSupplier,
-            DoubleSupplier leftPositiveSupplier,
-            DoubleSupplier ccwPositiveSupplier,
-            boolean fieldRelative,
-            boolean openLoop) {
-        this(
-                fwdPositiveSupplier,
-                leftPositiveSupplier,
-                ccwPositiveSupplier,
-                fieldRelative,
-                openLoop,
-                new Translation2d());
-    }
+        DoubleSupplier fwdPositiveSupplier,
+        DoubleSupplier leftPositiveSupplier,
+        DoubleSupplier ccwPositiveSupplier) {
+    this(fwdPositiveSupplier, leftPositiveSupplier, ccwPositiveSupplier, true, false);
+}
 
-    public DriveCmd(
-            DoubleSupplier fwdPositiveSupplier,
-            DoubleSupplier leftPositiveSupplier,
-            DoubleSupplier ccwPositiveSupplier,
-            boolean fieldRelative) {
-        this(
-                fwdPositiveSupplier,
-                leftPositiveSupplier,
-                ccwPositiveSupplier,
-                fieldRelative,
-                false,
-                new Translation2d());
-    }
-
-
+// -------------------- Command Methods --------------------
     public void intialize() {}
 
     @Override
@@ -95,6 +104,7 @@ public class DriveCmd extends CommandBase {
         double leftPositive = leftPositiveSupplier.getAsDouble();
         double ccwPositive = ccwPositiveSupplier.getAsDouble();
 
+        // this does the work - Drive wheels as needed
         swerve.drive(
                 fwdPositive,
                 leftPositive,

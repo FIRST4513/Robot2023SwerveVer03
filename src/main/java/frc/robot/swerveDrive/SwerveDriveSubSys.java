@@ -1,7 +1,6 @@
 // Created by 4513 - Circuit Breakers
 // Based on Code from Team3847 - 2023 Base
 // Based on Code from Team364 - BaseFalconSwerve
-// https://github.com/Team364/BaseFalconSwerve/tree/338c0278cb63714a617f1601a6b9648c64ee78d1
 
 package frc.robot.swerveDrive;
 
@@ -37,7 +36,6 @@ public class SwerveDriveSubSys extends SubsystemBase {
 
         gyro = new Gyro();
         odometry = new Odometry(this);
-        
         telemetry = new SwerveDriveTelemetry(this);
         RobotTelemetry.print("Gyro initilized and Swerve angles");
 
@@ -67,7 +65,7 @@ public class SwerveDriveSubSys extends SubsystemBase {
      * @param centerOfRotationMeters The center of rotation in meters
      */
 
-     // This drive method used with DriveByJoystick command, Autonomous drive commands
+     // This drive method used with DriveByJoystick command and Autonomous drive commands
     public void drive(
             double fwdPositive,
             double leftPositive,
@@ -76,6 +74,8 @@ public class SwerveDriveSubSys extends SubsystemBase {
             boolean isOpenLoop,
             Translation2d centerOfRotationMeters) {
 
+        // ------------------- Step 1 Set Chassis Speeds ----------------------
+        // mps (Meters Per Second) and rps (Radians Per Second)
         ChassisSpeeds speeds;
         if (fieldRelative) {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -84,13 +84,17 @@ public class SwerveDriveSubSys extends SubsystemBase {
             speeds = new ChassisSpeeds(fwdPositive, leftPositive, omegaRadiansPerSecond);
         }
 
+        // --------------- Step 2 Create Swerve Modules Desired States Array ---------------
+        // Wheel Velocity (mps) and Wheel Angle (radians) for each of the 4 swerve modules
         SwerveModDesiredStates =
                 SwerveDriveConfig.swerveKinematics.toSwerveModuleStates(speeds, centerOfRotationMeters);
 
+        // -------------------------- Step 3 Desaturate Wheel speeds -----------------------
         // LOOK INTO THE OTHER CONSTRUCTOR FOR desaturateWheelSpeeds to see if it is better
         SwerveDriveKinematics.desaturateWheelSpeeds(
                 SwerveModDesiredStates, SwerveDriveConfig.maxVelocity);
 
+        // ------------------ Step 4 Send Desrired Module states to wheel modules ----------------
         for (SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(SwerveModDesiredStates[mod.moduleNumber], isOpenLoop);
         }
@@ -137,6 +141,11 @@ public class SwerveDriveSubSys extends SubsystemBase {
         }
         SwerveModDesiredStates = states;
     }
+
+
+    // -------------------------------------------------------------
+    // ---------  Brake Mode & Reset Angle Motor Angle  ------------
+    // -------------------------------------------------------------
 
     /**
      * Set both the drive and angle motor on each module to brake mode if enabled = true

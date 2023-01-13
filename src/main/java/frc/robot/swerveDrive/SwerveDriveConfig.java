@@ -31,6 +31,7 @@ public final class SwerveDriveConfig {
     public static final double MK4i_L2_angleGearRatio = (50.0 / 14.0) * (60.0 / 10.0);
     public static final double angleGearRatio = MK4i_L2_angleGearRatio;
 
+    // -------- Kinematics --------
     public static final Translation2d frontLeftLocation =
             new Translation2d(wheelBase / 2.0, trackWidth / 2.0);
     public static final Translation2d frontRightLocation =
