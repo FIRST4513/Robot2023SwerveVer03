@@ -2,21 +2,21 @@
 // Based on Code from Team364 - BaseFalconSwerve
 // https://github.com/Team364/BaseFalconSwerve/tree/338c0278cb63714a617f1601a6b9648c64ee78d1
 
-package frc.robot.swerve.commands;
+package frc.robot.swerveDrive.commands;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.swerve.SwerveSubSys;
+import frc.robot.swerveDrive.SwerveDriveSubSys;
 
 import java.util.function.DoubleSupplier;
 
-public class SwerveDriveCmd extends CommandBase {
+public class DriveCmd extends CommandBase {
 
     private boolean fieldRelative;
     private boolean openLoop;
 
-    private SwerveSubSys swerve;
+    private SwerveDriveSubSys swerve;
     private DoubleSupplier fwdPositiveSupplier;
     private DoubleSupplier leftPositiveSupplier;
     private DoubleSupplier ccwPositiveSupplier;
@@ -30,7 +30,7 @@ public class SwerveDriveCmd extends CommandBase {
      * @param leftPositiveSupplier
      * @param fwdPositiveSupplier
      */
-    public SwerveDriveCmd(
+    public DriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier,
@@ -47,7 +47,7 @@ public class SwerveDriveCmd extends CommandBase {
         this.centerOfRotationMeters = centerOfRotationMeters;
     }
 
-    public SwerveDriveCmd(
+    public DriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier,
@@ -62,7 +62,7 @@ public class SwerveDriveCmd extends CommandBase {
                 new Translation2d());
     }
 
-    public SwerveDriveCmd(
+    public DriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier,
@@ -76,7 +76,7 @@ public class SwerveDriveCmd extends CommandBase {
                 new Translation2d());
     }
 
-    public SwerveDriveCmd(
+    public DriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier) {

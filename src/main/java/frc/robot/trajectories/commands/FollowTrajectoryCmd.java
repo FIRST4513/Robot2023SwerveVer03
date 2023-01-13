@@ -7,16 +7,16 @@ package frc.robot.trajectories.commands;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import frc.robot.Robot;
-import frc.robot.swerve.SwerveConfig;
+import frc.robot.swerveDrive.SwerveDriveConfig;
 
-public class FollowTrajectory extends PPSwerveControllerCommand {
+public class FollowTrajectoryCmd extends PPSwerveControllerCommand {
 
     /** Creates a new FollowTrajectory. */
-    public FollowTrajectory(PathPlannerTrajectory trajectory) {
+    public FollowTrajectoryCmd(PathPlannerTrajectory trajectory) {
         super(
                 trajectory,
                 Robot.swerve::getPoseMeters,
-                SwerveConfig.swerveKinematics,
+                SwerveDriveConfig.swerveKinematics,
                 Robot.trajectories.xController,
                 Robot.trajectories.yController,
                 Robot.trajectories.thetaController,

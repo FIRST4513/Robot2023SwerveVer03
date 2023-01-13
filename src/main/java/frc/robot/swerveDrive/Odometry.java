@@ -1,4 +1,4 @@
-package frc.robot.swerve;
+package frc.robot.swerveDrive;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -8,13 +8,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 public class Odometry {
 
     public SwerveDriveOdometry swerveOdometry;
-    private SwerveSubSys swerve;
+    private SwerveDriveSubSys swerve;
 
-    public Odometry(SwerveSubSys s) {
+    public Odometry(SwerveDriveSubSys s) {
         swerve = s;
         swerveOdometry =
                 new SwerveDriveOdometry(
-                        SwerveConfig.swerveKinematics,
+                        SwerveDriveConfig.swerveKinematics,
                         swerve.gyro.getRawYaw(),
                         swerve.getPositions());
     }

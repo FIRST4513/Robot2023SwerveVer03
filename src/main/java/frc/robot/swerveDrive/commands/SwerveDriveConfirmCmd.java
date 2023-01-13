@@ -1,15 +1,15 @@
-package frc.robot.swerve.commands;
+package frc.robot.swerveDrive.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.RobotTelemetry;
 
 // Uses the Pilot start/menu button to move on to the next method
-public class ConfirmCmd extends CommandBase {
+public class SwerveDriveConfirmCmd extends CommandBase {
     private String text;
 
     /** Creates a new ConfirmCommand. */
-    public ConfirmCmd(String text) {
+    public SwerveDriveConfirmCmd(String text) {
         this.text = text;
     }
 

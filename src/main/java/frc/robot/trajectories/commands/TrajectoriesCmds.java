@@ -6,7 +6,7 @@ import frc.robot.Robot;
 
 public class TrajectoriesCmds {
 
-    public static Command resetThetaController() {
+    public static Command resetThetaControllerCmd() {
         return new InstantCommand(() -> Robot.trajectories.resetTheta(), Robot.trajectories);
     }
 }

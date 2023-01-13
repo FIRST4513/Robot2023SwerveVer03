@@ -14,8 +14,8 @@ import frc.robot.elevator.ElevatorSubSys;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.pilotGamepad.PilotGamepad;
 import frc.robot.pilotGamepad.commands.PilotGamepadCmds;
-import frc.robot.swerve.SwerveSubSys;
-import frc.robot.swerve.commands.SwerveCmds;
+import frc.robot.swerveDrive.SwerveDriveSubSys;
+import frc.robot.swerveDrive.commands.SwerveDriveCmds;
 import frc.robot.trajectories.Trajectories;
 
 /**
@@ -27,7 +27,7 @@ import frc.robot.trajectories.Trajectories;
 public class Robot extends TimedRobot {
     public static RobotConfig config;
     public static RobotTelemetry telemetry;
-    public static SwerveSubSys swerve;
+    public static SwerveDriveSubSys swerve;
     public static Trajectories trajectories;
     public static PilotGamepad pilotGamepad;
     public static ElevatorSubSys elevator;
@@ -56,14 +56,14 @@ public class Robot extends TimedRobot {
 
     // Intialize subsystems and run their setupDefaultCommand methods here
     private void intializeSubsystems() {
-        swerve = new SwerveSubSys();
+        swerve = new SwerveDriveSubSys();
         trajectories = new Trajectories();
         elevator = new ElevatorSubSys();
         pilotGamepad = new PilotGamepad();
         telemetry = new RobotTelemetry();
 
         // Set Default Commands, this method should exist for each subsystem that has commands
-        SwerveCmds.setupDefaultCommand();
+        SwerveDriveCmds.setupDefaultCommand();
         ElevatorCmds.setupDefaultCommand();
         PilotGamepadCmds.setupDefaultCommand();
     }
