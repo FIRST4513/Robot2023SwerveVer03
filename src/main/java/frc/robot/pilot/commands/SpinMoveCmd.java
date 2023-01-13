@@ -1,4 +1,4 @@
-package frc.robot.pilotGamepad.commands;
+package frc.robot.pilot.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -10,7 +10,7 @@ import frc.robot.swerveDrive.SwerveDriveSubSys;
 
 import java.util.function.DoubleSupplier;
 
-public class SpinMove extends CommandBase {
+public class SpinMoveCmd extends CommandBase {
     private Translation2d translation;
     private boolean centerHasBeenSet = false;
 
@@ -21,7 +21,7 @@ public class SpinMove extends CommandBase {
     private Translation2d centerOfRotationMeters;
 
     /** Creates a new DodgeDrive. */
-    public SpinMove() {
+    public SpinMoveCmd() {
         swerve = Robot.swerve;
         centerOfRotationMeters = new Translation2d();
         fwdPositiveSupplier = Robot.pilotGamepad::getDriveFwdPositive;

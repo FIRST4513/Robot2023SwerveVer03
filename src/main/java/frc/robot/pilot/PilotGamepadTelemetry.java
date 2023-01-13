@@ -1,6 +1,6 @@
 //Created by Spectrum3847
 
-package frc.robot.pilotGamepad;
+package frc.robot.pilot;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;

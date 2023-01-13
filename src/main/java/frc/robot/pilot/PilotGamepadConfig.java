@@ -1,4 +1,4 @@
-package frc.robot.pilotGamepad;
+package frc.robot.pilot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 

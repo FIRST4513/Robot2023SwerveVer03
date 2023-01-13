@@ -1,9 +1,9 @@
-package frc.robot.pilotGamepad.commands;
+package frc.robot.pilot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
-import frc.robot.pilotGamepad.PilotGamepadConfig;
+import frc.robot.pilot.PilotGamepadConfig;
 import frc.robot.swerveDrive.commands.DriveCmd;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
@@ -23,22 +23,23 @@ public class PilotGamepadCmds {
     //}
 
     /** Field Oriented Drive */
-    public static Command pilotSwerveCmd() {
-        return new DriveCmd(
-                        () -> Robot.pilotGamepad.getDriveFwdPositive(),
-                        () -> Robot.pilotGamepad.getDriveLeftPositive(),
-                        () -> Robot.pilotGamepad.getDriveRotationCCWPositive())
-                .withName("PilotSwerve");
-    }
-
-    /** Robot Oriented Drive */
     public static Command fpvPilotSwerveCmd() {
         return new DriveCmd(
                         () -> Robot.pilotGamepad.getDriveFwdPositive(),
                         () -> Robot.pilotGamepad.getDriveLeftPositive(),
                         () -> Robot.pilotGamepad.getDriveRotationCCWPositive(),
-                        false)
+                        true)
                 .withName("fpvPilotSwerve");
+    }
+
+    /** Robot Oriented Drive */
+    public static Command rpvPilotSwerveCmd() {
+        return new DriveCmd(
+                        () -> Robot.pilotGamepad.getDriveFwdPositive(),
+                        () -> Robot.pilotGamepad.getDriveLeftPositive(),
+                        () -> Robot.pilotGamepad.getDriveRotationCCWPositive(),
+                        false)
+                .withName("rpvPilotSwerve");
     }
 
     public static Command snakeDriveCmd() {

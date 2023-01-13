@@ -1,4 +1,4 @@
-package frc.robot.pilotGamepad;
+package frc.robot.pilot;
 
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;

@@ -4,11 +4,11 @@ package frc.robot.swerveDrive.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.Robot;
-import frc.robot.pilotGamepad.commands.PilotGamepadCmds;
+import frc.robot.pilot.commands.PilotGamepadCmds;
 
 public class SwerveDriveCmds {
     public static void setupDefaultCommand() {
-        Robot.swerve.setDefaultCommand(PilotGamepadCmds.pilotSwerveCmd());
+        Robot.swerve.setDefaultCommand(PilotGamepadCmds.fpvPilotSwerveCmd());
     }
 
     public static Command lockSwerveCmd() {

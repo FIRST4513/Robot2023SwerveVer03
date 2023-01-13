@@ -30,6 +30,16 @@ public class DriveCmd extends CommandBase {
      * @param leftPositiveSupplier
      * @param fwdPositiveSupplier
      */
+
+    // This is called be the pilotGamepadCmds ie(DriveByJoystick)
+    // FieldRalatve assumed true, openloop assumed false
+    public DriveCmd(
+        DoubleSupplier fwdPositiveSupplier,
+        DoubleSupplier leftPositiveSupplier,
+        DoubleSupplier ccwPositiveSupplier) {
+    this(fwdPositiveSupplier, leftPositiveSupplier, ccwPositiveSupplier, true, false);
+}
+
     public DriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
@@ -76,12 +86,6 @@ public class DriveCmd extends CommandBase {
                 new Translation2d());
     }
 
-    public DriveCmd(
-            DoubleSupplier fwdPositiveSupplier,
-            DoubleSupplier leftPositiveSupplier,
-            DoubleSupplier ccwPositiveSupplier) {
-        this(fwdPositiveSupplier, leftPositiveSupplier, ccwPositiveSupplier, true, false);
-    }
 
     public void intialize() {}
 

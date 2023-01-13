@@ -1,7 +1,7 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation;
+//import edu.wpi.first.wpilibj.DataLogManager;
+//import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -12,8 +12,8 @@ import frc.lib.util.Network;
 import frc.robot.auto.AutoSetup;
 import frc.robot.elevator.ElevatorSubSys;
 import frc.robot.elevator.commands.ElevatorCmds;
-import frc.robot.pilotGamepad.PilotGamepad;
-import frc.robot.pilotGamepad.commands.PilotGamepadCmds;
+import frc.robot.pilot.PilotGamepad;
+import frc.robot.pilot.commands.PilotGamepadCmds;
 import frc.robot.swerveDrive.SwerveDriveSubSys;
 import frc.robot.swerveDrive.commands.SwerveDriveCmds;
 import frc.robot.trajectories.Trajectories;
