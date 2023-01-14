@@ -28,7 +28,8 @@ public final class SwerveDriveConfig {
 
     public static final double MK4_L2_driveGearRatio = (6.75 / 1.0);
     public static final double driveGearRatio = MK4_L2_driveGearRatio;
-    public static final double MK4i_L2_angleGearRatio = (50.0 / 14.0) * (60.0 / 10.0);
+
+    public static final double MK4i_L2_angleGearRatio = (150.0 / 7.0);  //(50.0 / 14.0) * (60.0 / 10.0);
     public static final double angleGearRatio = MK4i_L2_angleGearRatio;
 
     // -------- Kinematics --------
@@ -101,12 +102,12 @@ public final class SwerveDriveConfig {
         public static final int driveMotorID = Motors.FLdriveMotorID;
         public static final int angleMotorID = Motors.FLangleMotorID;
         public static final int canCoderID = Encoders.FLcanCoderID;
-        public static final double angleOffsetC = 143.4375 - 90;  // 2.54 + 180;
+        public static final double angleOffsetC = 143.4375;  // 2.54 + 180;
         public static final double angleOffsetP = 184.39;
         public static double angleOffset = angleOffsetC;
         public static final SwerveModuleConfig config =
                 new SwerveModuleConfig(
-                        driveMotorID, angleMotorID, canCoderID, angleOffset, angleOffsetP);
+                        moduleName, driveMotorID, angleMotorID, canCoderID, angleOffset, angleOffsetP);
     }
 
     /* Front Right Module - Module 1 */
@@ -115,12 +116,12 @@ public final class SwerveDriveConfig {
         public static final int driveMotorID = Motors.FRdriveMotorID;
         public static final int angleMotorID = Motors.FRangleMotorID;
         public static final int canCoderID = Encoders.FRcanCoderID;
-        public static final double angleOffsetC = 30.5859 - 90;  // -91.31 + 180;
+        public static final double angleOffsetC = 30.5859;  // -91.31 + 180;
         public static final double angleOffsetP = 99;
         public static double angleOffset = angleOffsetC;
         public static final SwerveModuleConfig config =
                 new SwerveModuleConfig(
-                        driveMotorID, angleMotorID, canCoderID, angleOffset, angleOffsetP);
+                        moduleName, driveMotorID, angleMotorID, canCoderID, angleOffset, angleOffsetP);
     }
 
     /* Back Left Module - Module 2 */
@@ -129,12 +130,12 @@ public final class SwerveDriveConfig {
         public static final int driveMotorID = Motors.BLdriveMotorID;
         public static final int angleMotorID = Motors.BLangleMotorID;
         public static final int canCoderID = Encoders.BLcanCoderID;
-        public static final double angleOffsetC = 288.8964 - 90;  // 172.4 + 180;
+        public static final double angleOffsetC = 288.8964;  // 172.4 + 180;
         public static final double angleOffsetP = 355;
         public static double angleOffset = angleOffsetC;
         public static final SwerveModuleConfig config =
                 new SwerveModuleConfig(
-                        driveMotorID, angleMotorID, canCoderID, angleOffset, angleOffsetP);
+                        moduleName, driveMotorID, angleMotorID, canCoderID, angleOffset, angleOffsetP);
     }
 
     /* Back Right Module - Module 3 */
@@ -143,18 +144,19 @@ public final class SwerveDriveConfig {
         public static final int driveMotorID = Motors.BRdriveMotorID;
         public static final int angleMotorID = Motors.BRangleMotorID;
         public static final int canCoderID = Encoders.BRcanCoderID;
-        public static final double angleOffsetC = 322.4707 - 90;  // 170.59 - 180;
+        public static final double angleOffsetC = 322.4707;  // 170.59 - 180;
         public static final double angleOffsetP = 342;
         public static double angleOffset = angleOffsetC;
         public static final SwerveModuleConfig config =
                 new SwerveModuleConfig(
-                        driveMotorID, angleMotorID, canCoderID, angleOffset, angleOffsetP);;
+                        moduleName, driveMotorID, angleMotorID, canCoderID, angleOffset, angleOffsetP);;
     }
 
     public TalonFXConfiguration swerveAngleFXConfig;
     public TalonFXConfiguration swerveDriveFXConfig;
     public CANCoderConfiguration swerveCanCoderConfig;
 
+    // ----------------------------
     public SwerveDriveConfig() {
         swerveAngleFXConfig = new TalonFXConfiguration();
         swerveDriveFXConfig = new TalonFXConfiguration();
@@ -200,6 +202,7 @@ public final class SwerveDriveConfig {
                 SensorInitializationStrategy.BootToAbsolutePosition;
         swerveCanCoderConfig.sensorTimeBase = SensorTimeBase.PerSecond;
     }
+    // --------------
 
     public static Translation2d[] moduleOffsets(double meters) {
         return moduleOffsets(new Translation2d(meters, meters));

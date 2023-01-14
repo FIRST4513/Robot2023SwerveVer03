@@ -19,6 +19,7 @@ import frc.lib.swerve.SwerveModuleConfig;
 import frc.lib.util.Conversions;
 
 public class SwerveModule extends SubsystemBase {
+    public String moduleName;
     public int moduleNumber;
     private double angleOffset;
     private WPI_TalonFX mAngleMotor;
@@ -36,10 +37,13 @@ public class SwerveModule extends SubsystemBase {
 
     // ------------- Constructor ------------
     public SwerveModule(
-        int moduleNumber, SwerveDriveConfig swerveConfig, SwerveModuleConfig moduleConfig) {
+                int moduleNumber, SwerveDriveConfig swerveConfig, SwerveModuleConfig moduleConfig) {
         this.moduleNumber = moduleNumber;
         this.swerveConfig = swerveConfig;
+
+        moduleName = moduleConfig.moduleName;
         angleOffset = moduleConfig.angleOffset;
+
         /* Angle Encoder Config */
         angleEncoder = new WPI_CANCoder(moduleConfig.cancoderID);
         configAngleEncoder();
@@ -72,12 +76,13 @@ public class SwerveModule extends SubsystemBase {
 
         // ---------------------- Step 1   Optimize Wheel Angle ----------------------
         // Wheel will only need to rotate a max of 90 degrees to achieve any direction
-        Rotation2d currentAngle = getState().angle;
+        Rotation2d currentAngle = getState().angle;  // from mSwerveModState
         desiredState = SwerveModuleState.optimize(desiredState, currentAngle);
 
         // ---------------------- Step 2   Correct Steer Angle ----------------------
         // Calculate the correct angle to steer the wheel and correct for CTRE controller
-        // not being continuous.   Why not use CanCoder (internal PID) ???????
+        // not being continuous.   
+        // Not using CanCoder so we can use then CTRE Internal Position PID
         Rotation2d desiredAngle = desiredState.angle;
         double delta = desiredAngle.getDegrees() - currentAngle.getDegrees();
         if (delta > 180) {
@@ -93,6 +98,7 @@ public class SwerveModule extends SubsystemBase {
         }
 
         // --------------------------- Step 4 Set Angle Motor  ----------------------------
+        // Uses internal PID to hold position
         mAngleMotor.set(
                 ControlMode.Position,
                 Conversions.degreesToFalcon(outputAngle, SwerveDriveConfig.angleGearRatio));
@@ -101,14 +107,14 @@ public class SwerveModule extends SubsystemBase {
         // --------------------------- Step 5 Set Drive Motor  ----------------------------
         // Calculate the velocity of the module and send to motor
         if (isOpenLoop) {
+            // MPS convert to -1 to +1 Value
             double percentOutput = desiredState.speedMetersPerSecond / SwerveDriveConfig.maxVelocity;
             mDriveMotor.set(ControlMode.PercentOutput, percentOutput);
         } else {
-            double velocity =
-                    Conversions.MPSToFalcon(
-                            desiredState.speedMetersPerSecond,
-                            SwerveDriveConfig.wheelCircumference,
-                            SwerveDriveConfig.driveGearRatio);
+            double velocity = Conversions.MPSToFalcon(
+                                    desiredState.speedMetersPerSecond,
+                                    SwerveDriveConfig.wheelCircumference,
+                                    SwerveDriveConfig.driveGearRatio);
             mDriveMotor.set(
                     ControlMode.Velocity,
                     velocity,
@@ -124,16 +130,6 @@ public class SwerveModule extends SubsystemBase {
 
     public void setVoltage(double voltage) {
         mDriveMotor.setVoltage(voltage);
-    }
-
-    // Initialize Angle Motor Encoder based on absolute CanCoder Value
-    // Called in configure Angle Motor at initial Constructor
-    public void resetToAbsolute() {
-        double offset = angleOffset;
-        double absolutePosition =
-                Conversions.degreesToFalcon(
-                        getAbsoluteAngle().getDegrees() - offset, SwerveDriveConfig.angleGearRatio);
-        mAngleMotor.setSelectedSensorPosition(absolutePosition);
     }
 
 
@@ -174,13 +170,24 @@ public class SwerveModule extends SubsystemBase {
         return mCANcoderAngle;
     }
 
+    // Only used for telemetry debug
+    public double getAbsoluteAngleWithOffset() {
+        return (mCANcoderAngle.getDegrees() - angleOffset);
+    }
+
     public double getTargetAngle() {
         return lastAngle;
     }
 
     public double getFalconAngle() {
+        // returns encoder.counts * (360.0 / (gearRatio * 2048.0));
+        // Each encoder count = 0.00823125 degrees
         return Conversions.falconToDegrees(
                 mAngleMotor.getSelectedSensorPosition(), SwerveDriveConfig.angleGearRatio);
+    }
+
+    public String getName() {
+        return moduleName;
     }
 
 
@@ -220,6 +227,16 @@ public class SwerveModule extends SubsystemBase {
         mAngleMotor.setInverted(SwerveDriveConfig.angleMotorInvert);
         mAngleMotor.setNeutralMode(SwerveDriveConfig.angleNeutralMode);
         resetToAbsolute();
+    }
+
+    // Initialize Angle Motor Encoder based on absolute CanCoder Value
+    // Called in configure Angle Motor at initial Constructor
+    public void resetToAbsolute() {
+        double offset = angleOffset;
+        double absolutePosition = Conversions.degreesToFalcon(
+                            getAbsoluteAngle().getDegrees() - offset,
+                            SwerveDriveConfig.angleGearRatio);
+        mAngleMotor.setSelectedSensorPosition(absolutePosition);
     }
 
     private void configDriveMotor() {
