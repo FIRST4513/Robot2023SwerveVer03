@@ -44,7 +44,7 @@ public class DriveCmd extends CommandBase {
             leftPositiveSupplier,
             ccwPositiveSupplier,
             fieldRelative,
-            false,
+            true,  // false,
             new Translation2d());
     }
 

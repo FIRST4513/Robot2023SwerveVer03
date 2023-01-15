@@ -3,6 +3,7 @@ package frc.robot.pilot;
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
 import frc.robot.elevator.commands.ElevatorCmds;
+import frc.robot.swerveDrive.commands.SwerveDriveCmds;
 
 /** Used to add buttons to the pilot gamepad and configure the joysticks */
 public class PilotGamepad extends Gamepad {
@@ -10,19 +11,19 @@ public class PilotGamepad extends Gamepad {
     public static ExpCurve forwardSpeedCurve =
             new ExpCurve(
                     PilotGamepadConfig.forwardSpeedExp,
-                    0,
+                    PilotGamepadConfig.forwardSpeedOffset,
                     PilotGamepadConfig.forwardSpeedScaler,
                     PilotGamepadConfig.forwardSpeedDeadband);
     public static ExpCurve sidewaysSpeedCurve =
             new ExpCurve(
                     PilotGamepadConfig.sidewaysSpeedExp,
-                    0,
+                    PilotGamepadConfig.sidewaysSpeedOffset,
                     PilotGamepadConfig.sidewaysSpeedScaler,
                     PilotGamepadConfig.sidewaysSpeedDeadband);
     public static ExpCurve rotationCurve =
             new ExpCurve(
                     PilotGamepadConfig.rotationSpeedExp,
-                    0,
+                    PilotGamepadConfig.rotationSpeedOffset,
                     PilotGamepadConfig.rotationSpeedScaler,
                     PilotGamepadConfig.rotationSpeedDeadband);
 
@@ -40,6 +41,7 @@ public class PilotGamepad extends Gamepad {
        
         gamepad.Dpad.Down.whileTrue(ElevatorCmds.lowerCmd());
         gamepad.Dpad.Up.whileTrue(ElevatorCmds.raiseCmd());
+        // gamepad.Dpad.Left.onTrue(null);  // same as the old "when pressed"
 
         // Reset Gyro/Encoders/Pose Data
         //gamepad.selectButton.whenPressed(DrivetrainCmds.resetPoseCmd());
@@ -49,14 +51,19 @@ public class PilotGamepad extends Gamepad {
     public void setupDisabledButtons() {
     }
 
-    public void setupTestButtons() {}
+    public void setupTestButtons() {
+        gamepad.aButton.whileTrue(SwerveDriveCmds.testWheelFwdCmd());
+        gamepad.bButton.whileTrue(SwerveDriveCmds.testWheelFwdLeftCmd());
+        gamepad.xButton.whileTrue(SwerveDriveCmds.testWheelFwdRightCmd());
+        gamepad.yButton.whileTrue(SwerveDriveCmds.lockSwerveCmd());
+    }
 
-    // forward/backward across the field
+    // forward/backward down the field
     public double getDriveFwdPositive() {
         return forwardSpeedCurve.calculateMappedVal(this.gamepad.leftStick.getY());
     }
 
-    // 
+    // side-to-side across the field
     public double getDriveLeftPositive() {
         return sidewaysSpeedCurve.calculateMappedVal(this.gamepad.rightStick.getX());
     }

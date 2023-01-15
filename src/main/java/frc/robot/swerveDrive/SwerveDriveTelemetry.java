@@ -15,14 +15,14 @@ public class SwerveDriveTelemetry {
     public SwerveDriveTelemetry(SwerveDriveSubSys swerve) {
         this.swerve = swerve;
         tab = Shuffleboard.getTab("Swerve");
-        tab.addNumber("Heading", () -> swerve.getHeading().getDegrees()).withPosition(0, 0);
-        tab.addNumber("Odometry X", () -> swerve.getPoseMeters().getX()).withPosition(0, 1);
-        tab.addNumber("Odometry Y", () -> swerve.getPoseMeters().getY()).withPosition(0, 2);
+        tab.addNumber("Heading", () -> swerve.getHeading().getDegrees()).withPosition(12, 0).withSize(2, 1);
+        tab.addNumber("Odometry X", () -> swerve.getPoseMeters().getX()).withPosition(12, 1).withSize(2, 1);
+        tab.addNumber("Odometry Y", () -> swerve.getPoseMeters().getY()).withPosition(12, 2).withSize(2, 1);
 
-        moduleLayout("Mod 0", 0, tab).withPosition(1, 0);
-        moduleLayout("Mod 1", 1, tab).withPosition(2, 0);
-        moduleLayout("Mod 2", 2, tab).withPosition(3, 0);
-        moduleLayout("Mod 3", 3, tab).withPosition(4, 0);
+        moduleLayout("Mod 0", 0, tab).withPosition(2, 0).withSize(3, 3);
+        moduleLayout("Mod 1", 1, tab).withPosition(5, 0).withSize(3, 3);
+        moduleLayout("Mod 2", 2, tab).withPosition(2, 3).withSize(3, 3);
+        moduleLayout("Mod 3", 3, tab).withPosition(5, 3).withSize(3, 3);
     }
 
     public void testMode() {
@@ -53,41 +53,41 @@ public class SwerveDriveTelemetry {
                 modLayout.addString(
                         "Name",
                         () -> swerve.mSwerveMods[moduleNum].getName());
-        modNameWidget.withPosition(0, 0);
+        modNameWidget.withPosition(0, 0).withSize(2, 2);
 
         // mod Cancoder Angle
         SuppliedValueWidget<Double> modCancoderAngleWidget =
                 modLayout.addNumber(
-                        "Cancoder Angle",
+                        "Cancoder A",
                         () -> swerve.mSwerveMods[moduleNum].getAbsoluteAngle().getDegrees());
-        modCancoderAngleWidget.withPosition(0, 1);
+        modCancoderAngleWidget.withPosition(0, 2).withSize(2, 2);
 
         // mod Cancoder Angle with Offset
         SuppliedValueWidget<Double> modCancoderAngleWOWidget =
         modLayout.addNumber(
-                "Cancoder Angle WO",
+                "Cancoder AWO",
                 () -> swerve.mSwerveMods[moduleNum].getAbsoluteAngleWithOffset());
-        modCancoderAngleWOWidget.withPosition(0, 2);
+        modCancoderAngleWOWidget.withPosition(0, 4).withSize(2, 2);
 
         // mod Integrated Angle
         SuppliedValueWidget<Double> modIntegratedAngleWidget =
                 modLayout.addNumber(
-                        "Integrated Angle",
+                        "Falcon Angle",
                         () -> swerve.mSwerveMods[moduleNum].getFalconAngle());
-        modIntegratedAngleWidget.withPosition(0, 3);
+        modIntegratedAngleWidget.withPosition(2, 0).withSize(2, 2);
 
         // mod Velocity
         SuppliedValueWidget<Double> modVelocityWidget =
                 modLayout.addNumber(
                         "Wheel Velocity",
                         () -> swerve.mSwerveMods[moduleNum].getState().speedMetersPerSecond);
-        modVelocityWidget.withPosition(0, 4);
+        modVelocityWidget.withPosition(2, 2).withSize(2, 2);
 
         // mod TargetAngle
         SuppliedValueWidget<Double> modTargetAngleWidget =
                 modLayout.addNumber(
                         "Target Angle", () -> swerve.mSwerveMods[moduleNum].getTargetAngle());
-        modTargetAngleWidget.withPosition(0, 5);
+        modTargetAngleWidget.withPosition(2, 4).withSize(2, 2);
         return modLayout;
     }
 }

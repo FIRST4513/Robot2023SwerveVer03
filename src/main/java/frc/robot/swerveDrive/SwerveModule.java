@@ -108,9 +108,12 @@ public class SwerveModule extends SubsystemBase {
         // Calculate the velocity of the module and send to motor
         if (isOpenLoop) {
             // MPS convert to -1 to +1 Value
+            // no PID, we just send a power amount
             double percentOutput = desiredState.speedMetersPerSecond / SwerveDriveConfig.maxVelocity;
             mDriveMotor.set(ControlMode.PercentOutput, percentOutput);
         } else {
+            // uses internal PID to maintain accurate velocity
+            // possible PID value or feedforward values causing errors?
             double velocity = Conversions.MPSToFalcon(
                                     desiredState.speedMetersPerSecond,
                                     SwerveDriveConfig.wheelCircumference,
@@ -172,7 +175,8 @@ public class SwerveModule extends SubsystemBase {
 
     // Only used for telemetry debug
     public double getAbsoluteAngleWithOffset() {
-        return (mCANcoderAngle.getDegrees() - angleOffset);
+        double angle = angleEncoder.getAbsolutePosition() - angleOffset;
+        return angle;
     }
 
     public double getTargetAngle() {
