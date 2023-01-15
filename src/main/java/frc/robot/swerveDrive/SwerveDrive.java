@@ -14,7 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotTelemetry;
 
-public class SwerveDriveSubSys extends SubsystemBase {
+public class SwerveDrive extends SubsystemBase {
     public SwerveDriveConfig config;
     protected Odometry odometry;
     public SwerveDriveTelemetry telemetry;
@@ -22,7 +22,7 @@ public class SwerveDriveSubSys extends SubsystemBase {
     private SwerveModuleState[] SwerveModDesiredStates;
     public Gyro gyro;
 
-    public SwerveDriveSubSys() {
+    public SwerveDrive() {
         setName("Swerve");
         config = new SwerveDriveConfig();
 
@@ -246,4 +246,14 @@ public class SwerveDriveSubSys extends SubsystemBase {
     }
 
 
+    /**
+     * Used by SwerveFollowCommand in Auto, assumes closed loop control
+     *
+     * @param desiredStates Meters per second and radians per second
+     */
+    public void resetFalconAngles() {
+        for (SwerveModule mod : mSwerveMods) {
+            mod.resetToAbsolute();
+        }
+    }
 }

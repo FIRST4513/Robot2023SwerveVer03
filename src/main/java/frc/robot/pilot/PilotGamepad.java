@@ -45,7 +45,6 @@ public class PilotGamepad extends Gamepad {
 
         // Reset Gyro/Encoders/Pose Data
         //gamepad.selectButton.whenPressed(DrivetrainCmds.resetPoseCmd());
-
     }
 
     public void setupDisabledButtons() {
@@ -56,6 +55,7 @@ public class PilotGamepad extends Gamepad {
         gamepad.bButton.whileTrue(SwerveDriveCmds.testWheelFwdLeftCmd());
         gamepad.xButton.whileTrue(SwerveDriveCmds.testWheelFwdRightCmd());
         gamepad.yButton.whileTrue(SwerveDriveCmds.lockSwerveCmd());
+        gamepad.startButton.whileTrue(SwerveDriveCmds.resetFalconAnglesCmd());
     }
 
     // forward/backward down the field

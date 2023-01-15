@@ -5,9 +5,10 @@
 package frc.robot.swerveDrive.commands;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.swerveDrive.SwerveDriveSubSys;
+import frc.robot.swerveDrive.SwerveDrive;
 
 import java.util.function.DoubleSupplier;
 
@@ -16,7 +17,7 @@ public class DriveCmd extends CommandBase {
     private boolean fieldRelative;
     private boolean openLoop;
 
-    private SwerveDriveSubSys swerve;
+    private SwerveDrive swerve;
     private DoubleSupplier fwdPositiveSupplier;
     private DoubleSupplier leftPositiveSupplier;
     private DoubleSupplier ccwPositiveSupplier;
@@ -100,18 +101,20 @@ public class DriveCmd extends CommandBase {
 
     @Override
     public void execute() {
+
         double fwdPositive = fwdPositiveSupplier.getAsDouble();
         double leftPositive = leftPositiveSupplier.getAsDouble();
         double ccwPositive = ccwPositiveSupplier.getAsDouble();
 
-        // this does the work - Drive wheels as needed
-        swerve.drive(
+        if (DriverStation.isTeleop()){
+            swerve.drive(
                 fwdPositive,
                 leftPositive,
                 ccwPositive,
                 fieldRelative,
                 openLoop,
                 centerOfRotationMeters);
+        }
     }
 
     public void end(boolean interrupted) {

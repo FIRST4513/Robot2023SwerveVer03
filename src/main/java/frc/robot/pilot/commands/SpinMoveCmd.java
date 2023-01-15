@@ -6,7 +6,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.swerveDrive.SwerveDriveConfig;
-import frc.robot.swerveDrive.SwerveDriveSubSys;
+import frc.robot.swerveDrive.SwerveDrive;
 
 import java.util.function.DoubleSupplier;
 
@@ -14,7 +14,7 @@ public class SpinMoveCmd extends CommandBase {
     private Translation2d translation;
     private boolean centerHasBeenSet = false;
 
-    private SwerveDriveSubSys swerve;
+    private SwerveDrive swerve;
     private DoubleSupplier leftPositiveSupplier;
     private DoubleSupplier fwdPositiveSupplier;
     private DoubleSupplier ccwPositiveSupplier;

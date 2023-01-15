@@ -29,7 +29,8 @@ public class SwerveModule extends SubsystemBase {
     private SwerveDriveConfig swerveConfig;
     private SwerveModuleState mSwerveModState = new SwerveModuleState();
     private SwerveModulePosition mSwerveModPosition = new SwerveModulePosition();
-    private Rotation2d mCANcoderAngle = new Rotation2d();
+    private Rotation2d mCANcoderAngle360CCW = new Rotation2d();    
+    private Rotation2d mCANcoderAngle180CCW = new Rotation2d();
 
     SimpleMotorFeedforward feedforward =
             new SimpleMotorFeedforward(
@@ -62,9 +63,9 @@ public class SwerveModule extends SubsystemBase {
     // ------------ Periodic Update of Wheel State Info. -----------
     @Override
     public void periodic() {
-        mSwerveModState = getCANState();        // Drive Mtr Vel (mps) & Angle Motor Angle (rad)
-        mSwerveModPosition = getCANPosition();  // Drive Mtr Dist & Angle Motor Angle
-        mCANcoderAngle = getCANcoderAngle();    // CanCoder Absolute Position
+        updateSwerveModuleState();              // Drive Mtr Vel (mps) & Angle Motor Angle
+        updateSwerveModulePosition();  // Drive Mtr Dist & Angle Motor Angle
+        updateCANcoderAngles();                 // CanCoder Angles (360 and 180 values)
     }
 
 
@@ -76,21 +77,35 @@ public class SwerveModule extends SubsystemBase {
 
         // ---------------------- Step 1   Optimize Wheel Angle ----------------------
         // Wheel will only need to rotate a max of 90 degrees to achieve any direction
-        Rotation2d currentAngle = getState().angle;  // from mSwerveModState
+        Rotation2d currentAngle = mSwerveModState.angle;
+
+        System.out.println("Desired Angle = "  + desiredState.angle.getDegrees() + 
+                           " current Angle = " + currentAngle.getDegrees());
+
         desiredState = SwerveModuleState.optimize(desiredState, currentAngle);
+        // We now has the optimized desired State (Speed/Angle)
+        Rotation2d desiredAngle = desiredState.angle;
 
         // ---------------------- Step 2   Correct Steer Angle ----------------------
         // Calculate the correct angle to steer the wheel and correct for CTRE controller
         // not being continuous.   
-        // Not using CanCoder so we can use then CTRE Internal Position PID
-        Rotation2d desiredAngle = desiredState.angle;
+
         double delta = desiredAngle.getDegrees() - currentAngle.getDegrees();
+
+        System.out.println("Optimized Desired Angle = " +   desiredAngle.getDegrees() + 
+                            " delta = " +                   delta);
+        // Converts a delta +-360 to +-180
         if (delta > 180) {
             delta = (delta - 360);
         } else if (delta < -180) {
             delta = (delta + 360);
         }
+
         double outputAngle = getFalconAngle() + delta;
+
+        System.out.println( " FalconAngle = " + getFalconAngle() +
+                            " Updated Delta = " +   delta +
+                            " outputAngle = " + outputAngle);
 
         // ------------------------- Step 3 Reduce wheel angle Jitter  --------------------------
         if ((Math.abs(desiredState.speedMetersPerSecond) < (SwerveDriveConfig.maxVelocity * 0.01))) {
@@ -140,44 +155,76 @@ public class SwerveModule extends SubsystemBase {
     // ---------------------------- Module State Methods -----------------------------
     // -------------------------------------------------------------------------------
 
+    private void updateSwerveModuleState() {
+        double velocity = Conversions.falconToMPS(
+                                mDriveMotor.getSelectedSensorVelocity(),
+                                SwerveDriveConfig.wheelCircumference,
+                                SwerveDriveConfig.driveGearRatio
+                                );
+     
+        Rotation2d angle = Rotation2d.fromDegrees( Conversions.falconToDegrees(
+                                // Coversion = Enc-Pos(cnts) * (360.0 / (gearRatio * 2048.0))
+                                // This is continous > 360 degrees to < -360 degrees
+                                mAngleMotor.getSelectedSensorPosition(),
+                                SwerveDriveConfig.angleGearRatio)
+                                );
+
+        mSwerveModState = new SwerveModuleState(velocity, angle);
+    }
+
     public SwerveModuleState getState() {
+        // used by swerve drive odometry
         return mSwerveModState;
     }
 
-    private SwerveModuleState getCANState() {
-        double velocity =
-                Conversions.falconToMPS(
-                        mDriveMotor.getSelectedSensorVelocity(),
-                        SwerveDriveConfig.wheelCircumference,
-                        SwerveDriveConfig.driveGearRatio);
-        Rotation2d angle =
-                Rotation2d.fromDegrees(
-                        // counts * (360.0 / (gearRatio * 2048.0));
-                        Conversions.falconToDegrees(
-                                mAngleMotor.getSelectedSensorPosition(),
-                                SwerveDriveConfig.angleGearRatio));
-        return new SwerveModuleState(velocity, angle);
-    }
-
 
     // -------------------------------------------------------------------------------
-    // ---------------------------- Wheel Angle Methods ------------------------------
+    // ---------------------- Wheel CANcoder Angle Methods ---------------------------
     // -------------------------------------------------------------------------------
         
-    private Rotation2d getCANcoderAngle() {
-        Rotation2d position = Rotation2d.fromDegrees(angleEncoder.getAbsolutePosition());
-        return position;
+    private void updateCANcoderAngles() {
+        mCANcoderAngle360CCW = Rotation2d.fromDegrees( getCANcoderAngle360() );
+        mCANcoderAngle180CCW = Rotation2d.fromDegrees( getCANcoderAngle180() );
     }
 
-    public Rotation2d getAbsoluteAngle() {
-        return mCANcoderAngle;
+    public double getCANcoderAngle360(){
+        // Returns CANcoder angle with offset applied, continous 0 to 360 degrees (CCW).
+        // 0 Degrees is wheel staight forward
+        double angle = getCANcoderAngleAbsolute() - angleOffset;
+        return convertAngleTo360CCW( angle );        
     }
 
-    // Only used for telemetry debug
-    public double getAbsoluteAngleWithOffset() {
-        double angle = angleEncoder.getAbsolutePosition() - angleOffset;
+    public double getCANcoderAngle180(){
+        // Returns CANcoder angle with offset applied, continous 180 to -180 degrees (CCW).
+        // 0 Degrees is wheel staight forward
+        double angle = getCANcoderAngle360();
+        return convertAngleTo180CCW( angle); 
+    }
+   
+    public double getCANcoderAngleAbsolute(){
+        // Returns CANcoder angle with NO offset applied, continous 0 to 360 degrees (CCW).
+        double angle = angleEncoder.getAbsolutePosition();
         return angle;
     }
+
+    double convertAngleTo360CCW(double angle){
+        //Convert angle to continous 0-360 degrees (CCW).
+        if (angle < 0) {
+            angle = angle + 360;
+        }
+        return angle;
+    }
+    double convertAngleTo180CCW(double angle){
+        //Convert angle with offset to +180(CCW) through -180 degrees (CW).
+        if (angle > 180) {
+            angle = 360 - angle;
+        }
+        return angle;
+    }
+
+    // -------------------------------------------------------------------------------
+    // ------------------------ Angle Motor Angle Methods ----------------------------
+    // -------------------------------------------------------------------------------
 
     public double getTargetAngle() {
         return lastAngle;
@@ -199,13 +246,13 @@ public class SwerveModule extends SubsystemBase {
     // -------------------------- Wheel Position Methods -----------------------------
     // -------------------------------------------------------------------------------
         
-    private SwerveModulePosition getCANPosition() {
+    private void updateSwerveModulePosition() {
         double position =
                 Conversions.FalconToMeters(
                         mDriveMotor.getSelectedSensorPosition(),
                         SwerveDriveConfig.wheelCircumference,
                         SwerveDriveConfig.driveGearRatio);
-        return new SwerveModulePosition(position, mSwerveModState.angle);
+        mSwerveModPosition = new SwerveModulePosition(position, mSwerveModState.angle);
     }
 
     public SwerveModulePosition getPosition() {
@@ -220,7 +267,7 @@ public class SwerveModule extends SubsystemBase {
     private void configAngleEncoder() {
         angleEncoder.configFactoryDefault();
         angleEncoder.configAllSettings(swerveConfig.swerveCanCoderConfig);
-        mCANcoderAngle = getCANcoderAngle();
+        updateCANcoderAngles();
         angleEncoder.setStatusFramePeriod(CANCoderStatusFrame.VbatAndFaults, 249);
         angleEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 20);
     }
@@ -236,9 +283,8 @@ public class SwerveModule extends SubsystemBase {
     // Initialize Angle Motor Encoder based on absolute CanCoder Value
     // Called in configure Angle Motor at initial Constructor
     public void resetToAbsolute() {
-        double offset = angleOffset;
         double absolutePosition = Conversions.degreesToFalcon(
-                            getAbsoluteAngle().getDegrees() - offset,
+                            getCANcoderAngle360(),
                             SwerveDriveConfig.angleGearRatio);
         mAngleMotor.setSelectedSensorPosition(absolutePosition);
     }

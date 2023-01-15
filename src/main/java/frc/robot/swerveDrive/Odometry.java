@@ -8,9 +8,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 public class Odometry {
 
     public SwerveDriveOdometry swerveOdometry;
-    private SwerveDriveSubSys swerve;
+    private SwerveDrive swerve;
 
-    public Odometry(SwerveDriveSubSys s) {
+    public Odometry(SwerveDrive s) {
         swerve = s;
         swerveOdometry =
                 new SwerveDriveOdometry(

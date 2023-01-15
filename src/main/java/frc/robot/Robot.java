@@ -14,7 +14,7 @@ import frc.robot.elevator.ElevatorSubSys;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.pilot.PilotGamepad;
 import frc.robot.pilot.commands.PilotGamepadCmds;
-import frc.robot.swerveDrive.SwerveDriveSubSys;
+import frc.robot.swerveDrive.SwerveDrive;
 import frc.robot.swerveDrive.commands.SwerveDriveCmds;
 import frc.robot.trajectories.Trajectories;
 
@@ -27,7 +27,7 @@ import frc.robot.trajectories.Trajectories;
 public class Robot extends TimedRobot {
     public static RobotConfig config;
     public static RobotTelemetry telemetry;
-    public static SwerveDriveSubSys swerve;
+    public static SwerveDrive swerve;
     public static Trajectories trajectories;
     public static PilotGamepad pilotGamepad;
     public static ElevatorSubSys elevator;
@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
 
     // Intialize subsystems and run their setupDefaultCommand methods here
     private void intializeSubsystems() {
-        swerve = new SwerveDriveSubSys();
+        swerve = new SwerveDrive();
         trajectories = new Trajectories();
         elevator = new ElevatorSubSys();
         pilotGamepad = new PilotGamepad();
@@ -120,6 +120,8 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         resetCommandsAndButtons();
+        swerve.resetFalconAngles(); // reset falcon angle motors to absolute encoder
+
     }
 
     /** This function is called periodically during operator control. */

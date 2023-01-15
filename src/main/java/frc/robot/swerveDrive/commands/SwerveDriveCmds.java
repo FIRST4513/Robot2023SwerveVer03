@@ -2,6 +2,7 @@
 package frc.robot.swerveDrive.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.Robot;
 import frc.robot.pilot.commands.PilotGamepadCmds;
@@ -28,5 +29,9 @@ public class SwerveDriveCmds {
     public static Command brakeModeCmd() {
         return new StartEndCommand(
                 () -> Robot.swerve.setBrakeMode(true), () -> Robot.swerve.setBrakeMode(false));
+    }
+    public static Command resetFalconAnglesCmd() {
+        return new InstantCommand( () -> Robot.swerve.resetFalconAngles(), Robot.swerve)
+            .withName("ResetFalconAnglesCmd");
     }
 }

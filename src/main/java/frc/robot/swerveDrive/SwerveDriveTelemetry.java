@@ -10,9 +10,9 @@ import java.util.Map;
 
 public class SwerveDriveTelemetry {
     protected ShuffleboardTab tab;
-    private SwerveDriveSubSys swerve;
+    private SwerveDrive swerve;
 
-    public SwerveDriveTelemetry(SwerveDriveSubSys swerve) {
+    public SwerveDriveTelemetry(SwerveDrive swerve) {
         this.swerve = swerve;
         tab = Shuffleboard.getTab("Swerve");
         tab.addNumber("Heading", () -> swerve.getHeading().getDegrees()).withPosition(12, 0).withSize(2, 1);
@@ -58,15 +58,15 @@ public class SwerveDriveTelemetry {
         // mod Cancoder Angle
         SuppliedValueWidget<Double> modCancoderAngleWidget =
                 modLayout.addNumber(
-                        "Cancoder A",
-                        () -> swerve.mSwerveMods[moduleNum].getAbsoluteAngle().getDegrees());
+                        "Cancdr A",
+                        () -> swerve.mSwerveMods[moduleNum].getCANcoderAngleAbsolute());
         modCancoderAngleWidget.withPosition(0, 2).withSize(2, 2);
 
         // mod Cancoder Angle with Offset
         SuppliedValueWidget<Double> modCancoderAngleWOWidget =
         modLayout.addNumber(
-                "Cancoder AWO",
-                () -> swerve.mSwerveMods[moduleNum].getAbsoluteAngleWithOffset());
+                "Cancder O",
+                () -> swerve.mSwerveMods[moduleNum].getCANcoderAngle360());
         modCancoderAngleWOWidget.withPosition(0, 4).withSize(2, 2);
 
         // mod Integrated Angle
