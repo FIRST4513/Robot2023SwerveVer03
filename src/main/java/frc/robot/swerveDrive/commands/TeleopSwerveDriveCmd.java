@@ -12,7 +12,7 @@ import frc.robot.swerveDrive.SwerveDrive;
 
 import java.util.function.DoubleSupplier;
 
-public class DriveCmd extends CommandBase {
+public class TeleopSwerveDriveCmd extends CommandBase {
 
     private boolean fieldRelative;
     private boolean openLoop;
@@ -34,7 +34,7 @@ public class DriveCmd extends CommandBase {
 
     // -------------- Overloaded Constuctor -------------------
     // openLoop assumed false, center of rotation assummed (0,0)
-    public DriveCmd(
+    public TeleopSwerveDriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier,
@@ -51,7 +51,7 @@ public class DriveCmd extends CommandBase {
 
     // -------------- Overloaded Constuctor -------------------
     // center of rotation assummed (0,0)    
-    public DriveCmd(
+    public TeleopSwerveDriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier,
@@ -68,7 +68,7 @@ public class DriveCmd extends CommandBase {
     }
 
     // -------------- Main Full Constuctor ---------------
-    public DriveCmd(
+    public TeleopSwerveDriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier,
@@ -89,7 +89,7 @@ public class DriveCmd extends CommandBase {
     // -------------- Overloaded Constuctor -------------------
     // fieldRelative assumed true
     // openLoop assumed false, center of rotation assummed (0,0)
-    public DriveCmd(
+    public TeleopSwerveDriveCmd(
         DoubleSupplier fwdPositiveSupplier,
         DoubleSupplier leftPositiveSupplier,
         DoubleSupplier ccwPositiveSupplier) {
@@ -101,12 +101,13 @@ public class DriveCmd extends CommandBase {
 
     @Override
     public void execute() {
+        if (Robot.pilotGamepad.configured &&
+            DriverStation.isTeleop() ){
+            // Gamepad is connected and were in teleop mode 
+            double fwdPositive = fwdPositiveSupplier.getAsDouble();
+            double leftPositive = leftPositiveSupplier.getAsDouble();
+            double ccwPositive = ccwPositiveSupplier.getAsDouble();
 
-        double fwdPositive = fwdPositiveSupplier.getAsDouble();
-        double leftPositive = leftPositiveSupplier.getAsDouble();
-        double ccwPositive = ccwPositiveSupplier.getAsDouble();
-
-        if (DriverStation.isTeleop()){
             swerve.drive(
                 fwdPositive,
                 leftPositive,
@@ -114,7 +115,10 @@ public class DriveCmd extends CommandBase {
                 fieldRelative,
                 openLoop,
                 centerOfRotationMeters);
+        } else {
+            swerve.stop();    
         }
+
     }
 
     public void end(boolean interrupted) {

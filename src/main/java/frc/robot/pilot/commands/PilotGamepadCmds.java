@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
 import frc.robot.pilot.PilotGamepadConfig;
-import frc.robot.swerveDrive.commands.DriveCmd;
+import frc.robot.swerveDrive.commands.TeleopSwerveDriveCmd;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 /** Add your docs here. */
@@ -24,7 +24,7 @@ public class PilotGamepadCmds {
 
     /** Field Oriented Drive */
     public static Command fpvPilotSwerveCmd() {
-        return new DriveCmd(
+        return new TeleopSwerveDriveCmd(
                         () -> Robot.pilotGamepad.getDriveFwdPositive(),
                         () -> Robot.pilotGamepad.getDriveLeftPositive(),
                         () -> Robot.pilotGamepad.getDriveRotationCCWPositive(),
@@ -34,7 +34,7 @@ public class PilotGamepadCmds {
 
     /** Robot Oriented Drive */
     public static Command rpvPilotSwerveCmd() {
-        return new DriveCmd(
+        return new TeleopSwerveDriveCmd(
                         () -> Robot.pilotGamepad.getDriveFwdPositive(),
                         () -> Robot.pilotGamepad.getDriveLeftPositive(),
                         () -> Robot.pilotGamepad.getDriveRotationCCWPositive(),
@@ -45,7 +45,7 @@ public class PilotGamepadCmds {
     public static Command snakeDriveCmd() {
         return TrajectoriesCmds.resetThetaControllerCmd()
                 .andThen(
-                        new DriveCmd(
+                        new TeleopSwerveDriveCmd(
                                 () -> Robot.pilotGamepad.getDriveFwdPositive(),
                                 () -> Robot.pilotGamepad.getDriveLeftPositive(),
                                 Robot.trajectories.calculateThetaSupplier(
