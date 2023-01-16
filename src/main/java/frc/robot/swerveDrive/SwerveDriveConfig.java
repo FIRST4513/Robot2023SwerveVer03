@@ -101,7 +101,7 @@ public final class SwerveDriveConfig {
     public static final boolean angleMotorInvert = false; // True = MK4i
 
     /* Angle Encoder Invert */
-    public static final boolean canCoderInvert = true;
+    public static final boolean canCoderInvert = false;
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
