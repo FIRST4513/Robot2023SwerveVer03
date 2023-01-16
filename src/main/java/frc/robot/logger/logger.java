@@ -10,7 +10,7 @@ import java.util.Vector;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Joystick;
 
-public class logger extends SubsystemBase {
+public class Logger extends SubsystemBase {
     String fileName;
 	String base = "/home/lvuser/log"; 
 	String msg;  
@@ -24,7 +24,7 @@ public class logger extends SubsystemBase {
 	public int logFlag = 0;
 	double time, lastTime, leftLastDist, rightLastDist, avgLastDist, LogFlag;
 
-    public logger() {
+    public Logger() {
         createFile();
 		//LogFlag = 1;		// Start with detail logging turned off 1=on
 		time = 0;
@@ -95,7 +95,7 @@ public class logger extends SubsystemBase {
     	appendLog("****** LOG FILE ( " + last + " )    Created at " + logDateTime + " *******");
     }
 
-    public void printLog(){
+    public void saveLogFile(){
     	System.out.println("Logger printlog function called"); 
 
     	for (String element : lines) {
@@ -109,11 +109,6 @@ public class logger extends SubsystemBase {
     }
 
     public void startTimer(){
-    	logTimer.reset();
-    	logTimer.start();
-    }
-
-    public void reSetLogTime(){
     	logTimer.reset();
     	logTimer.start();
     }

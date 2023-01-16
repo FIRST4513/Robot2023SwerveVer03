@@ -12,6 +12,7 @@ import frc.lib.util.Network;
 import frc.robot.auto.AutoSetup;
 import frc.robot.elevator.ElevatorSubSys;
 import frc.robot.elevator.commands.ElevatorCmds;
+import frc.robot.logger.Logger;
 import frc.robot.pilot.PilotGamepad;
 import frc.robot.pilot.commands.PilotGamepadCmds;
 import frc.robot.swerveDrive.SwerveDrive;
@@ -27,6 +28,7 @@ import frc.robot.trajectories.Trajectories;
 public class Robot extends TimedRobot {
     public static RobotConfig config;
     public static RobotTelemetry telemetry;
+    public static Logger logger;
     public static SwerveDrive swerve;
     public static Trajectories trajectories;
     public static PilotGamepad pilotGamepad;
@@ -46,7 +48,7 @@ public class Robot extends TimedRobot {
         // DriverStation.startDataLog(DataLogManager.getLog());
 
         sysTimer.reset();			// System timer for Competition run
-    	sysTimer.start(); 
+    	sysTimer.start();
 
         // Set the MAC Address for this robot, useful for adjusting comp/practice bot settings*/
         MAC = Network.getMACaddress();
@@ -56,16 +58,20 @@ public class Robot extends TimedRobot {
 
     // Intialize subsystems and run their setupDefaultCommand methods here
     private void intializeSubsystems() {
+        logger = new Logger();
+        logger.startTimer();
         swerve = new SwerveDrive();
         trajectories = new Trajectories();
         elevator = new ElevatorSubSys();
         pilotGamepad = new PilotGamepad();
         telemetry = new RobotTelemetry();
 
+
         // Set Default Commands, this method should exist for each subsystem that has commands
         SwerveDriveCmds.setupDefaultCommand();
         ElevatorCmds.setupDefaultCommand();
         PilotGamepadCmds.setupDefaultCommand();
+
     }
 
     /**
@@ -91,6 +97,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         resetCommandsAndButtons();
+        logger.saveLogFile();           // look for a way to verify we have a valid file
     }
 
     @Override
@@ -102,7 +109,8 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         resetCommandsAndButtons();
         sysTimer.reset();			// System timer for Competition run
-    	sysTimer.start(); 
+    	sysTimer.start();
+        logger.startTimer();
 
         Command autonCommand = AutoSetup.getAutonomousCommand();
         if (autonCommand != null) {
@@ -120,6 +128,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         resetCommandsAndButtons();
+        logger.startTimer();
         swerve.resetFalconAngles(); // reset falcon angle motors to absolute encoder
 
     }
@@ -134,6 +143,7 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         resetCommandsAndButtons();
+        logger.startTimer();
     }
 
     /** This function is called periodically during test mode. */

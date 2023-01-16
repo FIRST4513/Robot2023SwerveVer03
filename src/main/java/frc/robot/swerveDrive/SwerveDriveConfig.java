@@ -71,6 +71,14 @@ public final class SwerveDriveConfig {
     public static final double driveKD = 0.0;
     public static final double driveKF = 0.0;
 
+    // Some on-line sample examples
+    public static final double kP = 2.2956;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kS = 0.55493;
+    public static final double kV = 2.3014;
+    public static final double kA = 0.12872;
+
     /* Drive Motor Characterization Values */
     public static final double driveKS = (0.605 / 12); // /12 to convert from volts to %output
     public static final double driveKV = (1.72 / 12);
