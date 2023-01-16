@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Joystick;
-
+// ffs
 public class Logger extends SubsystemBase {
     String fileName;
 	String base = "/home/lvuser/log"; 
