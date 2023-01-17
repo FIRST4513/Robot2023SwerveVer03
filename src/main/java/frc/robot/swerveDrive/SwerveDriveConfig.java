@@ -98,10 +98,12 @@ public final class SwerveDriveConfig {
 
     /* Motor Inverts */
     public static final boolean driveMotorInvert = false; // True = MK4i
-    public static final boolean angleMotorInvert = false; // True = MK4i
+    public static final boolean angleMotorInvert = true; // True = MK4i
 
     /* Angle Encoder Invert */
     public static final boolean canCoderInvert = false;
+
+    /* When calibrating, angle bevel gear is to the right of the robot */
 
     /* Module Specific Constants */
     /* Front Left Module - Module 0 */
@@ -110,7 +112,7 @@ public final class SwerveDriveConfig {
         public static final int driveMotorID = Motors.FLdriveMotorID;
         public static final int angleMotorID = Motors.FLangleMotorID;
         public static final int canCoderID = Encoders.FLcanCoderID;
-        public static final double angleOffsetC = 218.32;  // 2.54 + 180;
+        public static final double angleOffsetC = 141.86;  // 2.54 + 180;
         public static final double angleOffsetP = 184.39;
         public static double angleOffset = angleOffsetC;
         public static final SwerveModuleConfig config =
@@ -124,7 +126,7 @@ public final class SwerveDriveConfig {
         public static final int driveMotorID = Motors.FRdriveMotorID;
         public static final int angleMotorID = Motors.FRangleMotorID;
         public static final int canCoderID = Encoders.FRcanCoderID;
-        public static final double angleOffsetC = 330.3;  // -91.31 + 180;
+        public static final double angleOffsetC = 29.7;  // -91.31 + 180;
         public static final double angleOffsetP = 99;
         public static double angleOffset = angleOffsetC;
         public static final SwerveModuleConfig config =
@@ -138,7 +140,7 @@ public final class SwerveDriveConfig {
         public static final int driveMotorID = Motors.BLdriveMotorID;
         public static final int angleMotorID = Motors.BLangleMotorID;
         public static final int canCoderID = Encoders.BLcanCoderID;
-        public static final double angleOffsetC = 71.54;  // 172.4 + 180;
+        public static final double angleOffsetC = 292.15;  // 172.4 + 180;
         public static final double angleOffsetP = 355;
         public static double angleOffset = angleOffsetC;
         public static final SwerveModuleConfig config =
@@ -152,7 +154,7 @@ public final class SwerveDriveConfig {
         public static final int driveMotorID = Motors.BRdriveMotorID;
         public static final int angleMotorID = Motors.BRangleMotorID;
         public static final int canCoderID = Encoders.BRcanCoderID;
-        public static final double angleOffsetC = 39.0;  // 170.59 - 180;
+        public static final double angleOffsetC = 321.25;  // 170.59 - 180;
         public static final double angleOffsetP = 342;
         public static double angleOffset = angleOffsetC;
         public static final SwerveModuleConfig config =

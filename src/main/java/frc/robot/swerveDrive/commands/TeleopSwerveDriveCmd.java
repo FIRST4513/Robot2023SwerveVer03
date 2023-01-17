@@ -97,10 +97,12 @@ public class TeleopSwerveDriveCmd extends CommandBase {
 }
 
 // -------------------- Command Methods --------------------
-    public void intialize() {}
+    public void intialize() {
+    }
 
     @Override
     public void execute() {
+        swerve.setBrakeMode(true);
         if (Robot.pilotGamepad.configured &&
             DriverStation.isTeleop() ){
             // Gamepad is connected and were in teleop mode 

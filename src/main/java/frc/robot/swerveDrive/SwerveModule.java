@@ -14,6 +14,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.swerve.SwerveModuleConfig;
 import frc.lib.util.Conversions;
@@ -78,10 +79,7 @@ public class SwerveModule extends SubsystemBase {
         // ---------------------- Step 1   Optimize Wheel Angle ----------------------
         // Wheel will only need to rotate a max of 90 degrees to achieve any direction
         Rotation2d currentAngle = mSwerveModState.angle;
-
-        System.out.println("Desired Angle = "  + desiredState.angle.getDegrees() + 
-                           " current Angle = " + currentAngle.getDegrees());
-
+        
         desiredState = SwerveModuleState.optimize(desiredState, currentAngle);
         // We now has the optimized desired State (Speed/Angle)
         Rotation2d desiredAngle = desiredState.angle;
@@ -108,7 +106,7 @@ public class SwerveModule extends SubsystemBase {
                             " outputAngle = " + outputAngle);
 
         // ------------------------- Step 3 Reduce wheel angle Jitter  --------------------------
-        if ((Math.abs(desiredState.speedMetersPerSecond) < (SwerveDriveConfig.maxVelocity * 0.01))) {
+        if ((Math.abs(desiredState.speedMetersPerSecond) < (SwerveDriveConfig.maxVelocity * 0.05))) {
             outputAngle = lastAngle;
         }
 
@@ -233,8 +231,16 @@ public class SwerveModule extends SubsystemBase {
     public double getFalconAngle() {
         // returns encoder.counts * (360.0 / (gearRatio * 2048.0));
         // Each encoder count = 0.00823125 degrees
-        return Conversions.falconToDegrees(
-                mAngleMotor.getSelectedSensorPosition(), SwerveDriveConfig.angleGearRatio);
+        double falconDegrees = Conversions.falconToDegrees(
+            mAngleMotor.getSelectedSensorPosition(), SwerveDriveConfig.angleGearRatio);
+        
+        if (this.moduleNumber == 0) {
+            SmartDashboard.putNumber("Falcon Degrees", falconDegrees);
+            SmartDashboard.putNumber("SDC Gear Ratio", SwerveDriveConfig.angleGearRatio);
+            SmartDashboard.putNumber("Angle Motor Sensor", mAngleMotor.getSelectedSensorPosition());
+        }
+
+        return falconDegrees;
     }
 
     public String getName() {
