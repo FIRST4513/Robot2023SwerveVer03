@@ -26,14 +26,14 @@ public class ElevatorSubSys extends SubsystemBase {
     public final PIDController m_controller;
     public final Encoder m_encoder;
     public final Spark m_motor;
-    public final ElevatorTelemetry telemetry;
+    //public final ElevatorTelemetry telemetry;
     public final DigitalInput elevLwrLimitSw;
 
     /** Creates a new ElevatorSim. */
     public ElevatorSubSys() {
 
         config = new ElevatorConfig();
-        telemetry = new ElevatorTelemetry(this);
+        //telemetry = new ElevatorTelemetry(this);
         
         m_controller = new PIDController(config.kElevatorKp, 0, 0);
         m_encoder = new Encoder(config.kEncoderAChannel, config.kEncoderBChannel);

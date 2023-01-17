@@ -77,33 +77,23 @@ public class SwerveModule extends SubsystemBase {
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
 
         // ---------------------- Step 1   Optimize Wheel Angle ----------------------
-        // Wheel will only need to rotate a max of 90 degrees to achieve any direction
+        // Wheel only needs to rotate a max of 90 degrees to achieve any direction
         Rotation2d currentAngle = mSwerveModState.angle;
-        
         desiredState = SwerveModuleState.optimize(desiredState, currentAngle);
-        // We now has the optimized desired State (Speed/Angle)
         Rotation2d desiredAngle = desiredState.angle;
 
         // ---------------------- Step 2   Correct Steer Angle ----------------------
         // Calculate the correct angle to steer the wheel and correct for CTRE controller
-        // not being continuous.   
+        // being continuous +360 -> -360.   
 
         double delta = desiredAngle.getDegrees() - currentAngle.getDegrees();
-
-        System.out.println("Optimized Desired Angle = " +   desiredAngle.getDegrees() + 
-                            " delta = " +                   delta);
         // Converts a delta +-360 to +-180
         if (delta > 180) {
             delta = (delta - 360);
         } else if (delta < -180) {
             delta = (delta + 360);
         }
-
         double outputAngle = getFalconAngle() + delta;
-
-        System.out.println( " FalconAngle = " + getFalconAngle() +
-                            " Updated Delta = " +   delta +
-                            " outputAngle = " + outputAngle);
 
         // ------------------------- Step 3 Reduce wheel angle Jitter  --------------------------
         if ((Math.abs(desiredState.speedMetersPerSecond) < (SwerveDriveConfig.maxVelocity * 0.05))) {
@@ -111,7 +101,7 @@ public class SwerveModule extends SubsystemBase {
         }
 
         // --------------------------- Step 4 Set Angle Motor  ----------------------------
-        // Uses internal PID to hold position
+        // Uses internal PID to set/hold angle motor at correct position
         mAngleMotor.set(
                 ControlMode.Position,
                 Conversions.degreesToFalcon(outputAngle, SwerveDriveConfig.angleGearRatio));
@@ -126,7 +116,7 @@ public class SwerveModule extends SubsystemBase {
             mDriveMotor.set(ControlMode.PercentOutput, percentOutput);
         } else {
             // uses internal PID to maintain accurate velocity
-            // possible PID value or feedforward values causing errors?
+            // possible PID value or feedforward values causing jitter and creep errors?
             double velocity = Conversions.MPSToFalcon(
                                     desiredState.speedMetersPerSecond,
                                     SwerveDriveConfig.wheelCircumference,
@@ -234,11 +224,11 @@ public class SwerveModule extends SubsystemBase {
         double falconDegrees = Conversions.falconToDegrees(
             mAngleMotor.getSelectedSensorPosition(), SwerveDriveConfig.angleGearRatio);
         
-        if (this.moduleNumber == 0) {
-            SmartDashboard.putNumber("Falcon Degrees", falconDegrees);
-            SmartDashboard.putNumber("SDC Gear Ratio", SwerveDriveConfig.angleGearRatio);
-            SmartDashboard.putNumber("Angle Motor Sensor", mAngleMotor.getSelectedSensorPosition());
-        }
+        // if (this.moduleNumber == 0) {
+        //     SmartDashboard.putNumber("Falcon Degrees", falconDegrees);
+        //     SmartDashboard.putNumber("SDC Gear Ratio", SwerveDriveConfig.angleGearRatio);
+        //     SmartDashboard.putNumber("Angle Motor Sensor", mAngleMotor.getSelectedSensorPosition());
+        // }
 
         return falconDegrees;
     }
