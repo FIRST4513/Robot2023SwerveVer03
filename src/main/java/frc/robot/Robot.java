@@ -27,7 +27,7 @@ import frc.robot.trajectories.Trajectories;
  */
 public class Robot extends TimedRobot {
     public static RobotConfig config;
-    public static RobotTelemetry telemetry;
+    //public static RobotTelemetry telemetry;
     //public static Logger logger;
     public static SwerveDrive swerve;
     public static Trajectories trajectories;
@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
         trajectories = new Trajectories();
         elevator = new ElevatorSubSys();
         pilotGamepad = new PilotGamepad();
-        telemetry = new RobotTelemetry();
+        //telemetry = new RobotTelemetry();
 
 
         // Set Default Commands, this method should exist for each subsystem that has commands
