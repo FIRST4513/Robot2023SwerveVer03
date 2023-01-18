@@ -65,7 +65,12 @@ public class PilotGamepad extends Gamepad {
 
     // side-to-side across the field
     public double getDriveLeftPositive() {
-        return sidewaysSpeedCurve.calculateMappedVal(this.gamepad.rightStick.getX());
+        // right will be priority in code, but not primarily used in driving practice
+        if (Math.abs(this.gamepad.rightStick.getX()) > Math.abs(this.gamepad.leftStick.getX())) {
+            return sidewaysSpeedCurve.calculateMappedVal(this.gamepad.rightStick.getX()) * 1;  // change later to scale
+        } else {
+            return sidewaysSpeedCurve.calculateMappedVal(this.gamepad.leftStick.getX());
+        }
     }
 
     //Positive is counter-clockwise, left Trigger is positive
