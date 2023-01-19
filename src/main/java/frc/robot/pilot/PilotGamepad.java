@@ -3,6 +3,9 @@ package frc.robot.pilot;
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
 import frc.robot.elevator.commands.ElevatorCmds;
+import frc.robot.pilot.commands.PilotGamepadCmds;
+import frc.robot.swerveDrive.Gyro;
+import frc.robot.swerveDrive.SwerveDrive;
 import frc.robot.swerveDrive.commands.SwerveDriveCmds;
 
 /** Used to add buttons to the pilot gamepad and configure the joysticks */
@@ -41,6 +44,11 @@ public class PilotGamepad extends Gamepad {
        
         gamepad.Dpad.Down.whileTrue(ElevatorCmds.lowerCmd());
         gamepad.Dpad.Up.whileTrue(ElevatorCmds.raiseCmd());
+
+        gamepad.startButton.onTrue(SwerveDriveCmds.zeroGyroHeadingCmd());
+
+        gamepad.aButton.whileTrue(PilotGamepadCmds.rpvPilotSwerveCmd());
+        
         // gamepad.Dpad.Left.onTrue(null);  // same as the old "when pressed"
 
         // Reset Gyro/Encoders/Pose Data

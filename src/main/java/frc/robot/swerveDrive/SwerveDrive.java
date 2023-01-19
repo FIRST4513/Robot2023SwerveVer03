@@ -198,6 +198,10 @@ public class SwerveDrive extends SubsystemBase {
         return odometry.getHeading();
     }
 
+    public void resetGyro(){
+        gyro.zeroHeading();
+    }
+
     /**
      * Ge the Pose of the odemotry class
      *

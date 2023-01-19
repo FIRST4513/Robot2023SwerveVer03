@@ -280,7 +280,8 @@ public class SwerveModule extends SubsystemBase {
     // Called in configure Angle Motor at initial Constructor
     public void resetToAbsolute() {
         double absolutePosition = Conversions.degreesToFalcon(
-                            getCANcoderAngle360(),
+                            // getCANcoderAngle360(),
+                            getCANcoderAngle180(),
                             SwerveDriveConfig.angleGearRatio);
         mAngleMotor.setSelectedSensorPosition(absolutePosition);
     }

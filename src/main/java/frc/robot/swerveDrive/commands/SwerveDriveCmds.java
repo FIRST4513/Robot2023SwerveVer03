@@ -34,4 +34,10 @@ public class SwerveDriveCmds {
         return new InstantCommand( () -> Robot.swerve.resetFalconAngles(), Robot.swerve)
             .withName("ResetFalconAnglesCmd");
     }
+
+    public static Command zeroGyroHeadingCmd() {
+        return new InstantCommand(
+            () -> Robot.swerve.resetGyro()
+        );
+    }
 }
