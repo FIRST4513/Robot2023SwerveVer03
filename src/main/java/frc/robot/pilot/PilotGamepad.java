@@ -36,23 +36,13 @@ public class PilotGamepad extends Gamepad {
     }
 
     public void setupTeleopButtons() {
-        //gamepad.aButton.whileTrue(ElevatorCmds.goToPIDPosCmd(30.0));
-        // Setup Elevator button Assignments
 
-        //final JoystickButton xboxButton1 = new JoystickButton(gamepad, XboxController.Button.kA.value);        
-        //xboxButton1.whileTrue(SliderCmds.sliderLeftCmd().withInterruptBehavior(InterruptionBehavior.kCancelSelf));
-       
-        gamepad.Dpad.Down.whileTrue(ElevatorCmds.lowerCmd());
-        gamepad.Dpad.Up.whileTrue(ElevatorCmds.raiseCmd());
-
+        // Rest Gyro to 0
         gamepad.startButton.onTrue(SwerveDriveCmds.zeroGyroHeadingCmd());
 
+        // Teleop Drive with R0bot Perspective
         gamepad.aButton.whileTrue(PilotGamepadCmds.rpvPilotSwerveCmd());
         
-        // gamepad.Dpad.Left.onTrue(null);  // same as the old "when pressed"
-
-        // Reset Gyro/Encoders/Pose Data
-        //gamepad.selectButton.whenPressed(DrivetrainCmds.resetPoseCmd());
     }
 
     public void setupDisabledButtons() {

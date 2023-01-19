@@ -15,11 +15,11 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
-public class delayCmd extends CommandBase {
+public class DelayCmd extends CommandBase {
     private double m_timeOut;
     Timer delayTimer = new Timer();
 
-    public delayCmd(double timeOut) {
+    public DelayCmd(double timeOut) {
         m_timeOut = timeOut;
     }
 

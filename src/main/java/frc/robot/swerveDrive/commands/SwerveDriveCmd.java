@@ -1,6 +1,5 @@
 // Created by Spectrum3847
 // Based on Code from Team364 - BaseFalconSwerve
-// https://github.com/Team364/BaseFalconSwerve/tree/338c0278cb63714a617f1601a6b9648c64ee78d1
 
 package frc.robot.swerveDrive.commands;
 
@@ -12,7 +11,7 @@ import frc.robot.swerveDrive.SwerveDrive;
 
 import java.util.function.DoubleSupplier;
 
-public class TeleopSwerveDriveCmd extends CommandBase {
+public class SwerveDriveCmd extends CommandBase {
 
     private boolean fieldRelative;
     private boolean openLoop;
@@ -34,7 +33,7 @@ public class TeleopSwerveDriveCmd extends CommandBase {
 
     // -------------- Overloaded Constuctor -------------------
     // openLoop assumed false, center of rotation assummed (0,0)
-    public TeleopSwerveDriveCmd(
+    public SwerveDriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier,
@@ -51,7 +50,7 @@ public class TeleopSwerveDriveCmd extends CommandBase {
 
     // -------------- Overloaded Constuctor -------------------
     // center of rotation assummed (0,0)    
-    public TeleopSwerveDriveCmd(
+    public SwerveDriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier,
@@ -68,7 +67,7 @@ public class TeleopSwerveDriveCmd extends CommandBase {
     }
 
     // -------------- Main Full Constuctor ---------------
-    public TeleopSwerveDriveCmd(
+    public SwerveDriveCmd(
             DoubleSupplier fwdPositiveSupplier,
             DoubleSupplier leftPositiveSupplier,
             DoubleSupplier ccwPositiveSupplier,
@@ -89,7 +88,7 @@ public class TeleopSwerveDriveCmd extends CommandBase {
     // -------------- Overloaded Constuctor -------------------
     // fieldRelative assumed true
     // openLoop assumed false, center of rotation assummed (0,0)
-    public TeleopSwerveDriveCmd(
+    public SwerveDriveCmd(
         DoubleSupplier fwdPositiveSupplier,
         DoubleSupplier leftPositiveSupplier,
         DoubleSupplier ccwPositiveSupplier) {

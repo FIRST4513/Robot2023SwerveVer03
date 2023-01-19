@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
 import frc.robot.RobotTelemetry;
-import frc.robot.auto.commands.delayCmd;
+import frc.robot.auto.commands.DelayCmd;
 
 public class AutoSetup {
     public static final SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -20,7 +20,7 @@ public class AutoSetup {
         autoChooser.setDefaultOption(
                 "Nothing", new PrintCommand("Doing Nothing in Auton").andThen(new WaitCommand(5)));
         autoChooser.setDefaultOption("Do Nothing", new PrintCommand("DO NOTHING AUTO RUNNING"));
-        autoChooser.addOption("Delay 10 Sec", new delayCmd(10));    
+        autoChooser.addOption("Delay 10 Sec", new DelayCmd(10));    
         }
 
     /**
