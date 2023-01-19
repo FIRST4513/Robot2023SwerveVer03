@@ -74,6 +74,7 @@ public class SwerveDrive extends SubsystemBase {
             boolean isOpenLoop,
             Translation2d centerOfRotationMeters) {
 
+
         // ------------------- Step 1 Set Chassis Speeds ----------------------
         // mps (Meters Per Second) and rps (Radians Per Second)
         ChassisSpeeds speeds;
@@ -127,6 +128,16 @@ public class SwerveDrive extends SubsystemBase {
         mSwerveMods[1].setVoltage(rightVolts);
         mSwerveMods[3].setVoltage(rightVolts);
     }
+
+    // Used in turnCmd
+    // public void useOutput(double output) {
+    //     pidTurn = output * SwerveConstants.maxAngularVelocity;
+    // }
+
+    // //Used for control loops that give a rotational velocity directly
+    // public void setRotationalVelocity(double rotationalVelocity){
+    //     pidTurn = rotationalVelocity;
+    // }
 
    /**
      * Stop the drive and angle motor of each module And set desired states to 0 meters per second
@@ -196,6 +207,11 @@ public class SwerveDrive extends SubsystemBase {
      */
     public Rotation2d getHeading() {
         return odometry.getHeading();
+    }
+
+    // Used in turn to angle
+    public double getDegrees(){
+        return gyro.getHeadingDegrees();
     }
 
     public void resetGyro(){
