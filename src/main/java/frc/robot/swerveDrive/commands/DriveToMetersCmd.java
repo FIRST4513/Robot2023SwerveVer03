@@ -11,7 +11,7 @@ import frc.robot.Robot;
 import frc.robot.auto.AutoConfig;
 import frc.robot.swerveDrive.SwerveDrive;
 
-public class DriveToMeters extends ProfiledPIDCommand {
+public class DriveToMetersCmd extends ProfiledPIDCommand {
 
   public static double kP = 1;
   public static double kI = 0; // 0.00015
@@ -27,7 +27,7 @@ public class DriveToMeters extends ProfiledPIDCommand {
   private Double ccwPositiveRPS = 0.0;
   private Translation2d ctrOfRotM =  new Translation2d( 0.0, 0.0);
 
-  public DriveToMeters(double distanceMeters) {
+  public DriveToMetersCmd(double distanceMeters) {
 
     super(
         // The ProfiledPIDController used by the command
@@ -37,7 +37,7 @@ public class DriveToMeters extends ProfiledPIDCommand {
             // The motion profile constraints
             new TrapezoidProfile.Constraints(AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel)),
         // This should return the measurement
-        DriveToMeters::getDistance,
+        DriveToMetersCmd::getDistance,
         // This should return the goal (can also be a constant)
         distanceMeters,
 

@@ -7,7 +7,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.Robot;
 
-public class TurnToAngle extends ProfiledPIDCommand {
+public class TurnToAngleCmd extends ProfiledPIDCommand {
 
   public static double kP = 0.01;
   public static double kI = 0; // 0.00015
@@ -15,7 +15,7 @@ public class TurnToAngle extends ProfiledPIDCommand {
 
   boolean hasTarget = false;
 
-  public TurnToAngle(double angle) {
+  public TurnToAngleCmd(double angle) {
     super(
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
