@@ -144,6 +144,7 @@ public class Robot extends TimedRobot {
     public void testInit() {
         resetCommandsAndButtons();
         //logger.startTimer();
+        swerve.resetFalconAngles(); // reset falcon angle motors to absolute encoder
     }
 
     /** This function is called periodically during test mode. */

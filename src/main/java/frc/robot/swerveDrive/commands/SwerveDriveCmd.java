@@ -44,7 +44,7 @@ public class SwerveDriveCmd extends CommandBase {
             leftPositiveSupplier,
             ccwPositiveSupplier,
             fieldRelative,
-            false,  // true
+            true,  // true
             new Translation2d());
     }
 
@@ -101,13 +101,14 @@ public class SwerveDriveCmd extends CommandBase {
 
     @Override
     public void execute() {
-        swerve.setBrakeMode(true);
         if (Robot.pilotGamepad.configured &&
             DriverStation.isTeleop() ){
             // Gamepad is connected and were in teleop mode 
             double fwdPositive = fwdPositiveSupplier.getAsDouble();
             double leftPositive = leftPositiveSupplier.getAsDouble();
             double ccwPositive = ccwPositiveSupplier.getAsDouble();
+
+            swerve.setBrakeMode(true);
 
             swerve.drive(
                 fwdPositive,
@@ -117,12 +118,14 @@ public class SwerveDriveCmd extends CommandBase {
                 openLoop,
                 centerOfRotationMeters);
         } else {
-            swerve.stop();    
+            swerve.stop();
+            swerve.setBrakeMode(false);
         }
 
     }
 
     public void end(boolean interrupted) {
         swerve.stop();
+        swerve.setBrakeMode(false);
     }
 }

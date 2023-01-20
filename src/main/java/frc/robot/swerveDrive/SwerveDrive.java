@@ -17,7 +17,7 @@ import frc.robot.RobotTelemetry;
 public class SwerveDrive extends SubsystemBase {
     public SwerveDriveConfig config;
     protected Odometry odometry;
-    //public SwerveDriveTelemetry telemetry;
+    public SwerveDriveTelemetry telemetry;
     protected SwerveModule[] mSwerveMods;
     private SwerveModuleState[] SwerveModDesiredStates;
     public Gyro gyro;
@@ -36,7 +36,7 @@ public class SwerveDrive extends SubsystemBase {
 
         gyro = new Gyro();
         odometry = new Odometry(this);
-        //telemetry = new SwerveDriveTelemetry(this);
+        telemetry = new SwerveDriveTelemetry(this);
         RobotTelemetry.print("Gyro initilized and Swerve angles");
 
         // Set the initial module states to zero

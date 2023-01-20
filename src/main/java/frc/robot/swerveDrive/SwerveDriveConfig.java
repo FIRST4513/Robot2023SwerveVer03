@@ -80,8 +80,11 @@ public final class SwerveDriveConfig {
     public static final double kA = 0.12872;
 
     /* Drive Motor Characterization Values */
-    public static final double driveKS = (0.605 / 12); // /12 to convert from volts to %output
-    public static final double driveKV = (1.72 / 12);
+    // KS - Volts Stiction - How many volts are needed to simply start moving/overcoming friction
+    public static final double driveKS = (0.0 / 12);  // (0.605 / 12); // /12 to convert from volts to %output
+    // KV - Volts Velocity - How many volts it takes to achieve a constant, specified velocity
+    public static final double driveKV = 12;  // (1.72 / 12);
+    // KA - Volts Acceleration - How many volts for a given acceleration (mps^2)
     public static final double driveKA = (0.193 / 12);
 
     /* Swerve Profiling Values */
