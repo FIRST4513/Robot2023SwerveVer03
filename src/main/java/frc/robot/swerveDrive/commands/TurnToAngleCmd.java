@@ -13,6 +13,13 @@ public class TurnToAngleCmd extends ProfiledPIDCommand {
   public static double kI = 0; // 0.00015
   public static double kD = 0.000; // 0.0005
 
+  double fwdSpeedMPS = 0.0;
+  double leftSpeedMPS = 0.0;
+  double rotSpeedRPS = 0.0;
+  boolean fPOV = false;
+  boolean closedLoop = true;
+  Translation2d ctrOfRot = new Translation2d( 0, 0);
+
   boolean hasTarget = false;
 
   public TurnToAngleCmd(double angle) {
@@ -46,11 +53,11 @@ public class TurnToAngleCmd extends ProfiledPIDCommand {
     // Configure additional PID options by calling `getController` here.
     getController().setTolerance(1);
     getController().enableContinuousInput(0, 360);
-    //double differance = angle - Robot.swerve.getDegrees();
-    //if (differance > 180) {
-      //differance = (360 - differance) * -1;
-    //}
-    //getController().setGoal(differance);
+    double differance = angle - Robot.swerve.getDegrees();
+    if (differance > 180) {
+      differance = (360 - differance) * -1;
+    }
+    getController().setGoal(differance);
     addRequirements(Robot.swerve);
   }
 
@@ -62,7 +69,14 @@ public class TurnToAngleCmd extends ProfiledPIDCommand {
   @Override
   public void execute() {
     super.execute();
-    //Robot.swerve.drive(new Translation2d(0, 0), 0, true, false);
+    //Robot.swerve.setModuleStates(new Translation2d(0, 0), 0, true, false);
+    // ????????
+    Robot.swerve.drive( 0.0,
+                        0.0,
+                        0.0,
+                        true,
+                        false,
+                        new Translation2d( 0.0, 0.0));
   }
 
   @Override

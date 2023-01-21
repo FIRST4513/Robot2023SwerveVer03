@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.swerve.SwerveModuleConfig;
 import frc.lib.util.Conversions;
 import frc.robot.Robot;
-import frc.robot.logger.Logger;
 
 public class SwerveModule extends SubsystemBase {
     public String moduleName;
