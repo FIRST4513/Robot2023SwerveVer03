@@ -6,15 +6,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI;
 
 public class Gyro {
-        // Gyro
         private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+        private double gyroOffset;      // Used to set gyro to different heading
 
-    /**
-     * Creates a new Gyro, which is a wrapper for the Pigeon IMU and stores an offset so we don't
-     * have to directly zero the gyro
-     */
     public Gyro() {
         gyro.reset();
+        gyroOffset = 0;
     }
 
     /**
@@ -23,11 +20,8 @@ public class Gyro {
      * @return the raw yaw of the robot in Rotation2d
      */
     public Rotation2d getRawYaw() {
-        // this will return a Rotation2d object of the yaw value -180 to +180 degree ???
-        // TODO this may return in +-radians .... need to verify !!!!!!!
-        return Rotation2d.fromDegrees(getHeadingDegrees());
+        return Rotation2d.fromDegrees(gyro.getAngle());
     } 
-
 
     public Rotation2d getGyroHeadingRotation2d() {
         // this will return a Rotation2d object of the yaw value -180 to +180 degree
@@ -36,13 +30,20 @@ public class Gyro {
 
     public void zeroHeading() {
          gyro.reset();
+         gyroOffset = 0;
     }
 
     public double getHeadingDegrees() {
         // This will return values from -180CW to +180CCW degrees of yaw
-        return -Math.IEEEremainder(gyro.getAngle(), 360);
+        return -Math.IEEEremainder(gyro.getAngle()+gyroOffset, 360);
     }
 
-
+    public void setHeadingDegrees( double newHdg ){
+        // new Heading +180 to - 180 degrees
+        gyroOffset = newHdg - getHeadingDegrees();
+        // Dont think these are really needed
+        //if (gyroOffset > 180 )  { gyroOffset = gyroOffset - 360.0 ;}
+        //if (gyroOffset < -180 ) { gyroOffset = gyroOffset + 360.0 ; }
+    }
 
 }

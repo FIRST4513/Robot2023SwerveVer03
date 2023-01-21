@@ -363,7 +363,7 @@ public class SwerveModule extends SubsystemBase {
         if (moduleNumber != 0)  { return; }
 
         // ---------- Build Print String -----------------
-        line = ",";
+        line = "";
         // ---------- Show Module Num and Name ------------
         line += moduleNumber + "," +moduleName;
 

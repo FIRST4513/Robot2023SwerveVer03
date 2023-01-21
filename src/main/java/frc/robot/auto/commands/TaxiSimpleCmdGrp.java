@@ -7,16 +7,19 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.swerveDrive.commands.SwerveDrive2Cmd;
 
-//Wait 5 seconds before driving out of tarmac
+// Wait 5 seconds
+// Then drive forward at 0.2 MPS
+// Stop after 1.5 seconds of motion
+
 public class TaxiSimpleCmdGrp extends ParallelCommandGroup {
   /** Creates a new TestPathFollowing. */
   public TaxiSimpleCmdGrp() {
     double fwdSpeedMPS = 0.2;
     double leftSpeedMPS = 0.0;
     double rotSpeedRPS = 0.0;
-    Translation2d ctrOfRot = new Translation2d( 0, 0);
     boolean fPOV = false;
     boolean closedLoop = true;
+    Translation2d ctrOfRot = new Translation2d( 0, 0);
     
     addCommands(
       new WaitCommand(5),

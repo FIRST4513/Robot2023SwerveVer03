@@ -218,6 +218,10 @@ public class SwerveDrive extends SubsystemBase {
         gyro.zeroHeading();
     }
 
+    public void setGyroDegrees( double newHdg ) {
+        gyro.setHeadingDegrees( newHdg);
+    }
+
     /**
      * Ge the Pose of the odemotry class
      *

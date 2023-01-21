@@ -4,7 +4,6 @@ package frc.robot.auto.commands;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auto.AutoConfig;
 import frc.robot.trajectories.commands.FollowTrajectoryCmd;
 
@@ -19,10 +18,10 @@ public class TestPathPlannerCmdGrp extends SequentialCommandGroup {
     PathPlannerTrajectory Test_SlideRight = PathPlanner.loadPath("Test_SlideRight", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
     
     addCommands(
-        //AutonCommands.intializePathFollowing(DriveOneMeterFwd),
-        new FollowTrajectoryCmd(DriveOneMeterFwd)
-        //new WaitCommand(0.5),
-        //new SwerveFollowCommand(DriveTerminal)
+        AutoCmds.IntializePathFollowing(DriveOneMeterFwd),
+        new FollowTrajectoryCmd(DriveOneMeterFwd),
+        new DelayCmd(0.5),
+        new FollowTrajectoryCmd(DriveTerminal)
 
     );
   }
