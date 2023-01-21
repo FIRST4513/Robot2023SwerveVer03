@@ -28,7 +28,7 @@ import frc.robot.trajectories.Trajectories;
 public class Robot extends TimedRobot {
     public static RobotConfig config;
     //public static RobotTelemetry telemetry;
-    //public static Logger logger;
+    public static Logger logger;
     public static SwerveDrive swerve;
     public static Trajectories trajectories;
     public static PilotGamepad pilotGamepad;
@@ -58,8 +58,8 @@ public class Robot extends TimedRobot {
 
     // Intialize subsystems and run their setupDefaultCommand methods here
     private void intializeSubsystems() {
-        //logger = new Logger();
-        //logger.startTimer();
+        logger = new Logger();
+        logger.startTimer();
         swerve = new SwerveDrive();
         trajectories = new Trajectories();
         elevator = new ElevatorSubSys();
@@ -97,7 +97,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         resetCommandsAndButtons();
-        //logger.saveLogFile();           // look for a way to verify we have a valid file
+        logger.saveLogFile();           // look for a way to verify we have a valid file
     }
 
     @Override
@@ -110,7 +110,7 @@ public class Robot extends TimedRobot {
         resetCommandsAndButtons();
         sysTimer.reset();			// System timer for Competition run
     	sysTimer.start();
-        //logger.startTimer();
+        logger.startTimer();
 
         Command autonCommand = AutoSetup.getAutonomousCommand();
         if (autonCommand != null) {
@@ -128,7 +128,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         resetCommandsAndButtons();
-        //logger.startTimer();
+        logger.startTimer();
         swerve.resetFalconAngles(); // reset falcon angle motors to absolute encoder
 
     }
@@ -143,7 +143,7 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         resetCommandsAndButtons();
-        //logger.startTimer();
+        logger.startTimer();
         swerve.resetFalconAngles(); // reset falcon angle motors to absolute encoder
     }
 
