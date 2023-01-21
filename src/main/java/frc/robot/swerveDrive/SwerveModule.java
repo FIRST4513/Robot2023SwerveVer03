@@ -38,6 +38,7 @@ public class SwerveModule extends SubsystemBase {
     private double desiredSpeed, optimizedSpeed = 0;
     private double delta, currentAngle, outputAngle, optimizedAngle = 0;
     private double percentOutput, feedforward_value = 0;
+    private double rawFalconSensorData = 0;
 
     private boolean m_LogFlag = false;
     private String line;
@@ -142,14 +143,14 @@ public class SwerveModule extends SubsystemBase {
         // This is a closed loop, using internal PID and Feedforward, to maintain accurate velocity
         // possible PID parameter not tuned or feedforward values causing jitter and creep errors?
         double falcon_desired_Velocity = Conversions.MPSToFalcon(
-                                            vel,
+                                            vel / 10.0,
                                             SwerveDriveConfig.wheelCircumference,
                                             SwerveDriveConfig.driveGearRatio);
 
         mDriveMotor.set( ControlMode.Velocity,
                          falcon_desired_Velocity,
                          DemandType.ArbitraryFeedForward,
-                         feedforward);
+                         0); // feedforward);
     }
 
     public void setDriveMotorPercent( double percentOut){
@@ -231,7 +232,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     // Set Angle Motor Encoder based on absolute CanCoder Value
-    public void resetToAbsolute() {
+    public void resetFalconToCANcoderAngle() {
         double absolutePosition = Conversions.degreesToFalcon(
                             // getCANcoderAngle360(),
                             getCANcoderAngle180(),
@@ -258,7 +259,8 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public double getDriveVelocityMPS(){
-        double velMPS = Conversions.FalconToMeters(
+        rawFalconSensorData = mDriveMotor.getSelectedSensorVelocity();
+        double velMPS = Conversions.falconToMPS(
             mDriveMotor.getSelectedSensorVelocity(),
             SwerveDriveConfig.wheelCircumference,
             SwerveDriveConfig.driveGearRatio);
@@ -283,7 +285,7 @@ public class SwerveModule extends SubsystemBase {
         mAngleMotor.configAllSettings(swerveConfig.swerveAngleFXConfig);
         mAngleMotor.setInverted(SwerveDriveConfig.angleMotorInvert);
         mAngleMotor.setNeutralMode(SwerveDriveConfig.angleNeutralMode);
-        resetToAbsolute();
+        resetFalconToCANcoderAngle();
     }
 
     private void configDriveMotor() {
@@ -337,6 +339,10 @@ public class SwerveModule extends SubsystemBase {
 
             SmartDashboard.putNumber("Actual Vel", getDriveVelocityMPS());
             SmartDashboard.putNumber("FeedForward", feedforward_value);
+
+            SmartDashboard.putNumber("Percent Output", percentOutput);
+            SmartDashboard.putNumber("Falcon Sensor", rawFalconSensorData);
+
         }
     }
 

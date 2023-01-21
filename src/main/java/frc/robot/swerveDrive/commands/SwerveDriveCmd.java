@@ -44,7 +44,7 @@ public class SwerveDriveCmd extends CommandBase {
             leftPositiveSupplier,
             ccwPositiveSupplier,
             fieldRelative,
-            true,  // true
+            false,  // true
             new Translation2d());
     }
 

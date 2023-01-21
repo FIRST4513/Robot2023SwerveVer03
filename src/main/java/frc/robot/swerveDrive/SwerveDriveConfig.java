@@ -66,7 +66,7 @@ public final class SwerveDriveConfig {
             122; // increase to reduce jitter, (2048 * angleGearRatio) / 360.0) = 1 degree
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 0.1;
+    public static final double driveKP = 0.1; // 0.1;
     public static final double driveKI = 0.0;
     public static final double driveKD = 0.0;
     public static final double driveKF = 0.0;
@@ -88,8 +88,8 @@ public final class SwerveDriveConfig {
     public static final double driveKA = (0.193 / 12);
 
     /* Swerve Profiling Values */
-    public static final double maxVelocity =
-            ((6380 / 60) / angleGearRatio) * wheelDiameter * Math.PI * 0.95; // meters per second
+    public static final double maxVelocity = 4.8;
+        //     ((6380 / 60) / angleGearRatio) * wheelDiameter * Math.PI * 0.95; // meters per second
     public static final double maxAccel = maxVelocity * 1.5; // take 1/2 sec to get to max speed.
     public static final double maxAngularVelocity =
             maxVelocity / Math.hypot(trackWidth / 2.0, wheelBase / 2.0);

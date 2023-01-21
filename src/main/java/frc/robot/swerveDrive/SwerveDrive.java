@@ -39,6 +39,10 @@ public class SwerveDrive extends SubsystemBase {
         telemetry = new SwerveDriveTelemetry(this);
         RobotTelemetry.print("Gyro initilized and Swerve angles");
 
+        for (SwerveModule mod : mSwerveMods) {
+            mod.resetFalconToCANcoderAngle();
+        }
+
         // Set the initial module states to zero
         drive(0, 0, 0, true, false, new Translation2d());
     }
@@ -173,7 +177,7 @@ public class SwerveDrive extends SubsystemBase {
     /** Reset AngleMotors to Absolute This is used to reset the angle motors to absolute position */
     public void resetSteeringToAbsolute() {
         for (SwerveModule mod : mSwerveMods) {
-            mod.resetToAbsolute();
+            mod.resetFalconToCANcoderAngle();
         }
     }
 
@@ -277,7 +281,15 @@ public class SwerveDrive extends SubsystemBase {
      */
     public void resetFalconAngles() {
         for (SwerveModule mod : mSwerveMods) {
-            mod.resetToAbsolute();
+            mod.resetFalconToCANcoderAngle();
         }
+    }
+
+    public double getCanCoderAngleTest(int modID) {
+        return mSwerveMods[modID].getCANcoderAngle180();
+    }
+
+    public double getFalconAngleTest(int modID) {
+        return mSwerveMods[modID].getFalconAngle().getDegrees();
     }
 }

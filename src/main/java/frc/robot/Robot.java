@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.util.Network;
@@ -58,7 +59,7 @@ public class Robot extends TimedRobot {
 
     // Intialize subsystems and run their setupDefaultCommand methods here
     private void intializeSubsystems() {
-        logger = new Logger();
+        logger = new Logger(); 
         logger.startTimer();
         swerve = new SwerveDrive();
         trajectories = new Trajectories();
@@ -129,7 +130,28 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         resetCommandsAndButtons();
         logger.startTimer();
+        
+        System.out.print("----------\nTeleop Init!\n");
+        System.out.print("Mod 0 CanCoder Angle: " + swerve.getCanCoderAngleTest(0));
+        System.out.print("Mod 0 Falcon Angle: " + swerve.getFalconAngleTest(0));
+        System.out.print("Mod 1 CanCoder Angle: " + swerve.getCanCoderAngleTest(1));
+        System.out.print("Mod 1 Falcon Angle: " + swerve.getFalconAngleTest(1));
+        System.out.print("Mod 2 CanCoder Angle: " + swerve.getCanCoderAngleTest(2));
+        System.out.print("Mod 2 Falcon Angle: " + swerve.getFalconAngleTest(2));
+        System.out.print("Mod 3 CanCoder Angle: " + swerve.getCanCoderAngleTest(3));
+        System.out.print("Mod 3 Falcon Angle: " + swerve.getFalconAngleTest(3));
+        
         swerve.resetFalconAngles(); // reset falcon angle motors to absolute encoder
+        
+        System.out.print("\nAfter Reset!\n----------");
+        System.out.print("Mod 0 CanCoder Angle: " + swerve.getCanCoderAngleTest(0));
+        System.out.print("Mod 0 Falcon Angle: " + swerve.getFalconAngleTest(0));
+        System.out.print("Mod 1 CanCoder Angle: " + swerve.getCanCoderAngleTest(1));
+        System.out.print("Mod 1 Falcon Angle: " + swerve.getFalconAngleTest(1));
+        System.out.print("Mod 2 CanCoder Angle: " + swerve.getCanCoderAngleTest(2));
+        System.out.print("Mod 2 Falcon Angle: " + swerve.getFalconAngleTest(2));
+        System.out.print("Mod 3 CanCoder Angle: " + swerve.getCanCoderAngleTest(3));
+        System.out.print("Mod 3 Falcon Angle: " + swerve.getFalconAngleTest(3));
 
     }
 

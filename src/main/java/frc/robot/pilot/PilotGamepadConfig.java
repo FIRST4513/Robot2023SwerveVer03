@@ -8,12 +8,12 @@ public class PilotGamepadConfig {
 
     // forward speed
     public static final double forwardSpeedExp = 50;
-    public static final double forwardSpeedScaler = -0.75;  // max velocity? // ~4.9 robot max
+    public static final double forwardSpeedScaler = -4.8;  // max velocity? // ~4.9 robot max
     public static final double forwardSpeedDeadband = 0.15;
     public static final double forwardSpeedOffset = 0;
     // sideways speed
     public static final double sidewaysSpeedExp = forwardSpeedExp;
-    public static final double sidewaysSpeedScaler = -0.75;
+    public static final double sidewaysSpeedScaler = -4.8;
     public static final double sidewaysSpeedDeadband = forwardSpeedDeadband;
     public static final double sidewaysSpeedOffset = 0;
     // rotation speed
