@@ -18,74 +18,80 @@ public class AutoCmds {
 
     private static Translation2d ctrOfRot = new Translation2d( 0, 0);
 
-    public static Command SetBrakeMode(){
+    public static Command SetBrakeModeCmd(){
         return new RunCommand(() -> Robot.swerve.setBrakeMode(true));
     }
 
-    public static Command SetCoastMode(){
+    public static Command SetCoastModeCmd(){
         return new RunCommand(() -> Robot.swerve.setBrakeMode(false));
     }
         
-    public static Command FollowPath(PathPlannerTrajectory path, double time){
+    public static Command FollowPathCmd(PathPlannerTrajectory path, double time){
         return new FollowTrajectoryCmd(path).withTimeout(time);
     }
 
-
-    public static Command DriveForTime(double time, double speed){
+    public static Command DriveForTimeCmd(double time, double speed){
         //return new SwerveDrive(false, speed, 0).withTimeout(time);
         return new SwerveDrive2Cmd ( speed, 0.0,  0.0, false, true, ctrOfRot)
                 .withTimeout(time);
     }
 
-
-    public static Command IntializePathFollowing(PathPlannerTrajectory path){
+    public static Command IntializePathFollowingCmd(PathPlannerTrajectory path){
         return new SequentialCommandGroup(
-            SetBrakeMode().withTimeout(0.25), //set brake mode and pause for 1/4 second
-            IntializeGyroAngle(path), //set gyro to initial heading
-            ResetOdometry(path) //reset odometry to the initial position
+            SetBrakeModeCmd().withTimeout(0.25), //set brake mode and pause for 1/4 second
+            IntializeGyroAngleCmd(path), //set gyro to initial heading
+            ResetOdometryCmd(path) //reset odometry to the initial position
         );
     }
 
-    public static Command setGryoDegrees(double deg){
+    public static Command setGryoDegreesCmd(double deg){
         return new InstantCommand(() -> Robot.swerve.setGyroDegrees(deg)).andThen(
             new PrintCommand("Gyro Degrees: " + Robot.swerve.getDegrees())
         );
     }
 
-    public static Command IntializeGyroAngle(PathPlannerTrajectory path){
+    public static Command IntializeGyroAngleCmd(PathPlannerTrajectory path){
         PathPlannerState s = (PathPlannerState) path.getStates().get(0);
-        return setGryoDegrees(s.holonomicRotation.getDegrees());
+        return setGryoDegreesCmd(s.holonomicRotation.getDegrees());
     }
 
-    public static Command ResetOdometry(PathPlannerTrajectory path){
+    public static Command ResetOdometryCmd(PathPlannerTrajectory path){
         Pose2d tempPose = path.getInitialPose();
         PathPlannerState s = (PathPlannerState) path.getStates().get(0) ;
         Pose2d tempPose2 = new Pose2d(tempPose.getTranslation(), s.holonomicRotation) ;
         return new InstantCommand(() -> Robot.swerve.resetOdometry(tempPose2));
     }
 
-    // public static Command feed(double time){
-    //     return BallPathCommands.feed().withTimeout(time);
-    // }
+    public static Command feedCmd(double time){
+        //return BallPathCommands.feed().withTimeout(time);
+        return DriveForTimeCmd( 2.5, 1.5).withTimeout(time);    // Dummy placeholder
+    }
 
-    // public static Command llShotwithTimeout(double time){
-    //     return BallPathCommands.llShotRPM().withTimeout(time);
-    //     //return BallPathCommands.lowGoalShot().withTimeout(time);
-    // }
+    public static Command llShotwithTimeoutCmd(double time){
+        //return BallPathCommands.llShotRPM().withTimeout(time);
+        //return BallPathCommands.lowGoalShot().withTimeout(time);
+        return DriveForTimeCmd( 2.5, 1.5).withTimeout(time);    // Dummy placeholder
+    }
 
-    // public static Command autonLLAim(){
-    //     return new LLAim().alongWith(
-    //      new TeleopSwerve(Robot.swerve, true, true)   
-    //     );
-    // }
+    public static Command autoLLAimCmd(){
+        //return new LLAim().alongWith(
+        // new TeleopSwerve(Robot.swerve, true, true));
+        return DriveForTimeCmd( 2.5, 1.5).withTimeout(5.0);    // Dummy placeholder
+    }
     
-    // public static Command intake(){
-    //     return BallPathCommands.intakeBalls();
-    //     //return new WaitCommand(1);
-    // }
+    public static Command intakeCmd(){
+        //return BallPathCommands.intakeBalls();
+        //return new WaitCommand(1);
+        return DriveForTimeCmd( 2.5, 1.5).withTimeout(5.6);    // Dummy placeholder
+    }
 
-    // public static Command intake(double time){
-    //     return intake().withTimeout(time);
-    // }
+    public static Command intakeCmd(double time){
+        //return intake().withTimeout(time);
+        return DriveForTimeCmd( 2.5, 1.5).withTimeout(5.5);    // Dummy placeholder
+    }
+
+    public static Command followPathAndIntakeCmd(PathPlannerTrajectory path, double time){
+        return new FollowTrajectoryCmd(path).deadlineWith(intakeCmd()).withTimeout(time);
+    }
 
 }

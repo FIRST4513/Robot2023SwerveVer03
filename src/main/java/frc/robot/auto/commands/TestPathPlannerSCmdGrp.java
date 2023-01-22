@@ -8,9 +8,9 @@ import frc.robot.auto.AutoConfig;
 import frc.robot.trajectories.commands.FollowTrajectoryCmd;
 
 //Need to work on setting an intial position for the field2D map to work properly.
-public class TestPathPlannerCmdGrp extends SequentialCommandGroup {
+public class TestPathPlannerSCmdGrp extends SequentialCommandGroup {
   /** Creates a new TestPathFollowing. */
-  public TestPathPlannerCmdGrp() {
+  public TestPathPlannerSCmdGrp() {
 
     // An example trajectory to follow. All units in meters.
     PathPlannerTrajectory DriveOneMeterFwd = PathPlanner.loadPath("Test_1meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
@@ -18,7 +18,8 @@ public class TestPathPlannerCmdGrp extends SequentialCommandGroup {
     PathPlannerTrajectory Test_SlideRight = PathPlanner.loadPath("Test_SlideRight", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
     
     addCommands(
-        AutoCmds.IntializePathFollowing(DriveOneMeterFwd),
+        new DelayCmd(0.25),
+        AutoCmds.IntializePathFollowingCmd(DriveOneMeterFwd),
         new FollowTrajectoryCmd(DriveOneMeterFwd),
         new DelayCmd(0.5),
         new FollowTrajectoryCmd(DriveTerminal)

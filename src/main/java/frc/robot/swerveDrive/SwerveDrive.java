@@ -18,7 +18,7 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveDriveConfig config;
     protected Odometry odometry;
     public SwerveDriveTelemetry telemetry;
-    protected SwerveModule[] mSwerveMods;
+    protected SwerveDriveModule[] mSwerveMods;
     private SwerveModuleState[] SwerveModDesiredStates;
     public Gyro gyro;
 
@@ -27,11 +27,11 @@ public class SwerveDrive extends SubsystemBase {
         config = new SwerveDriveConfig();
 
         mSwerveMods =
-                new SwerveModule[] {
-                    new SwerveModule(0, config, SwerveDriveConfig.FLMod0.config),
-                    new SwerveModule(1, config, SwerveDriveConfig.FRMod1.config),
-                    new SwerveModule(2, config, SwerveDriveConfig.BLMod2.config),
-                    new SwerveModule(3, config, SwerveDriveConfig.BRMod3.config)
+                new SwerveDriveModule[] {
+                    new SwerveDriveModule(0, config, SwerveDriveConfig.FLMod0.config),
+                    new SwerveDriveModule(1, config, SwerveDriveConfig.FRMod1.config),
+                    new SwerveDriveModule(2, config, SwerveDriveConfig.BLMod2.config),
+                    new SwerveDriveModule(3, config, SwerveDriveConfig.BRMod3.config)
                 };
 
         gyro = new Gyro();
@@ -39,12 +39,12 @@ public class SwerveDrive extends SubsystemBase {
         telemetry = new SwerveDriveTelemetry(this);
         RobotTelemetry.print("Gyro initilized and Swerve angles");
 
-        for (SwerveModule mod : mSwerveMods) {
+        for (SwerveDriveModule mod : mSwerveMods) {
             mod.resetFalconToCANcoderAngle();
         }
 
         // Set the initial module states to zero
-        drive(0, 0, 0, true, false, new Translation2d());
+        //drive(0, 0, 0, true, false, new Translation2d());
     }
 
     @Override
@@ -100,7 +100,7 @@ public class SwerveDrive extends SubsystemBase {
                 SwerveModDesiredStates, SwerveDriveConfig.maxVelocity);
 
         // ------------------ Step 4 Send Desrired Module states to wheel modules ----------------
-        for (SwerveModule mod : mSwerveMods) {
+        for (SwerveDriveModule mod : mSwerveMods) {
             mod.setDesiredState(SwerveModDesiredStates[mod.moduleNumber], isOpenLoop);
         }
     }
@@ -114,7 +114,7 @@ public class SwerveDrive extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveDriveConfig.maxVelocity);
 
         SwerveModDesiredStates = desiredStates;
-        for (SwerveModule mod : mSwerveMods) {
+        for (SwerveDriveModule mod : mSwerveMods) {
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
     }
@@ -127,10 +127,10 @@ public class SwerveDrive extends SubsystemBase {
      * @param rightVolts +- 12 volots
      */    
     public void tankDriveVolts(double leftVolts, double rightVolts) {
-        mSwerveMods[0].setVoltage(leftVolts);
-        mSwerveMods[2].setVoltage(leftVolts);
-        mSwerveMods[1].setVoltage(rightVolts);
-        mSwerveMods[3].setVoltage(rightVolts);
+        mSwerveMods[0].setDriveMotorVoltage(leftVolts);
+        mSwerveMods[2].setDriveMotorVoltage(leftVolts);
+        mSwerveMods[1].setDriveMotorVoltage(rightVolts);
+        mSwerveMods[3].setDriveMotorVoltage(rightVolts);
     }
 
     // Used in turnCmd
@@ -149,7 +149,7 @@ public class SwerveDrive extends SubsystemBase {
      */
     public void stop() {
         SwerveModuleState[] states = new SwerveModuleState[4];
-        for (SwerveModule mod : mSwerveMods) {
+        for (SwerveDriveModule mod : mSwerveMods) {
             mod.stop();
             states[mod.moduleNumber] =
                     new SwerveModuleState(0, Rotation2d.fromDegrees(mod.getTargetAngle()));
@@ -168,7 +168,7 @@ public class SwerveDrive extends SubsystemBase {
      * @param enabled true = brake mode, false = coast mode
      */
     public void setBrakeMode(boolean enabled) {
-        for (SwerveModule mod : mSwerveMods) {
+        for (SwerveDriveModule mod : mSwerveMods) {
             mod.setBrakeMode(enabled);
         }
     }
@@ -176,7 +176,7 @@ public class SwerveDrive extends SubsystemBase {
 
     /** Reset AngleMotors to Absolute This is used to reset the angle motors to absolute position */
     public void resetSteeringToAbsolute() {
-        for (SwerveModule mod : mSwerveMods) {
+        for (SwerveDriveModule mod : mSwerveMods) {
             mod.resetFalconToCANcoderAngle();
         }
     }
@@ -250,7 +250,7 @@ public class SwerveDrive extends SubsystemBase {
      */
     public SwerveModuleState[] getStates() {
         SwerveModuleState[] states = new SwerveModuleState[4];
-        for (SwerveModule mod : mSwerveMods) {
+        for (SwerveDriveModule mod : mSwerveMods) {
             states[mod.moduleNumber] = mod.getState();
         }
         return states;
@@ -267,7 +267,7 @@ public class SwerveDrive extends SubsystemBase {
      */
     public SwerveModulePosition[] getPositions() {
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
-        for (SwerveModule mod : mSwerveMods) {
+        for (SwerveDriveModule mod : mSwerveMods) {
             positions[mod.moduleNumber] = mod.mSwerveModPosition;
         }
         return positions;
@@ -280,7 +280,7 @@ public class SwerveDrive extends SubsystemBase {
      * @param desiredStates Meters per second and radians per second
      */
     public void resetFalconAngles() {
-        for (SwerveModule mod : mSwerveMods) {
+        for (SwerveDriveModule mod : mSwerveMods) {
             mod.resetFalconToCANcoderAngle();
         }
     }

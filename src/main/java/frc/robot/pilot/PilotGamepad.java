@@ -2,10 +2,7 @@ package frc.robot.pilot;
 
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
-import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.pilot.commands.PilotGamepadCmds;
-import frc.robot.swerveDrive.Gyro;
-import frc.robot.swerveDrive.SwerveDrive;
 import frc.robot.swerveDrive.commands.SwerveDriveCmds;
 
 /** Used to add buttons to the pilot gamepad and configure the joysticks */

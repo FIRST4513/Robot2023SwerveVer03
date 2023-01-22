@@ -42,7 +42,7 @@ public class Conversions {
      */
     public static double RPMToFalcon(double RPM, double gearRatio) {
         double motorRPM = RPM * gearRatio;
-        double sensorCounts = motorRPM * (2048.0 / 600.0);
+        double sensorCounts = motorRPM * (2048.0 / 600.0); // Per 100 ms
         return sensorCounts;
     }
 

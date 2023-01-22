@@ -11,9 +11,9 @@ import frc.robot.swerveDrive.commands.SwerveDrive2Cmd;
 // Then drive forward at 0.2 MPS
 // Stop after 1.5 seconds of motion
 
-public class TaxiSimpleCmdGrp extends ParallelCommandGroup {
+public class TaxiSimplePCmdGrp extends ParallelCommandGroup {
   /** Creates a new TestPathFollowing. */
-  public TaxiSimpleCmdGrp() {
+  public TaxiSimplePCmdGrp() {
     double fwdSpeedMPS = 0.2;
     double leftSpeedMPS = 0.0;
     double rotSpeedRPS = 0.0;

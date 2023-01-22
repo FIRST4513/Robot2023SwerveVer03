@@ -62,8 +62,9 @@ public final class SwerveDriveConfig {
     public static final double angleKI = 0.0;
     public static final double angleKD = 0.1;  // 364 = 12.0; SDS = 0.1;
     public static final double angleKF = 0.0;
-    public static final int angleAllowableError =
-            122; // increase to reduce jitter, (2048 * angleGearRatio) / 360.0) = 1 degree
+    
+    // increase to reduce jitter, (2048 * angleGearRatio) / 360.0) = 1 degree = 122 cnts
+    public static final int angleAllowableError = 122;  // 1 degree is close enough 
 
     /* Drive Motor PID Values */
     public static final double driveKP = 0.1; // 0.1;
@@ -88,7 +89,7 @@ public final class SwerveDriveConfig {
     public static final double driveKA = (0.193 / 12);
 
     /* Swerve Profiling Values */
-    public static final double maxVelocity = 4.8;
+    public static final double maxVelocity = 4.8; // MPS
         //     ((6380 / 60) / angleGearRatio) * wheelDiameter * Math.PI * 0.95; // meters per second
     public static final double maxAccel = maxVelocity * 1.5; // take 1/2 sec to get to max speed.
     public static final double maxAngularVelocity =

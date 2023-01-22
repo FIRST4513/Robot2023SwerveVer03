@@ -2,7 +2,6 @@ package frc.robot.auto;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import frc.lib.util.GeomUtil;
 import frc.robot.swerveDrive.SwerveDriveConfig;
 
 /** Add your docs here. */

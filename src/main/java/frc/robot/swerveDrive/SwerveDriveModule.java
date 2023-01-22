@@ -20,7 +20,7 @@ import frc.lib.swerve.SwerveModuleConfig;
 import frc.lib.util.Conversions;
 import frc.robot.Robot;
 
-public class SwerveModule extends SubsystemBase {
+public class SwerveDriveModule extends SubsystemBase {
     public String moduleName;
     public int moduleNumber;
     private double angleOffset;
@@ -48,7 +48,7 @@ public class SwerveModule extends SubsystemBase {
                     SwerveDriveConfig.driveKS, SwerveDriveConfig.driveKV, SwerveDriveConfig.driveKA);
 
     // ------------- Constructor ------------
-    public SwerveModule( int moduleNumber,
+    public SwerveDriveModule( int moduleNumber,
                          SwerveDriveConfig swerveConfig,
                          SwerveModuleConfig moduleConfig) {
         setLoggingOn();
@@ -69,6 +69,7 @@ public class SwerveModule extends SubsystemBase {
         mDriveMotor = new WPI_TalonFX(moduleConfig.driveMotorID);
         configDriveMotor();
 
+        resetFalconToCANcoderAngle();
         lastAngle = getFalconAngle().getDegrees();
     }
 
@@ -120,7 +121,7 @@ public class SwerveModule extends SubsystemBase {
         // --------------------------- Step 5 Set Drive Motor  ----------------------------
         // Send velocity data to the modules Drive motor
         if (isOpenLoop) {
-            percentOutput = optimizedSpeed / SwerveDriveConfig.maxVelocity; // Convert MPS to -1 to +1 value
+            percentOutput = optimizedSpeed / SwerveDriveConfig.maxVelocity; // MPS to -1 to +1 value
             setDriveMotorPercent( percentOutput );
         } else {
             // Send Optimized speed MPS along with feedforward value to Drive motor
@@ -135,7 +136,7 @@ public class SwerveModule extends SubsystemBase {
         mAngleMotor.stopMotor();
     }
 
-    public void setVoltage(double voltage) {
+    public void setDriveMotorVoltage(double voltage) {
         mDriveMotor.setVoltage(voltage);
     }
 
@@ -143,7 +144,7 @@ public class SwerveModule extends SubsystemBase {
         // This is a closed loop, using internal PID and Feedforward, to maintain accurate velocity
         // possible PID parameter not tuned or feedforward values causing jitter and creep errors?
         double falcon_desired_Velocity = Conversions.MPSToFalcon(
-                                            vel / 10.0,
+                                            vel,
                                             SwerveDriveConfig.wheelCircumference,
                                             SwerveDriveConfig.driveGearRatio);
 
@@ -251,17 +252,18 @@ public class SwerveModule extends SubsystemBase {
     }
 
     public double getDriveDistanceMeters() {
-        double position = Conversions.FalconToMeters(
-                                mDriveMotor.getSelectedSensorPosition(),
+        double rawFalconSensorPos = mDriveMotor.getSelectedSensorPosition();
+        double positionMeters = Conversions.FalconToMeters(
+                                rawFalconSensorPos,
                                 SwerveDriveConfig.wheelCircumference,
                                 SwerveDriveConfig.driveGearRatio);
-        return position;
+        return positionMeters;
     }
 
     public double getDriveVelocityMPS(){
-        rawFalconSensorData = mDriveMotor.getSelectedSensorVelocity();
+        double rawFalconSensorVel = mDriveMotor.getSelectedSensorVelocity();
         double velMPS = Conversions.falconToMPS(
-            mDriveMotor.getSelectedSensorVelocity(),
+            rawFalconSensorVel,
             SwerveDriveConfig.wheelCircumference,
             SwerveDriveConfig.driveGearRatio);
         return velMPS;
