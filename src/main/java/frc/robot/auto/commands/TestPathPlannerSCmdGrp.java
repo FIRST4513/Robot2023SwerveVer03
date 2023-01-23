@@ -6,6 +6,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.auto.AutoConfig;
 import frc.robot.trajectories.commands.FollowTrajectoryCmd;
+import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 //Need to work on setting an intial position for the field2D map to work properly.
 public class TestPathPlannerSCmdGrp extends SequentialCommandGroup {
@@ -19,7 +20,7 @@ public class TestPathPlannerSCmdGrp extends SequentialCommandGroup {
     
     addCommands(
         new DelayCmd(0.25),
-        AutoCmds.IntializePathFollowingCmd(DriveOneMeterFwd),
+        TrajectoriesCmds.IntializePathFollowingCmd(DriveOneMeterFwd),
         new FollowTrajectoryCmd(DriveOneMeterFwd),
         new DelayCmd(0.5),
         new FollowTrajectoryCmd(DriveTerminal)
