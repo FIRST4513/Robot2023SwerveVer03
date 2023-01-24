@@ -47,31 +47,37 @@ public final class SwerveDriveConfig {
                     frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
     /* Swerve Current Limiting */
-    public static final int angleContinuousCurrentLimit = 20;
-    public static final int anglePeakCurrentLimit = 30;
+    public static final int angleContinuousCurrentLimit = 25;
+    public static final int anglePeakCurrentLimit = 40;
     public static final double anglePeakCurrentDuration = 0.1;
     public static final boolean angleEnableCurrentLimit = true;
 
-    public static final int driveContinuousCurrentLimit = 40;
-    public static final int drivePeakCurrentLimit = 40;
-    public static final double drivePeakCurrentDuration = 0.0;
+    public static final int driveContinuousCurrentLimit = 35;
+    public static final int drivePeakCurrentLimit = 60;
+    public static final double drivePeakCurrentDuration = 0.1;
     public static final boolean driveEnableCurrentLimit = true;
 
     /* Angle Motor PID Values */
-    public static final double angleKP = 0.2;  // 364 = 0.6; SDS = 0.2;
+    public static final double angleKP = 0.3;  // 0.2 prev 1-24-23 364 = 0.6; SDS = 0.2;
     public static final double angleKI = 0.0;
-    public static final double angleKD = 0.1;  // 364 = 12.0; SDS = 0.1;
-    public static final double angleKF = 0.0;
-    
-    // increase to reduce jitter, (2048 * angleGearRatio) / 360.0) = 1 degree = 122 cnts
-    public static final int angleAllowableError = 250;  // 1 degree is close enough 
+    public static final double angleKD = 0.0;  // 0.1 prev 1-24-23 364 = 12.0; SDS = 0.1;
+    public static final double angleKF = 0.0; 
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 0.1; // 0.1;
+    public static final double driveKP = 0.05; // 0.1;
     public static final double driveKI = 0.0;
     public static final double driveKD = 0.0;
     public static final double driveKF = 0.0;
 
+    /* Drive Motor Characterization Values */
+    public static final double driveKS = ( 0.32 / 12.0 );  // (0.605 / 12); // /12 to convert from volts to %output
+    public static final double driveKV = ( 1.51 / 12.0 );  // (1.72 / 12);
+    public static final double driveKA = ( 0.27 / 12.0 );  // (0.193 / 12);
+    
+    // KS - Volts Stiction -     How many volts are needed to simply start moving/overcoming friction
+    // KV - Volts Velocity -     How many volts it takes to achieve a constant, specified velocity
+    // KA - Volts Acceleration - How many volts for a given acceleration (mps^2)
+    
     // Some on-line sample examples
     public static final double kP = 2.2956;
     public static final double kI = 0;
@@ -80,32 +86,28 @@ public final class SwerveDriveConfig {
     public static final double kV = 2.3014;
     public static final double kA = 0.12872;
 
-    /* Drive Motor Characterization Values */
-    // KS - Volts Stiction - How many volts are needed to simply start moving/overcoming friction
-    public static final double driveKS = (0.0 / 12);  // (0.605 / 12); // /12 to convert from volts to %output
-    // KV - Volts Velocity - How many volts it takes to achieve a constant, specified velocity
-    public static final double driveKV = 12;  // (1.72 / 12);
-    // KA - Volts Acceleration - How many volts for a given acceleration (mps^2)
-    public static final double driveKA = (0.193 / 12);
+    // increase to reduce jitter, (2048 * angleGearRatio) / 360.0) = 1 degree = 122 cnts
+    public static final int angleAllowableError = 122;  // 1 degree is close enough ????
 
     /* Swerve Profiling Values */
     public static final double maxVelocity = 4.8; // MPS
-        //     ((6380 / 60) / angleGearRatio) * wheelDiameter * Math.PI * 0.95; // meters per second
+    //     ((6380 / 60) / angleGearRatio) * wheelDiameter * Math.PI * 0.95; // meters per second
+
+    //     public static final double maxAngularVelocity =
+    //             maxVelocity / Math.hypot(trackWidth / 2.0, wheelBase / 2.0);
+    public static final double maxAngularVelocity = 10.0;  // RPS 3.14 * 2 = 360 Degrees per second
+
     public static final double maxAccel = maxVelocity * 1.5; // take 1/2 sec to get to max speed.
-    public static final double maxAngularVelocity =
-            maxVelocity / Math.hypot(trackWidth / 2.0, wheelBase / 2.0);
     public static final double maxAngularAcceleration = Math.pow(maxAngularVelocity, 2);
 
     /* Neutral Modes */
     public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
     public static final NeutralMode driveNeutralMode = NeutralMode.Coast;
 
-    /* Motor Inverts */
+    /* Inverts */
     public static final boolean driveMotorInvert = false; // True = MK4i
     public static final boolean angleMotorInvert = true; // True = MK4i
-
-    /* Angle Encoder Invert */
-    public static final boolean canCoderInvert = false;
+    public static final boolean canCoderInvert =   false;
 
     /* When calibrating, angle bevel gear is to the right of the robot */
 
