@@ -51,7 +51,7 @@ public class SwerveDriveModule extends SubsystemBase {
     public SwerveDriveModule( int moduleNumber,
                          SwerveDriveConfig swerveConfig,
                          SwerveModuleConfig moduleConfig) {
-        setLoggingOn();
+        setLoggingOff();
         this.moduleNumber = moduleNumber;
         this.swerveConfig = swerveConfig;
         moduleName = moduleConfig.moduleName;
@@ -69,7 +69,6 @@ public class SwerveDriveModule extends SubsystemBase {
         mDriveMotor = new WPI_TalonFX(moduleConfig.driveMotorID);
         configDriveMotor();
 
-        resetFalconToCANcoderAngle();
         lastAngle = getFalconAngle().getDegrees();
     }
 
@@ -108,7 +107,7 @@ public class SwerveDriveModule extends SubsystemBase {
 
         // ------------------------- Step 3 Reduce wheel angle Jitter  --------------------------
         //
-        if ((Math.abs(optimizedSpeed) < (SwerveDriveConfig.maxVelocity * 0.05))) {
+        if ((Math.abs(optimizedSpeed) < (SwerveDriveConfig.maxVelocity * 0.01))) {
             outputAngle = lastAngle;
         }
 

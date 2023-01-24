@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotTelemetry;
+import edu.wpi.first.wpilibj.Timer;
 
 public class SwerveDrive extends SubsystemBase {
     public SwerveDriveConfig config;
@@ -38,6 +39,8 @@ public class SwerveDrive extends SubsystemBase {
         gyro = new Gyro();
         odometry = new Odometry(this);
         telemetry = new SwerveDriveTelemetry(this);
+        Timer.delay(1.0);
+        resetFalconAngles();
         RobotTelemetry.print("Gyro initilized and Swerve angles");
 
         // Set the initial module states to zero
