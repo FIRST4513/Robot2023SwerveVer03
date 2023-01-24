@@ -354,6 +354,7 @@ public class SwerveDriveModule extends SubsystemBase {
       	// Check to see if we should just exit and not log
         if (m_LogFlag == false)  { return; }
         line = "Timestamp,";
+        line = "Type,";
         line = "Mod #,Mod Nm";
         line += "Desired Angle,Desired Speed,";
         line += "Orig Cancoder Angle,Orig Falcon Angle,";
@@ -370,7 +371,7 @@ public class SwerveDriveModule extends SubsystemBase {
         //if (moduleNumber != 0)  { return; }
 
         // ---------- Build Print String -----------------
-        line = "";
+        line = "SwMod,";    // Record Type
         // ---------- Show Module Num and Name ------------
         line += moduleNumber + "," +moduleName;
 
