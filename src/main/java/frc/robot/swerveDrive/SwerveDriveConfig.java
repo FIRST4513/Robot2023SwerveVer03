@@ -64,14 +64,14 @@ public final class SwerveDriveConfig {
     public static final double angleKF = 0.0; 
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 0.05; // 0.1;
+    public static final double driveKP = 0.1; // 0.1;
     public static final double driveKI = 0.0;
     public static final double driveKD = 0.0;
     public static final double driveKF = 0.0;
 
     /* Drive Motor Characterization Values */
     public static final double driveKS = ( 0.32 / 12.0 );  // (0.605 / 12); // /12 to convert from volts to %output
-    public static final double driveKV = ( 1.51 / 12.0 );  // (1.72 / 12);
+    public static final double driveKV = ( 3.0 / 12.0 );  // (1.72 / 12);
     public static final double driveKA = ( 0.27 / 12.0 );  // (0.193 / 12);
     
     // KS - Volts Stiction -     How many volts are needed to simply start moving/overcoming friction

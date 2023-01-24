@@ -7,7 +7,7 @@ public class PilotGamepadConfig {
     public static final int port = 0;
 
     // forward speed
-    public static final double forwardSpeedExp = 50;
+    public static final double forwardSpeedExp = 35;
     public static final double forwardSpeedScaler = -4.8;  // max velocity? // ~4.9 robot max
     public static final double forwardSpeedDeadband = 0.15;
     public static final double forwardSpeedOffset = 0;
