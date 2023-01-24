@@ -132,15 +132,6 @@ public class SwerveDriveModule extends SubsystemBase {
         if (moduleNumber == 0)      { smartDashboardUpdate(); } // Only for testing and Tuning
     }
 
-    public void stop() {
-        mDriveMotor.stopMotor();
-        mAngleMotor.stopMotor();
-    }
-
-    public void setDriveMotorVoltage(double voltage) {
-        mDriveMotor.setVoltage(voltage);
-    }
-
     public void setDriveMotorVelocityMPS( double vel, double feedforward){
         // This is a closed loop, using internal PID and Feedforward, to maintain accurate velocity
         // possible PID parameter not tuned or feedforward values causing jitter and creep errors?
@@ -160,6 +151,14 @@ public class SwerveDriveModule extends SubsystemBase {
         mDriveMotor.set(ControlMode.PercentOutput, percentOut); 
     }
 
+    public void stop() {
+        mDriveMotor.stopMotor();
+        mAngleMotor.stopMotor();
+    }
+
+    public void setDriveMotorVoltage(double voltage) {
+        mDriveMotor.setVoltage(voltage);
+    }
 
     // -------------------------------------------------------------------------------
     // ---------------------------- Module State Methods -----------------------------
@@ -212,7 +211,7 @@ public class SwerveDriveModule extends SubsystemBase {
         // Returns CANcoder angle Continous +180 degrees CCW to -180 degrees CW, with offset applied
         // 0 Degrees is wheel staight forward
         double angle = getCANcoderAngleAbsolute() - angleOffset;
-        if (angle < 0)      { angle = angle + 360; }    // Assures 0-360 degrees
+        if (angle < -180)   { angle = angle + 360; }    
         if (angle > 180)    { angle = 360 - angle; }    // Assures +180 to -180 degrees
         return (angle); 
     }
