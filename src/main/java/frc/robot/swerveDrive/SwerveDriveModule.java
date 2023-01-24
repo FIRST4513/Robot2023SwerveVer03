@@ -212,7 +212,7 @@ public class SwerveDriveModule extends SubsystemBase {
         // 0 Degrees is wheel staight forward
         double angle = getCANcoderAngleAbsolute() - angleOffset;
         if (angle < -180)   { angle = angle + 360; }    
-        if (angle > 180)    { angle = 360 - angle; }    // Assures +180 to -180 degrees
+        if (angle > +180)   { angle = angle - 360; }    // Assures +180 to -180 degrees
         return (angle); 
     }
 
