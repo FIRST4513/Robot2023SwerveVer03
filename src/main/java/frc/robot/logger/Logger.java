@@ -1,37 +1,14 @@
-
 package frc.robot.logger;
 
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-//import java.sql.Date;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.TimeZone;
 import java.util.Vector;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Joystick;
 
 public class Logger extends SubsystemBase {
     String fileName;
-	String base = "/home/lvuser/logs/logfile";
-	
-	
-	//String output_dir = "/U/data_captures/"; // USB drive is mounted to /U on roboRIO
-	String output_dir = "/home/lvuser/logs/"; // USB drive is mounted to /U on roboRIO
-	boolean log_open = false;
-	long log_write_index;
-	String log_name = null;
-	BufferedWriter log_file = null;
-
-
+	String base = "/home/lvuser/logs/logfile";	// Files of format logfile01.csv to logfile15.csv
 	String msg;  
 	java.io.PrintStream outFile;
 	String current, last, logDateTime;
@@ -98,18 +75,7 @@ public class Logger extends SubsystemBase {
 			//System.out.println("Logger Create file completed ! last =" + last );
     	}
 		System.out.println("Logger Create file completed ! last =" + last );
-		appendLog("Line 1");
-		appendLog("Line 2");
-		appendLog("Line 3");
-
     	// Open Log file for Output
-
-		//LocalDateTime date = LocalDateTime.now();
-		//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
-		//logDateTime = formatter.format(date);
-		// logDateTime= "2018-03-07 10-29-59"
-		//logDateTimeFile = new File(logDateTime);
-    	
 		// what happens if no file exists !!! empty folder !!!!!
     	try{  
     		// Create a PrintStream attached to a file named last log1.csv.
@@ -121,7 +87,6 @@ public class Logger extends SubsystemBase {
     		System.out.println("Error in opening new log file..." + last);         	
     		System.out.println(e);
     	}
-
     	appendLog("****** LOG FILE ( " + last + " )    Created at " + logDateTime + " *******");
     }
 
@@ -129,8 +94,9 @@ public class Logger extends SubsystemBase {
     	System.out.println("Logger printlog function called"); 
 		System.out.println("  ----------- Lines in log file = "+ lines.size());
 
+		// Write out individual lens to file
     	for (String element : lines) {
-			System.out.println("  ----------- Line = "+ element);
+			//System.out.println("  ----------- Line = "+ element);
 			try{  
 				outFile.println(element);	
 			}
@@ -139,6 +105,7 @@ public class Logger extends SubsystemBase {
 				System.out.println(e);
 			} 	
     	}
+		// Flush out all remaing line to disk
 		try{ 
 			System.out.println("  ----------- Trying to flush out file buffer");
 			outFile.flush();    	// Flush all buffered data to the file.
@@ -149,8 +116,6 @@ public class Logger extends SubsystemBase {
 		}
 		lines.clear();
 		logFlag = 0;			// Show that there is nothing in buffer	
-
-    	// ????            //outFile.close();		// Close the file (by closing the PrintStream). problems
     }
 
     public void startTimer(){
@@ -170,39 +135,6 @@ public class Logger extends SubsystemBase {
     	lines.add(String.valueOf(time)+", " + s + ", " + String.valueOf(d));
     }
 
-    public void appendLog(String type, String sys, String s ){
-    	logFlag = 1;						// we have log entry in buffer
-    	time = Robot.sysTimer.get();
-    	lines.add(String.valueOf(time)+", " + type + ", " + sys + ", " + s);
-    }
-
-
-    public void logJoyAxis(Joystick joy){
-    	logFlag = 1;						// we have log entry in buffer
-    	line = String.valueOf(time) + ", Debug, Joystick";
-    	//line += ", Xaxis=," + String.valueOf(Robot.drivetrain.JoyXaxis);
-    	//line += ", Yaxis=," + String.valueOf(Robot.drivetrain.JoyYaxis);
-    	//line += ", Twist=," + String.valueOf(Robot.drivetrain.JoyTwist);
-    	//line += ", Throttle=," + String.valueOf(Robot.drivetrain.JoyThrottle);
-    	//line += ", RevBtn=," + String.valueOf(Robot.drivetrain.JoyReverse);
-    	lines.add(line);
-    }
-
-	public void appendLogPosition(String s ){
-    	//logFlag = 1;						// we have log entry in buffer
-		//time = Robot.sysTimer.get();
-		//double x =			 Robot.drivetrain.getPositionX();
-		//double y =  		 Robot.drivetrain.getPositionY();
-		//double posTracker = Robot.drivetrain.getTrackerYaw();
-		//double gyroYaw = 	 Robot.drivetrain.getGyroYaw();
-		//msg = String.format(",Position X=,%g, Y=,%g,GyroYaw=,%g, TrackerYaw=,%g" , x , y, posTracker, gyroYaw);
-    	//lines.add(String.valueOf(time) + "," + s + "," + msg);
-	}
-	
-    //public void setLogFlag(double flag)	{  	LogFlag = flag; }
-    //public double getLogFlag()			{ 	return LogFlag; }
     public void clearLog()				{  	lines.clear();  }
 
 }
-
-// This is a test comment -Logan
