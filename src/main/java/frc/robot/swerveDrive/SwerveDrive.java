@@ -33,15 +33,12 @@ public class SwerveDrive extends SubsystemBase {
                     new SwerveDriveModule(2, config, SwerveDriveConfig.BLMod2.config),
                     new SwerveDriveModule(3, config, SwerveDriveConfig.BRMod3.config)
                 };
+        mSwerveMods[0].logDescription();    // Add description to log file
 
         gyro = new Gyro();
         odometry = new Odometry(this);
         telemetry = new SwerveDriveTelemetry(this);
         RobotTelemetry.print("Gyro initilized and Swerve angles");
-
-        // for (SwerveDriveModule mod : mSwerveMods) {
-        //     mod.resetFalconToCANcoderAngle();
-        // }
 
         // Set the initial module states to zero
         //drive(0, 0, 0, true, false, new Translation2d());

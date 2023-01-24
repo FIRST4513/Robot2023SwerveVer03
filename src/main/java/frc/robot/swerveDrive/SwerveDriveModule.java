@@ -345,7 +345,6 @@ public class SwerveDriveModule extends SubsystemBase {
 
             SmartDashboard.putNumber("Percent Output", percentOutput);
             SmartDashboard.putNumber("Falcon Sensor", rawFalconSensorData);
-
         }
     }
 
@@ -355,13 +354,14 @@ public class SwerveDriveModule extends SubsystemBase {
     public void logDescription(){
       	// Check to see if we should just exit and not log
         if (m_LogFlag == false)  { return; }
-        line = "";
+        line = "Timestamp,";
+        line = "Mod #,Mod Nm";
         line += "Desired Angle,Desired Speed,";
         line += "Orig Cancoder Angle,Orig Falcon Angle,";
         line += "Optimized Angle,Optimized Speed,";
         line += "Delta Angle,Output Angle,";
         line += "Actual Vel, FeedForward";
-        //Robot.logger.appendLog(line);
+        Robot.logger.appendLog(line);
     }
 
     // ----------- Log Drivetrain data --------------------
