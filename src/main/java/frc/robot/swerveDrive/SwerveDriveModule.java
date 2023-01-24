@@ -361,14 +361,14 @@ public class SwerveDriveModule extends SubsystemBase {
         line += "Optimized Angle,Optimized Speed,";
         line += "Delta Angle,Output Angle,";
         line += "Actual Vel, FeedForward";
-        Robot.logger.appendLog(line);
+        //Robot.logger.appendLog(line);
     }
 
     // ----------- Log Drivetrain data --------------------
     public void logSwerveModuleData() {
     	// Check to see if we should just exit and not log
         if (m_LogFlag == false) { return; }
-        if (moduleNumber != 0)  { return; }
+        //if (moduleNumber != 0)  { return; }
 
         // ---------- Build Print String -----------------
         line = "";

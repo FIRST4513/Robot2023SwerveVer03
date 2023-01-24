@@ -3,16 +3,35 @@ package frc.robot.logger;
 
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+//import java.sql.Date;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 import java.util.Vector;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Joystick;
-// ffs
+
 public class Logger extends SubsystemBase {
     String fileName;
-	String base = "/home/lvuser/log"; 
+	String base = "/home/lvuser/logs/logfile";
+	
+	
+	//String output_dir = "/U/data_captures/"; // USB drive is mounted to /U on roboRIO
+	String output_dir = "/home/lvuser/logs/"; // USB drive is mounted to /U on roboRIO
+	boolean log_open = false;
+	long log_write_index;
+	String log_name = null;
+	BufferedWriter log_file = null;
+
+
 	String msg;  
 	java.io.PrintStream outFile;
 	String current, last, logDateTime;
@@ -46,13 +65,16 @@ public class Logger extends SubsystemBase {
     	// Remove log file 15 to make room
     	last = new String(base + "15.csv"); 
     	lastFile = new File(last);
-	    System.out.println("attempting log15.csv delete");
+
+		// -------- Delete oldest file 15 -----------
+	    System.out.println("attempting logfile15.csv delete");
    		bool = lastFile.delete();
    		if (bool)
-   		    System.out.println("log15.csv delete SUCCESS");
+   		    System.out.println("logfile15.csv delete SUCCESS");
    		else
-   		    System.out.println("NO log15.csv to delete!");
+   		    System.out.println("NO logfile15.csv to delete!");
    		
+		// ----------------------------------------------------------------
     	// Rename remaining files 9-1 to 10-2 (incrementing the file count)
 	    System.out.println("\nRenaming files 1-15\n");
     	for (int i = 14; i > 0; i--){
@@ -70,19 +92,25 @@ public class Logger extends SubsystemBase {
             } else {
                       System.out.println("NO " + current + " to rename!");
             }
+			//System.out.println("Logger Create file completed ! Current =" + current );
     		last = new String(current);
     		lastFile = new File(last);
-			appendLog("Line 1");
+			//System.out.println("Logger Create file completed ! last =" + last );
     	}
-	
+		System.out.println("Logger Create file completed ! last =" + last );
+		appendLog("Line 1");
+		appendLog("Line 2");
+		appendLog("Line 3");
+
     	// Open Log file for Output
 
-		LocalDateTime date = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
-		logDateTime = formatter.format(date);
+		//LocalDateTime date = LocalDateTime.now();
+		//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss");
+		//logDateTime = formatter.format(date);
 		// logDateTime= "2018-03-07 10-29-59"
-		logDateTimeFile = new File(logDateTime);
+		//logDateTimeFile = new File(logDateTime);
     	
+		// what happens if no file exists !!! empty folder !!!!!
     	try{  
     		// Create a PrintStream attached to a file named last log1.csv.
     		outFile = new java.io.PrintStream(last);
@@ -93,25 +121,35 @@ public class Logger extends SubsystemBase {
     		System.out.println("Error in opening new log file..." + last);         	
     		System.out.println(e);
     	}
+
     	appendLog("****** LOG FILE ( " + last + " )    Created at " + logDateTime + " *******");
     }
 
     public void saveLogFile(){
     	System.out.println("Logger printlog function called"); 
+		System.out.println("  ----------- Lines in log file = "+ lines.size());
 
     	for (String element : lines) {
-    		//System.out.println(element);
+			System.out.println("  ----------- Line = "+ element);
 			try{  
 				outFile.println(element);	
-				outFile.flush();    	// Flush all buffered data to the file.
-				lines.clear();
-				logFlag = 0;			// Show that there is nothing in buffer
 			}
 			catch(Exception e) {
 				System.out.println("Error in saving log file..." + last);         	
 				System.out.println(e);
 			} 	
     	}
+		try{ 
+			System.out.println("  ----------- Trying to flush out file buffer");
+			outFile.flush();    	// Flush all buffered data to the file.
+		}
+		catch(Exception e) {
+			System.out.println("Error in flushing log file..." + last);         	
+			System.out.println(e);
+		}
+		lines.clear();
+		logFlag = 0;			// Show that there is nothing in buffer	
+
     	// ????            //outFile.close();		// Close the file (by closing the PrintStream). problems
     }
 

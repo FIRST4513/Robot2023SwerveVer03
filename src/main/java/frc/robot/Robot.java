@@ -72,6 +72,7 @@ public class Robot extends TimedRobot {
         SwerveDriveCmds.setupDefaultCommand();
         ElevatorCmds.setupDefaultCommand();
         PilotGamepadCmds.setupDefaultCommand();
+        logger.startTimer();
 
     }
 
@@ -98,7 +99,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         resetCommandsAndButtons();
-        logger.saveLogFile();           // look for a way to verify we have a valid file
+        //logger.saveLogFile();           // look for a way to verify we have a valid file
     }
 
     @Override
@@ -111,7 +112,7 @@ public class Robot extends TimedRobot {
         resetCommandsAndButtons();
         sysTimer.reset();			// System timer for Competition run
     	sysTimer.start();
-        logger.startTimer();
+        //logger.startTimer();
 
         Command autonCommand = AutoSetup.getAutonomousCommand();
         if (autonCommand != null) {
@@ -165,7 +166,7 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         resetCommandsAndButtons();
-        logger.startTimer();
+        //logger.startTimer();
         swerve.resetFalconAngles(); // reset falcon angle motors to absolute encoder
     }
 

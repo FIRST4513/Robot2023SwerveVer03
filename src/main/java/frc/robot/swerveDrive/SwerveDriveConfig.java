@@ -64,7 +64,7 @@ public final class SwerveDriveConfig {
     public static final double angleKF = 0.0;
     
     // increase to reduce jitter, (2048 * angleGearRatio) / 360.0) = 1 degree = 122 cnts
-    public static final int angleAllowableError = 122;  // 1 degree is close enough 
+    public static final int angleAllowableError = 250;  // 1 degree is close enough 
 
     /* Drive Motor PID Values */
     public static final double driveKP = 0.1; // 0.1;

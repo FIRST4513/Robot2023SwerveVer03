@@ -2,6 +2,8 @@ package frc.robot.pilot;
 
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
+import frc.robot.logger.commands.LoggerCmds;
+import frc.robot.logger.commands.WriteOutTest2SCmdGrp;
 import frc.robot.pilot.commands.PilotGamepadCmds;
 import frc.robot.swerveDrive.commands.SwerveDriveCmds;
 
@@ -39,7 +41,9 @@ public class PilotGamepad extends Gamepad {
 
         // Teleop Drive with R0bot Perspective
         gamepad.aButton.whileTrue(PilotGamepadCmds.rpvPilotSwerveCmd());
-        
+        gamepad.yButton.onTrue(LoggerCmds.WriteOutLogFileCmd());
+        gamepad.xButton.onTrue(new WriteOutTest2SCmdGrp());
+
     }
 
     public void setupDisabledButtons() {
