@@ -28,10 +28,10 @@ public class SwerveDriveTelemetry {
         Mod2Name = swerve.mSwerveMods[2].getName();
         Mod3Name = swerve.mSwerveMods[3].getName();
 
-        moduleLayout(Mod0Name, 0, tab).withPosition(2, 0).withSize(3, 3);
-        moduleLayout(Mod1Name, 1, tab).withPosition(5, 0).withSize(3, 3);
-        moduleLayout(Mod2Name, 2, tab).withPosition(2, 3).withSize(3, 3);
-        moduleLayout(Mod3Name, 3, tab).withPosition(5, 3).withSize(3, 3);
+        moduleLayout(Mod0Name, 0, tab).withPosition(2, 0).withSize(3, 4);
+        moduleLayout(Mod1Name, 1, tab).withPosition(6, 0).withSize(3, 4);
+        moduleLayout(Mod2Name, 2, tab).withPosition(2, 3).withSize(3, 4);
+        moduleLayout(Mod3Name, 3, tab).withPosition(6, 3).withSize(3, 4);
     }
 
     public void testMode() {

@@ -39,9 +39,9 @@ public class SwerveDrive extends SubsystemBase {
         telemetry = new SwerveDriveTelemetry(this);
         RobotTelemetry.print("Gyro initilized and Swerve angles");
 
-        for (SwerveDriveModule mod : mSwerveMods) {
-            mod.resetFalconToCANcoderAngle();
-        }
+        // for (SwerveDriveModule mod : mSwerveMods) {
+        //     mod.resetFalconToCANcoderAngle();
+        // }
 
         // Set the initial module states to zero
         //drive(0, 0, 0, true, false, new Translation2d());

@@ -79,6 +79,7 @@ public class SwerveDriveModule extends SubsystemBase {
         updateSwerveModuleState();              // Drive Mtr Vel (mps) & Angle Motor Angle
         updateSwerveModulePosition();           // Drive Mtr Dist & Angle Motor Angle
         updateCANcoderAngles();                 // CanCoder Angles (360 and 180 values)
+        logSwerveModuleData();
     }
 
 

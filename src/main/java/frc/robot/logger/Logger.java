@@ -71,7 +71,8 @@ public class Logger extends SubsystemBase {
                       System.out.println("NO " + current + " to rename!");
             }
     		last = new String(current);
-    		lastFile = new File(last); 
+    		lastFile = new File(last);
+			appendLog("Line 1");
     	}
 	
     	// Open Log file for Output
@@ -99,12 +100,18 @@ public class Logger extends SubsystemBase {
     	System.out.println("Logger printlog function called"); 
 
     	for (String element : lines) {
-    		//System.out.println(element);         	
-    		outFile.println(element);	
+    		//System.out.println(element);
+			try{  
+				outFile.println(element);	
+				outFile.flush();    	// Flush all buffered data to the file.
+				lines.clear();
+				logFlag = 0;			// Show that there is nothing in buffer
+			}
+			catch(Exception e) {
+				System.out.println("Error in saving log file..." + last);         	
+				System.out.println(e);
+			} 	
     	}
-    	outFile.flush();    	// Flush all buffered data to the file.
-    	lines.clear();
-    	logFlag = 0;			// Show that there is nothing in buffer
     	// ????            //outFile.close();		// Close the file (by closing the PrintStream). problems
     }
 
