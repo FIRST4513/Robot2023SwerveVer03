@@ -82,9 +82,10 @@ public class SwerveDrive extends SubsystemBase {
         // ------------------- Step 1 Set Chassis Speeds ----------------------
         // mps (Meters Per Second) and rps (Radians Per Second)
         ChassisSpeeds speeds;
+
         if (fieldRelative) {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            fwdPositive, leftPositive, omegaRadiansPerSecond, getHeading());
+                            fwdPositive, leftPositive, omegaRadiansPerSecond, getHeading().times(-1.0));
         } else {
             speeds = new ChassisSpeeds(fwdPositive, leftPositive, omegaRadiansPerSecond);
         }
