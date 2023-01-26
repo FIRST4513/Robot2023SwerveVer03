@@ -28,10 +28,10 @@ public class SwerveDriveTelemetry {
         Mod2Name = swerve.mSwerveMods[2].getName();
         Mod3Name = swerve.mSwerveMods[3].getName();
 
-        moduleLayout(Mod0Name, 0, tab).withPosition(2, 0).withSize(3, 4);
-        moduleLayout(Mod1Name, 1, tab).withPosition(6, 0).withSize(3, 4);
-        moduleLayout(Mod2Name, 2, tab).withPosition(2, 3).withSize(3, 4);
-        moduleLayout(Mod3Name, 3, tab).withPosition(6, 3).withSize(3, 4);
+        moduleLayout(Mod0Name, 0, tab).withPosition(1, 0).withSize(4, 3);
+        moduleLayout(Mod1Name, 1, tab).withPosition(5, 0).withSize(4, 3);
+        moduleLayout(Mod2Name, 2, tab).withPosition(1, 3).withSize(4, 3);
+        moduleLayout(Mod3Name, 3, tab).withPosition(5, 3).withSize(4, 3);
     }
 
     public void testMode() {
@@ -57,39 +57,47 @@ public class SwerveDriveTelemetry {
         // m_mod0Layout.withSize(1, 2);
         modLayout.withProperties(Map.of("Label position", "TOP"));
 
-        // mod Cancoder Angle
-        SuppliedValueWidget<Double> modCancoderAngleWidget =
-                modLayout.addNumber(
-                        "ABS Raw",
-                        () -> swerve.mSwerveMods[moduleNum].getCANcoderAngleAbsolute());
-        modCancoderAngleWidget.withPosition(0, 0).withSize(2, 2);
-
-        // mod Cancoder Angle with Offset
-        SuppliedValueWidget<Double> modCancoderAngleWOWidget =
+        // mod Cancoder raw angle
+        SuppliedValueWidget<Double> modCanAbsRawWidget =
         modLayout.addNumber(
-                "ABS Angle",
-                () -> swerve.mSwerveMods[moduleNum].getCANcoderAngle180());
-        modCancoderAngleWOWidget.withPosition(2, 0).withSize(2, 2);
+                "CAN ABS Raw",
+                () -> swerve.mSwerveMods[moduleNum].getCanCoder().getDegrees());
+        modCanAbsRawWidget.withPosition(0, 0).withSize(1, 2);
 
-        // mod Integrated Angle
-        SuppliedValueWidget<Double> modIntegratedAngleWidget =
-                modLayout.addNumber(
-                        "Fal Angle",
-                        () -> swerve.mSwerveMods[moduleNum].getFalconAngle().getDegrees());
-        modIntegratedAngleWidget.withPosition(0, 4).withSize(2, 2);
-      
-        // mod TargetAngle
-        SuppliedValueWidget<Double> modTargetAngleWidget =
-                modLayout.addNumber(
-                        "Tgt Angle", () -> swerve.mSwerveMods[moduleNum].getTargetAngle());
-        modTargetAngleWidget.withPosition(2, 2).withSize(2, 2);
+        // mod Cancoder angle with offset
+        SuppliedValueWidget<Double> modCanAngleWithOffsetWidget =
+        modLayout.addNumber(
+                "CAN With Offset",
+                () -> swerve.mSwerveMods[moduleNum].getCanCoderDegreesWithOffset());
+        modCanAngleWithOffsetWidget.withPosition(2, 0).withSize(1, 2);
 
-        // mod Velocity
-        SuppliedValueWidget<Double> modVelocityWidget =
-                modLayout.addNumber(
-                        "Fal Vel",
-                        () -> swerve.mSwerveMods[moduleNum].getState().speedMetersPerSecond);
-        modVelocityWidget.withPosition(2, 0).withSize(2, 2);
+        // mod falcon angle
+        SuppliedValueWidget<Double> modFalconAngleWidget =
+        modLayout.addNumber(
+                "Falcon Angle",
+                () -> swerve.mSwerveMods[moduleNum].getFalconAngle().getDegrees());
+        modFalconAngleWidget.withPosition(0, 1).withSize(1, 2);
+
+        // mod target angle
+        SuppliedValueWidget<Double> modTargetFalconAngle =
+        modLayout.addNumber(
+                "Target Angle",
+                () -> swerve.mSwerveMods[moduleNum].getTargetAngle().getDegrees());
+        modTargetFalconAngle.withPosition(2, 1).withSize(1, 2);
+
+        // mod wheel velocity
+        SuppliedValueWidget<Double> modWheelVelocity =
+        modLayout.addNumber(
+                "Wheel Vel.",
+                () -> swerve.mSwerveMods[moduleNum].getDriveVelocityMPS());
+        modWheelVelocity.withPosition(0, 2).withSize(1, 2);
+
+        // mod wheel target velocity
+        SuppliedValueWidget<Double> modWheelTargetVelocity =
+        modLayout.addNumber(
+                "Wheel Tgt. Vel.",
+                () -> swerve.mSwerveMods[moduleNum].getState().speedMetersPerSecond);
+        modWheelTargetVelocity.withPosition(2,2).withSize(1, 2);
 
         return modLayout;
     }
