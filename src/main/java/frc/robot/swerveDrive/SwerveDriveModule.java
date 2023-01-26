@@ -38,8 +38,9 @@ public class SwerveDriveModule extends SubsystemBase {
     private String line;
 
     SimpleMotorFeedforward feedforward =
-            new SimpleMotorFeedforward(
-                    SwerveDriveConfig.driveKS, SwerveDriveConfig.driveKV, SwerveDriveConfig.driveKA);
+            new SimpleMotorFeedforward( SwerveDriveConfig.driveKS,
+                                        SwerveDriveConfig.driveKV,
+                                        SwerveDriveConfig.driveKA);
 
     // ------------- Constructor ------------
     public SwerveDriveModule( int moduleNumber,
@@ -87,13 +88,16 @@ public class SwerveDriveModule extends SubsystemBase {
         Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (SwerveDriveConfig.maxVelocity * 0.01)) ? lastAngle : desiredState.angle;
         // Rotation2d angle = desiredState.angle;
 
-        mAngleMotor.set(ControlMode.Position, Conversions.degreesToFalcon(angle.getDegrees(), SwerveDriveConfig.angleGearRatio));
+        mAngleMotor.set(ControlMode.Position,
+                        Conversions.degreesToFalcon(angle.getDegrees(),
+                        SwerveDriveConfig.angleGearRatio));
         lastAngle = angle;
     }
 
     public void setSpeedMPS(SwerveModuleState desiredState, boolean isOpenLoop) {
         if (isOpenLoop) {
-            double percentOutput = desiredState.speedMetersPerSecond / SwerveDriveConfig.maxVelocity; // MPS to -1 to +1 value
+             // MPS to -1 to +1 value
+            double percentOutput = desiredState.speedMetersPerSecond / SwerveDriveConfig.maxVelocity;
             mDriveMotor.set(ControlMode.PercentOutput, percentOutput);
         } else {
             // Send Optimized speed MPS along with feedforward value to Drive motor
@@ -155,8 +159,8 @@ public class SwerveDriveModule extends SubsystemBase {
     public SwerveModuleState getState() {
         // used by swerve drive odometry
         return new SwerveModuleState(Conversions.falconToMPS(mDriveMotor.getSelectedSensorVelocity(),
-                                        SwerveDriveConfig.wheelCircumference,
-                                        SwerveDriveConfig.driveGearRatio),
+                                                             SwerveDriveConfig.wheelCircumference,
+                                                             SwerveDriveConfig.driveGearRatio),
                                      getFalconAngle());
     }
 
@@ -165,16 +169,15 @@ public class SwerveDriveModule extends SubsystemBase {
     }
 
     public SwerveModulePosition getPosition() {
-        return new SwerveModulePosition(getDriveDistanceMeters(),
-                                        getFalconAngle());
+        return new SwerveModulePosition(getDriveDistanceMeters(), getFalconAngle());
     }
 
     public double getDriveDistanceMeters() {
         double rawFalconSensorPos = mDriveMotor.getSelectedSensorPosition();
         double positionMeters = Conversions.FalconToMeters(
-                                rawFalconSensorPos,
-                                SwerveDriveConfig.wheelCircumference,
-                                SwerveDriveConfig.driveGearRatio);
+                                        rawFalconSensorPos,
+                                        SwerveDriveConfig.wheelCircumference,
+                                        SwerveDriveConfig.driveGearRatio);
         return positionMeters;
     }
 
@@ -193,8 +196,9 @@ public class SwerveDriveModule extends SubsystemBase {
 
     // Set Angle Motor Encoder based on absolute CanCoder Value
     public void resetFalconToAbsolute() {
-        double absolutePosition = Conversions.degreesToFalcon(getCanCoder().getDegrees() - angleOffset.getDegrees(),
-                                                              SwerveDriveConfig.angleGearRatio);
+        double absolutePosition = Conversions.degreesToFalcon(
+                                                getCanCoderDegreesWithOffset(),
+                                                SwerveDriveConfig.angleGearRatio);
         mAngleMotor.setSelectedSensorPosition(absolutePosition);
     }
 
