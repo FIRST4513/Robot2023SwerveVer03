@@ -39,8 +39,10 @@ public class SwerveDrive extends SubsystemBase {
         gyro = new Gyro();
         odometry = new Odometry(this);
         telemetry = new SwerveDriveTelemetry(this);
+
         Timer.delay(1.0);
         resetFalconAngles();
+        
         RobotTelemetry.print("Gyro initilized and Swerve angles");
 
         // Set the initial module states to zero
@@ -82,9 +84,10 @@ public class SwerveDrive extends SubsystemBase {
         // ------------------- Step 1 Set Chassis Speeds ----------------------
         // mps (Meters Per Second) and rps (Radians Per Second)
         ChassisSpeeds speeds;
+
         if (fieldRelative) {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            fwdPositive, leftPositive, omegaRadiansPerSecond, getHeading());
+                            fwdPositive, leftPositive, omegaRadiansPerSecond, getHeading().times(-1.0));
         } else {
             speeds = new ChassisSpeeds(fwdPositive, leftPositive, omegaRadiansPerSecond);
         }
@@ -152,7 +155,7 @@ public class SwerveDrive extends SubsystemBase {
         for (SwerveDriveModule mod : mSwerveMods) {
             mod.stop();
             states[mod.moduleNumber] =
-                    new SwerveModuleState(0, Rotation2d.fromDegrees(mod.getTargetAngle()));
+                    new SwerveModuleState(0, mod.getTargetAngle());
         }
         SwerveModDesiredStates = states;
     }
@@ -177,7 +180,7 @@ public class SwerveDrive extends SubsystemBase {
     /** Reset AngleMotors to Absolute This is used to reset the angle motors to absolute position */
     public void resetSteeringToAbsolute() {
         for (SwerveDriveModule mod : mSwerveMods) {
-            mod.resetFalconToCANcoderAngle();
+            mod.resetFalconToAbsolute();
         }
     }
 
@@ -281,12 +284,12 @@ public class SwerveDrive extends SubsystemBase {
      */
     public void resetFalconAngles() {
         for (SwerveDriveModule mod : mSwerveMods) {
-            mod.resetFalconToCANcoderAngle();
+            mod.resetFalconToAbsolute();
         }
     }
 
     public double getCanCoderAngleTest(int modID) {
-        return mSwerveMods[modID].getCANcoderAngle180();
+        return mSwerveMods[modID].getCanCoder().getDegrees();
     }
 
     public double getFalconAngleTest(int modID) {

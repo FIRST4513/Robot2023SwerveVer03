@@ -18,7 +18,7 @@ public class PilotGamepadConfig {
     public static final double sidewaysSpeedOffset = 0;
     // rotation speed
     public static final double rotationSpeedExp = forwardSpeedExp;
-    public static final double rotationSpeedScaler = -(Math.PI/3);  // -pi to +pi? for radians
+    public static final double rotationSpeedScaler = -(Math.PI);  // -pi to +pi? for radians
     public static final double rotationSpeedDeadband = forwardSpeedDeadband;
     public static final double rotationSpeedOffset = 0;
 
