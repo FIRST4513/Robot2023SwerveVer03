@@ -4,6 +4,8 @@
 
 package frc.robot.swerveDrive;
 
+import java.time.chrono.IsoChronology;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -80,14 +82,13 @@ public class SwerveDrive extends SubsystemBase {
             boolean isOpenLoop,
             Translation2d centerOfRotationMeters) {
 
-
         // ------------------- Step 1 Set Chassis Speeds ----------------------
         // mps (Meters Per Second) and rps (Radians Per Second)
         ChassisSpeeds speeds;
 
         if (fieldRelative) {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            fwdPositive, leftPositive, omegaRadiansPerSecond, getHeading().times(-1.0));
+                            fwdPositive, leftPositive, omegaRadiansPerSecond, getHeadingRotation2d());
         } else {
             speeds = new ChassisSpeeds(fwdPositive, leftPositive, omegaRadiansPerSecond);
         }
@@ -126,8 +127,8 @@ public class SwerveDrive extends SubsystemBase {
      /**
      * Used to drive wheel speeds manually
      *
-     * @param leftVolts +- 12 volots
-     * @param rightVolts +- 12 volots
+     * @param leftVolts +- 12 volts
+     * @param rightVolts +- 12 volts
      */    
     public void tankDriveVolts(double leftVolts, double rightVolts) {
         mSwerveMods[0].setDriveMotorVoltage(leftVolts);
@@ -219,6 +220,10 @@ public class SwerveDrive extends SubsystemBase {
     // Used in turn to angle
     public double getDegrees(){
         return gyro.getHeadingDegrees();
+    }
+
+    public Rotation2d getHeadingRotation2d() {
+        return Rotation2d.fromDegrees(getDegrees() * -1.0f);
     }
 
     public void resetGyro(){
