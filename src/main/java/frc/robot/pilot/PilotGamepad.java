@@ -86,5 +86,5 @@ public class PilotGamepad extends Gamepad {
 
     public void rumble(double intensity) {
         this.gamepad.setRumble(intensity, intensity);
-     }
+    }
 }
