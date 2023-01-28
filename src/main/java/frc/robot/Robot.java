@@ -127,7 +127,6 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         resetCommandsAndButtons();
         logger.startTimer();
-        
         // System.out.print("----------\nTeleop Init!\n");
         // System.out.println("Mod 0 CanCoder Angle: " + swerve.getCanCoderAngleTest(0));
         // System.out.println("Mod 0 Falcon Angle: " + swerve.getFalconAngleTest(0));

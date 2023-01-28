@@ -28,7 +28,7 @@ public class PilotGamepadCmds {
                         () -> Robot.pilotGamepad.getDriveFwdPositive(),
                         () -> Robot.pilotGamepad.getDriveLeftPositive(),
                         () -> Robot.pilotGamepad.getDriveRotationCCWPositive(),
-                        false)
+                        true )
                 .withName("fpvPilotSwerve");
     }
 

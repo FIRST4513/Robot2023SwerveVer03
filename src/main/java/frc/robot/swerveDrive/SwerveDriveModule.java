@@ -200,6 +200,8 @@ public class SwerveDriveModule extends SubsystemBase {
                                                 getCanCoderDegreesWithOffset(),
                                                 SwerveDriveConfig.angleGearRatio);
         mAngleMotor.setSelectedSensorPosition(absolutePosition);
+        lastAngle = Rotation2d.fromDegrees( getCanCoderDegreesWithOffset() );
+
     }
 
     private void configAngleEncoder() {

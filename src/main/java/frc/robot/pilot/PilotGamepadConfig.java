@@ -5,15 +5,35 @@ import edu.wpi.first.math.geometry.Translation2d;
 /** Constants used by the Pilot Gamepad */
 public class PilotGamepadConfig {
     public static final int port = 0;
+    //selectuble speeds
+    //----Fast-----//
+    public static final double FastfowardVelocity = 35;
+    public static final double FastsidewaysVelocity= -1.5; // -4.8;  // max velocity? // ~4.9 robot max
+    public static final double FastrotationVelocity = 0.15;
+    
+    //---Medium Fast---///
+    public static final double MedFastfowardVelocity = 35;
+    public static final double MedFastsidewaysVelocity= -1.5; // -4.8;  // max velocity? // ~4.9 robot max
+    public static final double MedFastrotationVelocity = 0.15;
 
-    // forward speed
+    //---Medium Slow--//
+    public static final double MedSlowfowardVelocity = 35;
+    public static final double MedSlowsidewaysVelocity= -1.5; // -4.8;  // max velocity? // ~4.9 robot max
+    public static final double MedSlowrotationVelocity = 0.15;
+
+    //---Slow--//
+    public static final double SlowfowardVelocity = 35;
+    public static final double SlowsidewaysVelocity= -1.5; // -4.8;  // max velocity? // ~4.9 robot max
+    public static final double SlowrotationVelocity = 0.15;
+
+    // forward speed//
     public static final double forwardSpeedExp = 35;
-    public static final double forwardSpeedScaler = -4.8;  // max velocity? // ~4.9 robot max
+    public static final double forwardSpeedScaler = -1.5; // -4.8;  // max velocity? // ~4.9 robot max
     public static final double forwardSpeedDeadband = 0.15;
     public static final double forwardSpeedOffset = 0;
     // sideways speed
     public static final double sidewaysSpeedExp = forwardSpeedExp;
-    public static final double sidewaysSpeedScaler = -4.8;
+    public static final double sidewaysSpeedScaler = -1.5; //-4.8;
     public static final double sidewaysSpeedDeadband = forwardSpeedDeadband;
     public static final double sidewaysSpeedOffset = 0;
     // rotation speed

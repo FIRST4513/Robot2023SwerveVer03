@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotTelemetry;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveDrive extends SubsystemBase {
     public SwerveDriveConfig config;
@@ -51,6 +52,8 @@ public class SwerveDrive extends SubsystemBase {
     @Override
     public void periodic() {
         odometry.update();
+        SmartDashboard.putNumber("gyroheading",gyro.getHeadingDegrees());
+
         //telemetry.logModuleAbsolutePositions();
     }
 
@@ -83,7 +86,7 @@ public class SwerveDrive extends SubsystemBase {
 
         if (fieldRelative) {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            fwdPositive, leftPositive, omegaRadiansPerSecond, getHeadingRotation2d());
+                            fwdPositive, leftPositive, omegaRadiansPerSecond, getHeading());
         } else {
             speeds = new ChassisSpeeds(fwdPositive, leftPositive, omegaRadiansPerSecond);
         }

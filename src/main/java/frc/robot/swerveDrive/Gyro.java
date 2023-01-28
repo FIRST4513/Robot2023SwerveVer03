@@ -14,14 +14,7 @@ public class Gyro {
         gyroOffset = 0;
     }
 
-    /**
-     * Get the raw yaw of the robot in Rotation2d without using the yawOffset
-     *
-     * @return the raw yaw of the robot in Rotation2d
-     */
-    public Rotation2d getRawYaw() {
-        return Rotation2d.fromDegrees(gyro.getAngle());
-    } 
+    
 
     public Rotation2d getGyroHeadingRotation2d() {
         // this will return a Rotation2d object of the yaw value -180 to +180 degree
@@ -35,7 +28,20 @@ public class Gyro {
 
     public double getHeadingDegrees() {
         // This will return values from -180CW to +180CCW degrees of yaw
-        return -Math.IEEEremainder(gyro.getAngle()+gyroOffset, 360);
+        //return -Math.IEEEremainder(gyro.getAngle()+gyroOffset, 360);
+        return (-gyro.getAngle()) % 360.0;
+    }
+    
+    public Rotation2d getHeading() {
+        // This will return values from -180CW to +180CCW degrees of yaw
+        //return -Math.IEEEremainder(gyro.getAngle()+gyroOffset, 360);
+        return Rotation2d.fromDegrees((-gyro.getAngle()) % 360.0);
+    }
+
+    public double getangle() {
+        // This will return values from -180CW to +180CCW degrees of yaw
+        //return -Math.IEEEremainder(gyro.getAngle()+gyroOffset, 360);
+        return (gyro.getAngle()); 
     }
 
     public void setHeadingDegrees( double newHdg ){
