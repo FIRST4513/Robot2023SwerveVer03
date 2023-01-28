@@ -5,7 +5,6 @@
 package frc.robot.swerveDrive;
 
 import java.time.chrono.IsoChronology;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -46,16 +45,12 @@ public class SwerveDrive extends SubsystemBase {
         resetFalconAngles();
         
         RobotTelemetry.print("Gyro initilized and Swerve angles");
-
-        // Set the initial module states to zero
-        //drive(0, 0, 0, true, false, new Translation2d());
+        //drive(0, 0, 0, true, false, new Translation2d());     // Set the initial module states to zero
     }
 
     @Override
     public void periodic() {
         odometry.update();
-        //telemetry.logModuleStates("SwerveModuleStates/Measured", getStates());
-        //telemetry.logModuleStates("SwerveModuleStates/Desired", getDesiredStates());
         //telemetry.logModuleAbsolutePositions();
     }
 
@@ -122,7 +117,6 @@ public class SwerveDrive extends SubsystemBase {
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
     }
-
 
      /**
      * Used to drive wheel speeds manually
