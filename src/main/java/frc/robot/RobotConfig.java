@@ -34,6 +34,8 @@ public final class RobotConfig {
         public final static int BLangleMotorID =     7;       // Can ID Talon SRX
         public final static int BRangleMotorID =     8;       // Can ID Talon SRX
 
+        public final static int armMotorID =         10;      // Can ID Talon SRX
+
         public final static int elevatorMotor =      7;       // PWM Port 
     }
 
@@ -49,6 +51,8 @@ public final class RobotConfig {
 
     public final class LimitSwitches {
         public final static int elevatorLowerLimitSw =     0;   // DIO Port
+        public final static int armUpperLimitSw =          1;   // DIO Port
+        public final static int armLowerLimitSw =          2;   // DIO Port
     }
 
     //Check if we are FMSattached or Faking it
