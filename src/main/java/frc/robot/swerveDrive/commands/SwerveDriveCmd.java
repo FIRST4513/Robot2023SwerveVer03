@@ -44,7 +44,7 @@ public class SwerveDriveCmd extends CommandBase {
             leftPositiveSupplier,
             ccwPositiveSupplier,
             fieldRelative,
-            true,  // trues
+            true,  // trues for openLoop from teleop
             new Translation2d());
     }
 
