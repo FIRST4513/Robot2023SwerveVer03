@@ -42,7 +42,7 @@ public class RobotTelemetry extends TelemetrySubsystem {
     private String IPaddress = "UNKOWN";
 
     public RobotTelemetry() {
-        super("Robot");
+        super("Robot");     // Set tab name to Robot
 
         // Allows us to see all running commands on the robot
         SmartDashboard.putData(CommandScheduler.getInstance());

@@ -224,7 +224,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void resetGyro(){
-        gyro.zeroHeading();
+        gyro.resetGyro();
     }
 
     public void setGyroDegrees( double newHdg ) {

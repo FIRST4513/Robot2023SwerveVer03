@@ -17,8 +17,8 @@ public class AutoSetup {
 
     // A chooser for autonomous commands
     public static void setupSelectors() {
-        autoChooser.setDefaultOption(
-                "Nothing", new PrintCommand("Doing Nothing in Auton").andThen(new WaitCommand(5)));
+        autoChooser.setDefaultOption("Nothing",
+                             new PrintCommand("Doing Nothing in Auton").andThen(new WaitCommand(5)));
         autoChooser.setDefaultOption("Do Nothing", new PrintCommand("DO NOTHING AUTO RUNNING"));
         autoChooser.addOption("Delay 10 Sec", new DelayCmd(10));    
         }

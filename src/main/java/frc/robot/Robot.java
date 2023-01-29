@@ -127,6 +127,8 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         resetCommandsAndButtons();
         logger.startTimer();
+        // Set Pilot Teleop Speeds to those selected on smartdashboard
+        pilotGamepad.setMaxSpeeds(pilotGamepad.getSelectedSpeed());
         // System.out.print("----------\nTeleop Init!\n");
         // System.out.println("Mod 0 CanCoder Angle: " + swerve.getCanCoderAngleTest(0));
         // System.out.println("Mod 0 Falcon Angle: " + swerve.getFalconAngleTest(0));
