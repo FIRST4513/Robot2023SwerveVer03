@@ -34,24 +34,18 @@ public class PilotGamepad extends Gamepad {
 
     public PilotGamepad() {
         super("Pilot", PilotGamepadConfig.port);
-
-        // Setup Speed Selector
-    	speedChooser.setDefaultOption("1. SLOW", 	"Slow");
-    	speedChooser.addOption ("2. MED. Slow",	    "MedSlow");
-    	speedChooser.addOption ("3. MED. Fast", 	"MedFast");
-    	speedChooser.addOption ("4. Fast", 	        "Fast");
-        SmartDashboard.putData(speedChooser);
-
+        setupSpeedMenu();
         //telemetry = new PilotGamepadTelemetry(this);
     }
 
     public void setupTeleopButtons() {
-
-        // Rest Gyro to 0
+        // "A" Button - Teleop Drive with Robot Perspective
+        gamepad.aButton.whileTrue(PilotGamepadCmds.rpvPilotSwerveCmd());
+        
+        // "Start" Button - Rest Gyro to 0
         gamepad.startButton.onTrue(SwerveDriveCmds.zeroGyroHeadingCmd());
 
-        // Teleop Drive with R0bot Perspective
-        gamepad.aButton.whileTrue(PilotGamepadCmds.rpvPilotSwerveCmd());
+        // "Y" Button - Write log file to disk
         gamepad.yButton.onTrue(LoggerCmds.WriteOutLogFileCmd());
 
     }
@@ -104,6 +98,15 @@ public class PilotGamepad extends Gamepad {
         return MaxSpeeds.SLOW;
     }
 
+    public void setupSpeedMenu(){
+            // Setup Speed Selector
+            speedChooser.setDefaultOption("1. SLOW", 	"Slow");
+            speedChooser.addOption ("2. MED. Slow",	    "MedSlow");
+            speedChooser.addOption ("3. MED. Fast", 	"MedFast");
+            speedChooser.addOption ("4. Fast", 	        "Fast");
+            SmartDashboard.putData(speedChooser);
+    }
+    
     public void setMaxSpeeds(MaxSpeeds speed){
         switch (speed) { 
             case FAST:

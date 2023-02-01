@@ -29,12 +29,12 @@ public class ElevatorCmds {
     }
 
     public static Command lowerCmd() {
-        return new InstantCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
+        return new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
             .withName("LowerCmd");
     }
 
     public static Command raiseCmd() {
-        return new InstantCommand( () -> Robot.elevator.elevRaise(), Robot.elevator)
+        return new RunCommand( () -> Robot.elevator.elevRaise(), Robot.elevator)
             .withName("RaiseCmd");
     }
 
