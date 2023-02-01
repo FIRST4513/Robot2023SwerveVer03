@@ -18,7 +18,7 @@ public class IntakeSubSys extends SubsystemBase {
         stopMotors();
     } 
 
-//Methods
+    //Methods
     public void setMotors(double speed) {
         intakeUpperMotor.set(speed);
         intakeLowerMotor.set(speed); 
@@ -50,16 +50,13 @@ public class IntakeSubSys extends SubsystemBase {
     }
 
     public boolean isConeDetectSwitchPressed(){
-        if(coneDetectSwitch.get() == IntakeConfig.coneDetectTrue) {
-            return true; 
-        } 
+        if(coneDetectSwitch.get() == IntakeConfig.coneDetectTrue) { return true; } 
         return false;
         }
 
      public boolean isCubeDetectSwitchPressed(){
-        if(cubeDetectSwitch.get() == IntakeConfig.cubeDetectTrue) {
-            return true; 
-        } 
+        if(cubeDetectSwitch.get() == IntakeConfig.cubeDetectTrue) { return true; } 
         return false;
      }
+     
 }

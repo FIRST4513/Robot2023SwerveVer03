@@ -20,7 +20,4 @@ public class IntakeConfig {
     public static double cubeEjectSpeed = -0.25;
     public static double coneEjectSpeed = -0.25;
 
-
-
-
 }

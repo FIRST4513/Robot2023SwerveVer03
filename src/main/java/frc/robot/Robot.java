@@ -20,12 +20,6 @@ import frc.robot.swerveDrive.SwerveDrive;
 import frc.robot.swerveDrive.commands.SwerveDriveCmds;
 import frc.robot.trajectories.Trajectories;
 
-/**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
- * project.
- */
 public class Robot extends TimedRobot {
     public static RobotConfig config;
     //public static RobotTelemetry telemetry;
@@ -125,32 +119,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        // System.out.print("----------\nTeleop Init!\n");
         resetCommandsAndButtons();
         logger.startTimer();
         // Set Pilot Teleop Speeds to those selected on smartdashboard
         pilotGamepad.setMaxSpeeds(pilotGamepad.getSelectedSpeed());
-        // System.out.print("----------\nTeleop Init!\n");
-        // System.out.println("Mod 0 CanCoder Angle: " + swerve.getCanCoderAngleTest(0));
-        // System.out.println("Mod 0 Falcon Angle: " + swerve.getFalconAngleTest(0));
-        // System.out.println("Mod 1 CanCoder Angle: " + swerve.getCanCoderAngleTest(1));
-        // System.out.println("Mod 1 Falcon Angle: " + swerve.getFalconAngleTest(1));
-        // System.out.println("Mod 2 CanCoder Angle: " + swerve.getCanCoderAngleTest(2));
-        // System.out.println("Mod 2 Falcon Angle: " + swerve.getFalconAngleTest(2));
-        // System.out.println("Mod 3 CanCoder Angle: " + swerve.getCanCoderAngleTest(3));
-        // System.out.println("Mod 3 Falcon Angle: " + swerve.getFalconAngleTest(3));
-        
         swerve.resetFalconAngles(); // reset falcon angle motors to absolute encoder
-        
-        // System.out.println("\nAfter Reset!\n----------");
-        // System.out.println("Mod 0 CanCoder Angle: " + swerve.getCanCoderAngleTest(0));
-        // System.out.println("Mod 0 Falcon Angle: " + swerve.getFalconAngleTest(0));
-        // System.out.println("Mod 1 CanCoder Angle: " + swerve.getCanCoderAngleTest(1));
-        // System.out.println("Mod 1 Falcon Angle: " + swerve.getFalconAngleTest(1));
-        // System.out.println("Mod 2 CanCoder Angle: " + swerve.getCanCoderAngleTest(2));
-        // System.out.println("Mod 2 Falcon Angle: " + swerve.getFalconAngleTest(2));
-        // System.out.println("Mod 3 CanCoder Angle: " + swerve.getCanCoderAngleTest(3));
-        // System.out.println("Mod 3 Falcon Angle: " + swerve.getFalconAngleTest(3));
-
     }
 
     /** This function is called periodically during operator control. */

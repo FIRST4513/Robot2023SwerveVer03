@@ -10,7 +10,7 @@ public class ElevatorConfig {
     // Declare and Initialize needed class objects
 
     // ------ Device Port Constants ------
-    public final int kMotorPort =           Motors.elevatorMotor;
+    public final int kMotorPort =           Motors.elevatorMotorID;
     public final int kEncoderAChannel =     Encoders.elevMotorEncoderA;
     public final int kEncoderBChannel =     Encoders.elevMotorEncoderB;
     public final int kLowerLimitSwitchPort = LimitSwitches.elevatorLowerLimitSw;
