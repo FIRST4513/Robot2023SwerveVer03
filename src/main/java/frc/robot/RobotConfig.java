@@ -36,7 +36,10 @@ public final class RobotConfig {
 
         public final static int armMotorID =         10;      // Can ID Talon SRX
 
-        public final static int elevatorMotor =      7;       // PWM Port 
+        public final static int elevatorMotorID =      7;       // PWM Port 
+
+        public final static int intakeUpperMotorID = 11;       //Can ID Talon SRX
+        public final static int intakeLowerMotorID = 12;       //Can ID Talon SRX
     }
 
     public final class Encoders {
@@ -53,7 +56,9 @@ public final class RobotConfig {
         public final static int elevatorLowerLimitSw =     0;   // DIO Port
         public final static int armUpperLimitSw =          1;   // DIO Port
         public final static int armLowerLimitSw =          2;   // DIO Port
-    }
+        public final static int intakeConeDetectSwitch =   3;   //DIO Port
+        public final static int intakeCubeDetectSwitch =   4;   //DIO Port
+    } 
 
     //Check if we are FMSattached or Faking it
     public static boolean isFMSEnabled (){

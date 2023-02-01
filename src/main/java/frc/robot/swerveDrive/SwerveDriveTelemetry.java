@@ -22,6 +22,7 @@ public class SwerveDriveTelemetry {
         tab.addNumber("Heading", () -> swerve.getHeading().getDegrees()).withPosition(12, 0).withSize(2, 1);
         tab.addNumber("Odometry X", () -> swerve.getPoseMeters().getX()).withPosition(12, 1).withSize(2, 1);
         tab.addNumber("Odometry Y", () -> swerve.getPoseMeters().getY()).withPosition(12, 2).withSize(2, 1);
+        tab.addNumber("Gyro Heading", () -> swerve.getDegrees()).withPosition(12, 3).withSize(2, 1);
 
         Mod0Name = swerve.mSwerveMods[0].getName();
         Mod1Name = swerve.mSwerveMods[1].getName();

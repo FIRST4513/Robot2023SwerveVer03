@@ -12,22 +12,22 @@ public class PilotGamepadConfig {
     //----Fast-----//
     public static final double FastfowardVelocity       = -4.8;
     public static final double FastsidewaysVelocity     = -4.8; // -4.8;  // max velocity? // ~4.9 robot max
-    public static final double FastrotationVelocity     = 0.15;
+    public static final double FastrotationVelocity     = 0.25;
     
     //---Medium Fast---///
     public static final double MedFastfowardVelocity    = -2.5;
     public static final double MedFastsidewaysVelocity  = -2.5; // -4.8;  // max velocity? // ~4.9 robot max
-    public static final double MedFastrotationVelocity  = 0.15;
+    public static final double MedFastrotationVelocity  = 0.25;
 
     //---Medium Slow--//
     public static final double MedSlowfowardVelocity    = -1.5;
     public static final double MedSlowsidewaysVelocity  = -1.5; // -4.8;  // max velocity? // ~4.9 robot max
-    public static final double MedSlowrotationVelocity  = 0.15;
+    public static final double MedSlowrotationVelocity  = 0.25;
 
     //---Slow--//
     public static final double SlowfowardVelocity       = -0.75;
     public static final double SlowsidewaysVelocity     = -0.75; // -4.8;  // max velocity? // ~4.9 robot max
-    public static final double SlowrotationVelocity     = 0.15;
+    public static final double SlowrotationVelocity     = 0.25;
 
     // forward speed//
     public static final double forwardSpeedExp = 35;
