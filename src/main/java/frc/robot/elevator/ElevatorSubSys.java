@@ -4,11 +4,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
 
 public class ElevatorSubSys extends SubsystemBase {
     public ElevatorConfig config;
+    public ElevatorTelemetry telemetry;
 
     // Elevator Variables
     public double target_height;    // Relative to Ground
@@ -26,14 +28,13 @@ public class ElevatorSubSys extends SubsystemBase {
     public final PIDController m_controller;
     public final Encoder m_encoder;
     public final Spark m_motor;
-    //public final ElevatorTelemetry telemetry;
     public final DigitalInput elevLwrLimitSw;
 
     /** Creates a new ElevatorSim. */
     public ElevatorSubSys() {
 
         config = new ElevatorConfig();
-        //telemetry = new ElevatorTelemetry(this);
+        telemetry = new ElevatorTelemetry(this);
         
         m_controller = new PIDController(config.kElevatorKp, 0, 0);
         m_encoder = new Encoder(config.kEncoderAChannel, config.kEncoderBChannel);
@@ -59,7 +60,7 @@ public class ElevatorSubSys extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
+        updateCurrentElevPosition();
     }
  
    // ------------ Stop Elevator Motor  ----------
@@ -81,9 +82,10 @@ public void elevHoldMtr(){
 
 // ------------ Lower Elevator ----------
 public void elevLower() {
-    System.out.println("************** Elevator Lower ***********");
     mCurrElevPwr = config.KLowerSpeedDefault;
-    if (isLowerLmtReached()){  		
+
+    if (isLowerLmtReached()){
+        // We have hit bottom limit switch  		
         stop();
         return;
     }
@@ -96,7 +98,6 @@ public void elevLower() {
 
 // ------------ Raise Elevator ----------
 public void elevRaise() {
-    System.out.println("************** Elevator Raise ***********");
     mCurrElevPwr = config.KRaiseSpeedDefault;
     if (isUpperLmtReached()) {
         elevHoldMtr();

@@ -10,10 +10,8 @@ import frc.robot.Robot;
 // -----------------------------------------------------
 
 public class ElevatorCmds {
-    // Declare needed class objects. In this case Commands
 
     // Default Command
-    /** Set default command to turn off the rumble */
     public static void setupDefaultCommand() {
         Robot.elevator.setDefaultCommand(holdCmd());
     }
@@ -23,7 +21,7 @@ public class ElevatorCmds {
             .withName("HoldCmd");
     }
 
-    public static Command stopCmd() {
+    public static Command stop() {
         return new InstantCommand( () -> Robot.elevator.stop(), Robot.elevator)
             .withName("StopCmd");
     }

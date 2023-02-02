@@ -20,9 +20,19 @@ public class ArmConfig {
     public final static double kLowerSpeed = -0.35;
     public final static double kHoldSpeed = 0.1;
 
+    public final static double kArmMotorMaxPwr = 0.5;
+
     // ------ Limit Switch True States ------
     public final static boolean lowerLimitSwitchTrue = true;
     public final static boolean upperLimitSwitchTrue = true;
+
+
+    // ------- Encoder Conversion Factor --------------
+    public final static double kEncoderConversion = .02222;      // Convert cnt to degrees of angle
+
+    // ---------- Arm Angle Limits ------------
+    public final static double minArmAngle = 0.0;
+    public final static double maxArmAngle = 180.0;
 
     /* Neutral Modes */
     public static final NeutralMode armNeutralMode = NeutralMode.Coast;

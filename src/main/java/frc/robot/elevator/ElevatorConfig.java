@@ -26,17 +26,17 @@ public class ElevatorConfig {
     public final double kElevatorEncoderDistPerPulse = 2.0 * Math.PI * kElevatorDrumRadius / 4096;
 
     // ------ Orig Elevator Constants -----
-    public final double KRaiseSpeedDefault = +1.0;
+    public final double KRaiseSpeedDefault = +0.80;
     public final double KRaiseSlowSpeed =    +0.45;
     public final double KHoldSpeedDefault =  +0.15;
     public final double KLowerSlowSpeed =    -0.20;
-    public final double KLowerSpeedDefault = -0.75;
+    public final double KLowerSpeedDefault = -0.65;
 
     public final double KheightDeadBand =    +0.15;
 
     public final double KElevMaxTopPos =             38.0;      // This is the top GO NO FURTHER!
-    public final double KLimitElevTopSlowPos =       36.5;		// Start slowing the raise at this position   
-    public final double KLimitElevBottomSlowPos =    1.5;       // Start slowing the lower at this position
+    public final double KLimitElevTopSlowPos =       35.5;		// Start slowing the raise at this position   
+    public final double KLimitElevBottomSlowPos =    3.0;       // Start slowing the lower at this position
     
     public final double ELEV_INCH_ABOVE_GROUND =     2.875;     // Inches claw is above ground when fully lowered
 

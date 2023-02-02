@@ -2,8 +2,11 @@ package frc.robot.arm;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Rmath;
 import frc.robot.RobotConfig.LimitSwitches;
 
 public class ArmSubSys extends SubsystemBase {
@@ -13,17 +16,27 @@ public class ArmSubSys extends SubsystemBase {
 
     private ArmTelemetry telemetry;
 
+    public double mCurrEncoderCnt = 0; 
+    public double mCurrArmAngle = 0;
+    public double mTargetArmAngle = 0;       // PID Target Angle
+
+    public final PIDController mArmPIDController;
+    public double mPIDSetpoint = 0;
+    public double mPIDOutput = 0;
+
     // ------------- Constructor ----------
     public ArmSubSys() {
         telemetry = new ArmTelemetry();
         armMotorConfig();
         stopArm();
+        mArmPIDController = new PIDController(ArmConfig.armKP, ArmConfig.armKI, ArmConfig.armKD);
     }
 
     // ------------- Periodic -------------
     public void periodic() {
         if (isLowerLimitSwitchPressed() == true) {
             resetEncoder();
+        updateCurrentArmPosition();
         }
     }
 
@@ -32,7 +45,7 @@ public class ArmSubSys extends SubsystemBase {
     // -----------------------------------------------------
     public void raiseArm() {
         if (isUpperLimitSwitchPressed() == false) {
-            mArmMotor.set(ArmConfig.kRaiseSpeed);
+            setArmMotor(ArmConfig.kRaiseSpeed);
         }else {
             holdArm();
         }
@@ -40,18 +53,24 @@ public class ArmSubSys extends SubsystemBase {
 
     public void lowerArm() {
         if (isLowerLimitSwitchPressed() == false) {
-            mArmMotor.set(ArmConfig.kLowerSpeed);
+            setArmMotor(ArmConfig.kLowerSpeed);
         }else {
             stopArm();
         }
     }
 
-    public void holdArm() {
-        mArmMotor.set(ArmConfig.kHoldSpeed);
+    public void holdArm()   {
+        setArmMotor(ArmConfig.kHoldSpeed);
     }
 
-    public void stopArm() {
+    public void stopArm()   { 
         mArmMotor.stopMotor();
+    }
+
+    public void setArmMotor( double pwr ) {
+        if ( pwr > +ArmConfig.kArmMotorMaxPwr )  { pwr = +ArmConfig.kArmMotorMaxPwr; }
+        if ( pwr < -ArmConfig.kArmMotorMaxPwr )  { pwr = -ArmConfig.kArmMotorMaxPwr; }
+        mArmMotor.set(pwr);
     }
  
     public void setBrakeMode(Boolean enabled) {
@@ -60,6 +79,17 @@ public class ArmSubSys extends SubsystemBase {
         } else {
             mArmMotor.setNeutralMode(NeutralMode.Coast);
         }
+    }
+
+    // ------------  Set Arm to Angle by PID  ----------
+    public void setPIDArmToAngle( double angle ) {
+        // Angle 0 = fully retracted  90 = fully extended
+        angle = limitArmAngle( angle );                             // Dont allow an angle greater than permitted
+        mPIDSetpoint = convertAngleToCnt(angle);                    // Convert Angle to Encoder Cnts
+        mPIDOutput = mArmPIDController.calculate( mPIDSetpoint );   // Calculate PID Out to send to motor
+        mPIDOutput = mPIDOutput + ArmConfig.armKF;                  // Add feedforward component
+        setArmMotor( mPIDOutput );                                  // Send Power to motor  Pwr -1 to +1
+        //m_motor.setVoltage(mPIDOutput);                           // Voltage -12 to +12 ???????        
     }
 
     // ------------------------------------------------------------
@@ -94,7 +124,6 @@ public class ArmSubSys extends SubsystemBase {
         }
         return "Not Pressed";
     }
-
     
     // -------------------------------------------------------
     // ---------------- Arm Encoder Methods ------------------
@@ -105,9 +134,29 @@ public class ArmSubSys extends SubsystemBase {
         mArmMotor.setSelectedSensorPosition(0);
     }
 
-    public double getEncoder() {
+    public double getEncoderCnt() {
         return mArmMotor.getSelectedSensorPosition();
     }
+
+    public double getArmAngle() {
+        return convertCntToAngle(getEncoderCnt());
+    }
+
+    public void updateCurrentArmPosition() {
+        mCurrEncoderCnt = getEncoderCnt(); 
+        mCurrArmAngle = Rmath.mRound((mCurrEncoderCnt * ArmConfig.kEncoderConversion) , 2);
+     }
+
+     public double limitArmAngle( double angle ){
+        if (angle > ArmConfig.maxArmAngle)      { angle = ArmConfig.maxArmAngle; }
+        if (angle < ArmConfig.minArmAngle)      { angle = ArmConfig.minArmAngle; }
+        return angle;
+    }
+
+
+
+    public double convertAngleToCnt( double angle)   { return angle * ArmConfig.kEncoderConversion; }
+    public double convertCntToAngle( double cnt)     { return cnt / ArmConfig.kEncoderConversion; }
 
     // -------------------------------------------------------
     // ---------------- Configure Arm Motor ------------------
