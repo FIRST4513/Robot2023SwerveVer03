@@ -7,12 +7,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotConfig.LimitSwitches;
 
 public class ArmSubSys extends SubsystemBase {
-    private WPI_TalonFX mArmMotor = new WPI_TalonFX(ArmConfig.kMotorPort);
+    public WPI_TalonFX mArmMotor = new WPI_TalonFX(ArmConfig.kMotorPort);
     private DigitalInput upperlimitSwitch = new DigitalInput(LimitSwitches.armUpperLimitSw);
     private DigitalInput lowerlimitSwitch = new DigitalInput(LimitSwitches.armLowerLimitSw);
 
+    private ArmTelemetry telemetry;
+
     // ------------- Constructor ----------
     public ArmSubSys() {
+        telemetry = new ArmTelemetry();
         armMotorConfig();
         stopArm();
     }
@@ -58,7 +61,7 @@ public class ArmSubSys extends SubsystemBase {
             mArmMotor.setNeutralMode(NeutralMode.Coast);
         }
     }
-    
+
     // ------------------------------------------------------------
     // ---------------- Arm Limit Switch Methods ------------------
     // ------------------------------------------------------------

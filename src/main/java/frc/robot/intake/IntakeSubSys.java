@@ -11,13 +11,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeSubSys extends SubsystemBase {
     
     //Devices
-    private WPI_TalonFX intakeUpperMotor = new WPI_TalonFX(IntakeConfig.intakeUpperMotorCANID);
-    private WPI_TalonFX intakeLowerMotor = new WPI_TalonFX(IntakeConfig.intakeLowerMotorCANID);
+    public WPI_TalonFX intakeUpperMotor = new WPI_TalonFX(IntakeConfig.intakeUpperMotorCANID);
+    public WPI_TalonFX intakeLowerMotor = new WPI_TalonFX(IntakeConfig.intakeLowerMotorCANID);
     private DigitalInput coneDetectSwitch = new DigitalInput(IntakeConfig.coneDetectSwitchID);
     private DigitalInput cubeDetectSwitch = new DigitalInput(IntakeConfig.cubeDetectSwitchID);
 
+    private IntakeTelemetry telemetry;
+
     //contructor
     public IntakeSubSys() { 
+        telemetry = new IntakeTelemetry();
         configureTalonMotors();
         stopMotors();
     } 
