@@ -23,7 +23,7 @@ public class ElevatorCmds {
             .withName("HoldCmd");
     }
 
-    public static Command stop() {
+    public static Command stopCmd() {
         return new InstantCommand( () -> Robot.elevator.stop(), Robot.elevator)
             .withName("StopCmd");
     }

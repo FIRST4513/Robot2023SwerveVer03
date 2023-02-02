@@ -6,10 +6,10 @@ import frc.robot.Robot;
 
 //the funny code
 
-public class ArmTelemeter {
+public class ArmTelemetry {
     protected ShuffleboardTab tab;
 
-    public ArmTelemeter() {
+    public ArmTelemetry() {
         tab = Shuffleboard.getTab("Arm");
         tab.addString("Lower Limit Switch",()-> Robot.arm.lowerLimitSwitchStatus());
         tab.addString("Upper Limit Switch",()-> Robot.arm.UpperLimitSwitchStatus());

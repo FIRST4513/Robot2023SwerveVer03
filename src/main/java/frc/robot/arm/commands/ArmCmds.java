@@ -25,19 +25,25 @@ public class ArmCmds {
             .withName("StopArmCmd");
     }
 
-    public static Command raiseArm() {
+    public static Command raiseArmCmd() {
         return new RunCommand(() -> Robot.arm.raiseArm(), Robot.arm )
             .withName("RaiseArmCmd");
     }
 
-    public static Command lowerArm() {
+    public static Command lowerArmCmd() {
         return new RunCommand(() -> Robot.arm.lowerArm(), Robot.arm )
             .withName("LowerArmCmd");
     }
 
-    public static Command armToPIDPosition(double pos) {
+    public static Command armGoToBottomCmd() {
+        return new RunCommand( () -> Robot.arm.lowerArm(), Robot.elevator)
+            .until(() ->Robot.arm.isLowerLimitSwitchPressed())
+            .withName("armToBottomCmd");
+    }
+
+    public static Command armToPIDPositionCmd(double pos) {
         return new RunCommand(() -> Robot.arm.lowerArm(), Robot.arm )
-            .withName("Arm to PID posistion");
+            .withName("ArmToPIDPosistionCmd");
     }
     
 }

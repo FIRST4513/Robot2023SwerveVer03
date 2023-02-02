@@ -2,6 +2,7 @@ package frc.robot.intake;
 
 import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -21,7 +22,9 @@ public class IntakeSubSys extends SubsystemBase {
         stopMotors();
     } 
 
-    //Methods
+    // --------------------------------------------------------
+    // ---------------- Intake Motor Methods ------------------
+    // --------------------------------------------------------
     public void setMotors(double speed) {
         intakeUpperMotor.set(speed);
         intakeLowerMotor.set(speed); 
@@ -52,6 +55,19 @@ public class IntakeSubSys extends SubsystemBase {
         intakeLowerMotor.set(IntakeConfig.coneEjectSpeed);
     }
 
+    public void setBrakeMode(Boolean enabled) {
+        if (enabled) {
+            intakeUpperMotor.setNeutralMode(NeutralMode.Brake);
+            intakeLowerMotor.setNeutralMode(NeutralMode.Brake);
+        } else {
+            intakeUpperMotor.setNeutralMode(NeutralMode.Coast);
+            intakeLowerMotor.setNeutralMode(NeutralMode.Coast);
+        }
+    }
+
+    // ----------------------------------------------------------------
+    // ---------------- Intake Detect Switch Methods ------------------
+    // ----------------------------------------------------------------
     public boolean isConeDetectSwitchPressed(){
         if(coneDetectSwitch.get() == IntakeConfig.coneDetectTrue) { return true; } 
         return false;
@@ -74,9 +90,23 @@ public class IntakeSubSys extends SubsystemBase {
         return "Not Pressed";
     }
 
-    public void configureTalonMotors() {
-        //configure motor1
-        //congigure motor2
+    // -------------------------------------------------------
+    // ---------------- Configure Arm Motor ------------------
+    // -------------------------------------------------------
+    public void configureTalonMotors(){
+        // Upper Motor
+        intakeUpperMotor.configFactoryDefault();
+        intakeUpperMotor.configAllSettings(IntakeConfig.intakeFXConfig);
+        intakeUpperMotor.setInverted(IntakeConfig.upperIntakeMotorInvert);
+        intakeUpperMotor.setNeutralMode(IntakeConfig.intakeNeutralMode);
+        intakeUpperMotor.setSelectedSensorPosition(0);
+
+        // Lower Motor
+        intakeLowerMotor.configFactoryDefault();
+        intakeLowerMotor.configAllSettings(IntakeConfig.intakeFXConfig);
+        intakeLowerMotor.setInverted(IntakeConfig.lowerIntakeMotorInvert);
+        intakeLowerMotor.setNeutralMode(IntakeConfig.intakeNeutralMode);
+        intakeLowerMotor.setSelectedSensorPosition(0);
+
     }
-     
 }
