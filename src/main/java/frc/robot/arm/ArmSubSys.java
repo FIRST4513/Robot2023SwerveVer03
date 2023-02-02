@@ -2,6 +2,10 @@ package frc.robot.arm;
 
 import java.lang.reflect.Method;
 
+//the funni code!1!1!1!!
+
+//Yippww
+
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -15,7 +19,12 @@ public class ArmSubSys extends SubsystemBase {
 
     
     public ArmSubSys() {
+        armMotorConfig();
         stopArm();
+    }
+
+    public void armMotorConfig(){
+        //code blah blah blah blah aaaaaaaaa
     }
 
     public void periodic() {
@@ -51,17 +60,33 @@ public class ArmSubSys extends SubsystemBase {
     }
 
     public boolean isLowerLimitSwitchPressed() {
-        if (lowerlimitSwitch.get() == ArmConfig.lowerLimitedSwitchTrue) {
+        if (lowerlimitSwitch.get() == ArmConfig.lowerLimitSwitchTrue) {
             return true;
         }
         return false;
     }
 
     public boolean isUpperLimitSwitchPressed() {
-        if (upperlimitSwitch.get() == ArmConfig.upperlimitSwitchTrue) {
+        if (upperlimitSwitch.get() == ArmConfig.upperLimitSwitchTrue) {
             return true;
         }
         return false;
+    }
+
+    public String lowerLimitSwitchStatus(){
+        if (lowerlimitSwitch.get() == ArmConfig.lowerLimitSwitchTrue) {
+            return "Pressed";
+        }
+        return "Not Pressed";
+    }
+
+    //
+    // The funny code
+    public String UpperLimitSwitchStatus() {
+        if (upperlimitSwitch.get() == ArmConfig.upperLimitSwitchTrue) {
+            return "Pressed";
+        }
+        return "Not Pressed";
     }
 
     public void resetEncoder() {

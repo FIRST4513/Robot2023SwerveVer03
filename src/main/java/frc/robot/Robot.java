@@ -10,9 +10,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.util.Network;
+import frc.robot.arm.ArmSubSys;
+import frc.robot.arm.commands.ArmCmds;
 import frc.robot.auto.AutoSetup;
 import frc.robot.elevator.ElevatorSubSys;
 import frc.robot.elevator.commands.ElevatorCmds;
+import frc.robot.intake.IntakeSubSys;
+import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.logger.Logger;
 import frc.robot.pilot.PilotGamepad;
 import frc.robot.pilot.commands.PilotGamepadCmds;
@@ -28,6 +32,8 @@ public class Robot extends TimedRobot {
     public static Trajectories trajectories;
     public static PilotGamepad pilotGamepad;
     public static ElevatorSubSys elevator;
+    public static ArmSubSys arm;
+    public static IntakeSubSys intake;
 
     public static Timer sysTimer = new Timer();
     public static String MAC = "";
@@ -55,6 +61,8 @@ public class Robot extends TimedRobot {
         trajectories = new Trajectories();
         elevator = new ElevatorSubSys();
         pilotGamepad = new PilotGamepad();
+        arm = new ArmSubSys();
+        intake = new IntakeSubSys();
         //telemetry = new RobotTelemetry();
 
 
@@ -62,6 +70,8 @@ public class Robot extends TimedRobot {
         SwerveDriveCmds.setupDefaultCommand();
         ElevatorCmds.setupDefaultCommand();
         PilotGamepadCmds.setupDefaultCommand();
+        ArmCmds.setupDefaultCommand();
+        IntakeCmds.setupDefaultCommand();
         logger.startTimer();
 
     }

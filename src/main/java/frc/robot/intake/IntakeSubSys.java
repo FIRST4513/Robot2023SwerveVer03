@@ -1,5 +1,7 @@
 package frc.robot.intake;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -15,6 +17,7 @@ public class IntakeSubSys extends SubsystemBase {
 
     //contructor
     public IntakeSubSys() { 
+        configureTalonMotors();
         stopMotors();
     } 
 
@@ -52,11 +55,28 @@ public class IntakeSubSys extends SubsystemBase {
     public boolean isConeDetectSwitchPressed(){
         if(coneDetectSwitch.get() == IntakeConfig.coneDetectTrue) { return true; } 
         return false;
-        }
+    }
 
-     public boolean isCubeDetectSwitchPressed(){
+    public String coneDetectSwitchStatus(){
+        if(coneDetectSwitch.get() == IntakeConfig.coneDetectTrue) { 
+            return "Pressed"; } 
+        return "Not Pressed";
+    }
+
+    public boolean isCubeDetectSwitchPressed() {
         if(cubeDetectSwitch.get() == IntakeConfig.cubeDetectTrue) { return true; } 
         return false;
-     }
+    }
+
+    public String cubeDetectSwitchStatus(){
+        if(cubeDetectSwitch.get() == IntakeConfig.cubeDetectTrue) { 
+            return "Pressed"; } 
+        return "Not Pressed";
+    }
+
+    public void configureTalonMotors() {
+        //configure motor1
+        //congigure motor2
+    }
      
 }

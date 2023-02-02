@@ -21,6 +21,6 @@ public class ArmConfig {
     public final static double kHoldSpeed = 0.1;
 
     // ------ Limit Switch True States ------
-    public final static boolean lowerLimitedSwitchTrue = true;
-    public final static boolean upperlimitSwitchTrue = true;
+    public final static boolean lowerLimitSwitchTrue = true;
+    public final static boolean upperLimitSwitchTrue = true;
 }
