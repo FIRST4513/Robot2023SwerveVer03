@@ -12,22 +12,30 @@ import frc.lib.telemetry.Alert.AlertType;
 import frc.lib.telemetry.TelemetrySubsystem;
 import frc.lib.util.Network;
 import frc.lib.util.Util;
+import frc.robot.arm.ArmTelemetry;
 import frc.robot.auto.AutoSetup;
+import frc.robot.elevator.ElevatorTelemetry;
+import frc.robot.intake.IntakeTelemetry;
+import frc.robot.pilot.PilotGamepadTelemetry;
+import frc.robot.swerveDrive.SwerveDriveTelemetry;
+
 import java.util.Map;
 
-/** Add your docs here. */
 public class RobotTelemetry extends TelemetrySubsystem {
     
     private static boolean disablePrints = false;
 
-    // ---------------------//
-    // NetworkTableEntries //
-    // ---------------------//
+    // Shuffleboard Tabs
+    // private static ElevatorTelemetry m_ElevTelemetry;
+    // private static SwerveDriveTelemetry m_SwerveDriveTelemetry;
+    // private static IntakeTelemetry m_IntakeTelemetry;
+    // private static ArmTelemetry m_ArmTelemetry;
+    // private static PilotGamepadTelemetry m_PilotTelemetry;
+
+    // NetworkTableEntries
     public static NetworkTableEntry flashEntry;
 
-    // ---------//
-    // Widgets //
-    // ---------//
+    // Widgets
     public static SimpleWidget m_flashWidget;
     public static SimpleWidget m_limelightLEDenable;
     public static SimpleWidget m_enableTabsWidget;
@@ -90,6 +98,8 @@ public class RobotTelemetry extends TelemetrySubsystem {
     // Create all View Widgets, ones you can't edit, created after subsystem
     // instances are made
     public void initialize() {
+
+        
         //matchTimeWidget().withPosition(0, 1);
         //flashWidget().withPosition(0, 0);
         //m_tab.addBoolean("Compressor on?", () -> Robot.pneumatics.isCompressorEnabled()).withPosition(1, 1);
@@ -101,6 +111,8 @@ public class RobotTelemetry extends TelemetrySubsystem {
         //m_tab.addNumber("Target Distance", () -> Robot.visionLL.getActualDistance()).withPosition(2, 2);
         //m_enableTabsWidget = m_tab.add("Update Enable", false).withWidget(BuiltInWidgets.kToggleButton).withPosition(3,
         //        0).withSize(1, 1);
+
+
         //AutonSetup.setupSelectors();
         //m_autonSelectorWidget = m_tab.add(AutonSetup.chooser).withPosition(4, 0).withSize(3, 1);
         //m_autonPositionWidget = m_tab.add(AutonSetup.posChooser).withPosition(4, 1).withSize(3, 1);

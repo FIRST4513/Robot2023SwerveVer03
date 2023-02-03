@@ -1,5 +1,8 @@
 package frc.robot;
 
+import com.pathplanner.lib.server.PathPlannerServer;
+
+import edu.wpi.first.wpilibj.Threads;
 //import edu.wpi.first.wpilibj.DataLogManager;
 //import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -20,51 +23,38 @@ import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.logger.Logger;
 import frc.robot.pilot.PilotGamepad;
 import frc.robot.pilot.commands.PilotGamepadCmds;
+import frc.robot.pose.Pose;
 import frc.robot.swerveDrive.SwerveDrive;
 import frc.robot.swerveDrive.commands.SwerveDriveCmds;
 import frc.robot.trajectories.Trajectories;
 
 public class Robot extends TimedRobot {
     public static RobotConfig config;
-    //public static RobotTelemetry telemetry;
     public static Logger logger;
     public static SwerveDrive swerve;
+    public static Pose pose;
     public static Trajectories trajectories;
     public static PilotGamepad pilotGamepad;
     public static ElevatorSubSys elevator;
     public static ArmSubSys arm;
     public static IntakeSubSys intake;
+    public static RobotTelemetry telemetry;
 
-    public static Timer sysTimer = new Timer();
     public static String MAC = "";
-
-    /**
-     * This function is run when the robot is first started up and should be used for any
-     * initialization code.
-     */
-    @Override
-    public void robotInit() {
-        sysTimer.reset();			// System timer for Competition run
-    	sysTimer.start();
-
-        // Set the MAC Address for this robot, useful for adjusting comp/practice bot settings*/
-        MAC = Network.getMACaddress();
-        Shuffleboard.getTab("Robot"); // Makes the Robot tab the first tab on the Shuffleboard
-        intializeSubsystems();
-    }
+    public static Timer sysTimer = new Timer();
 
     // Intialize subsystems and run their setupDefaultCommand methods here
     private void intializeSubsystems() {
         logger = new Logger(); 
         logger.startTimer();
         swerve = new SwerveDrive();
+        pose = new Pose();
         trajectories = new Trajectories();
         elevator = new ElevatorSubSys();
         pilotGamepad = new PilotGamepad();
         arm = new ArmSubSys();
         intake = new IntakeSubSys();
-        //telemetry = new RobotTelemetry();
-
+        telemetry = new RobotTelemetry();
 
         // Set Default Commands, this method should exist for each subsystem that has commands
         SwerveDriveCmds.setupDefaultCommand();
@@ -75,24 +65,34 @@ public class Robot extends TimedRobot {
         logger.startTimer();
 
     }
-
     /**
-     * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-     * that you want ran during disabled, autonomous, teleoperated and test.
-     *
-     * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-     * SmartDashboard integrated updating.
+     * This function is run when the robot is first started up and should be used for any
+     * initialization code.
      */
     @Override
+    public void robotInit() {
+        sysTimer.reset();			// System timer for Competition run
+    	sysTimer.start();
+        Timer.delay( 2.0 );     // Delay for 2 seconds for robot to come fully up
+        // Set the MAC Address for this robot, useful for adjusting comp/practice bot settings*/
+        MAC = Network.getMACaddress();
+        //PathPlannerServer.startServer( 5811 ); // 5811 = port number. adjust this according to your needs
+        intializeSubsystems();
+    }
+
+    @Override
     public void robotPeriodic() {
-        // Runs the Scheduler. This is responsible for polling buttons, adding
-        // newly-scheduled
-        // commands, running already-scheduled commands, removing finished or
-        // interrupted commands,
-        // and running subsystem periodic() methods. This must be called from the
-        // robot's periodic
-        // block in order for anything in the Command-based framework to work.
+        // Ensures that the main thread is the highest priority thread
+        Threads.setCurrentThreadPriority(true, 99);
+        /**
+         * Runs the Scheduler. This is responsible for polling buttons, adding newly-scheduled
+         * commands, running already-scheduled commands, removing finished or interrupted commands,
+         * and running subsystem periodic() methods. This must be called from the robot's periodic
+         * block in order for anything in the Command-based framework to work.
+         */
         CommandScheduler.getInstance().run();
+
+        Threads.setCurrentThreadPriority(true, 10); // Set the main thread back to normal priority
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
@@ -104,8 +104,14 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        CommandScheduler.getInstance().enable();
+        
     }
+
+    @Override
+    public void disabledExit() {
+        //
+    }
+
 
     @Override
     public void autonomousInit() {
@@ -166,8 +172,8 @@ public class Robot extends TimedRobot {
     public static void resetCommandsAndButtons() {
         CommandScheduler.getInstance().cancelAll(); // Disable any currently running commands
         CommandScheduler.getInstance().getActiveButtonLoop().clear();
-        LiveWindow.setEnabled(false); // Disable Live Window we don't need that data being sent
-        LiveWindow.disableAllTelemetry();
+        //LiveWindow.setEnabled(false); // Disable Live Window we don't need that data being sent
+        //LiveWindow.disableAllTelemetry();
 
         // Reset Config for all gamepads and other button bindings
         pilotGamepad.resetConfig();

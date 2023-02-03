@@ -4,7 +4,6 @@
 
 package frc.robot.swerveDrive;
 
-import java.time.chrono.IsoChronology;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,12 +17,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveDrive extends SubsystemBase {
-    public SwerveDriveConfig config;
-    protected Odometry odometry;
-    public SwerveDriveTelemetry telemetry;
-    protected SwerveDriveModule[] mSwerveMods;
-    private SwerveModuleState[] SwerveModDesiredStates;
-    public Gyro gyro;
+    public      SwerveDriveConfig config;
+    public      Odometry odometry;
+    public      SwerveDriveTelemetry telemetry;
+    protected   SwerveDriveModule[] mSwerveMods;
+    private     SwerveModuleState[] SwerveModDesiredStates;
+    public      Gyro gyro;
 
     public SwerveDrive() {
         setName("Swerve");
