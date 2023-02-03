@@ -28,7 +28,7 @@ public class ArmConfig {
 
 
     // ------- Encoder Conversion Factor --------------
-    public final static double kEncoderConversion = .02222;      // Convert cnt to degrees of angle
+    public final static double kEncoderConversion = 0.17578;      // Convert cnt to degrees of angle    //the funny code was here
 
     // ---------- Arm Angle Limits ------------
     public final static double minArmAngle = 0.0;

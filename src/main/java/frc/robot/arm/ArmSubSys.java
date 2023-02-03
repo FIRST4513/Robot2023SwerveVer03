@@ -1,7 +1,7 @@
 package frc.robot.arm;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+//the funny code
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -10,7 +10,7 @@ import frc.Rmath;
 import frc.robot.RobotConfig.LimitSwitches;
 
 public class ArmSubSys extends SubsystemBase {
-    public WPI_TalonFX mArmMotor = new WPI_TalonFX(ArmConfig.kMotorPort);
+    public  WPI_TalonSRX mArmMotor = new WPI_TalonSRX(ArmConfig.kMotorPort);
     private DigitalInput upperlimitSwitch = new DigitalInput(LimitSwitches.armUpperLimitSw);
     private DigitalInput lowerlimitSwitch = new DigitalInput(LimitSwitches.armLowerLimitSw);
 
@@ -27,7 +27,7 @@ public class ArmSubSys extends SubsystemBase {
     // ------------- Constructor ----------
     public ArmSubSys() {
         telemetry = new ArmTelemetry();
-        armMotorConfig();
+        //armMotorConfig();
         stopArm();
         mArmPIDController = new PIDController(ArmConfig.armKP, ArmConfig.armKI, ArmConfig.armKD);
     }
@@ -73,6 +73,7 @@ public class ArmSubSys extends SubsystemBase {
         mArmMotor.set(pwr);
     }
  
+/*
     public void setBrakeMode(Boolean enabled) {
         if (enabled) {
             mArmMotor.setNeutralMode(NeutralMode.Brake);
@@ -80,7 +81,7 @@ public class ArmSubSys extends SubsystemBase {
             mArmMotor.setNeutralMode(NeutralMode.Coast);
         }
     }
-
+ */
     // ------------  Set Arm to Angle by PID  ----------
     public void setPIDArmToAngle( double angle ) {
         // Angle 0 = fully retracted  90 = fully extended
@@ -157,7 +158,7 @@ public class ArmSubSys extends SubsystemBase {
 
     public double convertAngleToCnt( double angle)   { return angle * ArmConfig.kEncoderConversion; }
     public double convertCntToAngle( double cnt)     { return cnt / ArmConfig.kEncoderConversion; }
-
+/* 
     // -------------------------------------------------------
     // ---------------- Configure Arm Motor ------------------
     // -------------------------------------------------------
@@ -169,5 +170,6 @@ public class ArmSubSys extends SubsystemBase {
         mArmMotor.setNeutralMode(ArmConfig.armNeutralMode);
         mArmMotor.setSelectedSensorPosition(0);
     }
+    */
 }
-
+//the funny :)
