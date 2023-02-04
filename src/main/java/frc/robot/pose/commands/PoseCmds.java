@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot;
 
-public class PoseCommands {
+public class PoseCmds {
     public static Command resetHeading(Rotation2d heading) {
         return new InstantCommand(() -> Robot.pose.resetHeading(heading));
     }

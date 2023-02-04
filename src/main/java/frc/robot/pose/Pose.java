@@ -17,7 +17,7 @@ public class Pose extends SubsystemBase {
     PoseConfig config;
     PoseTelemetry telemetry;
     Pose2d odometryPose = new Pose2d();
-    Pose2d desiredPose = new Pose2d();
+    Pose2d desiredPose =  new Pose2d();
     Pose2d estimatePose = new Pose2d();
 
     //    private final SwerveDrivePoseEstimator<N7, N7, N5> poseEstimator;
