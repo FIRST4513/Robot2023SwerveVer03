@@ -1,7 +1,6 @@
 package frc.robot.elevator;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.RobotConfig.Encoders;
 import frc.robot.RobotConfig.LimitSwitches;
 import frc.robot.RobotConfig.Motors;
 
@@ -11,9 +10,8 @@ public class ElevatorConfig {
 
     // ------ Device Port Constants ------
     public final int kMotorPort =           Motors.elevatorMotorID;
-    public final int kEncoderAChannel =     Encoders.elevMotorEncoderA;
-    public final int kEncoderBChannel =     Encoders.elevMotorEncoderB;
     public final int kLowerLimitSwitchPort = LimitSwitches.elevatorLowerLimitSw;
+    public final int kUpperLimitSwitchPort = LimitSwitches.elevatorUpperLimitSw;
     
     // ------ PID Constants ------
     public final double kElevatorKp = 0.4;      // orig example 5.0;

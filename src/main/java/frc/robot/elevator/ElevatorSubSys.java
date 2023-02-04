@@ -2,6 +2,9 @@ package frc.robot.elevator;
 
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
@@ -28,9 +31,8 @@ public class ElevatorSubSys extends SubsystemBase {
     
     // Standard classes for controlling our elevator
     public final PIDController m_controller;
-    public final Encoder m_encoder;
-    public final Spark m_motor;
-    public final DigitalInput elevLwrLimitSw;
+    public final WPI_TalonSRX m_motor;
+    public final DigitalInput elevLowerLimitSw, elevUpperLimitSw;
 
     /** Creates a new ElevatorSim. */
     public ElevatorSubSys() {
@@ -39,11 +41,9 @@ public class ElevatorSubSys extends SubsystemBase {
         telemetry = new ElevatorTelemetry(this);
         
         m_controller = new PIDController(config.kElevatorKp, 0, 0);
-        m_encoder = new Encoder(config.kEncoderAChannel, config.kEncoderBChannel);
-        m_motor = new Spark(config.kMotorPort);
-        elevLwrLimitSw = new DigitalInput(config.kLowerLimitSwitchPort);
-
-        m_encoder.setDistancePerPulse(config.kElevatorEncoderDistPerPulse);
+        m_motor = new WPI_TalonSRX(config.kMotorPort);
+        elevLowerLimitSw = new DigitalInput(config.kLowerLimitSwitchPort);
+        elevUpperLimitSw = new DigitalInput(config.kUpperLimitSwitchPort);
     }
 
     // --------------------------------------------
@@ -162,7 +162,7 @@ public class ElevatorSubSys extends SubsystemBase {
 
     // -----------------  Encoder Sensor Methods --------------------
     public void updateCurrentElevPosition() {
-        mCurrEncoderCnt = m_encoder.get(); 
+        mCurrEncoderCnt = m_motor.getSelectedSensorPosition();
         mCurrElevPos = Rmath.mRound((mCurrEncoderCnt * config.ELEV_ENCODER_CONV) , 2);
         mCurrElevHt =  Rmath.mRound( convertPosToHeight(mCurrElevPos) , 2 );
     }
@@ -186,7 +186,7 @@ public class ElevatorSubSys extends SubsystemBase {
 
     // -----------------  Lower/Upper Limits ----------------
     public boolean isLowerLmtReached() {
-        if (elevLwrLimitSw.get() == config.KLIMIT_SWITCH_PRESSED) return true;
+        if (elevLowerLimitSw.get() == config.KLIMIT_SWITCH_PRESSED) return true;
     return false;
     }
 
