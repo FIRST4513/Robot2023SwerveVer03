@@ -1,6 +1,8 @@
 //Created by Spectrum3847
 package frc.robot.swerveDrive.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -22,13 +24,14 @@ public class TurnToAngleCmd extends ProfiledPIDCommand {
 
   boolean hasTarget = false;
 
-  public TurnToAngleCmd(double angle) {
+  // Basic: turn-in-place; fwd and left assumed 0
+  public TurnToAngleCmd(DoubleSupplier targetAngleSupplier) {
     super(
         // The ProfiledPIDController used by the command
         new ProfiledPIDController( kP, kI, kD,
                                    new TrapezoidProfile.Constraints(360, 1080)),
                                   Robot.swerve::getDegrees,     // This gets the current heading
-                                  angle,                        // This is the target heading
+                                  targetAngleSupplier.getAsDouble(),                        // This is the target heading
                                   // This uses the output
                                   //(output, setpoint) -> Robot.swerve.useOutput(output));
                                   (output, setpoint) -> Robot.swerve.drive( 0.0, 0.0, output, false, false,
@@ -39,7 +42,40 @@ public class TurnToAngleCmd extends ProfiledPIDCommand {
 
     // Configure additional PID options by calling `getController'
 
-    double differance = angle - Robot.swerve.getDegrees();
+    double differance = targetAngleSupplier.getAsDouble() - Robot.swerve.getDegrees();
+    if (differance > 180) {
+      differance = (360 - differance) * -1;
+    }
+    getController().setTolerance(1);    // Tolerence is 1 degree accuracy
+    getController().enableContinuousInput(0, 360);
+    getController().setGoal(differance);
+
+  }
+
+  // More advanced: assisted/auto angle, but manual moving
+  public TurnToAngleCmd(
+                        DoubleSupplier fwdSpeedSupplier,
+                        DoubleSupplier leftSpeedSupplier,
+                        DoubleSupplier targetAngleSupplier) {
+    super(
+        // The ProfiledPIDController used by the command
+        new ProfiledPIDController( kP, kI, kD,
+                                   new TrapezoidProfile.Constraints(360, 1080)),
+                                  Robot.swerve::getDegrees,     // This gets the current heading
+                                  targetAngleSupplier.getAsDouble(),                        // This is the target heading
+                                  // This uses the output
+                                  //(output, setpoint) -> Robot.swerve.useOutput(output));
+                                  (output, setpoint) -> Robot.swerve.drive( fwdSpeedSupplier.getAsDouble(),
+                                                                            leftSpeedSupplier.getAsDouble(),
+                                                                            output, false, false,
+                                                                            new Translation2d( 0.0, 0.0) )
+    );
+
+    addRequirements(Robot.swerve);
+
+    // Configure additional PID options by calling `getController'
+
+    double differance = targetAngleSupplier.getAsDouble() - Robot.swerve.getDegrees();
     if (differance > 180) {
       differance = (360 - differance) * -1;
     }

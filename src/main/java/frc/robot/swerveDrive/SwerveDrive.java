@@ -230,6 +230,16 @@ public class SwerveDrive extends SubsystemBase {
         gyro.setHeadingDegrees( newHdg);
     }
 
+    public double getSnap90Angle() {
+        double currAngle = getDegrees();
+        double tgt;
+        if      ((currAngle >= 45) && (currAngle <= 135))  { tgt = 90; }
+        else if ((currAngle >= 135) && (currAngle <= 225)) { tgt = 180; }
+        else if ((currAngle >= 225) && (currAngle <= 315)) { tgt = 270; }
+        else    { tgt = 0; }
+        return tgt;
+    }
+
     /**
      * Ge the Pose of the odemotry class
      *

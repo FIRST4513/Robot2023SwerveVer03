@@ -95,4 +95,8 @@ public class SwerveDriveCmds {
             () -> Robot.swerve.resetGyro()
         );
     }
+
+    public static Command SnapTurnCmd() {
+        return new TurnToAngleCmd(() -> Robot.swerve.getSnap90Angle());
+    }
 }

@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
 import frc.robot.pilot.PilotGamepadConfig;
 import frc.robot.swerveDrive.commands.SwerveDriveCmd;
+import frc.robot.swerveDrive.commands.TurnToAngleCmd;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 /** Add your docs here. */
@@ -15,6 +16,11 @@ public class PilotGamepadCmds {
         Robot.pilotGamepad.setDefaultCommand(rumblePilotCmd(0));
     }
 
+    public static Command BasicSnapCmd() {
+        return new TurnToAngleCmd(() -> Robot.swerve.getSnap90Angle())
+            .withName("BasicSnapCmd")
+            .withTimeout(5.0);
+    }
 
     /** Set default command to turn off the rumble */
     //public static void setupDefaultCommand() {
@@ -30,6 +36,16 @@ public class PilotGamepadCmds {
                         () -> Robot.pilotGamepad.getDriveRotationCCWPositive(),
                         true )
                 .withName("fpvPilotSwerve");
+    }
+
+    /** Field Oriented Drive */
+    public static Command fpvDriveAndAutoRotate() {
+        return new TurnToAngleCmd(
+                        () -> Robot.pilotGamepad.getDriveFwdPositive(),
+                        () -> Robot.pilotGamepad.getDriveLeftPositive(),
+                        () -> Robot.swerve.getSnap90Angle())
+                .withName("fpvDriveAndAutoRotate")
+                .withTimeout(5.0);
     }
 
     /** Robot Oriented Drive */

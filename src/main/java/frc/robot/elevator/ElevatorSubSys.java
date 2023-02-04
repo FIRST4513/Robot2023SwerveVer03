@@ -50,11 +50,6 @@ public class ElevatorSubSys extends SubsystemBase {
     // ---------   Elevator Methods   -------------
     // --------------------------------------------
 
-    public void goToTarget(int height) {
-        double pidOutput = m_controller.calculate(m_encoder.getDistance(), height);
-        m_motor.setVoltage(pidOutput);
-    }
-
     @Override
     public void periodic() {
         updateCurrentElevPosition();
