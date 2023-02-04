@@ -32,12 +32,20 @@ public class ElevatorConfig {
     public final double KLowerSlowSpeed =    -0.20;
     public final double KLowerSpeedDefault = -0.65;
 
+    // ------ Max Speeds (testing/controllability) ------
+    public final double KMaxSpeed = 0.6;
+
     public final double KheightDeadBand =    +0.15;
+
+    public final static double ElevClearPos = 10.0;
+    public final static double ElevStorePos = 7.0;
+    public final static double ElevMidPos = 20.0;
+    public final static double ElevHighPos = 35.0;
 
     public final double KElevMaxTopPos =             38.0;      // This is the top GO NO FURTHER!
     public final double KLimitElevTopSlowPos =       35.5;		// Start slowing the raise at this position   
     public final double KLimitElevBottomSlowPos =    3.0;       // Start slowing the lower at this position
-    
+
     public final double ELEV_INCH_ABOVE_GROUND =     2.875;     // Inches claw is above ground when fully lowered
 
     public final double ELEV_ENCODER_CONV = 0.03461;            // Inches the elevator rises for each encoder count

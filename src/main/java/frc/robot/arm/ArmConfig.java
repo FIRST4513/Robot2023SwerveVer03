@@ -26,7 +26,14 @@ public class ArmConfig {
     public final static boolean lowerLimitSwitchTrue = true;
     public final static boolean upperLimitSwitchTrue = true;
 
-
+    // ------ Arm Pos Constants (In Degrees) ------
+    public final static double ArmAngleFullRetractPos = 0.0;
+    public final static double ArmAngleStorePos       = 25.0;
+    public final static double ArmAngleLowPos         = 90.0;
+    public final static double ArmAngleMidPos         = 110.0;
+    public final static double ArmAngleHighPos        = 180.0;
+    public final static double ArmInsidePos           = 90.0;  // less than this number = inside robot
+    
     // ------- Encoder Conversion Factor --------------
     public final static double kEncoderConversion = 0.17578;      // Convert cnt to degrees of angle    //the funny code was here
 

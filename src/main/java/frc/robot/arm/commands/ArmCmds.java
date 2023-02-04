@@ -35,15 +35,19 @@ public class ArmCmds {
             .withName("LowerArmCmd");
     }
 
-    public static Command armGoToBottomCmd() {
+    public static Command armToFullRetractCmd() {
         return new RunCommand( () -> Robot.arm.lowerArm(), Robot.elevator)
             .until(() ->Robot.arm.isLowerLimitSwitchPressed())
             .withName("armToBottomCmd");
     }
 
-    public static Command armToPIDPositionCmd(double pos) {
-        return new RunCommand(() -> Robot.arm.lowerArm(), Robot.arm )
+    public static Command armToPIDPositionCmd(double angle) {
+        return new InstantCommand(() -> Robot.arm.setPIDArmToAngle(angle), Robot.arm )
             .withName("ArmToPIDPosistionCmd");
     }
-    
+
+    public static Command armByJoystick() {
+        return new RunCommand(
+        () -> Robot.arm.setArmMotor(() -> Robot.operatorGamepad.getArmInput()), Robot.arm);
+    }
 }

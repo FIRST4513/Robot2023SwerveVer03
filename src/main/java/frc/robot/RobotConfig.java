@@ -54,9 +54,12 @@ public final class RobotConfig {
         public final static int elevatorLowerLimitSw =     0;   // DIO Port
         public final static int armUpperLimitSw =          1;   // DIO Port
         public final static int armLowerLimitSw =          2;   // DIO Port
-        public final static int intakeConeDetectSwitch =   3;   //DIO Port
-        public final static int intakeCubeDetectSwitch =   4;   //DIO Port
     } 
+
+    public final class AnalogPorts {
+        public final static int intakeConeDetectPort =   0;   //ANALOG Port
+        public final static int intakeCubeDetectPort =   1;   //ANALOG Port
+    }
 
     //Check if we are FMSattached or Faking it
     public static boolean isFMSEnabled (){

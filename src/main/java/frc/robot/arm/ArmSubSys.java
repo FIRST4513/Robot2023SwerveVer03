@@ -1,5 +1,7 @@
 package frc.robot.arm;
 
+import java.util.function.DoubleSupplier;
+
 //the funny code
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -36,8 +38,8 @@ public class ArmSubSys extends SubsystemBase {
     public void periodic() {
         if (isLowerLimitSwitchPressed() == true) {
             resetEncoder();
-        updateCurrentArmPosition();
         }
+        updateCurrentArmPosition();
     }
 
     // -----------------------------------------------------
@@ -71,6 +73,10 @@ public class ArmSubSys extends SubsystemBase {
         if ( pwr > +ArmConfig.kArmMotorMaxPwr )  { pwr = +ArmConfig.kArmMotorMaxPwr; }
         if ( pwr < -ArmConfig.kArmMotorMaxPwr )  { pwr = -ArmConfig.kArmMotorMaxPwr; }
         mArmMotor.set(pwr);
+    }
+
+    public void setArmMotor(DoubleSupplier pwr) {
+        setArmMotor(pwr.getAsDouble());
     }
  
 /*
@@ -154,7 +160,17 @@ public class ArmSubSys extends SubsystemBase {
         return angle;
     }
 
+    public boolean isArmInside() {
+        if (getArmAngle() < ArmConfig.ArmInsidePos) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    public boolean isArmOutside() {
+        return !isArmInside();
+    }
 
     public double convertAngleToCnt( double angle)   { return angle * ArmConfig.kEncoderConversion; }
     public double convertCntToAngle( double cnt)     { return cnt / ArmConfig.kEncoderConversion; }

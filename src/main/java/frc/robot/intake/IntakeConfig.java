@@ -5,7 +5,7 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
-import frc.robot.RobotConfig.LimitSwitches;
+import frc.robot.RobotConfig.AnalogPorts;
 import frc.robot.RobotConfig.Motors;
 
 public class IntakeConfig {
@@ -13,11 +13,11 @@ public class IntakeConfig {
     public static int intakeUpperMotorCANID = Motors.intakeUpperMotorID;
     public static int intakeLowerMotorCANID = Motors.intakeLowerMotorID;
 
-    public static int coneDetectSwitchID = LimitSwitches.intakeConeDetectSwitch;
-    public static int cubeDetectSwitchID = LimitSwitches.intakeCubeDetectSwitch;
+    public static int coneDetectPortID = AnalogPorts.intakeConeDetectPort;
+    public static int cubeDetectPortID = AnalogPorts.intakeCubeDetectPort;
 
-    public static boolean cubeDetectTrue = true;
-    public static boolean coneDetectTrue = true;
+    public static double cubeDetectTrue = 2.25; // IR Prox Volt greator than 2.25 means we see it.
+    public static double coneDetectTrue = 2.25; // IR Prox Volt greator than 2.25 means we see it.
 
     public static double cubeRetractSpeed = -0.25;
     public static double coneRetractSpeed = -0.25;

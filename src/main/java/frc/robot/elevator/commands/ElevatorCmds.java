@@ -41,8 +41,8 @@ public class ElevatorCmds {
             .withName("ToPIDHeightCmd");
     }
 
-    public static Command goToPIDPosCmd(double pos) {
-        return new InstantCommand( () -> Robot.elevator.setPIDposition(pos), Robot.elevator)
+    public static Command goToPIDPosCmd(double inches) {
+        return new InstantCommand( () -> Robot.elevator.setPIDposition(inches), Robot.elevator)
             .withName("ToPIDPosCmd");
     }
 
@@ -52,4 +52,8 @@ public class ElevatorCmds {
             .withName("ToPIDPosCmd");
     }
     
+    public static Command elevByJoystick() {
+        return new RunCommand(
+        () -> Robot.elevator.elevSetSpeed(() -> Robot.operatorGamepad.getElevInput()), Robot.arm);
+    }
 }

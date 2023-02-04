@@ -5,16 +5,17 @@ import java.util.function.BooleanSupplier;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubSys extends SubsystemBase {
     
     //Devices
-    public WPI_TalonFX intakeUpperMotor = new WPI_TalonFX(IntakeConfig.intakeUpperMotorCANID);
-    public WPI_TalonFX intakeLowerMotor = new WPI_TalonFX(IntakeConfig.intakeLowerMotorCANID);
-    private DigitalInput coneDetectSwitch = new DigitalInput(IntakeConfig.coneDetectSwitchID);
-    private DigitalInput cubeDetectSwitch = new DigitalInput(IntakeConfig.cubeDetectSwitchID);
+    public WPI_TalonFX intakeUpperMotor  = new WPI_TalonFX(IntakeConfig.intakeUpperMotorCANID);
+    public WPI_TalonFX intakeLowerMotor  = new WPI_TalonFX(IntakeConfig.intakeLowerMotorCANID);
+    private AnalogInput coneDetectSensor = new AnalogInput(IntakeConfig.coneDetectPortID);
+    private AnalogInput cubeDetectSensor = new AnalogInput(IntakeConfig.cubeDetectPortID);
 
     private IntakeTelemetry telemetry;
 
@@ -48,14 +49,14 @@ public class IntakeSubSys extends SubsystemBase {
         intakeLowerMotor.set(IntakeConfig.cubeRetractSpeed);
     }
 
-    public void setMotorsCubeEject(){
-        intakeUpperMotor.set(IntakeConfig.cubeEjectSpeed);
-        intakeLowerMotor.set(IntakeConfig.cubeEjectSpeed);
-    }
-
-    public void setMotorsConeEject(){
-        intakeUpperMotor.set(IntakeConfig.coneEjectSpeed);
-        intakeLowerMotor.set(IntakeConfig.coneEjectSpeed);
+    public void setMotorsEject(){
+        if (isCubeDetected()) {
+            intakeUpperMotor.set(IntakeConfig.cubeEjectSpeed);
+            intakeLowerMotor.set(IntakeConfig.cubeEjectSpeed);
+        } else {
+            intakeUpperMotor.set(IntakeConfig.coneEjectSpeed);  // top deals with cone
+            intakeLowerMotor.set(IntakeConfig.coneEjectSpeed);  // bottom deals with cube
+        }
     }
 
     public void setBrakeMode(Boolean enabled) {
@@ -69,28 +70,32 @@ public class IntakeSubSys extends SubsystemBase {
     }
 
     // ----------------------------------------------------------------
-    // ---------------- Intake Detect Switch Methods ------------------
+    // ---------------- Intake Detect Methods -------------------------
     // ----------------------------------------------------------------
-    public boolean isConeDetectSwitchPressed(){
-        if(coneDetectSwitch.get() == IntakeConfig.coneDetectTrue) { return true; } 
+    public boolean isConeDetected(){
+        if(coneDetectSensor.getAverageVoltage() > IntakeConfig.coneDetectTrue) { return true; } 
         return false;
     }
 
-    public String coneDetectSwitchStatus(){
-        if(coneDetectSwitch.get() == IntakeConfig.coneDetectTrue) { 
-            return "Pressed"; } 
-        return "Not Pressed";
+    public String coneDetectStatus(){
+        if(isConeDetected()) { 
+            return "Detected"; } 
+        return "Not Detected";
     }
 
-    public boolean isCubeDetectSwitchPressed() {
-        if(cubeDetectSwitch.get() == IntakeConfig.cubeDetectTrue) { return true; } 
+    public boolean isCubeDetected() {
+        if(cubeDetectSensor.getAverageVoltage() == IntakeConfig.cubeDetectTrue) { return true; } 
         return false;
     }
 
-    public String cubeDetectSwitchStatus(){
-        if(cubeDetectSwitch.get() == IntakeConfig.cubeDetectTrue) { 
-            return "Pressed"; } 
-        return "Not Pressed";
+    public boolean isCubeNotDetected() {
+        return !isCubeDetected();
+    }
+
+    public String cubeDetectStatus(){
+        if(isCubeDetected()) { 
+            return "Detected"; } 
+        return "Not Detected";
     }
 
     // -------------------------------------------------------

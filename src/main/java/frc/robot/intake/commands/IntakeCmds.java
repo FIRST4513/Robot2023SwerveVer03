@@ -18,23 +18,17 @@ public class IntakeCmds {
     public static Command intakeCubeRetractCmd() {
         return new RunCommand(() -> Robot.intake.setMotorsCubeRetract(), Robot.intake)
             .withName("IntakeCubeRetract")
-            .until(() -> Robot.intake.isCubeDetectSwitchPressed());
+            .until(() -> Robot.intake.isCubeDetected());
     }
 
     public static Command intakeConeRetractCmd() {
         return new RunCommand(() -> Robot.intake.setMotorsConeRetract(), Robot.intake)
             .withName("IntakeConeRetract")
-            .until(() -> Robot.intake.isConeDetectSwitchPressed());
+            .until(() -> Robot.intake.isConeDetected());
     }
 
-    public static Command intakeCubeEjectCmd() {
-        return new RunCommand(() -> Robot.intake.setMotorsCubeEject(), Robot.intake)
-            .withName("IntakeCubeEject")
-            .withTimeout(0.5);
-    }
-
-    public static Command intakeConeEjectCmd() {
-        return new RunCommand(() -> Robot.intake.setMotorsConeEject(), Robot.intake)
+    public static Command intakeEjectCmd() {
+        return new RunCommand(() -> Robot.intake.setMotorsEject(), Robot.intake)
             .withName("IntakeConeEject")
             .withTimeout(0.5);
     }

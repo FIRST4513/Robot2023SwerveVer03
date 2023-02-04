@@ -21,6 +21,8 @@ import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.IntakeSubSys;
 import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.logger.Logger;
+import frc.robot.operator.OperatorGamepad;
+import frc.robot.operator.commands.OperatorGamepadCmds;
 import frc.robot.pilot.PilotGamepad;
 import frc.robot.pilot.commands.PilotGamepadCmds;
 import frc.robot.pose.Pose;
@@ -35,6 +37,7 @@ public class Robot extends TimedRobot {
     public static Pose pose;
     public static Trajectories trajectories;
     public static PilotGamepad pilotGamepad;
+    public static OperatorGamepad operatorGamepad;
     public static ElevatorSubSys elevator;
     public static ArmSubSys arm;
     public static IntakeSubSys intake;
@@ -52,6 +55,7 @@ public class Robot extends TimedRobot {
         trajectories = new Trajectories();
         elevator = new ElevatorSubSys();
         pilotGamepad = new PilotGamepad();
+        operatorGamepad = new OperatorGamepad();
         arm = new ArmSubSys();
         intake = new IntakeSubSys();
         telemetry = new RobotTelemetry();
@@ -60,6 +64,7 @@ public class Robot extends TimedRobot {
         SwerveDriveCmds.setupDefaultCommand();
         ElevatorCmds.setupDefaultCommand();
         PilotGamepadCmds.setupDefaultCommand();
+        OperatorGamepadCmds.setupDefaultCommand();
         ArmCmds.setupDefaultCommand();
         IntakeCmds.setupDefaultCommand();
         logger.startTimer();
