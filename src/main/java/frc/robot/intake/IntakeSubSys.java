@@ -1,12 +1,8 @@
 package frc.robot.intake;
 
-import java.util.function.BooleanSupplier;
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubSys extends SubsystemBase {
@@ -17,11 +13,8 @@ public class IntakeSubSys extends SubsystemBase {
     private AnalogInput coneDetectSensor = new AnalogInput(IntakeConfig.coneDetectPortID);
     private AnalogInput cubeDetectSensor = new AnalogInput(IntakeConfig.cubeDetectPortID);
 
-    private IntakeTelemetry telemetry;
-
     //contructor
     public IntakeSubSys() { 
-        telemetry = new IntakeTelemetry();
         configureTalonMotors();
         stopMotors();
     } 

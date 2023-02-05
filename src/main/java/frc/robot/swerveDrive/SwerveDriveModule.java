@@ -13,7 +13,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.swerve.CTREModuleState;
 import frc.lib.swerve.SwerveModuleConfig;
@@ -256,27 +255,27 @@ public class SwerveDriveModule extends SubsystemBase {
         // Robot.logger.appendLog(line);
     }
 
-    private void smartDashboardUpdate(){
-        // Only needed for testing and tuning
-        if (moduleNumber == 0) {
-            // SmartDashboard.putNumber("Desired Angle", desiredAngle.getDegrees());
-            // SmartDashboard.putNumber("Desired Speed", desiredSpeed);
+    // private void smartDashboardUpdate(){
+    //     // Only needed for testing and tuning
+    //     if (moduleNumber == 0) {
+    //         SmartDashboard.putNumber("Desired Angle", desiredAngle.getDegrees());
+    //         SmartDashboard.putNumber("Desired Speed", desiredSpeed);
 
-            // SmartDashboard.putNumber("Orig Cancoder Angle", mCANcoderAngle180CCW.getDegrees());
-            // SmartDashboard.putNumber("Orig Falcon Angle", currentAngle);
+    //         SmartDashboard.putNumber("Orig Cancoder Angle", mCANcoderAngle180CCW.getDegrees());
+    //         SmartDashboard.putNumber("Orig Falcon Angle", currentAngle);
 
-            // SmartDashboard.putNumber("Optimized Angle", optimizedAngle);
-            // SmartDashboard.putNumber("Optimized Speed", optimizedSpeed);
+    //         SmartDashboard.putNumber("Optimized Angle", optimizedAngle);
+    //         SmartDashboard.putNumber("Optimized Speed", optimizedSpeed);
 
-            // SmartDashboard.putNumber("Delta Angle", delta);
-            // SmartDashboard.putNumber("Output Angle", outputAngle);
+    //         SmartDashboard.putNumber("Delta Angle", delta);
+    //         SmartDashboard.putNumber("Output Angle", outputAngle);
 
-            // SmartDashboard.putNumber("Actual Vel", getDriveVelocityMPS());
-            // SmartDashboard.putNumber("FeedForward", feedforward_value);
+    //         SmartDashboard.putNumber("Actual Vel", getDriveVelocityMPS());
+    //         SmartDashboard.putNumber("FeedForward", feedforward_value);
 
-            // SmartDashboard.putNumber("Percent Output", percentOutput);
-            // SmartDashboard.putNumber("Falcon Sensor", rawFalconSensorData);
-        }
-    }
+    //         SmartDashboard.putNumber("Percent Output", percentOutput);
+    //         SmartDashboard.putNumber("Falcon Sensor", rawFalconSensorData);
+    //     }
+    // }
     
 }

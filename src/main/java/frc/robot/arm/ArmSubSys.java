@@ -17,8 +17,6 @@ public class ArmSubSys extends SubsystemBase {
     private DigitalInput upperlimitSwitch = new DigitalInput(LimitSwitches.armUpperLimitSw);
     private DigitalInput lowerlimitSwitch = new DigitalInput(LimitSwitches.armLowerLimitSw);
 
-    private ArmTelemetry telemetry;
-
     public double mCurrEncoderCnt   = 0; 
     public double mCurrArmAngle     = 0;
     public double mTargetArmAngle   = 0;       // PID Target Angle
@@ -29,7 +27,6 @@ public class ArmSubSys extends SubsystemBase {
 
     // ------------- Constructor ----------
     public ArmSubSys() {
-        telemetry = new ArmTelemetry();
         armMotorConfig();
         stopArm();
         mArmPIDController = new PIDController(ArmConfig.armKP, ArmConfig.armKI, ArmConfig.armKD);
@@ -195,4 +192,3 @@ public class ArmSubSys extends SubsystemBase {
     }
     
 }
-//the funny :)

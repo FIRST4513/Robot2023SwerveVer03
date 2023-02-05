@@ -3,7 +3,6 @@ package frc.robot.pose;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot;
 
 public class PoseTelemetry {
     Pose pose;

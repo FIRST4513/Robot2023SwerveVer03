@@ -4,14 +4,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
-import frc.robot.Robot;
 import frc.robot.intake.commands.IntakeCmds;
-import frc.robot.logger.commands.LoggerCmds;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 import frc.robot.pilot.PilotGamepadConfig.MaxSpeeds;
 import frc.robot.pilot.commands.PilotGamepadCmds;
 import frc.robot.swerveDrive.commands.SwerveDriveCmds;
-import frc.robot.swerveDrive.commands.TurnToAngleCmd;
 
 /** Used to add buttons to the pilot gamepad and configure the joysticks */
 public class PilotGamepad extends Gamepad {
