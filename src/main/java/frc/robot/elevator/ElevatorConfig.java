@@ -1,5 +1,8 @@
 package frc.robot.elevator;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
+
 import edu.wpi.first.math.util.Units;
 import frc.robot.RobotConfig.LimitSwitches;
 import frc.robot.RobotConfig.Motors;
@@ -13,9 +16,31 @@ public class ElevatorConfig {
     public final int kLowerLimitSwitchPort = LimitSwitches.elevatorLowerLimitSw;
     public final int kUpperLimitSwitchPort = LimitSwitches.elevatorUpperLimitSw;
     
+    // Reduce jitter
+    public static final int elevAllowableError = 10; // Encoder counts close enough
+    
+    // Talon SRX Configuration    
+    public static TalonSRXConfiguration elevSRXConfig;       // TalonSRX Config object
+    
     // ------ PID Constants ------
-    public final double kElevatorKp = 0.4;      // orig example 5.0;
-    public final double kElevatorKf = 0.05;
+    public final double elevKP = 0.4;      // orig example 5.0;
+    public final double elevKI = 0.0;
+    public final double elevKD = 0.0;
+    public final double elevKF = 0.05;
+
+
+    /* Elev Motor Current Limiting */
+    public static final int     elevContinuousCurrentLimit   = 25;       // Amps
+    public static final int     elevPeakCurrentLimit         = 40;       // Amps
+    public static final int     elevPeakCurrentDuration      = 100;      // Time in milliseconds
+    public static final boolean elevEnableCurrentLimit = true;
+
+    /* Neutral Modes */
+    public static final NeutralMode elevNeutralMode = NeutralMode.Coast;
+
+    /* Inverts */
+    public static final boolean elevMotorInvert = false;
+
     public final double kMaxPwr = 1.00;
 
     //public final double kElevatorGearing = 10.0;
@@ -49,4 +74,21 @@ public class ElevatorConfig {
     public final double ELEV_ENCODER_CONV = 0.03461;            // Inches the elevator rises for each encoder count
 
     public final boolean KLIMIT_SWITCH_PRESSED = false;         // The state of the sensor at the bottom
+
+
+    // --------------- Constuctor Setting Up Motor Config values -------------
+    public ElevatorConfig() {
+        /* Arm Motor Configurations */
+        elevSRXConfig = new TalonSRXConfiguration();
+
+        elevSRXConfig.slot0.kP = elevKP;
+        elevSRXConfig.slot0.kI = elevKI;
+        elevSRXConfig.slot0.kD = elevKD;
+        elevSRXConfig.slot0.kF = elevKF;
+        elevSRXConfig.slot0.allowableClosedloopError = elevAllowableError;
+        elevSRXConfig.continuousCurrentLimit         = elevContinuousCurrentLimit;
+        elevSRXConfig.peakCurrentLimit               = elevPeakCurrentLimit;         
+        elevSRXConfig.peakCurrentDuration            = elevPeakCurrentDuration;
+    }
+
 }

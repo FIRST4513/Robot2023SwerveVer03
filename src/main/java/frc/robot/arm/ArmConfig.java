@@ -1,10 +1,7 @@
 package frc.robot.arm;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import frc.robot.RobotConfig.LimitSwitches;
 import frc.robot.RobotConfig.Motors;
 
@@ -20,7 +17,8 @@ public class ArmConfig {
     public final static double kLowerSpeed = -0.35;
     public final static double kHoldSpeed = 0.1;
 
-    public final static double kArmMotorMaxPwr = 0.5;
+    public final static double kArmMotorRaiseMaxPwr =  +0.5;
+    public final static double kArmMotorLowerMaxPwr = -0.35;
 
     // ------ Limit Switch True States ------
     public final static boolean lowerLimitSwitchTrue = true;
@@ -61,33 +59,29 @@ public class ArmConfig {
     // increase to reduce jitter, (2048 * angleGearRatio) / 360.0) = 1 degree = 122 cnts
     public static final int armAngleAllowableError = 122;  // 1 degree is close enough ????
 
-    
-    public static TalonFXConfiguration armFXConfig;     // TalonFX Config objetct
+    // Talon SRX Configuration    
+    public static TalonSRXConfiguration armSRXConfig;       // TalonSRX Config object
 
     /* Arm Motor Current Limiting */
-    public static final int angleContinuousCurrentLimit = 25;
-    public static final int anglePeakCurrentLimit = 40;
-    public static final double anglePeakCurrentDuration = 0.1;
-    public static final boolean angleEnableCurrentLimit = true;
+    public static final int     armContinuousCurrentLimit   = 25;       // Amps
+    public static final int     armPeakCurrentLimit         = 40;       // Amps
+    public static final int     armPeakCurrentDuration      = 100;      // Time in milliseconds
+    public static final boolean armEnableCurrentLimit = true;
 
 
     // --------------- Constuctor Setting Up Motor Config values -------------
     public ArmConfig() {
         /* Arm Motor Configurations */
-        armFXConfig = new TalonFXConfiguration();
-        SupplyCurrentLimitConfiguration armSupplyLimit =
-                new SupplyCurrentLimitConfiguration(
-                    ArmConfig.angleEnableCurrentLimit,
-                    ArmConfig.angleContinuousCurrentLimit,
-                    ArmConfig.anglePeakCurrentLimit,
-                    ArmConfig.anglePeakCurrentDuration);
+        armSRXConfig = new TalonSRXConfiguration();
 
-        armFXConfig.slot0.kP = ArmConfig.armKP;
-        armFXConfig.slot0.kI = ArmConfig.armKI;
-        armFXConfig.slot0.kD = ArmConfig.armKD;
-        armFXConfig.slot0.kF = ArmConfig.armKF;
-        armFXConfig.slot0.allowableClosedloopError = ArmConfig.armAngleAllowableError;
-        armFXConfig.supplyCurrLimit = armSupplyLimit;
-        armFXConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
+        armSRXConfig.slot0.kP = armKP;
+        armSRXConfig.slot0.kI = armKI;
+        armSRXConfig.slot0.kD = armKD;
+        armSRXConfig.slot0.kF = armKF;
+        armSRXConfig.slot0.allowableClosedloopError = armAngleAllowableError;
+        armSRXConfig.continuousCurrentLimit         = armContinuousCurrentLimit;
+        armSRXConfig.peakCurrentLimit               = armPeakCurrentLimit;         
+        armSRXConfig.peakCurrentDuration            = armPeakCurrentDuration;
     }
+
 }

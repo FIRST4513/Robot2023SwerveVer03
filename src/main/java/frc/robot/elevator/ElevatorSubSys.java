@@ -1,15 +1,9 @@
 package frc.robot.elevator;
 
 import java.util.function.DoubleSupplier;
-
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
 
@@ -36,12 +30,11 @@ public class ElevatorSubSys extends SubsystemBase {
 
     /** Creates a new ElevatorSim. */
     public ElevatorSubSys() {
-
         config = new ElevatorConfig();
         telemetry = new ElevatorTelemetry(this);
-        
-        m_controller = new PIDController(config.kElevatorKp, 0, 0);
+        m_controller = new PIDController(config.elevKP, 0, 0);
         m_motor = new WPI_TalonSRX(config.kMotorPort);
+        elevatorMotorConfig();
         elevLowerLimitSw = new DigitalInput(config.kLowerLimitSwitchPort);
         elevUpperLimitSw = new DigitalInput(config.kUpperLimitSwitchPort);
     }
@@ -148,7 +141,7 @@ public class ElevatorSubSys extends SubsystemBase {
     public double getPidCalcOut(double tgt_setpoint) {
         double tgt = limit_target_pos (tgt_setpoint);
         double out = m_controller.calculate(mCurrElevPos, tgt );
-        out = out + config.kElevatorKf;             // Add feedforward Term
+        out = out + config.elevKF;             // Add feedforward Term
         // Limit max pwr
         if ( out > config.kMaxPwr )  { out = config.kMaxPwr; }
         if ( out < -config.kMaxPwr ) { out = -config.kMaxPwr; }
@@ -208,5 +201,15 @@ public class ElevatorSubSys extends SubsystemBase {
     //public double getTargetTestPos()               { return target_test_pos; }
     public double getTargetPos()                   { return target_pos; }
 
-
+    // --------------------------------------------------------
+    // ---------------- Configure Elev Motor ------------------
+    // --------------------------------------------------------
+    public void elevatorMotorConfig(){
+        // This config is for the Talon SRX Controller
+        m_motor.configFactoryDefault();
+        m_motor.configAllSettings(ElevatorConfig.elevSRXConfig);
+        m_motor.setInverted(ElevatorConfig.elevMotorInvert);
+        m_motor.setNeutralMode(ElevatorConfig.elevNeutralMode);
+        m_motor.setSelectedSensorPosition(0);                     // Reset Encoder to zero
+    }
 }

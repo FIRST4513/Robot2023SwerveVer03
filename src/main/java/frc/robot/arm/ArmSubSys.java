@@ -2,6 +2,7 @@ package frc.robot.arm;
 
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 //the funny code
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -12,24 +13,24 @@ import frc.Rmath;
 import frc.robot.RobotConfig.LimitSwitches;
 
 public class ArmSubSys extends SubsystemBase {
-    public  WPI_TalonSRX mArmMotor = new WPI_TalonSRX(ArmConfig.kMotorPort);
+    public  WPI_TalonSRX mArmMotor        = new WPI_TalonSRX(ArmConfig.kMotorPort);
     private DigitalInput upperlimitSwitch = new DigitalInput(LimitSwitches.armUpperLimitSw);
     private DigitalInput lowerlimitSwitch = new DigitalInput(LimitSwitches.armLowerLimitSw);
 
     private ArmTelemetry telemetry;
 
-    public double mCurrEncoderCnt = 0; 
-    public double mCurrArmAngle = 0;
-    public double mTargetArmAngle = 0;       // PID Target Angle
+    public double mCurrEncoderCnt   = 0; 
+    public double mCurrArmAngle     = 0;
+    public double mTargetArmAngle   = 0;       // PID Target Angle
 
     public final PIDController mArmPIDController;
-    public double mPIDSetpoint = 0;
-    public double mPIDOutput = 0;
+    public double mPIDSetpoint      = 0;
+    public double mPIDOutput        = 0;
 
     // ------------- Constructor ----------
     public ArmSubSys() {
         telemetry = new ArmTelemetry();
-        //armMotorConfig();
+        armMotorConfig();
         stopArm();
         mArmPIDController = new PIDController(ArmConfig.armKP, ArmConfig.armKI, ArmConfig.armKD);
     }
@@ -46,18 +47,18 @@ public class ArmSubSys extends SubsystemBase {
     // ---------------- Arm Motor Methods ------------------
     // -----------------------------------------------------
     public void raiseArm() {
-        if (isUpperLimitSwitchPressed() == false) {
-            setArmMotor(ArmConfig.kRaiseSpeed);
-        }else {
+        if (isUpperLimitSwitchPressed() == true) {
             holdArm();
+        }else {
+            setArmMotor(ArmConfig.kRaiseSpeed);
         }
     }
 
     public void lowerArm() {
-        if (isLowerLimitSwitchPressed() == false) {
-            setArmMotor(ArmConfig.kLowerSpeed);
-        }else {
+        if (isLowerLimitSwitchPressed() == true) {
             stopArm();
+        }else {
+            setArmMotor(ArmConfig.kLowerSpeed);
         }
     }
 
@@ -70,8 +71,17 @@ public class ArmSubSys extends SubsystemBase {
     }
 
     public void setArmMotor( double pwr ) {
-        if ( pwr > +ArmConfig.kArmMotorMaxPwr )  { pwr = +ArmConfig.kArmMotorMaxPwr; }
-        if ( pwr < -ArmConfig.kArmMotorMaxPwr )  { pwr = -ArmConfig.kArmMotorMaxPwr; }
+        // Limit power if needed
+        if ( pwr > ArmConfig.kHoldSpeed) {
+            // Were raising Arm
+            if ( pwr > ArmConfig.kArmMotorRaiseMaxPwr )  {
+                 pwr = ArmConfig.kArmMotorRaiseMaxPwr;
+            }    
+        } else {
+            // Were Lowering Arm
+            if ( pwr < ArmConfig.kArmMotorLowerMaxPwr )  {
+                 pwr = ArmConfig.kArmMotorLowerMaxPwr; }
+        }
         mArmMotor.set(pwr);
     }
 
@@ -79,7 +89,6 @@ public class ArmSubSys extends SubsystemBase {
         setArmMotor(pwr.getAsDouble());
     }
  
-/*
     public void setBrakeMode(Boolean enabled) {
         if (enabled) {
             mArmMotor.setNeutralMode(NeutralMode.Brake);
@@ -87,7 +96,7 @@ public class ArmSubSys extends SubsystemBase {
             mArmMotor.setNeutralMode(NeutralMode.Coast);
         }
     }
- */
+ 
     // ------------  Set Arm to Angle by PID  ----------
     public void setPIDArmToAngle( double angle ) {
         // Angle 0 = fully retracted  90 = fully extended
@@ -123,9 +132,7 @@ public class ArmSubSys extends SubsystemBase {
         return "Not Pressed";
     }
 
-    //
-    // The funny code
-    public String UpperLimitSwitchStatus() {
+    public String upperLimitSwitchStatus() {
         if (upperlimitSwitch.get() == ArmConfig.upperLimitSwitchTrue) {
             return "Pressed";
         }
@@ -174,18 +181,18 @@ public class ArmSubSys extends SubsystemBase {
 
     public double convertAngleToCnt( double angle)   { return angle * ArmConfig.kEncoderConversion; }
     public double convertCntToAngle( double cnt)     { return cnt / ArmConfig.kEncoderConversion; }
-/* 
+
     // -------------------------------------------------------
     // ---------------- Configure Arm Motor ------------------
     // -------------------------------------------------------
     public void armMotorConfig(){
-        //code blah blah blah blah aaaaaaaaa
+        // This config is for the Talon SRX Controller
         mArmMotor.configFactoryDefault();
-        mArmMotor.configAllSettings(ArmConfig.armFXConfig);
+        mArmMotor.configAllSettings(ArmConfig.armSRXConfig);
         mArmMotor.setInverted(ArmConfig.armMotorInvert);
         mArmMotor.setNeutralMode(ArmConfig.armNeutralMode);
-        mArmMotor.setSelectedSensorPosition(0);
+        mArmMotor.setSelectedSensorPosition(0);                     // Reset Encoder to zero
     }
-    */
+    
 }
 //the funny :)

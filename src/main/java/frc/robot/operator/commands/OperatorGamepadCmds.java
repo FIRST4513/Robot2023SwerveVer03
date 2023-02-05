@@ -1,6 +1,5 @@
 package frc.robot.operator.commands;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -8,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.arm.ArmConfig;
-import frc.robot.arm.ArmSubSys;
 import frc.robot.arm.commands.ArmCmds;
 import frc.robot.auto.commands.DelayCmd;
 import frc.robot.elevator.ElevatorConfig;
@@ -50,21 +48,21 @@ public class OperatorGamepadCmds {
             // True condition: arm inside robot, no worry of bumper collision
             new ParallelCommandGroup(
                 ElevatorCmds.goToBottomCmd(),
-                ArmCmds.armToPIDPositionCmd(ArmConfig.ArmAngleLowPos)
+                ArmCmds.armToPIDPositionCmd(ArmConfig.ArmAngleStorePos)
             ),
             // False condition: arm outside robot, check for cube
             new ConditionalCommand(
                 // True condition: no cube, good to go, parallel motion used
                 new ParallelCommandGroup(
                     ElevatorCmds.goToBottomCmd(),
-                    ArmCmds.armToPIDPositionCmd(ArmConfig.ArmAngleLowPos)
+                    ArmCmds.armToPIDPositionCmd(ArmConfig.ArmAngleStorePos)
                 ),
                 // False condition: cube, must avoid bumper collision;
                 // raise elevator for clearance, set arm, then move elev back to correct pos
                 new SequentialCommandGroup(
                     ElevatorCmds.goToPIDPosCmd(ElevatorConfig.ElevClearPos),
                     new DelayCmd(2.0),
-                    ArmCmds.armToPIDPositionCmd(ArmConfig.ArmAngleLowPos),
+                    ArmCmds.armToPIDPositionCmd(ArmConfig.ArmAngleStorePos),
                     new DelayCmd(1.0),
                     ElevatorCmds.goToBottomCmd()
                 ),
