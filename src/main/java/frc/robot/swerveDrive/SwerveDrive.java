@@ -4,6 +4,8 @@
 
 package frc.robot.swerveDrive;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -18,16 +20,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveDrive extends SubsystemBase {
     public      SwerveDriveConfig config;
+    protected   Gyro gyro;
     public      Odometry odometry;
     public      SwerveDriveTelemetry telemetry;
-    protected   SwerveDriveModule[] mSwerveMods;
-    private     SwerveModuleState[] SwerveModDesiredStates;
-    public      Gyro gyro;
+    public      SwerveDriveModule[] mSwerveMods;
+    private     SwerveModuleState[] mSwerveModStates;
+
 
     public SwerveDrive() {
         setName("Swerve");
         config = new SwerveDriveConfig();
-
+        gyro = new Gyro();
         mSwerveMods =
                 new SwerveDriveModule[] {
                     new SwerveDriveModule(0, config, SwerveDriveConfig.FLMod0.config),
@@ -35,30 +38,40 @@ public class SwerveDrive extends SubsystemBase {
                     new SwerveDriveModule(2, config, SwerveDriveConfig.BLMod2.config),
                     new SwerveDriveModule(3, config, SwerveDriveConfig.BRMod3.config)
                 };
-        mSwerveMods[0].logDescription();    // Add description to log file
-
-        gyro = new Gyro();
+        //mSwerveMods[0].logDescription();    // Add description to log file
         odometry = new Odometry(this);
         telemetry = new SwerveDriveTelemetry(this);
-
         Timer.delay(1.0);
         resetFalconAngles();
-        
-        RobotTelemetry.print("Gyro initilized and Swerve angles");
-        //drive(0, 0, 0, true, false, new Translation2d());     // Set the initial module states to zero
     }
 
     @Override
     public void periodic() {
         odometry.update();
-        SmartDashboard.putNumber("gyroheading",gyro.getHeadingDegrees());
-
+        mSwerveModStates = getStatesCAN();
+        SmartDashboard.putNumber("gyroheading",gyro.getGyroHeadingDegrees());
         //telemetry.logModuleAbsolutePositions();
     }
 
     // -------------------------------------------------------------------
     // ----------------------  Swerve Drive Methods  ---------------------
     // -------------------------------------------------------------------
+
+    // This drive method (overloaded) does'nt need the translation component
+    public void drive( double fwdPositive,
+                    double leftPositive,
+                    double omegaRadiansPerSecond,
+                    boolean fieldRelative,
+                    boolean isOpenLoop) {
+    // call real method to get job done
+    drive ( fwdPositive,
+            leftPositive,
+            omegaRadiansPerSecond,
+            fieldRelative,
+            isOpenLoop,
+            new Translation2d ());      // Zeros out Translation by default
+    }
+
     /**
      * Used to drive the swerve robot, should be called from commands that require swerve.
      *
@@ -70,53 +83,45 @@ public class SwerveDrive extends SubsystemBase {
      * @param centerOfRotationMeters The center of rotation in meters
      */
 
-     // This drive method used with DriveByJoystick command and Autonomous drive commands
-    public void drive(
-            double fwdPositive,
-            double leftPositive,
-            double omegaRadiansPerSecond,
-            boolean fieldRelative,
-            boolean isOpenLoop,
-            Translation2d centerOfRotationMeters) {
+     public void drive(
+        double fwdPositive,
+        double leftPositive,
+        double omegaRadiansPerSecond,
+        boolean fieldRelative,
+        boolean isOpenLoop,
+        Translation2d centerOfRotationMeters) {{
+        drive(
+            fwdPositive,
+            leftPositive,
+            omegaRadiansPerSecond,
+            fieldRelative,
+            isOpenLoop,
+            new Translation2d ());
+        }
 
         // ------------------- Step 1 Set Chassis Speeds ----------------------
         // mps (Meters Per Second) and rps (Radians Per Second)
         ChassisSpeeds speeds;
-
         if (fieldRelative) {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            fwdPositive, leftPositive, omegaRadiansPerSecond, getHeading());
+                        fwdPositive, leftPositive, omegaRadiansPerSecond, getHeading());
         } else {
             speeds = new ChassisSpeeds(fwdPositive, leftPositive, omegaRadiansPerSecond);
         }
 
         // --------------- Step 2 Create Swerve Modules Desired States Array ---------------
         // Wheel Velocity (mps) and Wheel Angle (radians) for each of the 4 swerve modules
-        SwerveModDesiredStates =
+        SwerveModuleState[] swerveModuleDesiredStates =
                 SwerveDriveConfig.swerveKinematics.toSwerveModuleStates(speeds, centerOfRotationMeters);
 
         // -------------------------- Step 3 Desaturate Wheel speeds -----------------------
         // LOOK INTO THE OTHER CONSTRUCTOR FOR desaturateWheelSpeeds to see if it is better
         SwerveDriveKinematics.desaturateWheelSpeeds(
-                SwerveModDesiredStates, SwerveDriveConfig.maxVelocity);
+            swerveModuleDesiredStates, SwerveDriveConfig.maxVelocity);
 
         // ------------------ Step 4 Send Desrired Module states to wheel modules ----------------
         for (SwerveDriveModule mod : mSwerveMods) {
-            mod.setDesiredState(SwerveModDesiredStates[mod.moduleNumber], isOpenLoop);
-        }
-    }
-
-     /**
-     * Used by SwerveFollowCommand in Auto, assumes closed loop control
-     *
-     * @param desiredStates Meters per second and radians per second
-     */
-    public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveDriveConfig.maxVelocity);
-
-        SwerveModDesiredStates = desiredStates;
-        for (SwerveDriveModule mod : mSwerveMods) {
-            mod.setDesiredState(desiredStates[mod.moduleNumber], false);
+            mod.setDesiredState(swerveModuleDesiredStates[mod.moduleNumber], isOpenLoop);
         }
     }
 
@@ -133,48 +138,31 @@ public class SwerveDrive extends SubsystemBase {
         mSwerveMods[3].setDriveMotorVoltage(rightVolts);
     }
 
-    // Used in turnCmd
-    // public void useOutput(double output) {
-    //     pidTurn = output * SwerveConstants.maxAngularVelocity;
-    // }
-
-    // //Used for control loops that give a rotational velocity directly
-    // public void setRotationalVelocity(double rotationalVelocity){
-    //     pidTurn = rotationalVelocity;
-    // }
-
    /**
      * Stop the drive and angle motor of each module And set desired states to 0 meters per second
      * and current module angles
      */
     public void stop() {
-        SwerveModuleState[] states = new SwerveModuleState[4];
         for (SwerveDriveModule mod : mSwerveMods) {
-            mod.stop();
-            states[mod.moduleNumber] =
-                    new SwerveModuleState(0, mod.getTargetAngle());
+            mod.mDriveMotor.stopMotor();
+            mod.mAngleMotor.stopMotor();
         }
-        SwerveModDesiredStates = states;
     }
 
-
-    // -------------------------------------------------------------
-    // ---------  Brake Mode & Reset Angle Motor Angle  ------------
-    // -------------------------------------------------------------
-
-    /**
-     * Set both the drive and angle motor on each module to brake mode if enabled = true
-     *
-     * @param enabled true = brake mode, false = coast mode
-     */
+    // Set brakes On/Off for swerve module motors
     public void setBrakeMode(boolean enabled) {
         for (SwerveDriveModule mod : mSwerveMods) {
-            mod.setBrakeMode(enabled);
+            if (enabled) {
+                mod.mDriveMotor.setNeutralMode(NeutralMode.Brake);
+                mod.mAngleMotor.setNeutralMode(NeutralMode.Brake);
+            } else {
+                mod.mDriveMotor.setNeutralMode(NeutralMode.Coast);
+                mod.mAngleMotor.setNeutralMode(NeutralMode.Coast);
+            }
         }
     }
 
-
-    /** Reset AngleMotors to Absolute This is used to reset the angle motors to absolute position */
+    /** Initialize AngleMotors encoder to CANcoder Absolute angle. */
     public void resetSteeringToAbsolute() {
         for (SwerveDriveModule mod : mSwerveMods) {
             mod.resetFalconToAbsolute();
@@ -183,8 +171,26 @@ public class SwerveDrive extends SubsystemBase {
 
 
     // -------------------------------------------------------------
-    // ----------------------  Odometry Calls  ---------------------
+    // -------------------  Heading / Gyro Calls  ------------------
     // -------------------------------------------------------------
+
+     /**
+     * Get the heading of the robot
+     *
+     * @return current heading using the offset from Odometry class
+     */
+    public Rotation2d getHeading() {
+        return odometry.getHeading();
+    }
+
+    public Rotation2d getHeadingRotation2d() {
+        return Rotation2d.fromDegrees(getDegrees() * -1.0);
+    }
+
+    // Used in turn to angle
+    public double getDegrees(){
+        return gyro.getGyroHeadingDegrees();
+    }
 
     /**
      * Reset the Heading to any angle
@@ -195,39 +201,12 @@ public class SwerveDrive extends SubsystemBase {
         odometry.resetHeading(heading);
     }
 
-    /**
-     * Reset the pose2d of the robot
-     *
-     * @param pose
-     */
-    public void resetOdometry(Pose2d pose) {
-        odometry.resetOdometry(pose);
-    }
-
-    /**
-     * Get the heading of the robot
-     *
-     * @return current heading using the offset from Odometry class
-     */
-    public Rotation2d getHeading() {
-        return odometry.getHeading();
-    }
-
-    // Used in turn to angle
-    public double getDegrees(){
-        return gyro.getHeadingDegrees();
-    }
-
-    public Rotation2d getHeadingRotation2d() {
-        return Rotation2d.fromDegrees(getDegrees() * -1.0f);
-    }
-
     public void resetGyro(){
         gyro.resetGyro();
     }
 
     public void setGyroDegrees( double newHdg ) {
-        gyro.setHeadingDegrees( newHdg);
+        gyro.setGyroHeadingDegrees( newHdg);
     }
 
     public double getSnap90Angle() {
@@ -240,13 +219,16 @@ public class SwerveDrive extends SubsystemBase {
         return tgt;
     }
 
-    /**
-     * Ge the Pose of the odemotry class
-     *
-     * @return
-     */
+    // -------------------------------------------------------------
+    // ----------------------  Pose Calls  ---------------------
+    // -------------------------------------------------------------
+
     public Pose2d getPoseMeters() {
         return odometry.getPoseMeters();
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        odometry.resetOdometry(pose);
     }
 
     public Translation2d getPosition(){
@@ -254,15 +236,27 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     // -------------------------------------------------------------
-    // ----------------- Get Swerve Module States ------------------
+    // -------------- Set / Get Swerve Module States ---------------
     // -------------------------------------------------------------
+
+     /**
+     * Used by SwerveFollowCommand in Auto, assumes closed loop control
+     *
+     * @param desiredStates Meters per second and radians per second
+     */
+    public void setModuleStates(SwerveModuleState[] desiredStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveDriveConfig.maxVelocity);
+        for (SwerveDriveModule mod : mSwerveMods) {
+            mod.setDesiredState(desiredStates[mod.moduleNumber], false);
+        }
+    }
 
     /**
      * Gets the states of the modules from the modules directly, called once a loop
      *
      * @return the current module states
      */
-    public SwerveModuleState[] getStates() {
+    public SwerveModuleState[] getStatesCAN() {
         SwerveModuleState[] states = new SwerveModuleState[4];
         for (SwerveDriveModule mod : mSwerveMods) {
             states[mod.moduleNumber] = mod.getState();
@@ -270,8 +264,8 @@ public class SwerveDrive extends SubsystemBase {
         return states;
     }
 
-    public SwerveModuleState[] getDesiredStates() {
-        return SwerveModDesiredStates;
+    public SwerveModuleState[] getStates() {
+        return mSwerveModStates;
     }
 
     /**
@@ -282,7 +276,7 @@ public class SwerveDrive extends SubsystemBase {
     public SwerveModulePosition[] getPositions() {
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
         for (SwerveDriveModule mod : mSwerveMods) {
-            positions[mod.moduleNumber] = mod.mSwerveModPosition;
+            positions[mod.moduleNumber] = mod.getPosition();
         }
         return positions;
     }
