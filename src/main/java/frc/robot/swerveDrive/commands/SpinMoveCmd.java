@@ -1,4 +1,4 @@
-package frc.robot.pilot.commands;
+package frc.robot.swerveDrive.commands;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -24,9 +24,9 @@ public class SpinMoveCmd extends CommandBase {
     public SpinMoveCmd() {
         swerve = Robot.swerve;
         centerOfRotationMeters = new Translation2d();
-        fwdPositiveSupplier = Robot.pilotGamepad::getDriveFwdPositive;
+        fwdPositiveSupplier =  Robot.pilotGamepad::getDriveFwdPositive;
         leftPositiveSupplier = Robot.pilotGamepad::getDriveLeftPositive;
-        ccwPositiveSupplier = Robot.pilotGamepad::getDriveRotationCCWPositive;
+        ccwPositiveSupplier =  Robot.pilotGamepad::getDriveRotationCCWPositive;
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(swerve);
@@ -40,9 +40,9 @@ public class SpinMoveCmd extends CommandBase {
 
     @Override
     public void execute() {
-        double fwdPositive = fwdPositiveSupplier.getAsDouble();
-        double leftPositive = leftPositiveSupplier.getAsDouble();
-        double ccwPositive = ccwPositiveSupplier.getAsDouble();
+        double fwdPositive =    fwdPositiveSupplier.getAsDouble();
+        double leftPositive =   leftPositiveSupplier.getAsDouble();
+        double ccwPositive =    ccwPositiveSupplier.getAsDouble();
 
         translation = new Translation2d(fwdPositive, leftPositive);
 
