@@ -1,10 +1,7 @@
 package frc.robot.intake;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
-
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import frc.robot.RobotConfig.AnalogPorts;
 import frc.robot.RobotConfig.Motors;
 
@@ -31,47 +28,31 @@ public class IntakeConfig {
     public static final boolean upperIntakeMotorInvert = false;
     public static final boolean lowerIntakeMotorInvert = false;
 
-    /* Intake Motor PID Values */
-    public static final double intakeKP = 0.1;
-    public static final double intakeKI = 0.0;
-    public static final double intakeKD = 0.0;
-    public static final double intakeKF = 0.0;
-
-    /* Intake Motor Characterization Values */
-    public static final double intakeKS = ( 0.32 / 12.0 );  // /12 to convert from volts to %output
-    public static final double intakeKV = ( 3.00 / 12.0 );
-    public static final double intakeKA = ( 0.27 / 12.0 );
-
     // increase to reduce jitter
     public static final int intakeAllowableError = 0;
 
-    public static TalonFXConfiguration intakeFXConfig;     // TalonFX Config objetct
+    public static TalonSRXConfiguration intakeSRXConfig;     // TalonSRX Config objetct
 
     /* Intake Motor Current Limiting */
-    public static final int intakeContinuousCurrentLimit = 25;
-    public static final int intakePeakCurrentLimit = 40;
-    public static final double intakePeakCurrentDuration = 0.1;
-    public static final boolean intakeEnableCurrentLimit = true;
+    public static final int     intakeContinuousCurrentLimit = 25;
+    public static final int     intakePeakCurrentLimit       = 40;
+    public static final int     intakePeakCurrentDuration    = 100;
+    public static final boolean intakeEnableCurrentLimit     = true;
 
 
     // --------------- Constuctor Setting Up Motor Config values -------------
     public IntakeConfig() {
         /* Intake Motor Configurations */
-        intakeFXConfig = new TalonFXConfiguration();
-        SupplyCurrentLimitConfiguration intakeSupplyLimit =
-                new SupplyCurrentLimitConfiguration(
-                    IntakeConfig.intakeEnableCurrentLimit,
-                    IntakeConfig.intakeContinuousCurrentLimit,
-                    IntakeConfig.intakePeakCurrentLimit,
-                    IntakeConfig.intakePeakCurrentDuration);
+        intakeSRXConfig = new TalonSRXConfiguration();
 
-        intakeFXConfig.slot0.kP = IntakeConfig.intakeKP;
-        intakeFXConfig.slot0.kI = IntakeConfig.intakeKI;
-        intakeFXConfig.slot0.kD = IntakeConfig.intakeKD;
-        intakeFXConfig.slot0.kF = IntakeConfig.intakeKF;
-        intakeFXConfig.slot0.allowableClosedloopError = IntakeConfig.intakeAllowableError;
-        intakeFXConfig.supplyCurrLimit = intakeSupplyLimit;
-        intakeFXConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
+        intakeSRXConfig.slot0.kP = 0;
+        intakeSRXConfig.slot0.kI = 0;
+        intakeSRXConfig.slot0.kD = 0;
+        intakeSRXConfig.slot0.kF = 0;
+        intakeSRXConfig.slot0.allowableClosedloopError = intakeAllowableError;
+        intakeSRXConfig.continuousCurrentLimit         = intakeContinuousCurrentLimit;
+        intakeSRXConfig.peakCurrentLimit               = intakePeakCurrentLimit;         
+        intakeSRXConfig.peakCurrentDuration            = intakePeakCurrentDuration;
     }
 
 }

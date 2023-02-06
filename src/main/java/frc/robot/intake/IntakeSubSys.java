@@ -1,21 +1,23 @@
 package frc.robot.intake;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubSys extends SubsystemBase {
     
     //Devices
-    public WPI_TalonFX intakeUpperMotor  = new WPI_TalonFX(IntakeConfig.intakeUpperMotorCANID);
-    public WPI_TalonFX intakeLowerMotor  = new WPI_TalonFX(IntakeConfig.intakeLowerMotorCANID);
+    public WPI_TalonSRX intakeUpperMotor  = new WPI_TalonSRX(IntakeConfig.intakeUpperMotorCANID);
+    public WPI_TalonSRX intakeLowerMotor  = new WPI_TalonSRX(IntakeConfig.intakeLowerMotorCANID);
+
     private AnalogInput coneDetectSensor = new AnalogInput(IntakeConfig.coneDetectPortID);
     private AnalogInput cubeDetectSensor = new AnalogInput(IntakeConfig.cubeDetectPortID);
 
     //contructor
     public IntakeSubSys() { 
-        configureTalonMotors();
+        configureTalonSRXControllers();
         stopMotors();
     } 
 
@@ -91,20 +93,22 @@ public class IntakeSubSys extends SubsystemBase {
         return "Not Detected";
     }
 
-    // -------------------------------------------------------
-    // ---------------- Configure Arm Motor ------------------
-    // -------------------------------------------------------
-    public void configureTalonMotors(){
+    // ----------------------------------------------------------
+    // ---------------- Configure Intake Motor ------------------
+    // ----------------------------------------------------------
+    public void configureTalonSRXControllers(){
+        // This config is for the Talon SRX Controllers
+
         // Upper Motor
         intakeUpperMotor.configFactoryDefault();
-        intakeUpperMotor.configAllSettings(IntakeConfig.intakeFXConfig);
+        intakeUpperMotor.configAllSettings(IntakeConfig.intakeSRXConfig);
         intakeUpperMotor.setInverted(IntakeConfig.upperIntakeMotorInvert);
         intakeUpperMotor.setNeutralMode(IntakeConfig.intakeNeutralMode);
         intakeUpperMotor.setSelectedSensorPosition(0);
 
         // Lower Motor
         intakeLowerMotor.configFactoryDefault();
-        intakeLowerMotor.configAllSettings(IntakeConfig.intakeFXConfig);
+        intakeLowerMotor.configAllSettings(IntakeConfig.intakeSRXConfig);
         intakeLowerMotor.setInverted(IntakeConfig.lowerIntakeMotorInvert);
         intakeLowerMotor.setNeutralMode(IntakeConfig.intakeNeutralMode);
         intakeLowerMotor.setSelectedSensorPosition(0);
