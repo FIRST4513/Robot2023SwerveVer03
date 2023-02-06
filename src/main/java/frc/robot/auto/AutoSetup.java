@@ -1,5 +1,7 @@
 package frc.robot.auto;
 
+import java.util.HashMap;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -14,14 +16,34 @@ public class AutoSetup {
     public static final SendableChooser<Command> autoChooser = new SendableChooser<>();
     private static boolean autoMessagePrinted = true;
     private static double autoStart = 0;
+    public static HashMap<String, Command> eventMap = new HashMap<>();
+
+    public AutoSetup(){
+        setupSelectors();
+        setupEventMap();
+    }
 
     // A chooser for autonomous commands
     public static void setupSelectors() {
+
+        // Selector for Auto Routine
         autoChooser.setDefaultOption("Nothing",
                              new PrintCommand("Doing Nothing in Auton").andThen(new WaitCommand(5)));
         autoChooser.setDefaultOption("Do Nothing", new PrintCommand("DO NOTHING AUTO RUNNING"));
-        autoChooser.addOption("Delay 10 Sec", new DelayCmd(10));    
+        autoChooser.addOption("Delay 10 Sec", new DelayCmd(10));
+        
+        // Selector for starting Location on Field
+
+
+
         }
+
+    // Adds event mapping to autonomous commands
+    public static void setupEventMap(){
+        eventMap.put("Marker1", new PrintCommand("Passed marker 1"));
+        eventMap.put("Marker2", new PrintCommand("Passed marker 2"));
+    }
+
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -30,11 +52,11 @@ public class AutoSetup {
      */
     public static Command getAutonomousCommand() {
         // return new CharacterizeLauncher(Robot.launcher);
-        Command auton = autoChooser.getSelected();
-        if (auton != null) {
-            return auton;
+        Command auto = autoChooser.getSelected();
+        if (auto != null) {
+            return auto;
         } else {
-            return new PrintCommand("*** AUTON COMMAND IS NULL ***");
+            return new PrintCommand("*** AUTO COMMAND IS NULL ***");
         }
     }
 

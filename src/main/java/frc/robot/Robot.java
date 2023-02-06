@@ -1,15 +1,8 @@
 package frc.robot;
 
-import com.pathplanner.lib.server.PathPlannerServer;
-
 import edu.wpi.first.wpilibj.Threads;
-//import edu.wpi.first.wpilibj.DataLogManager;
-//import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.util.Network;
@@ -29,6 +22,7 @@ import frc.robot.pose.Pose;
 import frc.robot.swerveDrive.SwerveDrive;
 import frc.robot.swerveDrive.commands.SwerveDriveCmds;
 import frc.robot.trajectories.Trajectories;
+import com.pathplanner.lib.server.PathPlannerServer;
 
 public class Robot extends TimedRobot {
     public static RobotConfig config;
@@ -78,10 +72,10 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         sysTimer.reset();			// System timer for Competition run
     	sysTimer.start();
-        Timer.delay( 2.0 );     // Delay for 2 seconds for robot to come fully up
+        Timer.delay( 2.0 );         // Delay for 2 seconds for robot to come fully up
         // Set the MAC Address for this robot, useful for adjusting comp/practice bot settings*/
         MAC = Network.getMACaddress();
-        //PathPlannerServer.startServer( 5811 ); // 5811 = port number. adjust this according to your needs
+        PathPlannerServer.startServer( 5811 ); // 5811 = port number. adjust this according to your needs
         intializeSubsystems();
     }
 
@@ -108,14 +102,10 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void disabledPeriodic() {
-        
-    }
+    public void disabledPeriodic()  { }
 
     @Override
-    public void disabledExit() {
-        //
-    }
+    public void disabledExit()  { }
 
 
     @Override
@@ -140,7 +130,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        // System.out.print("----------\nTeleop Init!\n");
         resetCommandsAndButtons();
         logger.startTimer();
         // Set Pilot Teleop Speeds to those selected on smartdashboard
@@ -158,8 +147,6 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         resetCommandsAndButtons();
-        //logger.startTimer();
-        swerve.resetFalconAngles(); // reset falcon angle motors to absolute encoder
     }
 
     /** This function is called periodically during test mode. */
@@ -177,11 +164,9 @@ public class Robot extends TimedRobot {
     public static void resetCommandsAndButtons() {
         CommandScheduler.getInstance().cancelAll(); // Disable any currently running commands
         CommandScheduler.getInstance().getActiveButtonLoop().clear();
+        pilotGamepad.resetConfig();     // Reset Config for all gamepads and other button bindings
         //LiveWindow.setEnabled(false); // Disable Live Window we don't need that data being sent
         //LiveWindow.disableAllTelemetry();
-
-        // Reset Config for all gamepads and other button bindings
-        pilotGamepad.resetConfig();
     }
 
 }
