@@ -22,7 +22,7 @@ public class ElevatorCmds {
     }
 
     public static Command stop() {
-        return new InstantCommand( () -> Robot.elevator.stop(), Robot.elevator)
+        return new InstantCommand( () -> Robot.elevator.elevStop(), Robot.elevator)
             .withName("StopCmd");
     }
 
@@ -48,7 +48,7 @@ public class ElevatorCmds {
 
     public static Command goToBottomCmd() {
         return new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
-            .until(() ->Robot.elevator.isLowerLmtReached())
+            .until(() ->Robot.elevator.isLowerLimitSwitchPressed())
             .withName("ToPIDPosCmd");
     }
     

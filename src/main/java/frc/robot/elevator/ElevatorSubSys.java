@@ -9,12 +9,17 @@ import frc.Rmath;
 
 public class ElevatorSubSys extends SubsystemBase {
     public ElevatorConfig config;
-    public ElevatorTelemetry telemetry;
+
+    // Devices
+    public final WPI_TalonSRX m_motor;
+    public final DigitalInput elevLowerLimitSw, elevUpperLimitSw;
+
+    // PID Controller
+    public final PIDController elevPIDcontroller;
 
     // Elevator Variables
     public double target_height;    // Relative to Ground
     public double target_pos;       // Relative to zero
-    // public double target_test_pos = 20.0;
 
     public double mCurrPwr = 0;
     public double mCurrElevPwr;
@@ -22,92 +27,79 @@ public class ElevatorSubSys extends SubsystemBase {
     public double mCurrEncoderCnt = 0;
     public double mCurrElevPos;     // Elevator Height Zero at bottom (Inches)
     public double mCurrElevHt;      // Grabber Height off the floor (Inches)
-    
-    // Standard classes for controlling our elevator
-    public final PIDController m_controller;
-    public final WPI_TalonSRX m_motor;
-    public final DigitalInput elevLowerLimitSw, elevUpperLimitSw;
 
-    /** Creates a new ElevatorSim. */
+    // -----------  Constructor --------------------
     public ElevatorSubSys() {
         config = new ElevatorConfig();
-        telemetry = new ElevatorTelemetry(this);
-        m_controller = new PIDController(config.elevKP, 0, 0);
         m_motor = new WPI_TalonSRX(config.kMotorPort);
-        elevatorMotorConfig();
         elevLowerLimitSw = new DigitalInput(config.kLowerLimitSwitchPort);
         elevUpperLimitSw = new DigitalInput(config.kUpperLimitSwitchPort);
+        elevPIDcontroller = new PIDController(config.elevKP, 0, 0);
+        elevatorMotorConfig();
+    }
+
+   @Override
+   public void periodic() {
+       updateCurrentElevPosition();
     }
 
     // --------------------------------------------
     // ---------   Elevator Methods   -------------
     // --------------------------------------------
 
-    @Override
-    public void periodic() {
-        updateCurrentElevPosition();
-    }
- 
-   // ------------ Stop Elevator Motor  ----------
-   public void stop() {
-    mCurrElevPwr = 0;        
-    m_motor.stopMotor();            // Send Power to motor  
-}
-
-    // ------------ Hold Elevator Position ----------
-    public void elevHoldMtr(){
-        if (isLowerLmtReached() == true) {
-            stop();
-            return;	
-        } else {
-            mCurrElevPwr = config.KHoldSpeedDefault ;
-        }
-        m_motor.set(mCurrElevPwr);      // Send Power to motor  
-    }
-
     // ------------ Lower Elevator ----------
     public void elevLower() {
-        mCurrElevPwr = config.KLowerSpeedDefault;
-
-        if (isLowerLmtReached()){
-            // We have hit bottom limit switch  		
-            stop();
-            return;
-        }
-        //  This is for slowing down as we approach the bottom    		
-        if( mCurrElevPos <= config.KLimitElevBottomSlowPos ) {
-            mCurrElevPwr= config.KLowerSlowSpeed;
-        }
-        m_motor.set(mCurrElevPwr);      // Send Power to motor  
+        elevSetSpeed( config.KLowerSpeedDefault ); 
     }
 
     // ------------ Raise Elevator ----------
     public void elevRaise() {
-        mCurrElevPwr = config.KRaiseSpeedDefault;
-        if (isUpperLmtReached()) {
-            elevHoldMtr();
-            return;
-        }
-        //  This is for slowing down as we approach the top
-        if( mCurrElevPos >= config.KLimitElevTopSlowPos )  {
-            mCurrElevPwr = config.KRaiseSlowSpeed;
-        }
-        m_motor.set(mCurrElevPwr);    	// Send Power to motor  
+        elevSetSpeed( config.KRaiseSpeedDefault ); 
     }
 
-    // ------------ Manually Drive Elevator ----------
+    // ------------ Hold Elevator Position ----------
+    public void elevHoldMtr(){
+        elevSetSpeed( config.KHoldSpeedDefault ); 
+    }
+
+    // ------------ Stop Elevator Motor  ----------
+    public void elevStop() {
+        mCurrElevPwr = 0;        
+        m_motor.stopMotor();
+    }
+
+    // ------------ This does all the work (Non PID) to Drive the Elevator ----------
     public void elevSetSpeed(double speed){
         // Cap speed to max
-        if ( speed > +config.KMaxSpeed )  { speed = +config.KMaxSpeed; }
-        if ( speed < -config.KMaxSpeed )  { speed = -config.KMaxSpeed; }
-        // Check if it is at a limit
-        if ( ( speed < config.KHoldSpeedDefault) && (isLowerLmtReached()) ) {
-            stop();
-            return;
-        } else if ( ( speed > config.KHoldSpeedDefault) && (isLowerLmtReached())) {
-            elevHoldMtr();
-            return;
+        if ( speed > config.raiseMaxSpeed )  { speed = config.raiseMaxSpeed; }
+        if ( speed < config.lowerMaxSpeed )  { speed = config.lowerMaxSpeed; }
+
+        // Were Raising the elevator
+        if ( speed > config.KHoldSpeedDefault ) {
+            // Test for hitting Upper Limits
+            if ( ( isUpperLimitSwitchPressed() ) || isUpperLimitReached() ) {
+                elevHoldMtr();
+                return;
+            }
+            //  This is for slowing down as we approach the top
+            if ( mCurrElevPos >= config.KLimitElevTopSlowPos )  {
+                speed = config.KRaiseSlowSpeed;
+            }
         }
+
+        // Were Lowering the elevator
+        if ( speed <= config.KHoldSpeedDefault) {
+            // Test if hitting Bottom limit switch
+            if ( isLowerLimitSwitchPressed() ) {
+                elevStop();
+                return;
+            }
+            //  This is for slowing down as we approach the bottom    		
+            if ( mCurrElevPos <= config.KLimitElevBottomSlowPos ) {
+                speed = config.KLowerSlowSpeed;
+            }
+        }
+
         mCurrElevPwr = speed;
         m_motor.set(mCurrElevPwr);      // Send Power to motor  
     }
@@ -140,7 +132,7 @@ public class ElevatorSubSys extends SubsystemBase {
     // ---------  PID Out Calculator  --------------
     public double getPidCalcOut(double tgt_setpoint) {
         double tgt = limit_target_pos (tgt_setpoint);
-        double out = m_controller.calculate(mCurrElevPos, tgt );
+        double out = elevPIDcontroller.calculate(mCurrElevPos, tgt );
         out = out + config.elevKF;             // Add feedforward Term
         // Limit max pwr
         if ( out > config.kMaxPwr )  { out = config.kMaxPwr; }
@@ -178,24 +170,44 @@ public class ElevatorSubSys extends SubsystemBase {
     }
 
     // -----------------  Lower/Upper Limits ----------------
-    public boolean isLowerLmtReached() {
-        if (elevLowerLimitSw.get() == config.KLIMIT_SWITCH_PRESSED) return true;
-    return false;
+    public boolean isLowerLimitSwitchPressed() {
+        if (elevLowerLimitSw.get() == config.lowerLimitTrue) {
+            return true;
+        }
+        return false;
     }
 
-    public boolean isUpperLmtReached() {
-        // Check Encoder for exceeding top value
-        if ( mCurrElevPos >= config.KElevMaxTopPos ) return true;
-    return false;
+    public boolean isUpperLimitSwitchPressed() {
+        if (elevUpperLimitSw.get() == config.lowerLimitTrue) {
+            return true;
+        }
+        return false;
     }
 
-    public boolean isLowerLmtSwNotPressed() { return !isLowerLmtReached(); }
-    public boolean isUpperLmtNotReached()   { return !isUpperLmtReached(); }
+    public boolean isUpperLimitReached() {
+        if ( mCurrElevPos >= config.KElevMaxTopPos ) {
+            return true;
+        }
+        return false;
+    }
 
-    public String getLimitSwStatus(){
-        if ( isUpperLmtReached() )          { return "AT Top"; }
-        if ( isLowerLmtReached() )          { return "AT Bottom"; }
-        return "IN Between";
+    public boolean isLowerLmtSwNotPressed() { return !isLowerLimitSwitchPressed(); }
+    public boolean isUpperLmtNotReached()   { return !isUpperLimitSwitchPressed(); }
+
+    public String getUpperLimitSwStatus(){
+        if ( isUpperLimitSwitchPressed() ) {
+            return "Pressed"; 
+        } else {
+            return "Not Pressed";
+        }
+    }
+
+    public String getLowerLimitSwStatus(){
+        if ( isLowerLimitSwitchPressed() ) {
+            return "Pressed"; 
+        } else {
+            return "Not Pressed";
+        }
     }
 
     //public double getTargetTestPos()               { return target_test_pos; }

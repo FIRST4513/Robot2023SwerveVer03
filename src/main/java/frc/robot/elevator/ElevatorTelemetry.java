@@ -41,7 +41,8 @@ public class ElevatorTelemetry {
     SuppliedValueWidget<Double>  m_PIDtargetHtWidget;
     SuppliedValueWidget<Double>  m_PIDoutWidget;
 
-    SuppliedValueWidget<String>  m_limitSwWidget;
+    SuppliedValueWidget<String>  m_lowerLimitSwWidget;
+    SuppliedValueWidget<String>  m_upperLimitSwWidget;
     SuppliedValueWidget<String>  m_ModeWidget;
 
 
@@ -160,7 +161,7 @@ public class ElevatorTelemetry {
             .withPosition(0, 3)    .withSize(2, 1);
 
         elevCmdsLayout.add("TO Bottom", new RunCommand( () -> elevator.elevLower(), elevator)
-            .until(() ->elevator.isLowerLmtReached()))
+            .until(() ->elevator.isLowerLimitSwitchPressed()))
             .withPosition(0, 4)    .withSize(2, 1);
 
         return elevCmdsLayout;
@@ -173,8 +174,11 @@ public class ElevatorTelemetry {
         elevStatusLayout.withSize(2, 2);
 
         // Lower Limit Switch Widget
-        m_limitSwWidget = elevStatusLayout.addString("Limit Swr",()-> elevator.getLimitSwStatus())
+        m_lowerLimitSwWidget = elevStatusLayout.addString("Limit Lower",()-> elevator.getLowerLimitSwStatus())
             .withPosition(0,0).withSize(2, 1);
+        // Upper Limit Switch Widget
+        m_upperLimitSwWidget = elevStatusLayout.addString("Limit Upper",()-> elevator.getUpperLimitSwStatus())
+            .withPosition(0,2).withSize(2, 1);
 
         return elevStatusLayout;
     }

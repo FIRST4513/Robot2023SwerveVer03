@@ -89,7 +89,7 @@ public class ElevToPosCmd extends CommandBase {
         
         // If going to bottom lets check if were there yet
         if (tgt_pos == 0.0) {
-            if (Robot.elevator.isLowerLmtReached()) {
+            if (Robot.elevator.isLowerLimitSwitchPressed()) {
                 return true;
             } else {
                 return false;

@@ -15,7 +15,10 @@ public class ElevatorConfig {
     public final int kMotorPort =           Motors.elevatorMotorID;
     public final int kLowerLimitSwitchPort = LimitSwitches.elevatorLowerLimitSw;
     public final int kUpperLimitSwitchPort = LimitSwitches.elevatorUpperLimitSw;
-    
+
+    public final boolean lowerLimitTrue = true;
+    public final boolean upperLimitTrue = true;
+
     // Reduce jitter
     public static final int elevAllowableError = 10; // Encoder counts close enough
     
@@ -55,8 +58,11 @@ public class ElevatorConfig {
     public final double KLowerSlowSpeed =    -0.20;
     public final double KLowerSpeedDefault = -0.65;
 
+    public final double lowerMaxSpeed  = -0.70;
+    public final double raiseMaxSpeed  = +1.00;
+
     // ------ Max Speeds (testing/controllability) ------
-    public final double KMaxSpeed = 0.6;
+    //public final double KMaxSpeed = 0.6;
 
     public final double KheightDeadBand =    +0.15;
 

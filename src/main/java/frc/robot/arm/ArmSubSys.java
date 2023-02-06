@@ -1,11 +1,8 @@
 package frc.robot.arm;
 
 import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-//the funny code
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,9 +10,9 @@ import frc.Rmath;
 import frc.robot.RobotConfig.LimitSwitches;
 
 public class ArmSubSys extends SubsystemBase {
-    public  WPI_TalonSRX mArmMotor        = new WPI_TalonSRX(ArmConfig.kMotorPort);
-    private DigitalInput upperlimitSwitch = new DigitalInput(LimitSwitches.armUpperLimitSw);
-    private DigitalInput lowerlimitSwitch = new DigitalInput(LimitSwitches.armLowerLimitSw);
+    public  WPI_TalonSRX mArmMotor;
+    private DigitalInput upperlimitSwitch;
+    private DigitalInput lowerlimitSwitch;
 
     public double mCurrEncoderCnt   = 0; 
     public double mCurrArmAngle     = 0;
@@ -27,9 +24,12 @@ public class ArmSubSys extends SubsystemBase {
 
     // ------------- Constructor ----------
     public ArmSubSys() {
+        mArmMotor        = new WPI_TalonSRX(ArmConfig.kMotorPort);
+        upperlimitSwitch = new DigitalInput(LimitSwitches.armUpperLimitSw);
+        lowerlimitSwitch = new DigitalInput(LimitSwitches.armLowerLimitSw);
+        mArmPIDController = new PIDController(ArmConfig.armKP, ArmConfig.armKI, ArmConfig.armKD);
         armMotorConfig();
         stopArm();
-        mArmPIDController = new PIDController(ArmConfig.armKP, ArmConfig.armKI, ArmConfig.armKD);
     }
 
     // ------------- Periodic -------------
