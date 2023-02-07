@@ -39,6 +39,11 @@ public class IntakeSubSys extends SubsystemBase {
         intakeLowerMotor.set(IntakeConfig.coneRetractSpeed);
     }
 
+    public void setMotorsConeRetractSlow(){
+        intakeUpperMotor.set(IntakeConfig.coneRetractSlowSpeed);
+        intakeLowerMotor.set(IntakeConfig.coneRetractSlowSpeed);
+    }
+
     public void setMotorsCubeRetract(){
         intakeUpperMotor.set(IntakeConfig.cubeRetractSpeed);
         intakeLowerMotor.set(IntakeConfig.cubeRetractSpeed);

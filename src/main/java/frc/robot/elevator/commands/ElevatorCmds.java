@@ -42,7 +42,7 @@ public class ElevatorCmds {
     }
 
     public static Command goToPIDPosCmd(double inches) {
-        return new InstantCommand( () -> Robot.elevator.setPIDposition(inches), Robot.elevator)
+        return new RunCommand( () -> Robot.elevator.setPIDposition(inches), Robot.elevator)
             .withName("ToPIDPosCmd");
     }
 
