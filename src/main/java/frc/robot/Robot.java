@@ -115,6 +115,8 @@ public class Robot extends TimedRobot {
     	sysTimer.start();
         //logger.startTimer();
 
+        AutoSetup.getAutoSelections();
+
         Command autonCommand = AutoSetup.getAutonomousCommand();
         if (autonCommand != null) {
             autonCommand.schedule();
