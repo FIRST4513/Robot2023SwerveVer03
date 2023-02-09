@@ -58,9 +58,9 @@ public class RobotTelemetry extends TelemetrySubsystem {
         checkBatteryWhenDisabledalert();
     }
 
-    public static void createTab(String name) {
-        Shuffleboard.getTab(name);
-    }
+    // public static void createTab(String name) {
+    //     Shuffleboard.getTab(name);
+    // }
 
     public void layoutRobotTelemtryTab(){
         // Column 0 - Setup the autonomous selector to display on shuffleboard

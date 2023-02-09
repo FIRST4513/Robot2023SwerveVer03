@@ -2,15 +2,11 @@ package frc.robot.auto;
 
 import java.util.HashMap;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
-import frc.robot.RobotTelemetry;
-import frc.robot.auto.commands.DelayCmd;
 
 public class AutoSetup {
     public static final SendableChooser<String> autoChooser = new SendableChooser<>();
