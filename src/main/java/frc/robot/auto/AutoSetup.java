@@ -41,7 +41,9 @@ public class AutoSetup {
     static double maxVel = 1.5;
     static double maxAccel = 1.5;
     static PathPlannerTrajectory crossShortPath = PathPlanner.loadPath("CrossShort", maxVel, maxAccel);
-    
+    static PathPlannerTrajectory crossLongPath = PathPlanner.loadPath("CrossLong", maxVel, maxAccel);
+    static PathPlannerTrajectory crossLongDockPath = PathPlanner.loadPath("CrossLongDock", maxVel, maxAccel);
+
     public AutoSetup(){
         setupSelectors();
         setupEventMap();
