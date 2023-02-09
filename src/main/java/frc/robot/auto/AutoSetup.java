@@ -22,17 +22,17 @@ import frc.robot.auto.commands.DelayCmd;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class AutoSetup {
-    public static final SendableChooser<String> autoChooser = new SendableChooser<>();
+    public static final SendableChooser<String> scoreChooser = new SendableChooser<>();
     public static final SendableChooser<String> positionChooser = new SendableChooser<>();
-    public static final SendableChooser<String> heightChooser = new SendableChooser<>();
-    public static final SendableChooser<String> objectChooser = new SendableChooser<>();
+    public static final SendableChooser<String> crossChooser = new SendableChooser<>();
+    public static final SendableChooser<String> dockChooser = new SendableChooser<>();
     private static boolean autoMessagePrinted = true;
     private static double autoStart = 0;
     public static HashMap<String, Command> eventMap = new HashMap<>();
-    public static String autoSelect;
+    public static String scoreSelect;
     public static String positionSelect;
-    public static String objectSelect;
-    public static String heightSelect;
+    public static String crossSelect;
+    public static String dockSelect;
     public static double armPosition;
     public static double elevStartPos;
     public static double elevEndPos;
@@ -52,35 +52,26 @@ public class AutoSetup {
     // A chooser for autonomous commands
     public static void setupSelectors() {
 
-        // Selector for Routine
-        autoChooser.setDefaultOption("Nothing", "Nothing");
-        autoChooser.addOption("Place", "Place");
-        autoChooser.addOption("Place and Cross", "Place and Cross");
-        autoChooser.addOption("Place and Charge", "Place and Charge");
-        autoChooser.addOption("Place and Cross and Charge", "Place and Cross and Charge");
-        autoChooser.addOption("Place and Cross and Pickup", "Place and Cross and Pickup");
-        autoChooser.addOption("Place and Cross and Pickup and Charge", "Place and Cross and Pickup and Charge");
+        // Selector for Score Position
+        scoreChooser.setDefaultOption("Do Nothing", AutoConfig.kNoSelect);
+        scoreChooser.addOption("Low", AutoConfig.kLowSelect);
+        scoreChooser.addOption("Mid", AutoConfig.kMidSelect);
+        scoreChooser.addOption("High", AutoConfig.kHighSelect);
 
-        // Selector for Position
-        positionChooser.setDefaultOption("Left", "Left");
-        positionChooser.addOption("Left", "Left");
-        positionChooser.addOption("Center Left", "Center Left");
-        positionChooser.addOption("Center Right", "Center Right");
-        positionChooser.addOption("Right", "Right");
+        // Selector for Robot Position
+        positionChooser.setDefaultOption("Left", AutoConfig.kLeftSelect);
+        positionChooser.addOption("Left", AutoConfig.kLeftSelect);
+        positionChooser.addOption("Right", AutoConfig.kRightSelect);
+        positionChooser.addOption("Center Left", AutoConfig.kCenterLeftSelect);
+        positionChooser.addOption("Center Right", AutoConfig.kCenterRightSelect);
 
-        // Selector for Game Piece
-        objectChooser.setDefaultOption("Cube", "Cube");
-        objectChooser.addOption("Cube", "Cube");
-        objectChooser.addOption("Cone", "Cone");
+        // 
+        dockChooser.setDefaultOption("Do Nothing", AutoConfig.kNoSelect);
+        dockChooser.addOption("Dock", AutoConfig.kYesSelect);
 
-        // Selector for Height
-        heightChooser.setDefaultOption("Low", "Low");
-        heightChooser.addOption("Low", "Low");
-        heightChooser.addOption("Mid", "Mid");
-        heightChooser.addOption("High", "High");
-
-        // Selector for starting Location on Field
-        
+        //
+        crossChooser.setDefaultOption("Do Nothing", AutoConfig.kNoSelect);
+        crossChooser.setDefaultOption("Cross Line", AutoConfig.kYesSelect);
     }
 
     // Adds event mapping to autonomous commands
@@ -97,20 +88,23 @@ public class AutoSetup {
      */
     public static void getAutoSelections() {
         // return new CharacterizeLauncher(Robot.launcher);
-        autoSelect = autoChooser.getSelected();
+        scoreSelect = scoreChooser.getSelected();
         positionSelect = positionChooser.getSelected();
-        objectSelect = objectChooser.getSelected();
-        heightSelect = heightChooser.getSelected();
+        crossSelect = crossChooser.getSelected();
+        dockSelect = dockChooser.getSelected();
     }
 
     public static Command getAutonomousCommand() {
-        if (autoSelect == "Nothing") {
+        getAutoSelections();
+        setPlacePositions();
+
+        if (scoreSelect == "Nothing") {
             return new PrintCommand("Do Nothing");
         }
-        if (autoSelect == "Place") {
+        if (scoreSelect == "Place") {
             return AutoCmds.placeObject();
         }
-        if (autoSelect == "Place And Cross") {
+        if (scoreSelect == "Place And Cross") {
             // --- cross distances
             // if red:
                 // if left: long
@@ -151,18 +145,140 @@ public class AutoSetup {
     }
 
     public static void setPlacePositions() {
-        if ( (objectSelect == "Cone") && (positionSelect == "Low") ) {
+        if (cone() && low()) {
             elevStartPos = AutoConfig.coneLowElevStartPos;
             elevEndPos = AutoConfig.coneLowElevEndPos;
             armPosition = AutoConfig.coneLowArmPos;
             return;
+        } if (cone() && mid()) {
+            elevStartPos = AutoConfig.coneMidElevStartPos;
+            elevEndPos = AutoConfig.coneMidElevEndPos;
+            armPosition = AutoConfig.coneMidArmPos;
+            return;
+        } if (cone() && high()) {
+            elevStartPos = AutoConfig.coneHighElevStartPos;
+            elevEndPos = AutoConfig.coneHighElevEndPos;
+            armPosition = AutoConfig.coneHighArmPos;
+            return;
+        } if (cube() && low()) {
+            elevStartPos = AutoConfig.cubeLowElevStartPos;
+            elevEndPos = AutoConfig.cubeLowElevEndPos;
+            armPosition = AutoConfig.cubeLowArmPos;
+            return;
+        } if (cube() && mid()) {
+            elevStartPos = AutoConfig.cubeMidElevStartPos;
+            elevEndPos = AutoConfig.cubeMidElevEndPos;
+            armPosition = AutoConfig.cubeMidArmPos;
+            return;
+        } if (cube() && high()) {
+            elevStartPos = AutoConfig.cubeHighElevStartPos;
+            elevEndPos = AutoConfig.cubeHighElevEndPos;
+            armPosition = AutoConfig.cubeHighArmPos;
+            return;
         }
+        elevStartPos = 0;
+        elevEndPos = 0;
+        armPosition = 0;
     }
     
     /** This method is called in AutonInit */
     public static void startAutonTimer() {
         autoStart = Timer.getFPGATimestamp();
         autoMessagePrinted = false;
+    }
+
+    private static boolean doNothing() {
+        if (!place() && !dock() && !cross()) { return true; }
+        return false;
+    }
+    
+    private static boolean place() {
+        if (low() || mid() || high()) { return true; }
+        return false;
+    }
+
+    private static boolean cross() {
+        if (crossSelect.equals(AutoConfig.kYesSelect)) { return true; }
+        return false;
+    }
+
+    private static boolean dock() {
+        if (dockSelect.equals(AutoConfig.kYesSelect)) { return true; }
+        return false;
+    }
+
+    private static boolean red() {
+        if (DriverStation.getAlliance() == Alliance.Red) { return true; }
+        return false;
+    }
+
+    private static boolean blue() {
+        if (DriverStation.getAlliance() == Alliance.Blue) { return true; }
+        return false;
+    }
+
+    private static boolean cube() {
+        if (Robot.intake.isCubeDetected()) { return true; }
+        return false;
+    }
+
+    private static boolean cone() {
+        return !cube(); // NOT cube()
+    }
+
+    private static boolean left() {
+        if (positionSelect.equals(AutoConfig.kLeftSelect)) { return true; }
+        return false;
+    }
+
+    private static boolean right() {
+        if (positionSelect.equals(AutoConfig.kRightSelect)) { return true; }
+        return false;
+    }
+
+    private static boolean centerLeft() {
+        if (positionSelect.equals(AutoConfig.kCenterLeftSelect)) { return true; }
+        return false;
+    }
+
+    private static boolean centerRight() {
+        if (positionSelect.equals(AutoConfig.kCenterRightSelect)) { return true; }
+        return false;
+    }
+
+    private static boolean low() {
+        if (positionSelect.equals(AutoConfig.kLowSelect)) { return true; }
+        return false;
+    }
+
+    private static boolean mid() {
+        if (positionSelect.equals(AutoConfig.kMidSelect)) { return true; }
+        return false;
+    }
+
+    private static boolean high() {
+        if (positionSelect.equals(AutoConfig.kHighSelect)) { return true; }
+        return false;
+    }
+
+    private static boolean redLeft() {
+        if (red() && left()) { return true; }
+        return false;
+    }
+
+    private static boolean redRight() {
+        if (red() && right()) { return true; }
+        return false;
+    }
+
+    private static boolean blueLeft() {
+        if (blue() && left()) { return true; }
+        return false;
+    }
+
+    private static boolean blueRight() {
+        if (blue() && right()) { return true; }
+        return false;
     }
 
     /* ---------  Load Auto Path Group ----------------------

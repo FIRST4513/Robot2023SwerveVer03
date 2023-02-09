@@ -41,6 +41,17 @@ public class AutoConfig {
     public static final double kMaxAngularSpeedRadiansPerSecondSquared =
             SwerveDriveConfig.maxAngularVelocity;
 
+    // Auto menu selectors
+    public static final String kLeftSelect = "Left";
+    public static final String kRightSelect = "Right";
+    public static final String kCenterLeftSelect = "Center Left";
+    public static final String kCenterRightSelect = "Center Right";
+    public static final String kYesSelect = "Yes";
+    public static final String kNoSelect = "No";
+    public static final String kLowSelect = "Low";
+    public static final String kMidSelect = "Mid";
+    public static final String kHighSelect = "High";
+
     // PID Values for 2023
     public static final double kPTranslationController = 0.6;
     public static final double kITranslationController = 0;
