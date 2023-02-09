@@ -2,15 +2,22 @@ package frc.robot.auto;
 
 import java.util.HashMap;
 
+import com.pathplanner.lib.commands.FollowPathWithEvents;
+
+import edu.wpi.first.networktables.PubSubOption;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
 import frc.robot.RobotTelemetry;
+import frc.robot.auto.commands.AutoCmds;
 import frc.robot.auto.commands.DelayCmd;
+import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class AutoSetup {
     public static final SendableChooser<String> autoChooser = new SendableChooser<>();
@@ -24,7 +31,9 @@ public class AutoSetup {
     public static String positionSelect;
     public static String objectSelect;
     public static String heightSelect;
-
+    public static double armPosition;
+    public static double elevStartPos;
+    public static double elevEndPos;
     public AutoSetup(){
         setupSelectors();
         setupEventMap();
@@ -45,7 +54,8 @@ public class AutoSetup {
         // Selector for Position
         positionChooser.setDefaultOption("Left", "Left");
         positionChooser.addOption("Left", "Left");
-        positionChooser.addOption("Center", "Center");
+        positionChooser.addOption("Center Left", "Center Left");
+        positionChooser.addOption("Center Right", "Center Right");
         positionChooser.addOption("Right", "Right");
 
         // Selector for Game Piece
@@ -88,12 +98,57 @@ public class AutoSetup {
             return new PrintCommand("Do Nothing");
         }
         if (autoSelect == "Place") {
-            
+            return AutoCmds.placeObject();
+        }
+        if (autoSelect == "Place And Cross") {
+            // --- cross distances
+            // if red:
+                // if left: long
+                // if center: charge
+                // if right: short
+            // if blue:
+                // if left: short
+                // if center: charge
+                // if right: long
+            if (((Robot.alliance == Alliance.Red) && (positionSelect == "Right")) ||
+                ((Robot.alliance == Alliance.Blue) && (positionSelect == "Left")) ) {
+                return new SequentialCommandGroup(
+                    TrajectoriesCmds.IntializePathFollowingCmd(pathCrossLineShort),
+                    AutoCmds.placeObject(),
+                    TrajectoriesCmds.FollowPathCmd(pathCrossLineShort, 5.0)
+                );
+            } else if ((positionSelect == "Center Left") || (positionSelect == "Center Right")) {
+                return new SequentialCommandGroup(
+                    TrajectoriesCmds.IntializePathFollowingCmd(pathCrossLineCharge),
+                    AutoCmds.placeObject(),
+                    TrajectoriesCmds.FollowPathCmd(pathCrossLineCharge, 5.0)
+                )
+            } else if (((Robot.alliance == Alliance.Red) && (positionSelect == "Left")) ||
+                       ((Robot.alliance == Alliance.Blue) && (positionSelect == "Right")) ) {
+            return new SequentialCommandGroup(
+                TrajectoriesCmds.IntializePathFollowingCmd(pathCrossLineLong),
+                AutoCmds.placeObject(),
+                TrajectoriesCmds.FollowPathCmd(pathCrossLineLong, 5.0)
+            );
+        } 
+            return new SequentialCommandGroup(
+                AutoCmds.placeObject()
+                // follow path to cross line
+            );
         }
 
         return new PrintCommand("Do Nothing");
     }
 
+    public static void setPlacePositions() {
+        if ( (objectSelect == "Cone") && (positionSelect == "Low") ) {
+            elevStartPos = AutoConfig.coneLowElevStartPos;
+            elevEndPos = AutoConfig.coneLowElevEndPos;
+            armPosition = AutoConfig.coneLowArmPos;
+            return;
+        }
+    }
+    
     /** This method is called in AutonInit */
     public static void startAutonTimer() {
         autoStart = Timer.getFPGATimestamp();

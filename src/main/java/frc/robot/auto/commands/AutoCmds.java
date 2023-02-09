@@ -3,6 +3,12 @@ package frc.robot.auto.commands;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.Robot;
+import frc.robot.arm.commands.ArmCmds;
+import frc.robot.auto.AutoSetup;
+import frc.robot.elevator.commands.ElevatorCmds;
+import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.swerveDrive.commands.SwerveDriveCmds;
 import frc.robot.trajectories.commands.FollowTrajectoryCmd;
 
@@ -43,4 +49,16 @@ public class AutoCmds {
         return new FollowTrajectoryCmd(path).deadlineWith(intakeCmd()).withTimeout(time);
     }
 
+    public static Command placeObject() {
+        // 1. raise elev to start pos
+        // 2. raise arm to target pos
+        // 3. elev lower to final target pos
+        // 4. eject
+        return new ParallelCommandGroup(
+            ElevatorCmds.ElevGoToPIDPosCmd(AutoSetup.elevStartPos).withTimeout(2),
+            ArmCmds.armToPIDPositionCmd(AutoSetup.armPosition).withTimeout(2),
+            ElevatorCmds.ElevGoToPIDPosCmd(AutoSetup.elevEndPos).withTimeout(2),
+            IntakeCmds.intakeEjectCmd()
+        );
+    }
 }
