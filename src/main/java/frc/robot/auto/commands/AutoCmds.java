@@ -59,6 +59,9 @@ public class AutoCmds {
             ArmCmds.armToPIDPositionCmd(AutoSetup.armPosition).withTimeout(2),
             ElevatorCmds.ElevGoToPIDPosCmd(AutoSetup.elevEndPos).withTimeout(2),
             IntakeCmds.intakeEjectCmd()
+            //
+            // TODO Add retract after eject to prepare for motion !!!!!!
+            //
         );
     }
 }
