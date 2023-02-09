@@ -1,8 +1,10 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Threads;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.util.Network;
@@ -36,6 +38,7 @@ public class Robot extends TimedRobot {
     public static ArmSubSys arm;
     public static IntakeSubSys intake;
     public static RobotTelemetry telemetry;
+    public static Alliance alliance;
 
     public static String MAC = "";
     public static Timer sysTimer = new Timer();
@@ -114,6 +117,8 @@ public class Robot extends TimedRobot {
         sysTimer.reset();			// System timer for Competition run
     	sysTimer.start();
         //logger.startTimer();
+
+        alliance = DriverStation.getAlliance();
 
         AutoSetup.getAutoSelections();
 

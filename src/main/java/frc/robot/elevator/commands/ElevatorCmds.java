@@ -36,17 +36,19 @@ public class ElevatorCmds {
             .withName("RaiseCmd");
     }
 
-    public static Command goToPIDheightCmd(double height) {
+    // relative to floor, considering robot height
+    public static Command ElevGoToPIDheightCmd(double height) {
         return new InstantCommand( () -> Robot.elevator.setPIDheight(height), Robot.elevator)
             .withName("ToPIDHeightCmd");
     }
 
-    public static Command goToPIDPosCmd(double inches) {
+    // pure elevator height
+    public static Command ElevGoToPIDPosCmd(double inches) {
         return new RunCommand( () -> Robot.elevator.setPIDposition(inches), Robot.elevator)
             .withName("ToPIDPosCmd");
     }
 
-    public static Command goToBottomCmd() {
+    public static Command ElevGoToBottomCmd() {
         return new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
             .until(() ->Robot.elevator.isLowerLimitSwitchPressed())
             .withName("ToPIDPosCmd");
