@@ -38,7 +38,7 @@ public class Robot extends TimedRobot {
     public static ArmSubSys arm;
     public static IntakeSubSys intake;
     public static RobotTelemetry telemetry;
-    public static Alliance alliance;
+    public static AutoSetup autoSetup;
 
     public static String MAC = "";
     public static Timer sysTimer = new Timer();
@@ -56,6 +56,7 @@ public class Robot extends TimedRobot {
         arm = new ArmSubSys();
         intake = new IntakeSubSys();
         telemetry = new RobotTelemetry();
+        autoSetup = new AutoSetup();
 
         // Set Default Commands, this method should exist for each subsystem that has commands
         SwerveDriveCmds.setupDefaultCommand();
@@ -67,6 +68,8 @@ public class Robot extends TimedRobot {
         logger.startTimer();
 
     }
+
+
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -93,7 +96,6 @@ public class Robot extends TimedRobot {
          * block in order for anything in the Command-based framework to work.
          */
         CommandScheduler.getInstance().run();
-
         Threads.setCurrentThreadPriority(true, 10); // Set the main thread back to normal priority
     }
 
@@ -117,10 +119,6 @@ public class Robot extends TimedRobot {
         sysTimer.reset();			// System timer for Competition run
     	sysTimer.start();
         //logger.startTimer();
-
-        alliance = DriverStation.getAlliance();
-
-        AutoSetup.getAutoSelections();
 
         Command autonCommand = AutoSetup.getAutonomousCommand();
         if (autonCommand != null) {

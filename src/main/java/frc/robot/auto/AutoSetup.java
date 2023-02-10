@@ -3,9 +3,11 @@ package frc.robot.auto;
 import java.util.HashMap;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,8 +22,6 @@ public class AutoSetup {
     public static final SendableChooser<String> positionChooser = new SendableChooser<>();
     public static final SendableChooser<String> crossChooser = new SendableChooser<>();
     public static final SendableChooser<String> dockChooser = new SendableChooser<>();
-    private static boolean autoMessagePrinted = true;
-    private static double autoStart = 0;
     public static HashMap<String, Command> eventMap = new HashMap<>();
     public static String scoreSelect;
     public static String positionSelect;
@@ -30,7 +30,11 @@ public class AutoSetup {
     public static double armPosition;
     public static double elevStartPos;
     public static double elevEndPos;
+    public static Pose2d startPose;
+    private static boolean autoMessagePrinted = true;
+    private static double autoStart = 0;
 
+    // Setup Needed PathPlaner Paths
     static PathPlannerTrajectory crossShortPath     = PathPlanner.loadPath(
                             "CrossShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
     static PathPlannerTrajectory crossLongPath      = PathPlanner.loadPath(
@@ -46,68 +50,77 @@ public class AutoSetup {
     static PathPlannerTrajectory rightLongDockPath  = PathPlanner.loadPath(
                             "RightLongDockPath", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
 
+
+    // -----------------------------  Constructor ----------------------------
     public AutoSetup(){
-        setupSelectors();
+        setupSelectors();       // Setup on screen slection menus
         setupEventMap();
     }
 
-    // A chooser for autonomous commands
+    // ------------------------------------------------------------------------
+    //          Setup Shuffle Board Selection Menus for Autonomous
+    // ------------------------------------------------------------------------
+
     public static void setupSelectors() {
 
-        // Selector for Score Position
-        scoreChooser.setDefaultOption("Do Nothing", AutoConfig.kNoSelect);
-        scoreChooser.addOption("Low", AutoConfig.kLowSelect);
-        scoreChooser.addOption("Mid", AutoConfig.kMidSelect);
-        scoreChooser.addOption("High", AutoConfig.kHighSelect);
-
-        // Selector for Robot Position
+        // Selector for Robot Position on field
         positionChooser.setDefaultOption("Left", AutoConfig.kLeftSelect);
         positionChooser.addOption("Left", AutoConfig.kLeftSelect);
         positionChooser.addOption("Right", AutoConfig.kRightSelect);
         positionChooser.addOption("Center Left", AutoConfig.kCenterLeftSelect);
         positionChooser.addOption("Center Right", AutoConfig.kCenterRightSelect);
 
-        // 
+        // Selector Score by placing Cube/Cone on selected Position
+        scoreChooser.setDefaultOption("Do Nothing", AutoConfig.kNoSelect);
+        scoreChooser.addOption("Low", AutoConfig.kLowSelect);
+        scoreChooser.addOption("Mid", AutoConfig.kMidSelect);
+        scoreChooser.addOption("High", AutoConfig.kHighSelect);
+
+        // Selector for Getting on Charge Platform
         dockChooser.setDefaultOption("Do Nothing", AutoConfig.kNoSelect);
         dockChooser.addOption("Dock", AutoConfig.kYesSelect);
 
-        //
+        // Selector for Crossing the Line to score
         crossChooser.setDefaultOption("Do Nothing", AutoConfig.kNoSelect);
         crossChooser.setDefaultOption("Cross Line", AutoConfig.kYesSelect);
     }
 
-    // Adds event mapping to autonomous commands
-    public static void setupEventMap(){
-        eventMap.put("Marker1", new PrintCommand("Passed marker 1"));
-        eventMap.put("Marker2", new PrintCommand("Passed marker 2"));
-    }
+    // ------ Get operator selected responses from shuffleboard -----
 
-
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
     public static void getAutoSelections() {
-        // return new CharacterizeLauncher(Robot.launcher);
         scoreSelect = scoreChooser.getSelected();
         positionSelect = positionChooser.getSelected();
         crossSelect = crossChooser.getSelected();
         dockSelect = dockChooser.getSelected();
     }
+    
+
+    // ------------------------------------------------------------------------
+    //            Get selected Autonomous Command Routine
+    // ------------------------------------------------------------------------
 
     public static Command getAutonomousCommand() {
         getAutoSelections();
         setPlacePositions();
+        setStartPose();
 
         // ----------------------- Do Nothing -------------------
         if (doNothing()) {
-            return new PrintCommand("Do Nothing");
+            // Set position and Gyro Heading based on position
+            return new SequentialCommandGroup(            
+                AutoCmds.IntializeRobotPoseCmd(startPose),
+                new PrintCommand("Do nothing Auto - Init Pose")
+            );
         }
 
         // ----------------------- Score Only -------------------
         if (placeOnly()) {
-            return AutoCmds.PlaceObjectCmd();
+            // Set position and Gyro Heading based on position
+            return new SequentialCommandGroup(           
+                AutoCmds.IntializeRobotPoseCmd(startPose),
+                new PrintCommand("Do nothing Auto - Init Pose"),
+                AutoCmds.PlaceObjectCmd()
+            );
         }
 
         // ----------------------- Cross Line Only -------------------
@@ -200,7 +213,10 @@ public class AutoSetup {
     }
 
 
-    // ---------------------------------------------------------------
+    // ------------------------------------------------------------------------
+    //     Setup proper Arm/Elevator position to Place Cone/Cube
+    // ------------------------------------------------------------------------
+
     public static void setPlacePositions() {
         if (cone() && low()) {
             elevStartPos = AutoConfig.coneLowElevStartPos;
@@ -237,13 +253,30 @@ public class AutoSetup {
         elevEndPos = 0;
         armPosition = 0;
     }
+
+    public static void setStartPose() {
+        // Set position and Gyro Heading based on position
+        startPose = new Pose2d(new Translation2d(0,0), new Rotation2d(0));
+        if (left())         startPose = AutoConfig.kLeftPose;
+        if (right())        startPose =AutoConfig.kRightPose;
+        if (centerLeft())   startPose = AutoConfig.kCenterLeftPose;
+        if (centerRight())  startPose = AutoConfig.kCenterRightPose;
+    }          
     
-    /** This method is called in AutonInit */
-    public static void startAutonTimer() {
-        autoStart = Timer.getFPGATimestamp();
-        autoMessagePrinted = false;
+    // ------------------------------------------------------------------------
+    //                      Setup any Event Mapped Commands
+    // ------------------------------------------------------------------------
+
+    // Adds event mapping to autonomous commands
+    public static void setupEventMap(){
+        eventMap.put("Marker1", new PrintCommand("Passed marker 1"));
+        eventMap.put("Marker2", new PrintCommand("Passed marker 2"));
     }
 
+
+    // ------------------------------------------------------------------------
+    //            Simple Checks to make above routines cleaner
+    // ------------------------------------------------------------------------
     private static boolean doNothing() {
         if (!place() && !dock() && !cross()) { return true; }
         return false;
@@ -353,28 +386,12 @@ public class AutoSetup {
         return false;
     }
 
-
-
-   
-    /* ---------  Load Auto Path Group ----------------------
-    This example will load a path file as a path group. The path group will be separated into paths
-    based on which waypoints are marked stop points.
-
-
-    ArrayList<PathPlannerTrajectory> pathGroup1 = PathPlanner.loadPathGroup(
-                                                        "Example Path Group",
-                                                        new PathConstraints(4, 3));
-
-    // This will load the file "Example Path Group.path" and generate it with different path constraints for each segment
-    ArrayList<PathPlannerTrajectory> pathGroup2 = PathPlanner.loadPathGroup(
-        "Example Path Group", 
-        new PathConstraints(4, 3), 
-        new PathConstraints(2, 2), 
-        new PathConstraints(3, 3));
-    // -------------------------------------------------------
-*/
-
-
+    
+    /** This method is called in AutonInit */
+    // public static void startAutonTimer() {
+    //     autoStart = Timer.getFPGATimestamp();
+    //     autoMessagePrinted = false;
+    // }
 
     /** Called in RobotPeriodic and displays the duration of the auton command Based on 6328 code */
     // public static void printAutoDuration() {
