@@ -31,8 +31,8 @@ public class AutoSetup {
     public static double elevStartPos;
     public static double elevEndPos;
     public static Pose2d startPose;
-    private static boolean autoMessagePrinted = true;
-    private static double autoStart = 0;
+    //private static boolean autoMessagePrinted = true;
+    //private static double autoStart = 0;
 
     // Setup Needed PathPlaner Paths
     static PathPlannerTrajectory crossShortPath     = PathPlanner.loadPath(
