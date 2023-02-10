@@ -1,12 +1,9 @@
 package frc.robot.auto;
 
 import java.util.HashMap;
-
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
-
-import edu.wpi.first.networktables.PubSubOption;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -14,11 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
-import frc.robot.RobotTelemetry;
 import frc.robot.auto.commands.AutoCmds;
-import frc.robot.auto.commands.DelayCmd;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class AutoSetup {
@@ -384,22 +378,22 @@ public class AutoSetup {
 
     /** Called in RobotPeriodic and displays the duration of the auton command Based on 6328 code */
     // public static void printAutoDuration() {
-        // Command autoCommand = AutoSetup.getAutonomousCommand();
-        // if (autoCommand != null) {
-        //     if (!autoCommand.isScheduled() && !autoMessagePrinted) {
-        //         if (DriverStation.isAutonomousEnabled()) {
-        //             RobotTelemetry.print(
-        //                     String.format(
-        //                             "*** Auton finished in %.2f secs ***",
-        //                             Timer.getFPGATimestamp() - autoStart));
-        //         } else {
-        //             RobotTelemetry.print(
-        //                     String.format(
-        //                             "*** Auton CANCELLED in %.2f secs ***",
-        //                             Timer.getFPGATimestamp() - autoStart));
-        //         }
-        //         autoMessagePrinted = true;
-        //     }
-        // }
+    //     Command autoCommand = AutoSetup.getAutonomousCommand();
+    //     if (autoCommand != null) {
+    //         if (!autoCommand.isScheduled() && !autoMessagePrinted) {
+    //             if (DriverStation.isAutonomousEnabled()) {
+    //                 RobotTelemetry.print(
+    //                         String.format(
+    //                                 "*** Auton finished in %.2f secs ***",
+    //                                 Timer.getFPGATimestamp() - autoStart));
+    //             } else {
+    //                 RobotTelemetry.print(
+    //                         String.format(
+    //                                 "*** Auton CANCELLED in %.2f secs ***",
+    //                                 Timer.getFPGATimestamp() - autoStart));
+    //             }
+    //             autoMessagePrinted = true;
+    //         }
+    //     }
     // }
 }
