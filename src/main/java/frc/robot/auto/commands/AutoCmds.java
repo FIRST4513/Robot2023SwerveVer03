@@ -5,7 +5,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Robot;
+import frc.robot.arm.ArmConfig;
 import frc.robot.arm.commands.ArmCmds;
+import frc.robot.auto.AutoConfig;
 import frc.robot.auto.AutoSetup;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
@@ -58,10 +60,10 @@ public class AutoCmds {
             ElevatorCmds.ElevGoToPIDPosCmd(AutoSetup.elevStartPos).withTimeout(2),
             ArmCmds.armToPIDPositionCmd(AutoSetup.armPosition).withTimeout(2),
             ElevatorCmds.ElevGoToPIDPosCmd(AutoSetup.elevEndPos).withTimeout(2),
-            IntakeCmds.intakeEjectCmd()
-            //
-            // TODO Add retract after eject to prepare for motion !!!!!!
-            //
+            IntakeCmds.intakeEjectCmd(),
+            ElevatorCmds.ElevGoToPIDPosCmd(AutoConfig.kElevTop).withTimeout(2),
+            ArmCmds.armToPIDPositionCmd(ArmConfig.ArmAngleStorePos),
+            ElevatorCmds.ElevGoToBottomCmd().withTimeout(2)
         );
     }
 }

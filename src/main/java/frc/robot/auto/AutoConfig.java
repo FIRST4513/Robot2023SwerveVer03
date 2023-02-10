@@ -41,6 +41,9 @@ public class AutoConfig {
     public static final double kMaxAngularSpeedRadiansPerSecondSquared =
             SwerveDriveConfig.maxAngularVelocity;
 
+    // Elevator positions
+    public static final double kElevTop = 22.0;
+
     // Auto menu selectors
     public static final String kLeftSelect = "Left";
     public static final String kRightSelect = "Right";
