@@ -35,6 +35,28 @@ public class Gyro {
         gyroOffset = hdg;
     }
 
+    public Rotation2d getGyroYaw() {
+        // This returns a Gyro Yaw angle +-180 degrees in Rotation2d format
+        return Rotation2d.fromDegrees(getGyroYawAngle()); 
+    }  
+
+    public double getGyroYawAngle() {
+        // This returns a Gyro Yaw angle +-180 degrees 
+        double yaw = getGyroHeadingDegrees();
+        if ( yaw > 180.0 ) { yaw -= 360.0; }
+        if ( yaw < 180.0 ) { yaw += 360.0; }
+        return yaw; 
+    }  
+    
+    public void setGyroYawAngle( double yaw) {
+        // This accepte a Yaw angle +-180 degrees
+        gyro.reset();
+        gyroOffset = yaw;
+        if ( gyroOffset < 0.0 ) { gyroOffset += 360.0; }
+        return; 
+    }
+    
+
     public Rotation2d getGyroHeading() {
         // this will return a Rotation2d object of the yaw value 0 to +360 degree
         return Rotation2d.fromDegrees(getGyroHeadingDegrees());

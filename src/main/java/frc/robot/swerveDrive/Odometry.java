@@ -26,8 +26,9 @@ public class Odometry {
         swerveOdometry.update(swerve.gyro.getGyroHeading(), swerve.getPositions());
     }
 
-    public void resetOdometry(Pose2d pose) {
-        swerveOdometry.resetPosition(swerve.gyro.getGyroHeading(), swerve.getPositions(), pose);
+    public void resetOdometry(Pose2d pose) { 
+        //swerveOdometry.resetPosition(swerve.gyro.getGyroHeading(), swerve.getPositions(), pose);
+        swerveOdometry.resetPosition(swerve.gyro.getGyroYaw(), swerve.getPositions(), pose);
     }
 
     public Pose2d getPoseMeters() {

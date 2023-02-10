@@ -61,15 +61,15 @@ public class SwerveDriveCmds {
     // }
 
     
-    public static Command setGryoDegreesCmd(double deg){
-        return new InstantCommand(() -> Robot.swerve.setGyroDegrees(deg)).andThen(
+    public static Command setGyroYawCmd(double deg){
+        return new InstantCommand(() -> Robot.swerve.setGyroYawAngle(deg)).andThen(
             new PrintCommand("Gyro Degrees: " + Robot.swerve.getDegrees())
         );
     }
 
     public static Command IntializeGyroAngleCmd(PathPlannerTrajectory path){
-        PathPlannerState s = (PathPlannerState) path.getStates().get(0);
-        return setGryoDegreesCmd(s.holonomicRotation.getDegrees());
+        PathPlannerState s = (PathPlannerState) path.getStates().get(0);    // Starting pose
+        return setGyroYawCmd(s.holonomicRotation.getDegrees());             // Set Gyro to Starting holonomicRotation Hdg +-180
     }
 
     public static Command ResetOdometryCmd(PathPlannerTrajectory path){

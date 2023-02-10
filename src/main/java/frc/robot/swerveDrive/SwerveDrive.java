@@ -206,7 +206,11 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public void setGyroDegrees( double newHdg ) {
-        gyro.setGyroHeadingDegrees( newHdg);
+        gyro.setGyroHeadingDegrees( newHdg ); // +-180 Degrees ??
+    }
+
+    public void setGyroYawAngle( double yaw){
+        gyro.setGyroYawAngle(yaw);
     }
 
     public double getSnap90Angle() {
