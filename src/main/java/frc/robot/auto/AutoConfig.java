@@ -58,10 +58,10 @@ public class AutoConfig {
     public static final String kHighSelect = "High";
 
     // Auto Start Position Poses
-    public static final Rotation2d kLeftYaw         = new Rotation2d().fromDegrees(-180.0);
-    public static final Rotation2d kRightYaw        = new Rotation2d().fromDegrees(-180.0);
-    public static final Rotation2d kCenterLeftYaw   = new Rotation2d().fromDegrees(-180.0);
-    public static final Rotation2d kCenterRightYaw  = new Rotation2d().fromDegrees(-180.0);
+    public static final Rotation2d kLeftYaw         = Rotation2d.fromDegrees(-180.0);
+    public static final Rotation2d kRightYaw        = Rotation2d.fromDegrees(-180.0);
+    public static final Rotation2d kCenterLeftYaw   = Rotation2d.fromDegrees(-180.0);
+    public static final Rotation2d kCenterRightYaw  = Rotation2d.fromDegrees(-180.0);
 
     public static final Pose2d kLeftPose            = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
     public static final Pose2d kRightPose           = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
