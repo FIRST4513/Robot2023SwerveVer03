@@ -10,7 +10,7 @@ import edu.wpi.first.math.numbers.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.swerveDrive.SwerveDriveConfig;
+import frc.robot.swerve.SwerveConfig;
 
 /** Reports our expected, desired, and actual poses to dashboards */
 public class Pose extends SubsystemBase {
@@ -29,7 +29,7 @@ public class Pose extends SubsystemBase {
 
         poseEstimator =
                 new SwerveDrivePoseEstimator(
-                        SwerveDriveConfig.swerveKinematics,
+                        SwerveConfig.swerveKinematics,
                         Robot.swerve.getHeading(),
                         Robot.swerve.getPositions(),
                         new Pose2d(),

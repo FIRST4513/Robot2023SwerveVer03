@@ -3,9 +3,9 @@ package frc.robot.auto.commands;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import frc.robot.Robot;
-import frc.robot.auto.AutoSetup;
+import frc.robot.auto.Auto;
 import frc.robot.auto.AutoConfig;
-import frc.robot.swerveDrive.SwerveDriveConfig;
+import frc.robot.swerve.SwerveConfig;
 
 public
 class AutoBuilder { // Create the AutoBuilder. This only needs to be created once when robot code
@@ -18,7 +18,7 @@ class AutoBuilder { // Create the AutoBuilder. This only needs to be created onc
                     Robot.swerve.odometry
                             ::resetOdometry, // Pose2d consumer, used to reset odometry at the
                     // beginning of auto
-                    SwerveDriveConfig.swerveKinematics, // SwerveDriveKinematics
+                    SwerveConfig.swerveKinematics, // SwerveDriveKinematics
                     new PIDConstants(
                             AutoConfig.kPTranslationController,
                             AutoConfig.kITranslationController,
@@ -35,7 +35,7 @@ class AutoBuilder { // Create the AutoBuilder. This only needs to be created onc
                     Robot.swerve
                             ::setModuleStates, // Module states consumer used to output to the drive
                     // subsystem
-                    AutoSetup.eventMap,
+                    Auto.eventMap,
                     true, // Should the path be automatically mirrored depending on
                     // alliance color
                     // Alliance.

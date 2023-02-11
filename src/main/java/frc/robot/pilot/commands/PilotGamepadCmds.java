@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
 import frc.robot.pilot.PilotGamepadConfig;
-import frc.robot.swerveDrive.commands.SwerveDriveCmd;
-import frc.robot.swerveDrive.commands.TurnToAngleCmd;
+import frc.robot.swerve.commands.SwerveDriveCmd;
+import frc.robot.swerve.commands.TurnToAngleCmd;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 /** Add your docs here. */
@@ -13,7 +13,7 @@ public class PilotGamepadCmds {
 
     /** Set default command to turn off the rumble */
     public static void setupDefaultCommand() {
-        Robot.pilotGamepad.setDefaultCommand(rumblePilotCmd(0));
+        Robot.pilotGamepad.setDefaultCommand(RumblePilotCmd(0));
     }
 
     public static Command BasicSnapCmd() {
@@ -29,37 +29,37 @@ public class PilotGamepadCmds {
     //}
 
     /** Field Oriented Drive */
-    public static Command fpvPilotSwerveCmd() {
+    public static Command FpvPilotSwerveCmd() {
         return new SwerveDriveCmd(
                         () -> Robot.pilotGamepad.getDriveFwdPositive(),
                         () -> Robot.pilotGamepad.getDriveLeftPositive(),
                         () -> Robot.pilotGamepad.getDriveRotationCCWPositive(),
                         true )
-                .withName("fpvPilotSwerve");
+                .withName("FpvPilotSwerveCmd");
     }
 
     /** Field Oriented Drive */
-    public static Command fpvDriveAndAutoRotate() {
+    public static Command FpvDriveAndAutoRotateCmd() {
         return new TurnToAngleCmd(
                         () -> Robot.pilotGamepad.getDriveFwdPositive(),
                         () -> Robot.pilotGamepad.getDriveLeftPositive(),
                         () -> Robot.swerve.getSnap90Angle())
-                .withName("fpvDriveAndAutoRotate")
+                .withName("FpvDriveAndAutoRotateCmd")
                 .withTimeout(5.0);
     }
 
     /** Robot Oriented Drive */
-    public static Command rpvPilotSwerveCmd() {
+    public static Command RpvPilotSwerveCmd() {
         return new SwerveDriveCmd(
                         () -> Robot.pilotGamepad.getDriveFwdPositive(),
                         () -> Robot.pilotGamepad.getDriveLeftPositive(),
                         () -> Robot.pilotGamepad.getDriveRotationCCWPositive(),
                         false)
-                .withName("rpvPilotSwerve");
+                .withName("RpvPilotSwerveCmd");
     }
 
     public static Command snakeDriveCmd() {
-        return TrajectoriesCmds.resetThetaControllerCmd()
+        return TrajectoriesCmds.ResetThetaControllerCmd()
                 .andThen(
                         new SwerveDriveCmd(
                                 () -> Robot.pilotGamepad.getDriveFwdPositive(),
@@ -102,7 +102,7 @@ public class PilotGamepadCmds {
 
 
     /** Command that can be used to rumble the pilot controller */
-    public static Command rumblePilotCmd(double intensity) {
+    public static Command RumblePilotCmd(double intensity) {
         return new RunCommand(() -> Robot.pilotGamepad.rumble(intensity), Robot.pilotGamepad);
     }
 }

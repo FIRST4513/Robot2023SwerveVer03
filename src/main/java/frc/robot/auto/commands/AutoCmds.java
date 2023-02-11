@@ -10,7 +10,7 @@ import frc.robot.Robot;
 import frc.robot.arm.ArmConfig;
 import frc.robot.arm.commands.ArmCmds;
 import frc.robot.auto.AutoConfig;
-import frc.robot.auto.AutoSetup;
+import frc.robot.auto.Auto;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
@@ -20,16 +20,16 @@ public class AutoCmds {
     public static Command PlaceObjectCmd() {
         return new ParallelCommandGroup(
             // 1. raise elev to start pos
-            ElevatorCmds.ElevGoToPIDPosCmd(AutoSetup.elevStartPos).withTimeout(2),
+            ElevatorCmds.ElevGoToPIDPosCmd(Auto.elevStartPos).withTimeout(2),
             // 2. raise arm to target pos
-            ArmCmds.armToPIDPositionCmd(AutoSetup.armPosition).withTimeout(2),
+            ArmCmds.ArmToPIDPositionCmd(Auto.armPosition).withTimeout(2),
             // 3. elev lower to final target pos
-            ElevatorCmds.ElevGoToPIDPosCmd(AutoSetup.elevEndPos).withTimeout(2),
+            ElevatorCmds.ElevGoToPIDPosCmd(Auto.elevEndPos).withTimeout(2),
             // 4. eject
-            IntakeCmds.intakeEjectCmd(),
+            IntakeCmds.IntakeEjectCmd(),
             // Intake Arm to get ready for following path
             ElevatorCmds.ElevGoToPIDPosCmd(AutoConfig.kElevTop).withTimeout(2),
-            ArmCmds.armToPIDPositionCmd(ArmConfig.ArmAngleStorePos),
+            ArmCmds.ArmToPIDPositionCmd(ArmConfig.ArmAngleStorePos),
             ElevatorCmds.ElevGoToBottomCmd().withTimeout(2)
         );
     }
@@ -37,7 +37,7 @@ public class AutoCmds {
     public static Command PlaceObjectRunPathCmd( PathPlannerTrajectory path, double time){
         return new SequentialCommandGroup(
             PlaceObjectCmd(),
-            TrajectoriesCmds.IntializePathFollowingCmd(path , time)
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path , time)
         );
     }
 

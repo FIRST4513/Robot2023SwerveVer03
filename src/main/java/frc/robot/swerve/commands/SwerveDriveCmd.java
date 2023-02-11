@@ -1,13 +1,13 @@
 // Created by Spectrum3847
 // Based on Code from Team364 - BaseFalconSwerve
 
-package frc.robot.swerveDrive.commands;
+package frc.robot.swerve.commands;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.swerveDrive.SwerveDrive;
+import frc.robot.swerve.Swerve;
 
 import java.util.function.DoubleSupplier;
 
@@ -16,7 +16,7 @@ public class SwerveDriveCmd extends CommandBase {
     private boolean fieldRelative;
     private boolean openLoop;
 
-    private SwerveDrive swerve;
+    private Swerve swerve;
     private DoubleSupplier fwdPositiveSupplier;
     private DoubleSupplier leftPositiveSupplier;
     private DoubleSupplier ccwPositiveSupplier;

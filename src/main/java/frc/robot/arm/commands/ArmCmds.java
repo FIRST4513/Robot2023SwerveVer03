@@ -12,41 +12,41 @@ public class ArmCmds {
     // Default Command
     /** Set default command to turn off the rumble */
     public static void setupDefaultCommand() {
-        Robot.arm.setDefaultCommand(holdArmCmd());
+        Robot.arm.setDefaultCommand(HoldArmCmd());
     }
 
-    public static Command holdArmCmd() {
+    public static Command HoldArmCmd() {
         return new RunCommand(() -> Robot.arm.holdArm(), Robot.arm )
             .withName("HoldArmCmd");
     }
 
-    public static Command stopArmCmd() {
+    public static Command StopArmCmd() {
         return new InstantCommand( () -> Robot.arm.stopArm(), Robot.arm)
             .withName("StopArmCmd");
     }
 
-    public static Command raiseArmCmd() {
+    public static Command RaiseArmCmd() {
         return new RunCommand(() -> Robot.arm.raiseArm(), Robot.arm )
             .withName("RaiseArmCmd");
     }
 
-    public static Command lowerArmCmd() {
+    public static Command LowerArmCmd() {
         return new RunCommand(() -> Robot.arm.lowerArm(), Robot.arm )
             .withName("LowerArmCmd");
     }
 
-    public static Command armToFullRetractCmd() {
+    public static Command ArmToFullRetractCmd() {
         return new RunCommand( () -> Robot.arm.lowerArm(), Robot.elevator)
             .until(() ->Robot.arm.isLowerLimitSwitchPressed())
             .withName("armToBottomCmd");
     }
 
-    public static Command armToPIDPositionCmd(double angle) {
+    public static Command ArmToPIDPositionCmd(double angle) {
         return new InstantCommand(() -> Robot.arm.setPIDArmToAngle(angle), Robot.arm )
             .withName("ArmToPIDPosistionCmd");
     }
 
-    public static Command armByJoystick() {
+    public static Command ArmByJoystickCmd() {
         return new RunCommand(
         () -> Robot.arm.setArmMotor(() -> Robot.operatorGamepad.getArmInput()), Robot.arm);
     }

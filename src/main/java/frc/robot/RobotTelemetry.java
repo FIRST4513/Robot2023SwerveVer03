@@ -10,12 +10,12 @@ import frc.lib.telemetry.TelemetrySubsystem;
 import frc.lib.util.Network;
 import frc.lib.util.Util;
 import frc.robot.arm.ArmTelemetry;
-import frc.robot.auto.AutoSetup;
+import frc.robot.auto.Auto;
 import frc.robot.elevator.ElevatorTelemetry;
 import frc.robot.intake.IntakeTelemetry;
 import frc.robot.operator.OperatorGamepadTelemetry;
 import frc.robot.pilot.PilotGamepadTelemetry;
-import frc.robot.swerveDrive.SwerveDriveTelemetry;
+import frc.robot.swerve.SwerveDriveTelemetry;
 
 import java.util.Map;
 
@@ -64,11 +64,11 @@ public class RobotTelemetry extends TelemetrySubsystem {
 
     public void layoutRobotTelemtryTab(){
         // Column 0 - Setup the autonomous selector to display on shuffleboard
-        AutoSetup.setupSelectors();
-        tab.add("Score Position Selection", AutoSetup.scoreChooser).withPosition(0, 0).withSize(2, 1);
-        tab.add("Position Selection", AutoSetup.positionChooser).withPosition(0, 1).withSize(2, 1);
-        tab.add("Cross Selection", AutoSetup.crossChooser).withPosition(0, 2).withSize(2, 1);
-        tab.add("Dock Selection", AutoSetup.dockChooser).withPosition(0, 3).withSize(2, 1);
+        Auto.setupSelectors();
+        tab.add("Score Position Selection", Auto.scoreChooser).withPosition(0, 0).withSize(2, 1);
+        tab.add("Position Selection", Auto.positionChooser).withPosition(0, 1).withSize(2, 1);
+        tab.add("Cross Selection", Auto.crossChooser).withPosition(0, 2).withSize(2, 1);
+        tab.add("Dock Selection", Auto.dockChooser).withPosition(0, 3).withSize(2, 1);
 
         // Column 2
         tab.addBoolean("Connected?", () -> flash())

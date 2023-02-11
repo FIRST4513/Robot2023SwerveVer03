@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.swerveDrive.commands.SwerveDrive2Cmd;
+import frc.robot.swerve.commands.SwerveDrive2Cmd;
 
 // Wait 5 seconds
 // Then drive forward at 0.2 MPS

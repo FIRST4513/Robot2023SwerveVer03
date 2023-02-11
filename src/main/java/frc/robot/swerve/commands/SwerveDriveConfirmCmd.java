@@ -1,4 +1,4 @@
-package frc.robot.swerveDrive.commands;
+package frc.robot.swerve.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;

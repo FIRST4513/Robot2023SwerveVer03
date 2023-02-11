@@ -7,29 +7,30 @@ import frc.robot.Robot;
 
 public class IntakeCmds {
     public static void setupDefaultCommand() {
-        Robot.elevator.setDefaultCommand(intakeStopCmd());
+        Robot.elevator.setDefaultCommand(IntakeStopCmd());
     }
 
-    public static Command intakeStopCmd() {
+    public static Command IntakeStopCmd() {
         return new InstantCommand( () -> Robot.intake.stopMotors(), Robot.intake)
             .withName("IntakeStopCmd");
     }
 
-    public static Command intakeCubeRetractCmd() {
+    public static Command IntakeCubeRetractCmd() {
         return new RunCommand(() -> Robot.intake.setMotorsCubeRetract(), Robot.intake)
-            .withName("IntakeCubeRetract")
+            .withName("IntakeCubeRetractCmd")
             .until(() -> Robot.intake.isCubeDetected());
     }
 
-    public static Command intakeConeRetractCmd() {
+    public static Command IntakeConeRetractCmd() {
         return new RunCommand(() -> Robot.intake.setMotorsConeRetract(), Robot.intake)
-            .withName("IntakeConeRetract")
+            .withName("IntakeConeRetractCmd")
             .until(() -> Robot.intake.isConeDetected());
     }
 
-    public static Command intakeEjectCmd() {
+    public static Command IntakeEjectCmd() {
         return new RunCommand(() -> Robot.intake.setMotorsEject(), Robot.intake)
-            .withName("IntakeConeEject")
+            .withName("IntakeEjectCmd")
             .withTimeout(0.5);
     }
+    
 }

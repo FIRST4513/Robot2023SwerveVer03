@@ -1,4 +1,4 @@
-package frc.robot.swerveDrive;
+package frc.robot.swerve;
 
 import com.kauailabs.navx.frc.AHRS;
 

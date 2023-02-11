@@ -13,48 +13,48 @@ public class ElevatorCmds {
 
     // Default Command
     public static void setupDefaultCommand() {
-        Robot.elevator.setDefaultCommand(holdCmd());
+        Robot.elevator.setDefaultCommand(ElevHoldCmd());
     }
 
-    public static Command holdCmd() {
+    public static Command ElevHoldCmd() {
         return new RunCommand(() -> Robot.elevator.elevHoldMtr(), Robot.elevator )
-            .withName("HoldCmd");
+            .withName("ElevHoldCmd");
     }
 
-    public static Command stop() {
+    public static Command ElevStopCmd() {
         return new InstantCommand( () -> Robot.elevator.elevStop(), Robot.elevator)
-            .withName("StopCmd");
+            .withName("ElevStopCmd");
     }
 
-    public static Command lowerCmd() {
+    public static Command ElevLowerCmd() {
         return new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
-            .withName("LowerCmd");
+            .withName("ElevLowerCmd");
     }
 
-    public static Command raiseCmd() {
+    public static Command ElevRaiseCmd() {
         return new RunCommand( () -> Robot.elevator.elevRaise(), Robot.elevator)
-            .withName("RaiseCmd");
+            .withName("ElevRaiseCmd");
     }
 
     // relative to floor, considering robot height
     public static Command ElevGoToPIDheightCmd(double height) {
         return new InstantCommand( () -> Robot.elevator.setPIDheight(height), Robot.elevator)
-            .withName("ToPIDHeightCmd");
+            .withName("ElevGoToPIDHeightCmd");
     }
 
     // pure elevator height
     public static Command ElevGoToPIDPosCmd(double inches) {
         return new RunCommand( () -> Robot.elevator.setPIDposition(inches), Robot.elevator)
-            .withName("ToPIDPosCmd");
+            .withName("ElevGoToPIDPosCmd");
     }
 
     public static Command ElevGoToBottomCmd() {
         return new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
             .until(() ->Robot.elevator.isLowerLimitSwitchPressed())
-            .withName("ToPIDPosCmd");
+            .withName("ElevGoToBottomCmd");
     }
     
-    public static Command elevByJoystick() {
+    public static Command ElevByJoystickCmd() {
         return new RunCommand(
         () -> Robot.elevator.elevSetSpeed(() -> Robot.operatorGamepad.getElevInput()), Robot.arm);
     }

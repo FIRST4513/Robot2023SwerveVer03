@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.lib.util.Network;
 import frc.robot.arm.ArmSubSys;
 import frc.robot.arm.commands.ArmCmds;
-import frc.robot.auto.AutoSetup;
+import frc.robot.auto.Auto;
 import frc.robot.elevator.ElevatorSubSys;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.IntakeSubSys;
@@ -19,15 +19,16 @@ import frc.robot.operator.commands.OperatorGamepadCmds;
 import frc.robot.pilot.PilotGamepad;
 import frc.robot.pilot.commands.PilotGamepadCmds;
 import frc.robot.pose.Pose;
-import frc.robot.swerveDrive.SwerveDrive;
-import frc.robot.swerveDrive.commands.SwerveDriveCmds;
+import frc.robot.swerve.Swerve;
+import frc.robot.swerve.commands.SwerveCmds;
 import frc.robot.trajectories.Trajectories;
 import com.pathplanner.lib.server.PathPlannerServer;
 
+// ------------------- Constructor -----------------
 public class Robot extends TimedRobot {
     public static RobotConfig config;
     public static Logger logger;
-    public static SwerveDrive swerve;
+    public static Swerve swerve;
     public static Pose pose;
     public static Trajectories trajectories;
     public static PilotGamepad pilotGamepad;
@@ -36,48 +37,18 @@ public class Robot extends TimedRobot {
     public static ArmSubSys arm;
     public static IntakeSubSys intake;
     public static RobotTelemetry telemetry;
-    public static AutoSetup autoSetup;
+    public static Auto autoSetup;
 
     public static String MAC = "";
     public static Timer sysTimer = new Timer();
 
-    // Intialize subsystems and run their setupDefaultCommand methods here
-    private void intializeSubsystems() {
-        logger = new Logger(); 
-        logger.startTimer();
-        swerve = new SwerveDrive();
-        pose = new Pose();
-        trajectories = new Trajectories();
-        elevator = new ElevatorSubSys();
-        pilotGamepad = new PilotGamepad();
-        operatorGamepad = new OperatorGamepad();
-        arm = new ArmSubSys();
-        intake = new IntakeSubSys();
-        telemetry = new RobotTelemetry();
-        autoSetup = new AutoSetup();
 
-        // Set Default Commands, this method should exist for each subsystem that has commands
-        SwerveDriveCmds.setupDefaultCommand();
-        ElevatorCmds.setupDefaultCommand();
-        PilotGamepadCmds.setupDefaultCommand();
-        OperatorGamepadCmds.setupDefaultCommand();
-        ArmCmds.setupDefaultCommand();
-        IntakeCmds.setupDefaultCommand();
-        logger.startTimer();
-
-    }
-
-
-    /**
-     * This function is run when the robot is first started up and should be used for any
-     * initialization code.
-     */
+    // -----------------  Robot General Methods ------------------
     @Override
     public void robotInit() {
         sysTimer.reset();			// System timer for Competition run
     	sysTimer.start();
         Timer.delay( 2.0 );         // Delay for 2 seconds for robot to come fully up
-        // Set the MAC Address for this robot, useful for adjusting comp/practice bot settings*/
         MAC = Network.getMACaddress();
         PathPlannerServer.startServer( 5811 ); // 5811 = port number. adjust this according to your needs
         intializeSubsystems();
@@ -87,17 +58,38 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         // Ensures that the main thread is the highest priority thread
         Threads.setCurrentThreadPriority(true, 99);
-        /**
-         * Runs the Scheduler. This is responsible for polling buttons, adding newly-scheduled
-         * commands, running already-scheduled commands, removing finished or interrupted commands,
-         * and running subsystem periodic() methods. This must be called from the robot's periodic
-         * block in order for anything in the Command-based framework to work.
-         */
-        CommandScheduler.getInstance().run();
+        CommandScheduler.getInstance().run();       // Make sure scheduled commands get run
+        Auto.printAutoDuration();                   // displays the duration of the auto command
         Threads.setCurrentThreadPriority(true, 10); // Set the main thread back to normal priority
     }
 
-    /** This function is called once each time the robot enters Disabled mode. */
+    // Intialize subsystems and run their setupDefaultCommand methods here
+    private void intializeSubsystems() {
+        logger = new Logger(); 
+        logger.startTimer();
+        swerve = new Swerve();
+        pose = new Pose();
+        trajectories = new Trajectories();
+        elevator = new ElevatorSubSys();
+        pilotGamepad = new PilotGamepad();
+        operatorGamepad = new OperatorGamepad();
+        arm = new ArmSubSys();
+        intake = new IntakeSubSys();
+        telemetry = new RobotTelemetry();
+        autoSetup = new Auto();
+
+        // Set Default Commands, this method should exist for each subsystem that has commands
+        SwerveCmds.setupDefaultCommand();
+        ElevatorCmds.setupDefaultCommand();
+        PilotGamepadCmds.setupDefaultCommand();
+        OperatorGamepadCmds.setupDefaultCommand();
+        ArmCmds.setupDefaultCommand();
+        IntakeCmds.setupDefaultCommand();
+        logger.startTimer();
+    }
+
+    
+    // -----------------  Robot Disabled Mode Methods ------------------
     @Override
     public void disabledInit() {
         resetCommandsAndButtons();
@@ -111,6 +103,7 @@ public class Robot extends TimedRobot {
     public void disabledExit()  { }
 
 
+    // -----------------  Autonomous Mode Methods ------------------
     @Override
     public void autonomousInit() {
         resetCommandsAndButtons();
@@ -118,52 +111,54 @@ public class Robot extends TimedRobot {
     	sysTimer.start();
         //logger.startTimer();
 
-        Command autonCommand = AutoSetup.getAutonomousCommand();
+        Command autonCommand = Auto.getAutonomousCommand();
         if (autonCommand != null) {
             autonCommand.schedule();
         }
     }
 
-    /** This function is called periodically during autonomous. */
     @Override
     public void autonomousPeriodic() {}
 
     @Override
     public void autonomousExit() {}
 
+
+    // -----------------  TeleOp Mode Methods ------------------
     @Override
     public void teleopInit() {
         resetCommandsAndButtons();
         logger.startTimer();
         // Set Pilot Teleop Speeds to those selected on smartdashboard
         pilotGamepad.setMaxSpeeds(pilotGamepad.getSelectedSpeed());
-        swerve.resetFalconAngles(); // reset falcon angle motors to absolute encoder
+        swerve.resetFalconAngles(); // Set falcon angle motors to absolute encoder
     }
 
-    /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {}
 
     @Override
     public void teleopExit() {}
 
+    // -----------------  Test Mode Methods ------------------
     @Override
     public void testInit() {
         resetCommandsAndButtons();
     }
 
-    /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {}
 
-    /** This function is called once when a simulation starts */
+
+    // -----------------  Simulation Mode Methods ------------------
     public void simulationInit() {}
 
-    /** This function is called periodically during a simulation */
     public void simulationPeriodic() {
         // PhysicsSim.getInstance().run();
     }
 
+
+    // ------------------------  Misc Methods ---------------------
     public static void resetCommandsAndButtons() {
         CommandScheduler.getInstance().cancelAll(); // Disable any currently running commands
         CommandScheduler.getInstance().getActiveButtonLoop().clear();

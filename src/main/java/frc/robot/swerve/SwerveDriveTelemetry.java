@@ -1,4 +1,4 @@
-package frc.robot.swerveDrive;
+package frc.robot.swerve;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -10,13 +10,13 @@ import java.util.Map;
 
 public class SwerveDriveTelemetry {
     protected ShuffleboardTab tab;
-    private SwerveDrive swerve;
+    private Swerve swerve;
     String Mod0Name;
     String Mod1Name;
     String Mod2Name;
     String Mod3Name;
 
-    public SwerveDriveTelemetry(SwerveDrive swerve) {
+    public SwerveDriveTelemetry(Swerve swerve) {
         this.swerve = swerve;
         tab = Shuffleboard.getTab("Swerve");
         tab.addNumber("Heading", () -> swerve.getHeading().getDegrees()).withPosition(12, 0).withSize(2, 1);

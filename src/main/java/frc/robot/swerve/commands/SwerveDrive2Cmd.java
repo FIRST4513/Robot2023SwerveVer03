@@ -1,16 +1,16 @@
-package frc.robot.swerveDrive.commands;
+package frc.robot.swerve.commands;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.swerveDrive.SwerveDrive;
+import frc.robot.swerve.Swerve;
 
 public class SwerveDrive2Cmd extends CommandBase {
 
     private boolean fieldRelative;
     private boolean openLoop;
 
-    private SwerveDrive swerve;
+    private Swerve swerve;
     private Double fwdPositiveMPS;
     private Double leftPositiveMPS;
     private Double ccwPositiveRPS;

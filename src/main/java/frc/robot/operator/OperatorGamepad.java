@@ -10,19 +10,19 @@ public class OperatorGamepad extends Gamepad {
     }
     
     public void setupTeleopButtons() {
-        gamepad.aButton.onTrue(IntakeCmds.intakeEjectCmd());
-        gamepad.bButton.onTrue(IntakeCmds.intakeCubeRetractCmd());
-        gamepad.xButton.onTrue(IntakeCmds.intakeStopCmd());
-        gamepad.yButton.onTrue(IntakeCmds.intakeConeRetractCmd());
+        gamepad.aButton.onTrue(IntakeCmds.IntakeEjectCmd());
+        gamepad.bButton.onTrue(IntakeCmds.IntakeCubeRetractCmd());
+        gamepad.xButton.onTrue(IntakeCmds.IntakeStopCmd());
+        gamepad.yButton.onTrue(IntakeCmds.IntakeConeRetractCmd());
 
-        gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.setLowPosCmd());
-        gamepad.Dpad.Right.onTrue(OperatorGamepadCmds.setStorePosCmd());
-        gamepad.Dpad.Left.onTrue(OperatorGamepadCmds.setMidPosCmd());
-        gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.setHighPosCmd());
+        gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.SetArmElevToLowPosCmd());
+        gamepad.Dpad.Right.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
+        gamepad.Dpad.Left.onTrue(OperatorGamepadCmds.SetArmElevToMidPosCmd());
+        gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.SetArmElevToHighPosCmd());
 
-        gamepad.selectButton.onTrue(OperatorGamepadCmds.setFullBackPosCmd());
+        gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullBackPosCmd());
 
-        gamepad.rightBumper.whileTrue(OperatorGamepadCmds.controlByJoysticks());
+        gamepad.rightBumper.whileTrue(OperatorGamepadCmds.ControlArmElevByJoysticksCmd());
     }
 
     public void setupDisabledButtons() {

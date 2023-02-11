@@ -8,7 +8,7 @@ import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 import frc.robot.pilot.PilotGamepadConfig.MaxSpeeds;
 import frc.robot.pilot.commands.PilotGamepadCmds;
-import frc.robot.swerveDrive.commands.SwerveDriveCmds;
+import frc.robot.swerve.commands.SwerveCmds;
 
 /** Used to add buttons to the pilot gamepad and configure the joysticks */
 public class PilotGamepad extends Gamepad {
@@ -41,28 +41,28 @@ public class PilotGamepad extends Gamepad {
 
     public void setupTeleopButtons() {
         // "A" Button - Teleop Drive with Robot Perspective
-        gamepad.aButton.whileTrue(PilotGamepadCmds.rpvPilotSwerveCmd());
-        gamepad.bButton.onTrue(IntakeCmds.intakeEjectCmd());
-        gamepad.xButton.onTrue(OperatorGamepadCmds.setLowPosCmd());
-        gamepad.yButton.onTrue(OperatorGamepadCmds.setStorePosCmd());
+        gamepad.aButton.whileTrue(PilotGamepadCmds.RpvPilotSwerveCmd());
+        gamepad.bButton.onTrue(IntakeCmds.IntakeEjectCmd());
+        gamepad.xButton.onTrue(OperatorGamepadCmds.SetArmElevToLowPosCmd());
+        gamepad.yButton.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
 
-        gamepad.leftBumper.onTrue(IntakeCmds.intakeStopCmd());
+        gamepad.leftBumper.onTrue(IntakeCmds.IntakeStopCmd());
         gamepad.rightBumper.onTrue(PilotGamepadCmds.BasicSnapCmd());  // basic snap (turn-in-place)
         
         // "Start" Button - Rest Gyro to 0
-        gamepad.startButton.onTrue(SwerveDriveCmds.zeroGyroHeadingCmd());
-        gamepad.selectButton.onTrue(PilotGamepadCmds.fpvDriveAndAutoRotate());  // snap to angle while driving
+        gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());
+        gamepad.selectButton.onTrue(PilotGamepadCmds.FpvDriveAndAutoRotateCmd());  // snap to angle while driving
     }
 
     public void setupDisabledButtons() {
     }
 
     public void setupTestButtons() {
-        gamepad.aButton.whileTrue(SwerveDriveCmds.testWheelFwdCmd());
-        gamepad.bButton.whileTrue(SwerveDriveCmds.testWheelFwdLeftCmd());
-        gamepad.xButton.whileTrue(SwerveDriveCmds.testWheelFwdRightCmd());
-        gamepad.yButton.whileTrue(SwerveDriveCmds.lockSwerveCmd());
-        gamepad.startButton.whileTrue(SwerveDriveCmds.resetFalconAnglesCmd());
+        gamepad.aButton.whileTrue(SwerveCmds.TestWheelFwdCmd());
+        gamepad.bButton.whileTrue(SwerveCmds.TestWheelFwdLeftCmd());
+        gamepad.xButton.whileTrue(SwerveCmds.TestWheelFwdRightCmd());
+        gamepad.yButton.whileTrue(SwerveCmds.LockSwerveCmd());
+        gamepad.startButton.whileTrue(SwerveCmds.ResetFalconAnglesCmd());
     }
 
     // forward/backward down the field

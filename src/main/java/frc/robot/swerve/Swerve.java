@@ -2,7 +2,7 @@
 // Based on Code from Team3847 - 2023 Base
 // Based on Code from Team364 - BaseFalconSwerve
 
-package frc.robot.swerveDrive;
+package frc.robot.swerve;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
@@ -17,25 +17,25 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class SwerveDrive extends SubsystemBase {
-    public      SwerveDriveConfig config;
+public class Swerve extends SubsystemBase {
+    public      SwerveConfig config;
     protected   Gyro gyro;
     public      Odometry odometry;
     public      SwerveDriveTelemetry telemetry;
-    public      SwerveDriveModule[] mSwerveMods;
+    public      SwerveModule[] mSwerveMods;
     private     SwerveModuleState[] mSwerveModStates;
 
 
-    public SwerveDrive() {
+    public Swerve() {
         setName("Swerve");
-        config = new SwerveDriveConfig();
+        config = new SwerveConfig();
         gyro = new Gyro();
         mSwerveMods =
-                new SwerveDriveModule[] {
-                    new SwerveDriveModule(0, config, SwerveDriveConfig.FLMod0.config),
-                    new SwerveDriveModule(1, config, SwerveDriveConfig.FRMod1.config),
-                    new SwerveDriveModule(2, config, SwerveDriveConfig.BLMod2.config),
-                    new SwerveDriveModule(3, config, SwerveDriveConfig.BRMod3.config)
+                new SwerveModule[] {
+                    new SwerveModule(0, config, SwerveConfig.FLMod0.config),
+                    new SwerveModule(1, config, SwerveConfig.FRMod1.config),
+                    new SwerveModule(2, config, SwerveConfig.BLMod2.config),
+                    new SwerveModule(3, config, SwerveConfig.BRMod3.config)
                 };
         //mSwerveMods[0].logDescription();    // Add description to log file
         odometry = new Odometry(this);
@@ -111,15 +111,15 @@ public class SwerveDrive extends SubsystemBase {
         // --------------- Step 2 Create Swerve Modules Desired States Array ---------------
         // Wheel Velocity (mps) and Wheel Angle (radians) for each of the 4 swerve modules
         SwerveModuleState[] swerveModuleDesiredStates =
-                SwerveDriveConfig.swerveKinematics.toSwerveModuleStates(speeds, centerOfRotationMeters);
+                SwerveConfig.swerveKinematics.toSwerveModuleStates(speeds, centerOfRotationMeters);
 
         // -------------------------- Step 3 Desaturate Wheel speeds -----------------------
         // LOOK INTO THE OTHER CONSTRUCTOR FOR desaturateWheelSpeeds to see if it is better
         SwerveDriveKinematics.desaturateWheelSpeeds(
-            swerveModuleDesiredStates, SwerveDriveConfig.maxVelocity);
+            swerveModuleDesiredStates, SwerveConfig.maxVelocity);
 
         // ------------------ Step 4 Send Desrired Module states to wheel modules ----------------
-        for (SwerveDriveModule mod : mSwerveMods) {
+        for (SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(swerveModuleDesiredStates[mod.moduleNumber], isOpenLoop);
         }
     }
@@ -143,7 +143,7 @@ public class SwerveDrive extends SubsystemBase {
      * and current module angles
      */
     public void stop() {
-        for (SwerveDriveModule mod : mSwerveMods) {
+        for (SwerveModule mod : mSwerveMods) {
             mod.mDriveMotor.stopMotor();
             mod.mAngleMotor.stopMotor();
         }
@@ -151,7 +151,7 @@ public class SwerveDrive extends SubsystemBase {
 
     // Set brakes On/Off for swerve module motors
     public void setBrakeMode(boolean enabled) {
-        for (SwerveDriveModule mod : mSwerveMods) {
+        for (SwerveModule mod : mSwerveMods) {
             if (enabled) {
                 mod.mDriveMotor.setNeutralMode(NeutralMode.Brake);
                 mod.mAngleMotor.setNeutralMode(NeutralMode.Brake);
@@ -164,7 +164,7 @@ public class SwerveDrive extends SubsystemBase {
 
     /** Initialize AngleMotors encoder to CANcoder Absolute angle. */
     public void resetSteeringToAbsolute() {
-        for (SwerveDriveModule mod : mSwerveMods) {
+        for (SwerveModule mod : mSwerveMods) {
             mod.resetFalconToAbsolute();
         }
     }
@@ -249,8 +249,8 @@ public class SwerveDrive extends SubsystemBase {
      * @param desiredStates Meters per second and radians per second
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveDriveConfig.maxVelocity);
-        for (SwerveDriveModule mod : mSwerveMods) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, SwerveConfig.maxVelocity);
+        for (SwerveModule mod : mSwerveMods) {
             mod.setDesiredState(desiredStates[mod.moduleNumber], false);
         }
     }
@@ -262,7 +262,7 @@ public class SwerveDrive extends SubsystemBase {
      */
     public SwerveModuleState[] getStatesCAN() {
         SwerveModuleState[] states = new SwerveModuleState[4];
-        for (SwerveDriveModule mod : mSwerveMods) {
+        for (SwerveModule mod : mSwerveMods) {
             states[mod.moduleNumber] = mod.getState();
         }
         return states;
@@ -279,7 +279,7 @@ public class SwerveDrive extends SubsystemBase {
      */
     public SwerveModulePosition[] getPositions() {
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
-        for (SwerveDriveModule mod : mSwerveMods) {
+        for (SwerveModule mod : mSwerveMods) {
             positions[mod.moduleNumber] = mod.getPosition();
         }
         return positions;
@@ -292,7 +292,7 @@ public class SwerveDrive extends SubsystemBase {
      * @param desiredStates Meters per second and radians per second
      */
     public void resetFalconAngles() {
-        for (SwerveDriveModule mod : mSwerveMods) {
+        for (SwerveModule mod : mSwerveMods) {
             mod.resetFalconToAbsolute();
         }
     }

@@ -8,16 +8,18 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
+import frc.robot.RobotTelemetry;
 import frc.robot.auto.commands.AutoCmds;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
-public class AutoSetup {
+public class Auto {
     public static final SendableChooser<String> scoreChooser = new SendableChooser<>();
     public static final SendableChooser<String> positionChooser = new SendableChooser<>();
     public static final SendableChooser<String> crossChooser = new SendableChooser<>();
@@ -31,8 +33,8 @@ public class AutoSetup {
     public static double elevStartPos;
     public static double elevEndPos;
     public static Pose2d startPose;
-    //private static boolean autoMessagePrinted = true;
-    //private static double autoStart = 0;
+    private static boolean autoMessagePrinted = true;
+    private static double autoStart = 0;
 
     // Setup Needed PathPlaner Paths
     static PathPlannerTrajectory crossShortPath     = PathPlanner.loadPath(
@@ -52,7 +54,7 @@ public class AutoSetup {
 
 
     // -----------------------------  Constructor ----------------------------
-    public AutoSetup(){
+    public Auto(){
         setupSelectors();       // Setup on screen slection menus
         setupEventMap();
     }
@@ -126,13 +128,13 @@ public class AutoSetup {
         // ----------------------- Cross Line Only -------------------
         if (crossOnly()) {
             if (redRight() || blueLeft()) {                     // Short Cross
-                return TrajectoriesCmds.IntializePathFollowingCmd(crossShortPath, 5.0);
+                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossShortPath, 5.0);
             }
             if (centerLeft() || centerRight()) {                // Long Dock Cross
-                return TrajectoriesCmds.IntializePathFollowingCmd(crossLongDockPath, 5.0);
+                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossLongDockPath, 5.0);
             }
             if (redLeft() && blueRight()) {                     // Long Cross
-                return TrajectoriesCmds.IntializePathFollowingCmd(crossLongPath, 5.0);
+                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossLongPath, 5.0);
             }
             return new PrintCommand("ERROR: Invalid cross only auto command");
         }
@@ -140,13 +142,13 @@ public class AutoSetup {
         // ----------------------- Get on Charging Station Only -------------------
         if (dockOnly()) {
             if (centerLeft() || centerRight()) {
-                return TrajectoriesCmds.IntializePathFollowingCmd(shortDockPath, 5.0);
+                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(shortDockPath, 5.0);
             }
             if (redRight() || blueLeft()) {
-                return TrajectoriesCmds.IntializePathFollowingCmd(leftLongDockPath, 5.0);
+                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(leftLongDockPath, 5.0);
             }
             if (redLeft() || blueRight()) {
-                return TrajectoriesCmds.IntializePathFollowingCmd(rightLongDockPath, 5.0);
+                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(rightLongDockPath, 5.0);
             }
             return new PrintCommand("ERROR: Invalid dock only auto command");
         }
@@ -183,15 +185,15 @@ public class AutoSetup {
         if (!place() && cross() && dock()) {
             if (redRight() || blueLeft()) {                     // Short Cross
                 return new SequentialCommandGroup(
-                    TrajectoriesCmds.IntializePathFollowingCmd(crossShortPath, 5.0) );
+                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossShortPath, 5.0) );
             }
             if (centerLeft() || centerRight()) {                // Long Dock Cross
                 return new SequentialCommandGroup(
-                    TrajectoriesCmds.IntializePathFollowingCmd(crossLongDockPath, 5.0) );
+                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossLongDockPath, 5.0) );
             }
             if (redLeft() && blueRight()) {                     // Long Cross
                 return new SequentialCommandGroup(
-                    TrajectoriesCmds.IntializePathFollowingCmd(crossLongPath, 5.0) );
+                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossLongPath, 5.0) );
             }
             return new PrintCommand("ERROR: Invalid cross and dock auto command");
         }
@@ -386,31 +388,26 @@ public class AutoSetup {
         return false;
     }
 
-    
-    /** This method is called in AutonInit */
-    // public static void startAutonTimer() {
-    //     autoStart = Timer.getFPGATimestamp();
-    //     autoMessagePrinted = false;
-    // }
 
-    /** Called in RobotPeriodic and displays the duration of the auton command Based on 6328 code */
-    // public static void printAutoDuration() {
-    //     Command autoCommand = AutoSetup.getAutonomousCommand();
-    //     if (autoCommand != null) {
-    //         if (!autoCommand.isScheduled() && !autoMessagePrinted) {
-    //             if (DriverStation.isAutonomousEnabled()) {
-    //                 RobotTelemetry.print(
-    //                         String.format(
-    //                                 "*** Auton finished in %.2f secs ***",
-    //                                 Timer.getFPGATimestamp() - autoStart));
-    //             } else {
-    //                 RobotTelemetry.print(
-    //                         String.format(
-    //                                 "*** Auton CANCELLED in %.2f secs ***",
-    //                                 Timer.getFPGATimestamp() - autoStart));
-    //             }
-    //             autoMessagePrinted = true;
-    //         }
-    //     }
-    // }
+    // ------------------------------ Print Auto Duration ---------------------------
+    /** Called in RobotPeriodic and displays the duration of the auto command Based on 6328 code */
+    public static void printAutoDuration() {
+        Command autoCommand = Auto.getAutonomousCommand();
+        if (autoCommand != null) {
+            if (!autoCommand.isScheduled() && !autoMessagePrinted) {
+                if (DriverStation.isAutonomousEnabled()) {
+                    RobotTelemetry.print(
+                            String.format(
+                                    "*** Auton finished in %.2f secs ***",
+                                    Timer.getFPGATimestamp() - autoStart));
+                } else {
+                    RobotTelemetry.print(
+                            String.format(
+                                    "*** Auton CANCELLED in %.2f secs ***",
+                                    Timer.getFPGATimestamp() - autoStart));
+                }
+                autoMessagePrinted = true;
+            }
+        }
+    }
 }

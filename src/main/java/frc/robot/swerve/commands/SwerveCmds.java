@@ -1,5 +1,5 @@
 // Created by Spectrum3847
-package frc.robot.swerveDrive.commands;
+package frc.robot.swerve.commands;
 
 import frc.robot.Robot;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -12,11 +12,11 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.pilot.commands.PilotGamepadCmds;
 
-public class SwerveDriveCmds {
+public class SwerveCmds {
     private static Translation2d ctrOfRot = new Translation2d( 0, 0);
     
     public static void setupDefaultCommand() {
-        Robot.swerve.setDefaultCommand(PilotGamepadCmds.fpvPilotSwerveCmd());
+        Robot.swerve.setDefaultCommand(PilotGamepadCmds.FpvPilotSwerveCmd());
     }
 
     public static Command DriveForTimeCmd(double time, double speed){
@@ -24,18 +24,18 @@ public class SwerveDriveCmds {
         return new SwerveDrive2Cmd ( speed, 0.0,  0.0, false, true, ctrOfRot)
                 .withTimeout(time);
     }
-    public static Command lockSwerveCmd() {
+    public static Command LockSwerveCmd() {
         return SetBrakeModeOnCmd().alongWith(new SetModulesToAngleCmd(225, 135, 315, 45));
     }
 
-    public static Command testWheelFwdCmd() {
+    public static Command TestWheelFwdCmd() {
         return SetBrakeModeOnCmd().alongWith(new SetModulesToAngleCmd(0, 0, 0, 0));
     }
 
-    public static Command testWheelFwdLeftCmd() {
+    public static Command TestWheelFwdLeftCmd() {
         return SetBrakeModeOnCmd().alongWith(new SetModulesToAngleCmd(45, 45, 45, 45));
     }
-    public static Command testWheelFwdRightCmd() {
+    public static Command TestWheelFwdRightCmd() {
         return SetBrakeModeOnCmd().alongWith(new SetModulesToAngleCmd(-45, -45, -45, -45));
     }
 
@@ -59,7 +59,7 @@ public class SwerveDriveCmds {
     //         state);
     // }
     
-    public static Command setGyroYawCmd(double deg){
+    public static Command SetGyroYawCmd(double deg){
         return new InstantCommand(() -> Robot.swerve.setGyroYawAngle(deg)).andThen(
             new PrintCommand("Gyro Degrees: " + Robot.swerve.getDegrees())
         );
@@ -67,7 +67,7 @@ public class SwerveDriveCmds {
 
     public static Command IntializeGyroAngleCmd(PathPlannerTrajectory path){
         PathPlannerState s = (PathPlannerState) path.getStates().get(0);    // Starting pose
-        return setGyroYawCmd(s.holonomicRotation.getDegrees());             // Set Gyro to Starting holonomicRotation Hdg +-180
+        return SetGyroYawCmd(s.holonomicRotation.getDegrees());             // Set Gyro to Starting holonomicRotation Hdg +-180
     }
 
     public static Command ResetOdometryCmd(PathPlannerTrajectory path){
@@ -82,12 +82,12 @@ public class SwerveDriveCmds {
         return new RunCommand(() -> Robot.swerve.setBrakeMode(false));
     }
 
-    public static Command resetFalconAnglesCmd() {
+    public static Command ResetFalconAnglesCmd() {
         return new InstantCommand( () -> Robot.swerve.resetFalconAngles(), Robot.swerve)
             .withName("ResetFalconAnglesCmd");
     }
 
-    public static Command zeroGyroHeadingCmd() {
+    public static Command ZeroGyroHeadingCmd() {
         return new InstantCommand(
             () -> Robot.swerve.resetGyro()
         );

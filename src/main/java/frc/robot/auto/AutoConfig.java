@@ -4,18 +4,34 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import frc.robot.swerveDrive.SwerveDriveConfig;
+import frc.robot.swerve.SwerveConfig;
 
 /** Add your docs here. */
 public class AutoConfig {
-    public static final double posAangle = 142;     // Infront of Left Ball (Cargo B)
-    public static final double posA90angle = 91.5;  // Sideways A setup, intake toward field boarder
-    public static final double posBangle = 120;
-    public static final double posCangle = 205;     // Pointing to Cargo D
-    public static final double posDangle = 272;     // 263; //Infront of Right Ball (Cargo E)
-    public static final double posD90angle = 181.5; // Sideways D Setup intake facing the driver station
 
-    // Place Position values (for commands)
+    // Auto menu selectors
+    public static final String kLeftSelect          = "Left";
+    public static final String kRightSelect         = "Right";
+    public static final String kCenterLeftSelect    = "Center Left";
+    public static final String kCenterRightSelect   = "Center Right";
+    public static final String kYesSelect           = "Yes";
+    public static final String kNoSelect            = "No";
+    public static final String kLowSelect           = "Low";
+    public static final String kMidSelect           = "Mid";
+    public static final String kHighSelect          = "High";
+
+    // Auto Start Position Poses
+    public static final Rotation2d kLeftYaw         = Rotation2d.fromDegrees(-180.0);
+    public static final Rotation2d kRightYaw        = Rotation2d.fromDegrees(-180.0);
+    public static final Rotation2d kCenterLeftYaw   = Rotation2d.fromDegrees(-180.0);
+    public static final Rotation2d kCenterRightYaw  = Rotation2d.fromDegrees(-180.0);
+
+    public static final Pose2d kLeftPose            = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
+    public static final Pose2d kRightPose           = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
+    public static final Pose2d kCenterLeftPose      = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
+    public static final Pose2d kCenterRightPose     = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
+
+    // Arm Elev - Score Position values (for commands)
     // Cube
     public final static double cubeLowArmPos = 0.0;  // arm target pos
     public final static double cubeLowElevStartPos = 0.0;  // elev pos for clearing bumbers/other obstacles
@@ -37,37 +53,15 @@ public class AutoConfig {
     public final static double coneHighElevStartPos = 0.0;
     public final static double coneHighElevEndPos = 0.0;
 
-    public static final double kMaxSpeed = 2.7;
-    public static final double kMaxAccel = 2.4; // 2 worked but took too long
-    public static final double kMaxAngularSpeedRadiansPerSecond = SwerveDriveConfig.maxAngularVelocity;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared =
-            SwerveDriveConfig.maxAngularVelocity;
-
     // Elevator positions
     public static final double kElevTop = 22.0;
 
-    // Auto menu selectors
-    public static final String kLeftSelect = "Left";
-    public static final String kRightSelect = "Right";
-    public static final String kCenterLeftSelect = "Center Left";
-    public static final String kCenterRightSelect = "Center Right";
-    public static final String kYesSelect = "Yes";
-    public static final String kNoSelect = "No";
-    public static final String kLowSelect = "Low";
-    public static final String kMidSelect = "Mid";
-    public static final String kHighSelect = "High";
-
-    // Auto Start Position Poses
-    public static final Rotation2d kLeftYaw         = Rotation2d.fromDegrees(-180.0);
-    public static final Rotation2d kRightYaw        = Rotation2d.fromDegrees(-180.0);
-    public static final Rotation2d kCenterLeftYaw   = Rotation2d.fromDegrees(-180.0);
-    public static final Rotation2d kCenterRightYaw  = Rotation2d.fromDegrees(-180.0);
-
-    public static final Pose2d kLeftPose            = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
-    public static final Pose2d kRightPose           = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
-    public static final Pose2d kCenterLeftPose      = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
-    public static final Pose2d kCenterRightPose     = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
-
+    // Max Speeds for Auto commands
+    public static final double kMaxSpeed = 2.7;
+    public static final double kMaxAccel = 2.4; // 2 worked but took too long
+    public static final double kMaxAngularSpeedRadiansPerSecond = SwerveConfig.maxAngularVelocity;
+    public static final double kMaxAngularSpeedRadiansPerSecondSquared =
+                                            SwerveConfig.maxAngularVelocity;
 
     // PID Values for 2023
     public static final double kPTranslationController = 0.6;
