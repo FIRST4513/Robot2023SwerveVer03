@@ -27,9 +27,9 @@ public class AutoConfig {
     public static final Rotation2d kCenterRightYaw  = Rotation2d.fromDegrees(-180.0);
 
     public static final Pose2d kLeftPose            = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
-    public static final Pose2d kRightPose           = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
-    public static final Pose2d kCenterLeftPose      = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
-    public static final Pose2d kCenterRightPose     = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
+    public static final Pose2d kRightPose           = new Pose2d (new Translation2d( 2.0, 3.0), kRightYaw);
+    public static final Pose2d kCenterLeftPose      = new Pose2d (new Translation2d( 2.0, 3.0), kCenterLeftYaw);
+    public static final Pose2d kCenterRightPose     = new Pose2d (new Translation2d( 2.0, 3.0), kCenterRightYaw);
 
     // Arm Elev - Score Position values (for commands)
     // Cube

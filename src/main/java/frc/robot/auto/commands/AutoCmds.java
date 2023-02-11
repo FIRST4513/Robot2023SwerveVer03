@@ -41,12 +41,15 @@ public class AutoCmds {
         );
     }
 
-    public static Command IntializeRobotPoseCmd( Pose2d pose){
+    public static Command IntializeRobotFromPoseCmd( Pose2d pose){
         return new SequentialCommandGroup(
             //  //holonomicRotation Heading +-180 degrees
             new InstantCommand(() -> Robot.swerve.resetGyro(pose.getRotation().getDegrees())),
-            new InstantCommand(() -> Robot.swerve.resetOdometry(pose)) 
+            new InstantCommand(() -> Robot.swerve.resetOdometry(pose))
         );
     }
+
+  
+
 
 }

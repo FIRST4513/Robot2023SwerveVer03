@@ -110,7 +110,7 @@ public class Auto {
         if (doNothing()) {
             // Set position and Gyro Heading based on position
             return new SequentialCommandGroup(            
-                AutoCmds.IntializeRobotPoseCmd(startPose),
+                AutoCmds.IntializeRobotFromPoseCmd(startPose),
                 new PrintCommand("Do nothing Auto - Init Pose")
             );
         }
@@ -119,7 +119,7 @@ public class Auto {
         if (placeOnly()) {
             // Set position and Gyro Heading based on position
             return new SequentialCommandGroup(           
-                AutoCmds.IntializeRobotPoseCmd(startPose),
+                AutoCmds.IntializeRobotFromPoseCmd(startPose),
                 new PrintCommand("Do nothing Auto - Init Pose"),
                 AutoCmds.PlaceObjectCmd()
             );
