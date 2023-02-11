@@ -34,10 +34,10 @@ public class AutoCmds {
         );
     }
 
-    public static Command PlaceObjectRunPathCmd( PathPlannerTrajectory path, double time){
+    public static Command PlaceObjectRunPathCmd( PathPlannerTrajectory path, double timeOut){
         return new SequentialCommandGroup(
             PlaceObjectCmd(),
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path , time)
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path , timeOut)
         );
     }
 

@@ -137,10 +137,6 @@ public class Swerve extends SubsystemBase {
         mSwerveMods[3].setDriveMotorVoltage(rightVolts);
     }
 
-   /**
-     * Stop the drive and angle motor of each module And set desired states to 0 meters per second
-     * and current module angles
-     */
     public void stop() {
         for (SwerveModule mod : mSwerveMods) {
             mod.mDriveMotor.stopMotor();
@@ -161,13 +157,12 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    /** Initialize AngleMotors encoder to CANcoder Absolute angle. */
-    public void resetSteeringToAbsolute() {
+    // ---------- Initialize Falcon Angle Motor To CanCoder Absolute -------
+    public void resetFalconAngles() {
         for (SwerveModule mod : mSwerveMods) {
             mod.resetFalconToAbsolute();
         }
     }
-
 
     // -------------------------------------------------------------
     // -------------------  Heading / Gyro Calls  ------------------
@@ -205,11 +200,12 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setGyroDegrees( double newHdg ) {
-        gyro.setGyroHeadingDegrees( newHdg ); // +-180 Degrees ??
+        gyro.setGyroHeading( newHdg ); // +-180 Degrees ??
     }
 
     public void setGyroYawAngle( double yaw){
-        gyro.setGyroYawAngle(yaw);
+        // Yaw +180 (CCW) to -180 (CW) 
+        gyro.setGyroYaw(yaw);
     }
 
     public double getSnap90Angle() {
@@ -222,9 +218,9 @@ public class Swerve extends SubsystemBase {
         return tgt;
     }
 
-    // -------------------------------------------------------------
-    // ----------------------  Pose Calls  ---------------------
-    // -------------------------------------------------------------
+    // --------------------------------------------------------------------
+    // ----------------------  Odometry/Pose Methods  ---------------------
+    // --------------------------------------------------------------------
 
     public Pose2d getPoseMeters() {
         return odometry.getPoseMeters();
@@ -239,7 +235,7 @@ public class Swerve extends SubsystemBase {
     }
 
     // -------------------------------------------------------------
-    // -------------- Set / Get Swerve Module States ---------------
+    // --------------- Set/Get Swerve Module States ----------------
     // -------------------------------------------------------------
 
      /**
@@ -284,23 +280,4 @@ public class Swerve extends SubsystemBase {
         return positions;
     }
 
-
-    /**
-     * Used by SwerveFollowCommand in Auto, assumes closed loop control
-     *
-     * @param desiredStates Meters per second and radians per second
-     */
-    public void resetFalconAngles() {
-        for (SwerveModule mod : mSwerveMods) {
-            mod.resetFalconToAbsolute();
-        }
-    }
-
-    public double getCanCoderAngleTest(int modID) {
-        return mSwerveMods[modID].getCanCoder().getDegrees();
-    }
-
-    public double getFalconAngleTest(int modID) {
-        return mSwerveMods[modID].getFalconAngle().getDegrees();
-    }
 }

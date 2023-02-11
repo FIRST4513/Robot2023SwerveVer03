@@ -10,6 +10,7 @@ public class Odometry {
     public SwerveDriveOdometry swerveOdometry;
     private Swerve swerve;
 
+    // ----------------- Constructor --------------
     public Odometry(Swerve s) {
         swerve = s;
         swerveOdometry = new SwerveDriveOdometry(
@@ -18,17 +19,26 @@ public class Odometry {
                                 swerve.getPositions());
     }
 
-    public SwerveDriveOdometry getSwerveDriveOdometry() {
-        return swerveOdometry;
-    }
-
+    // --------------------- Update Odometry ----------------
     public void update() {
+        // Called in swerv priodic - every 20ms
         swerveOdometry.update(swerve.gyro.getGyroHeading(), swerve.getPositions());
     }
 
+    // --------------------- Reset/Init Odometry ----------------
     public void resetOdometry(Pose2d pose) { 
+        // Resets Odometry Pose to current Encodernand Gyro Angle
         //swerveOdometry.resetPosition(swerve.gyro.getGyroHeading(), swerve.getPositions(), pose);
-        swerveOdometry.resetPosition(swerve.gyro.getGyroYaw(), swerve.getPositions(), pose);
+        swerveOdometry.resetPosition(  swerve.gyro.getGyroYaw(),     swerve.getPositions(), pose);
+    }
+
+    public void resetHeading(Rotation2d newHeading) {
+        resetOdometry(new Pose2d(getTranslationMeters(), newHeading));
+    }
+
+    // ------------- Odometry Getters -----------------
+    public SwerveDriveOdometry getSwerveDriveOdometry() {
+        return swerveOdometry;
     }
 
     public Pose2d getPoseMeters() {
@@ -43,7 +53,4 @@ public class Odometry {
         return getPoseMeters().getRotation();
     }
 
-    public void resetHeading(Rotation2d newHeading) {
-        resetOdometry(new Pose2d(getTranslationMeters(), newHeading));
-    }
 }

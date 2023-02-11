@@ -16,34 +16,22 @@ public class SwerveCmds {
     private static Translation2d ctrOfRot = new Translation2d( 0, 0);
     
     public static void setupDefaultCommand() {
+        // Drive by joystick Field Point Of View
         Robot.swerve.setDefaultCommand(PilotGamepadCmds.FpvPilotSwerveCmd());
     }
 
-    public static Command DriveForTimeCmd(double time, double speed){
+    // ----------------------- Drive Commands  ------------------------
+    public static Command DriveForwardForTimeCmd(double time, double speed){
         //return new SwerveDrive(false, speed, 0).withTimeout(time);
         return new SwerveDrive2Cmd ( speed, 0.0,  0.0, false, true, ctrOfRot)
                 .withTimeout(time);
     }
-    public static Command LockSwerveCmd() {
-        return SetBrakeModeOnCmd().alongWith(new SetModulesToAngleCmd(225, 135, 315, 45));
+
+    public static Command SnapTurnCmd() {
+        return new TurnToAngleCmd(() -> Robot.swerve.getSnap90Angle());
     }
 
-    public static Command TestWheelFwdCmd() {
-        return SetBrakeModeOnCmd().alongWith(new SetModulesToAngleCmd(0, 0, 0, 0));
-    }
-
-    public static Command TestWheelFwdLeftCmd() {
-        return SetBrakeModeOnCmd().alongWith(new SetModulesToAngleCmd(45, 45, 45, 45));
-    }
-    public static Command TestWheelFwdRightCmd() {
-        return SetBrakeModeOnCmd().alongWith(new SetModulesToAngleCmd(-45, -45, -45, -45));
-    }
-
-    //public static Command brakeModeCmd() {
-    //    return new StartEndCommand(
-    //            () -> Robot.swerve.setBrakeMode(true), () -> Robot.swerve.setBrakeMode(false));
-    //}
-    
+    // ----------------------- Brake Commands  ------------------------
     public static Command SetBrakeModeOnCmd(){
         return new RunCommand(() -> Robot.swerve.setBrakeMode(true));
     }
@@ -52,13 +40,18 @@ public class SwerveCmds {
         return new RunCommand(() -> Robot.swerve.setBrakeMode(false));
     }
 
-    // public static Command SetBrakeModeCmd(boolean state )(
-    //     return new ConditionalCommand(
-    //         new RunCommand(() -> Robot.swerve.setBrakeMode(true)),
-    //         new RunCommand(() -> Robot.swerve.setBrakeMode(false)),
-    //         state);
-    // }
-    
+    public static Command LockSwerveCmd() {
+        return SetBrakeModeOnCmd().alongWith(new SetModulesToAngleCmd(225, 135, 315, 45));
+    }
+
+        
+    // ----------------------- Gyro Odometry Commands  ------------------------
+    public static Command ZeroGyroHeadingCmd() {
+        return new InstantCommand(
+            () -> Robot.swerve.resetGyro()
+        );
+    }
+
     public static Command SetGyroYawCmd(double deg){
         return new InstantCommand(() -> Robot.swerve.setGyroYawAngle(deg)).andThen(
             new PrintCommand("Gyro Degrees: " + Robot.swerve.getDegrees())
@@ -78,22 +71,22 @@ public class SwerveCmds {
     }
 
 
-    public static Command SetCoastModeCmd(){
-        return new RunCommand(() -> Robot.swerve.setBrakeMode(false));
-    }
-
+    // ----------------------- Swerve Module Commands  ------------------------
     public static Command ResetFalconAnglesCmd() {
         return new InstantCommand( () -> Robot.swerve.resetFalconAngles(), Robot.swerve)
             .withName("ResetFalconAnglesCmd");
     }
 
-    public static Command ZeroGyroHeadingCmd() {
-        return new InstantCommand(
-            () -> Robot.swerve.resetGyro()
-        );
+    // ----------------- Swerve Module Angle Position Test Commands  -------------------
+    public static Command TestWheelFwdCmd() {
+        return SetBrakeModeOnCmd().alongWith(new SetModulesToAngleCmd(0, 0, 0, 0));
     }
 
-    public static Command SnapTurnCmd() {
-        return new TurnToAngleCmd(() -> Robot.swerve.getSnap90Angle());
+    public static Command TestWheelFwdLeftCmd() {
+        return SetBrakeModeOnCmd().alongWith(new SetModulesToAngleCmd(45, 45, 45, 45));
     }
+    public static Command TestWheelFwdRightCmd() {
+        return SetBrakeModeOnCmd().alongWith(new SetModulesToAngleCmd(-45, -45, -45, -45));
+    }
+
 }

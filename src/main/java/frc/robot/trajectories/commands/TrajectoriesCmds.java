@@ -14,7 +14,7 @@ public class TrajectoriesCmds {
             SwerveCmds.SetBrakeModeOnCmd().withTimeout(0.25),  //set brake mode On and pause for 1/4 second
             SwerveCmds.IntializeGyroAngleCmd(path),            //set gyro to Path starting holonomicRotation Heading +-180 degrees
             SwerveCmds.ResetOdometryCmd(path),                 //reset odometry to the Path Starting position (x,y)
-            FollowPathCmd(path, time)                               // Run the path
+            FollowPathCmd(path, time)                          // Run the path
         );
     }
             

@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
     public static ArmSubSys arm;
     public static IntakeSubSys intake;
     public static RobotTelemetry telemetry;
-    public static Auto autoSetup;
+    public static Auto auto;
 
     public static String MAC = "";
     public static Timer sysTimer = new Timer();
@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
         arm = new ArmSubSys();
         intake = new IntakeSubSys();
         telemetry = new RobotTelemetry();
-        autoSetup = new Auto();
+        auto = new Auto();
 
         // Set Default Commands, this method should exist for each subsystem that has commands
         SwerveCmds.setupDefaultCommand();
@@ -111,9 +111,9 @@ public class Robot extends TimedRobot {
     	sysTimer.start();
         //logger.startTimer();
 
-        Command autonCommand = Auto.getAutonomousCommand();
-        if (autonCommand != null) {
-            autonCommand.schedule();
+        Command autoCommand = Auto.getAutonomousCommand();
+        if (autoCommand != null) {
+            autoCommand.schedule();
         }
     }
 
