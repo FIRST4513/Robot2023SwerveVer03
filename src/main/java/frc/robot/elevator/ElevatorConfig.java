@@ -4,17 +4,10 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.RobotConfig.LimitSwitches;
-import frc.robot.RobotConfig.Motors;
 
 /** Add your docs here. */
 public class ElevatorConfig {
     // Declare and Initialize needed class objects
-
-    // ------ Device Port Constants ------
-    public final int kMotorPort =           Motors.elevatorMotorID;
-    public final int kLowerLimitSwitchPort = LimitSwitches.elevatorLowerLimitSw;
-    public final int kUpperLimitSwitchPort = LimitSwitches.elevatorUpperLimitSw;
 
     public final boolean lowerLimitTrue = true;
     public final boolean upperLimitTrue = true;

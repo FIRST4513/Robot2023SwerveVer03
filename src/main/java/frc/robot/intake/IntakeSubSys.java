@@ -5,15 +5,17 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotConfig.AnalogPorts;
+import frc.robot.RobotConfig.Motors;
 
 public class IntakeSubSys extends SubsystemBase {
     
     //Devices
-    public WPI_TalonSRX intakeUpperMotor  = new WPI_TalonSRX(IntakeConfig.intakeUpperMotorCANID);
-    public WPI_TalonSRX intakeLowerMotor  = new WPI_TalonSRX(IntakeConfig.intakeLowerMotorCANID);
+    public WPI_TalonSRX intakeUpperMotor  = new WPI_TalonSRX(Motors.intakeUpperMotorID);
+    public WPI_TalonSRX intakeLowerMotor  = new WPI_TalonSRX(Motors.intakeLowerMotorID);
 
-    private AnalogInput coneDetectSensor = new AnalogInput(IntakeConfig.coneDetectPortID);
-    private AnalogInput cubeDetectSensor = new AnalogInput(IntakeConfig.cubeDetectPortID);
+    private AnalogInput coneDetectSensor = new AnalogInput(AnalogPorts.intakeConeDetectPort);
+    private AnalogInput cubeDetectSensor = new AnalogInput(AnalogPorts.intakeCubeDetectPort);
 
     //contructor
     public IntakeSubSys() { 

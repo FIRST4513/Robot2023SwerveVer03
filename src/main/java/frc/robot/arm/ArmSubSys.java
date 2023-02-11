@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
 import frc.robot.RobotConfig.LimitSwitches;
+import frc.robot.RobotConfig.Motors;
 
 public class ArmSubSys extends SubsystemBase {
     public  WPI_TalonSRX mArmMotor;
@@ -24,7 +25,7 @@ public class ArmSubSys extends SubsystemBase {
 
     // ------------- Constructor ----------
     public ArmSubSys() {
-        mArmMotor        = new WPI_TalonSRX(ArmConfig.kMotorPort);
+        mArmMotor        = new WPI_TalonSRX(Motors.armMotorID);
         upperlimitSwitch = new DigitalInput(LimitSwitches.armUpperLimitSw);
         lowerlimitSwitch = new DigitalInput(LimitSwitches.armLowerLimitSw);
         mArmPIDController = new PIDController(ArmConfig.armKP, ArmConfig.armKI, ArmConfig.armKD);

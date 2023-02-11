@@ -2,16 +2,8 @@ package frc.robot.intake;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
-import frc.robot.RobotConfig.AnalogPorts;
-import frc.robot.RobotConfig.Motors;
 
 public class IntakeConfig {
-
-    public static int intakeUpperMotorCANID = Motors.intakeUpperMotorID;
-    public static int intakeLowerMotorCANID = Motors.intakeLowerMotorID;
-
-    public static int coneDetectPortID = AnalogPorts.intakeConeDetectPort;
-    public static int cubeDetectPortID = AnalogPorts.intakeCubeDetectPort;
 
     public static double cubeDetectTrue = 2.25; // IR Prox Volt greator than 2.25 means we see it.
     public static double coneDetectTrue = 2.25; // IR Prox Volt greator than 2.25 means we see it.

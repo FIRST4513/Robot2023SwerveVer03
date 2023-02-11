@@ -6,6 +6,8 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
+import frc.robot.RobotConfig.LimitSwitches;
+import frc.robot.RobotConfig.Motors;
 
 public class ElevatorSubSys extends SubsystemBase {
     public ElevatorConfig config;
@@ -31,9 +33,9 @@ public class ElevatorSubSys extends SubsystemBase {
     // -----------  Constructor --------------------
     public ElevatorSubSys() {
         config = new ElevatorConfig();
-        m_motor = new WPI_TalonSRX(config.kMotorPort);
-        elevLowerLimitSw = new DigitalInput(config.kLowerLimitSwitchPort);
-        elevUpperLimitSw = new DigitalInput(config.kUpperLimitSwitchPort);
+        m_motor = new WPI_TalonSRX(Motors.elevatorMotorID);
+        elevLowerLimitSw = new DigitalInput(LimitSwitches.elevatorLowerLimitSw);
+        elevUpperLimitSw = new DigitalInput(LimitSwitches.elevatorUpperLimitSw);
         elevPIDcontroller = new PIDController(config.elevKP, 0, 0);
         elevatorMotorConfig();
     }

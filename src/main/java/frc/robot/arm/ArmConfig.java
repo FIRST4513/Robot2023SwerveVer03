@@ -2,15 +2,8 @@ package frc.robot.arm;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
-import frc.robot.RobotConfig.LimitSwitches;
-import frc.robot.RobotConfig.Motors;
 
 public class ArmConfig {
-
-    // ------ Device Port Constants ------
-    public final static int kMotorPort =            Motors.armMotorID;
-    public final static int kLowerLimitSwitchPort = LimitSwitches.armLowerLimitSw;
-    public final static int kUpperLimitSwitchPort = LimitSwitches.armUpperLimitSw;
 
     // ------ Speed Constants ------
     public final static double kRaiseSpeed = 0.5;
