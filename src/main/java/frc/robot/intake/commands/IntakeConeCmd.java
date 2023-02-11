@@ -3,7 +3,7 @@ package frc.robot.intake.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
-public class ConeIntakeCmd extends CommandBase{
+public class IntakeConeCmd extends CommandBase{
     
     static enum IntakeState {EMPTY, STAGED, INPLACE};
 

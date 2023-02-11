@@ -15,7 +15,7 @@ import frc.robot.elevator.ElevatorTelemetry;
 import frc.robot.intake.IntakeTelemetry;
 import frc.robot.operator.OperatorGamepadTelemetry;
 import frc.robot.pilot.PilotGamepadTelemetry;
-import frc.robot.swerve.SwerveDriveTelemetry;
+import frc.robot.swerve.SwerveTelemetry;
 
 import java.util.Map;
 
@@ -26,7 +26,7 @@ public class RobotTelemetry extends TelemetrySubsystem {
     private static ArmTelemetry             m_ArmTelemetry;
     private static ElevatorTelemetry        m_ElevTelemetry;
     private static IntakeTelemetry          m_IntakeTelemetry;
-    private static SwerveDriveTelemetry     m_SwerveDriveTelemetry;
+    private static SwerveTelemetry          m_SwerveTelemetry;
     private static PilotGamepadTelemetry    m_PilotTelemetry;
     private static OperatorGamepadTelemetry m_OperatorTelemetry;
 
@@ -47,7 +47,7 @@ public class RobotTelemetry extends TelemetrySubsystem {
         m_ArmTelemetry =            new ArmTelemetry(Robot.arm);
         m_ElevTelemetry =           new ElevatorTelemetry(Robot.elevator); ;
         m_IntakeTelemetry =         new IntakeTelemetry(Robot.intake); ;
-        m_SwerveDriveTelemetry =    new SwerveDriveTelemetry(Robot.swerve); ;
+        m_SwerveTelemetry =         new SwerveTelemetry(Robot.swerve); ;
         m_PilotTelemetry =          new PilotGamepadTelemetry(Robot.pilotGamepad); ;
         m_OperatorTelemetry =       new OperatorGamepadTelemetry(Robot.operatorGamepad); ;
     }

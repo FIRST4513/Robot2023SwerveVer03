@@ -21,11 +21,11 @@ public class Swerve extends SubsystemBase {
     public      SwerveConfig config;
     protected   Gyro gyro;
     public      Odometry odometry;
-    public      SwerveDriveTelemetry telemetry;
     public      SwerveModule[] mSwerveMods;
     private     SwerveModuleState[] mSwerveModStates;
 
 
+    // --------------------- Constructor ------------------
     public Swerve() {
         setName("Swerve");
         config = new SwerveConfig();
@@ -39,7 +39,6 @@ public class Swerve extends SubsystemBase {
                 };
         //mSwerveMods[0].logDescription();    // Add description to log file
         odometry = new Odometry(this);
-        telemetry = new SwerveDriveTelemetry(this);
         Timer.delay(1.0);
         resetFalconAngles();
     }

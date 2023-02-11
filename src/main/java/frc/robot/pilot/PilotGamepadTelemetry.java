@@ -12,11 +12,7 @@ import frc.robot.Robot;
 
 public class PilotGamepadTelemetry {
     private final PilotGamepad gamepad; 
-    //---------------------//
-    // NetworkTableEntries //
-    //---------------------//
 
-    //----------------//
     // Tab & Layouts  //
     private static ShuffleboardTab m_tab;
     private gamepadLayout driver;
@@ -24,25 +20,19 @@ public class PilotGamepadTelemetry {
     
     public static SimpleWidget m_EnableWidget;
 
-    //--------------//
-    // Constructor  //
+
+    // -------------  Constructor     ---------------
     public PilotGamepadTelemetry(PilotGamepad gp) {
         m_tab = Shuffleboard.getTab("Gamepad Pilot");
         gamepad = gp;
     }
 
-    //---------------------//
-    // initializeViewable  //
-    // Create all View Widgets, ones you can't edit, created after subsystem instances are made
     public void initialize() {
         driver = new gamepadLayout("Driver 0", m_tab, Robot.pilotGamepad);
         driver.initialize();
         m_EnableWidget = m_tab.add("Update Enable", false).withWidget(BuiltInWidgets.kToggleButton).withPosition(5, 0);
     }
 
-
-    //--------//
-    // Update //
     public void update() {
         if (m_EnableWidget.getEntry().getBoolean(false)) {
             driver.update();

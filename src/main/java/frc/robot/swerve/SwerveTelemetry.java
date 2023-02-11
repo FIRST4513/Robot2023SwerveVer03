@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
 import java.util.Map;
 
-public class SwerveDriveTelemetry {
+public class SwerveTelemetry {
     protected ShuffleboardTab tab;
     private Swerve swerve;
     String Mod0Name;
@@ -16,7 +16,7 @@ public class SwerveDriveTelemetry {
     String Mod2Name;
     String Mod3Name;
 
-    public SwerveDriveTelemetry(Swerve swerve) {
+    public SwerveTelemetry(Swerve swerve) {
         this.swerve = swerve;
         tab = Shuffleboard.getTab("Swerve");
         tab.addNumber("Heading", () -> swerve.getHeading().getDegrees()).withPosition(12, 0).withSize(2, 1);
