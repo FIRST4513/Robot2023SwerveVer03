@@ -7,10 +7,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
+import frc.lib.subsystems.angleMech.AngleMechSubsystem;
 import frc.robot.RobotConfig.LimitSwitches;
 import frc.robot.RobotConfig.Motors;
 
-public class ArmSubSys extends SubsystemBase {
+public class ArmSubSys extends AngleMechSubsystem {
     public  WPI_TalonSRX mArmMotor;
     private DigitalInput upperlimitSwitch;
     private DigitalInput lowerlimitSwitch;
@@ -23,8 +24,11 @@ public class ArmSubSys extends SubsystemBase {
     public double mPIDSetpoint      = 0;
     public double mPIDOutput        = 0;
 
+    public static ArmMMConfig config = new ArmMMConfig();
+
     // ------------- Constructor ----------
     public ArmSubSys() {
+        super(config);
         mArmMotor        = new WPI_TalonSRX(Motors.armMotorID);
         upperlimitSwitch = new DigitalInput(LimitSwitches.armUpperLimitSw);
         lowerlimitSwitch = new DigitalInput(LimitSwitches.armLowerLimitSw);
@@ -104,6 +108,23 @@ public class ArmSubSys extends SubsystemBase {
         mPIDOutput = mPIDOutput + ArmConfig.armKF;                  // Add feedforward component
         setArmMotor( mPIDOutput );                                  // Send Power to motor  Pwr -1 to +1
         //m_motor.setVoltage(mPIDOutput);                           // Voltage -12 to +12 ???????        
+    }
+
+    // ------------  Set Arm to Angle by Motion Magic  ----------
+    public double percentToFalcon(double percent) {
+        return config.armMaxFalcon * (percent / 100);
+    }
+
+    public void setMMPercent(double percent) {
+        setMMPosition(percentToFalcon(percent));
+    }
+
+    public void softLimitsTrue() {
+        motorLeader.configReverseSoftLimitEnable(true);
+    }
+
+    public void softLimitsFalse() {
+        motorLeader.configReverseSoftLimitEnable(false);
     }
 
     // ------------------------------------------------------------

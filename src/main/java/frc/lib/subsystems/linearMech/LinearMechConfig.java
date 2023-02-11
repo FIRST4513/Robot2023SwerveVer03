@@ -4,7 +4,7 @@ package frc.lib.subsystems.linearMech;
 
 import frc.lib.subsystems.MotorSubsystemConfig;
 
-public final class LinearMechConfig extends MotorSubsystemConfig {
+public abstract class LinearMechConfig extends MotorSubsystemConfig {
     public final int fullExtend = 0;
     public final int fullRetract = 0;
 

@@ -4,7 +4,7 @@ package frc.lib.subsystems.angleMech;
 
 import frc.lib.subsystems.MotorSubsystemConfig;
 
-public final class AngleMechConfig extends MotorSubsystemConfig {
+public abstract class AngleMechConfig extends MotorSubsystemConfig {
     public final int minAngle = 0;
     public final int maxAngle = 0;
 
