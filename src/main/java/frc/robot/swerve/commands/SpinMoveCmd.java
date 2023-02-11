@@ -46,7 +46,7 @@ public class SpinMoveCmd extends CommandBase {
 
         translation = new Translation2d(fwdPositive, leftPositive);
 
-        Rotation2d heading = translation.getAngle().minus(Robot.swerve.getHeading());
+        Rotation2d heading = translation.getAngle().minus(Robot.swerve.getGyroYaw());
         double angle = heading.getDegrees();
 
         if (Math.abs(ccwPositive) >= 0.2 && !centerHasBeenSet) {

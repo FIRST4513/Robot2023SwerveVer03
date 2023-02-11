@@ -47,7 +47,7 @@ public class Swerve extends SubsystemBase {
     public void periodic() {
         odometry.update();
         mSwerveModStates = getStatesCAN();
-        SmartDashboard.putNumber("gyroheading",gyro.getGyroHeadingDegrees());
+        SmartDashboard.putNumber("Gyro Yaw", gyro.getGyroYawAngle());
         //telemetry.logModuleAbsolutePositions();
     }
 
@@ -102,7 +102,7 @@ public class Swerve extends SubsystemBase {
         ChassisSpeeds speeds;
         if (fieldRelative) {
             speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                        fwdPositive, leftPositive, omegaRadiansPerSecond, getHeading());
+                        fwdPositive, leftPositive, omegaRadiansPerSecond, getGyroYaw());
         } else {
             speeds = new ChassisSpeeds(fwdPositive, leftPositive, omegaRadiansPerSecond);
         }
@@ -173,47 +173,36 @@ public class Swerve extends SubsystemBase {
      *
      * @return current heading using the offset from Odometry class
      */
-    public Rotation2d getHeading() {
-        return odometry.getHeading();
-    }
 
-    public Rotation2d getHeadingRotation2d() {
-        return Rotation2d.fromDegrees(getDegrees() * -1.0);
-    }
-
-    // Used in turn to angle
-    public double getDegrees(){
-        return gyro.getGyroHeadingDegrees();
-    }
 
     /**
      * Reset the Heading to any angle
      *
      * @param heading Rotation2d representing the current heading of the robot
      */
-    public void resetHeading(Rotation2d heading) {
-        odometry.resetHeading(heading);
-    }
 
     public void resetGyro(){
         gyro.resetGyro();
     }
 
-    public void setGyroDegrees( double newHdg ) {
-        gyro.setGyroHeading( newHdg ); // +-180 Degrees ??
+    public void resetGyro( double newYaw ) {
+        gyro.resetGyro( newYaw ); // +-180 Degrees ??
     }
 
-    public void setGyroYawAngle( double yaw){
-        // Yaw +180 (CCW) to -180 (CW) 
-        gyro.setGyroYaw(yaw);
+    public Rotation2d getGyroYaw() {
+        return gyro.getGyroYawRotation2d();
+    }
+
+    public double getGyroYawDegrees() {
+        return gyro.getGyroYawAngle();
     }
 
     public double getSnap90Angle() {
-        double currAngle = getDegrees();
+        double currAngle = getGyroYawDegrees();
         double tgt;
-        if      ((currAngle >= 45) && (currAngle <= 135))  { tgt = 90; }
-        else if ((currAngle >= 135) && (currAngle <= 225)) { tgt = 180; }
-        else if ((currAngle >= 225) && (currAngle <= 315)) { tgt = 270; }
+        if      ((currAngle >= 45) && (currAngle <= 135))  { tgt = 90;  }
+        else if ((currAngle >= 135) || (currAngle < -135)) { tgt = 180; }
+        else if ((currAngle <= -45) && (currAngle >=-135)) { tgt = -90; }
         else    { tgt = 0; }
         return tgt;
     }
@@ -232,6 +221,10 @@ public class Swerve extends SubsystemBase {
 
     public Translation2d getPosition(){
         return odometry.getTranslationMeters();
+    }
+
+    public Rotation2d getHeading() {
+        return odometry.getHeading();
     }
 
     // -------------------------------------------------------------

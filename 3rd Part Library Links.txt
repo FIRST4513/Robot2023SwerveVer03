@@ -1,0 +1,11 @@
+NavX Link:
+https://dev.studica.com/releases/2023/NavX.json
+
+CTRE Link:
+https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix5-frc2023-latest.json
+
+Photon Vision Link:
+https://maven.photonvision.org/repository/internal/org/photonvision/PhotonLib-json/1.0/PhotonLib-json-1.0.json
+
+RevRobotics Link:
+https://software-metadata.revrobotics.com/REVLib-2023.json

@@ -15,21 +15,21 @@ public class Odometry {
         swerve = s;
         swerveOdometry = new SwerveDriveOdometry(
                                 SwerveConfig.swerveKinematics,
-                                swerve.gyro.getGyroHeading(),
+                                swerve.gyro.getGyroYawRotation2d(),
                                 swerve.getPositions());
     }
 
     // --------------------- Update Odometry ----------------
     public void update() {
         // Called in swerv priodic - every 20ms
-        swerveOdometry.update(swerve.gyro.getGyroHeading(), swerve.getPositions());
+        swerveOdometry.update(swerve.gyro.getGyroYawRotation2d(), swerve.getPositions());
     }
 
     // --------------------- Reset/Init Odometry ----------------
     public void resetOdometry(Pose2d pose) { 
         // Resets Odometry Pose to current Encodernand Gyro Angle
         //swerveOdometry.resetPosition(swerve.gyro.getGyroHeading(), swerve.getPositions(), pose);
-        swerveOdometry.resetPosition(  swerve.gyro.getGyroYaw(),     swerve.getPositions(), pose);
+        swerveOdometry.resetPosition(  swerve.gyro.getGyroYawRotation2d(),     swerve.getPositions(), pose);
     }
 
     public void resetHeading(Rotation2d newHeading) {

@@ -53,8 +53,8 @@ public class SwerveCmds {
     }
 
     public static Command SetGyroYawCmd(double deg){
-        return new InstantCommand(() -> Robot.swerve.setGyroYawAngle(deg)).andThen(
-            new PrintCommand("Gyro Degrees: " + Robot.swerve.getDegrees())
+        return new InstantCommand(() -> Robot.swerve.resetGyro(deg)).andThen(
+            new PrintCommand("Gyro Degrees: " + Robot.swerve.getGyroYawDegrees())
         );
     }
 

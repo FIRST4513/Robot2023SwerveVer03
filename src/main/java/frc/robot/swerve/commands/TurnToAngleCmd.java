@@ -30,7 +30,7 @@ public class TurnToAngleCmd extends ProfiledPIDCommand {
         // The ProfiledPIDController used by the command
         new ProfiledPIDController( kP, kI, kD,
                                    new TrapezoidProfile.Constraints(360, 1080)),
-                                  Robot.swerve::getDegrees,     // This gets the current heading
+                                  Robot.swerve::getGyroYawDegrees,     // This gets the current heading
                                   targetAngleSupplier.getAsDouble(),                        // This is the target heading
                                   // This uses the output
                                   //(output, setpoint) -> Robot.swerve.useOutput(output));
@@ -42,7 +42,7 @@ public class TurnToAngleCmd extends ProfiledPIDCommand {
 
     // Configure additional PID options by calling `getController'
 
-    double differance = targetAngleSupplier.getAsDouble() - Robot.swerve.getDegrees();
+    double differance = targetAngleSupplier.getAsDouble() - Robot.swerve.getGyroYawDegrees();
     if (differance > 180) {
       differance = (360 - differance) * -1;
     }
@@ -61,7 +61,8 @@ public class TurnToAngleCmd extends ProfiledPIDCommand {
         // The ProfiledPIDController used by the command
         new ProfiledPIDController( kP, kI, kD,
                                    new TrapezoidProfile.Constraints(360, 1080)),
-                                  Robot.swerve::getDegrees,     // This gets the current heading
+                                  Robot.swerve::getGyroYawDegrees,     // This gets the current heading
+                                  // () -> Robot.swerve.getGyroYawDegrees(),
                                   targetAngleSupplier.getAsDouble(),                        // This is the target heading
                                   // This uses the output
                                   //(output, setpoint) -> Robot.swerve.useOutput(output));
@@ -75,7 +76,7 @@ public class TurnToAngleCmd extends ProfiledPIDCommand {
 
     // Configure additional PID options by calling `getController'
 
-    double differance = targetAngleSupplier.getAsDouble() - Robot.swerve.getDegrees();
+    double differance = targetAngleSupplier.getAsDouble() - Robot.swerve.getGyroYawDegrees();
     if (differance > 180) {
       differance = (360 - differance) * -1;
     }

@@ -33,59 +33,33 @@ public class Gyro {
          gyro.reset();
          gyroOffset = 0;
     }
-
-    public void setGyroHeading( double hdg) {
-        // reset gyro to a given heading 0 (Field Fwd) to +360 (CCW)  
-        gyro.reset();
-        gyroOffset = hdg;
-    }
     
-    public void setGyroYaw( double yaw) {
+    public void resetGyro(double yaw) {
         // Set gyro to a given Yaw angle +180 (CCW) to -180 (CW) degrees
         // Since the offset is calculated above in 0 to 360 format
         // this needs to be converted to 0 to +360 format
         gyro.reset();
         gyroOffset = yaw;
-        if ( gyroOffset < 0.0 ) { gyroOffset += 360.0; }
-    }
-
-    // ------------------------- Get Gyro Heading Angle ------------------------
-    public double getGyroHeadingDegrees(){
-        // Get Gyro angle from 0 to 360 degrees CCW
-        // This applies offset as needed
-        // and limits output to 0 to +360 CCW direction
-        double gyroAngle = (-getGyroAngle()) % 360.0;
-        if ( gyroAngle < 0.0 ) { gyroAngle += 360.0; }
-        // Now add any Heading Offset
-        double angle = gyroAngle + gyroOffset;
-        if ( angle < 0.0 )   { angle += 360.0; }
-        if ( angle > 360.0 ) { angle -= 360.0; }
-        return Rmath.mRound(angle, 2);
-    }
-    
-    public Rotation2d getGyroHeading() {
-        // this returns a Gyro HeadingDegrees in Rotation2d format
-        return Rotation2d.fromDegrees(getGyroHeadingDegrees());
-    }
-
-    public double getGyroAngle() {
-        // This returns the hardware RAW continous rotation angle
-        // - x times +360 (CW) through x times -360 (CCW) 
-        return (gyro.getAngle()); 
     }
 
     // ------------------------- Get Gyro Yaw ----------------------------
     public double getGyroYawAngle() {
-        // This returns a Gyro Yaw angle 0 to +180 CCW and 0 to -180 CW 
-        double yaw = getGyroHeadingDegrees();
-        if ( yaw > 180.0 ) { yaw -= 360.0; }
-        if ( yaw < 180.0 ) { yaw += 360.0; }
+        // This returns a Gyro Yaw angle 0 to +180 CCW and 0 to -180 CW
+        double yaw = gyro.getYaw() * -1;
+        yaw = yaw + gyroOffset;
+        if ( yaw > 180 ) yaw -= 360;
+        if ( yaw < -180 ) yaw += 360;
         return yaw; 
     }  
 
-    public Rotation2d getGyroYaw() {
+    public Rotation2d getGyroYawRotation2d() {
         // This returns a Gyro Yaw angle in Rotation2d format
         return Rotation2d.fromDegrees(getGyroYawAngle()); 
-    }  
+    }
 
+    // ------------------------- Get Gyro Inclination ----------------------------
+    public double getGyroIncline() {
+        double incline = gyro.getRawAccelX();
+        return incline;
+    }
 }
