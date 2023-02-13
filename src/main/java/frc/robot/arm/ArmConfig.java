@@ -3,6 +3,7 @@ package frc.robot.arm;
 public class ArmConfig {
 
     // ------ Speed Constants ------
+    public final static double zeroSpeed = -0.1;
     public final static double kRaiseSpeed = 0.5;
     public final static double kLowerSpeed = -0.35;
     public final static double kHoldSpeed = 0.1;
@@ -29,8 +30,6 @@ public class ArmConfig {
     public final static double minArmAngle = 0.0;
     public final static double maxArmAngle = 180.0;
 
-
-
     // ----------------------------------------
     // ----------  Spectrum Example   --------- 
     // Positions set as percentage of fourbar
@@ -44,8 +43,6 @@ public class ArmConfig {
 
     public final static int coneMid = 24; // converted from 1800 angle
     public final static int coneTop = 73; // converted from 54900 angle
-
-    public final static double zeroSpeed = -0.1;
 
     // Physical Constants
     public final static double gearRatio = 1; 

@@ -1,41 +1,13 @@
 package frc.robot.elevator;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
-
 import edu.wpi.first.math.util.Units;
 
-/** Add your docs here. */
 public class ElevatorConfig {
     // Declare and Initialize needed class objects
 
     public final boolean lowerLimitTrue = true;
     public final boolean upperLimitTrue = true;
-
-    // Reduce jitter
-    public static final int elevAllowableError = 10; // Encoder counts close enough
-    
-    // Talon SRX Configuration    
-    public static TalonSRXConfiguration elevSRXConfig;       // TalonSRX Config object
-    
-    // ------ PID Constants ------
-    public final double elevKP = 0.4;      // orig example 5.0;
-    public final double elevKI = 0.0;
-    public final double elevKD = 0.0;
-    public final double elevKF = 0.05;
-
-
-    /* Elev Motor Current Limiting */
-    public static final int     elevContinuousCurrentLimit   = 25;       // Amps
-    public static final int     elevPeakCurrentLimit         = 40;       // Amps
-    public static final int     elevPeakCurrentDuration      = 100;      // Time in milliseconds
-    public static final boolean elevEnableCurrentLimit = true;
-
-    /* Neutral Modes */
-    public static final NeutralMode elevNeutralMode = NeutralMode.Coast;
-
-    /* Inverts */
-    public static final boolean elevMotorInvert = false;
 
     public final double kMaxPwr = 1.00;
 
@@ -45,6 +17,8 @@ public class ElevatorConfig {
     public final double kElevatorEncoderDistPerPulse = 2.0 * Math.PI * kElevatorDrumRadius / 4096;
 
     // ------ Orig Elevator Constants -----
+    public final static double zeroSpeed = -0.1;
+    
     public final double KRaiseSpeedDefault = +0.80;
     public final double KRaiseSlowSpeed =    +0.45;
     public final double KHoldSpeedDefault =  +0.15;
@@ -75,19 +49,27 @@ public class ElevatorConfig {
     public final boolean KLIMIT_SWITCH_PRESSED = false;         // The state of the sensor at the bottom
 
 
-    // --------------- Constuctor Setting Up Motor Config values -------------
-    public ElevatorConfig() {
-        /* Arm Motor Configurations */
-        elevSRXConfig = new TalonSRXConfiguration();
+    
+    // All these are made up and need to be changed
+    public final static double cubeIntake = 5000;
+    public final static double cubeMid = 60000;
+    public final static double cubeTop = 100000;
 
-        elevSRXConfig.slot0.kP = elevKP;
-        elevSRXConfig.slot0.kI = elevKI;
-        elevSRXConfig.slot0.kD = elevKD;
-        elevSRXConfig.slot0.kF = elevKF;
-        elevSRXConfig.slot0.allowableClosedloopError = elevAllowableError;
-        elevSRXConfig.continuousCurrentLimit         = elevContinuousCurrentLimit;
-        elevSRXConfig.peakCurrentLimit               = elevPeakCurrentLimit;         
-        elevSRXConfig.peakCurrentDuration            = elevPeakCurrentDuration;
-    }
+    public final static double coneIntake = 0;
+    public final static double coneStandingIntake = 0;
+    public final static double coneShelf = 130000;
+
+    public final static double coneMid = 130000;
+    public final static double coneTop = 150000;
+
+    public final static double diameterInches = 2.0; // changed from int, 4
+    public final static double gearRatio = 62 / 8;
+    public final static double maxUpFalconPos = 162116;
+
+    public final static double safePositionForFourBar = 0; // TODO: find safe position for four bar
+    public final static double startingHeight = 0; // TODO: find starting height
+    public final static double startingHorizontalExtension = 0; // TODO: find starting horizontal extension
+    public final static double maxExtension = 80000; // TODO: find max relative extension
+    public final static double angle = 60;
 
 }

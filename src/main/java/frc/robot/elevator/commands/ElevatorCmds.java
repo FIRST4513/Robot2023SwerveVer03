@@ -1,9 +1,13 @@
 package frc.robot.elevator.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.Robot;
+import frc.robot.elevator.ElevatorConfig;
 
 // -----------------------------------------------------
 // --------------   Elevator Commands    ---------------
@@ -64,12 +68,12 @@ public class ElevatorCmds {
     // ------------------------------------------------------
 
     public static Command setOutput(double value) {
-        return new RunCommand(() -> Robot.elevator.setManualOutput(value), Robot.elevator);
+        return new RunCommand(() -> Robot.elevator.elevSetSpeed(value), Robot.elevator);
     }
 
     public static Command setOutput(DoubleSupplier value) {
         return new RunCommand(
-                () -> Robot.elevator.setManualOutput(value.getAsDouble()), Robot.elevator);
+                () -> Robot.elevator.elevSetSpeed(value.getAsDouble()), Robot.elevator);
     }
 
     public static Command setMMPosition(double position) {
@@ -77,35 +81,35 @@ public class ElevatorCmds {
     }
 
     public static Command coneIntake() {
-        return setMMPosition(Elevator.config.coneIntake);
+        return setMMPosition(ElevatorConfig.coneIntake);
     }
 
     public static Command coneStandingIntake() {
-        return setMMPosition(Elevator.config.coneStandingIntake);
+        return setMMPosition(ElevatorConfig.coneStandingIntake);
     }
 
     public static Command coneMid() {
-        return setMMPosition(Elevator.config.coneMid);
+        return setMMPosition(ElevatorConfig.coneMid);
     }
 
     public static Command coneTop() {
-        return setMMPosition(Elevator.config.coneTop);
+        return setMMPosition(ElevatorConfig.coneTop);
     }
 
     public static Command coneShelf() {
-        return setMMPosition(Elevator.config.coneShelf);
+        return setMMPosition(ElevatorConfig.coneShelf);
     }
 
     public static Command cubeIntake() {
-        return setMMPosition(Elevator.config.cubeIntake);
+        return setMMPosition(ElevatorConfig.cubeIntake);
     }
 
     public static Command cubeMid() {
-        return setMMPosition(Elevator.config.cubeMid);
+        return setMMPosition(ElevatorConfig.cubeMid);
     }
 
     public static Command cubeTop() {
-        return setMMPosition(Elevator.config.cubeTop);
+        return setMMPosition(ElevatorConfig.cubeTop);
     }
 
     public static Command home() {
@@ -123,14 +127,14 @@ public class ElevatorCmds {
     // below function is not used
     public static Command runDownAndZero() {
         return new StartEndCommand(
-                () -> Robot.elevator.setManualOutput(-0.1),
+                () -> Robot.elevator.elevSetSpeed(-0.1),
                 () -> Robot.elevator.zeroElevator(),
                 // () -> Robot.elevator.resetSensorPosition(),
                 Robot.elevator);
     }
 
     public static Command setEncoder(double position) {
-        return new RunCommand(() -> Robot.elevator.setEncoder(position), Robot.elevator);
+        return new RunCommand(() -> Robot.elevator.resetEncoder(position), Robot.elevator);
     }
 
     public static Command resetEncoder() {

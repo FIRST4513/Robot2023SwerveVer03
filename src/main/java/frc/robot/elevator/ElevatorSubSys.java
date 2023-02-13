@@ -1,19 +1,23 @@
 package frc.robot.elevator;
 
 import java.util.function.DoubleSupplier;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
 import frc.robot.RobotConfig.LimitSwitches;
 import frc.robot.RobotConfig.Motors;
 
 public class ElevatorSubSys extends SubsystemBase {
-    public ElevatorConfig config;
+    public ElevatorConfig       config;
+    public ElevFXMotorConfig    motorConfig;
 
     // Devices
-    public final WPI_TalonSRX m_motor;
+    public final WPI_TalonFX m_motor;
     public final DigitalInput elevLowerLimitSw, elevUpperLimitSw;
 
     // PID Controller
@@ -33,10 +37,10 @@ public class ElevatorSubSys extends SubsystemBase {
     // -----------  Constructor --------------------
     public ElevatorSubSys() {
         config = new ElevatorConfig();
-        m_motor = new WPI_TalonSRX(Motors.elevatorMotorID);
+        m_motor = new WPI_TalonFX(Motors.elevatorMotorID);
         elevLowerLimitSw = new DigitalInput(LimitSwitches.elevatorLowerLimitSw);
         elevUpperLimitSw = new DigitalInput(LimitSwitches.elevatorUpperLimitSw);
-        elevPIDcontroller = new PIDController(config.elevKP, 0, 0);
+        elevPIDcontroller = new PIDController(motorConfig.kP, 0, 0);
         elevatorMotorConfig();
     }
 
@@ -135,7 +139,7 @@ public class ElevatorSubSys extends SubsystemBase {
     public double getPidCalcOut(double tgt_setpoint) {
         double tgt = limit_target_pos (tgt_setpoint);
         double out = elevPIDcontroller.calculate(mCurrElevPos, tgt );
-        out = out + config.elevKF;             // Add feedforward Term
+        out = out + motorConfig.kF;             // Add feedforward Term
         // Limit max pwr
         if ( out > config.kMaxPwr )  { out = config.kMaxPwr; }
         if ( out < -config.kMaxPwr ) { out = -config.kMaxPwr; }
@@ -147,7 +151,19 @@ public class ElevatorSubSys extends SubsystemBase {
         return getPidCalcOut(test_setpoint);
     }
 
-    // -----------------  Encoder Sensor Methods --------------------
+    // ------------  Set Arm to Angle by Motion Magic  ----------
+    public double percentToFalcon(double percent) {
+        return motorConfig.elevMaxFalcon * (percent / 100);
+    }
+
+    public void setMMPercent(double percent) {
+        setMMPosition( percentToFalcon(percent) );
+    }
+
+    public void setMMPosition(double position) {
+        m_motor.set(ControlMode.MotionMagic, position);
+    }
+// -----------------  Encoder Sensor Methods --------------------
     public void updateCurrentElevPosition() {
         mCurrEncoderCnt = m_motor.getSelectedSensorPosition();
         mCurrElevPos = Rmath.mRound((mCurrEncoderCnt * config.ELEV_ENCODER_CONV) , 2);
@@ -160,6 +176,14 @@ public class ElevatorSubSys extends SubsystemBase {
 
     public double convertHeightToPos( double tgt)   { return tgt - config.ELEV_INCH_ABOVE_GROUND; }
     public double convertPosToHeight( double tgt)   { return tgt + config.ELEV_INCH_ABOVE_GROUND; }
+
+    public void resetEncoder(){
+        m_motor.setSelectedSensorPosition(0);
+    }
+
+    public void resetEncoder( double position ){
+        m_motor.setSelectedSensorPosition(position);
+    }
 
     // ------------- Other Misc Methods  ---------------
     public double getTargetHeight()         { return target_height; }
@@ -219,11 +243,11 @@ public class ElevatorSubSys extends SubsystemBase {
     // ---------------- Configure Elev Motor ------------------
     // --------------------------------------------------------
     public void elevatorMotorConfig(){
-        // This config is for the Talon SRX Controller
+        // This config is for the Talon FX Controller
         m_motor.configFactoryDefault();
-        m_motor.configAllSettings(ElevatorConfig.elevSRXConfig);
-        m_motor.setInverted(ElevatorConfig.elevMotorInvert);
-        m_motor.setNeutralMode(ElevatorConfig.elevNeutralMode);
+        m_motor.configAllSettings(ElevFXMotorConfig.config);
+        m_motor.setInverted(ElevFXMotorConfig.elevMotorInvert);
+        m_motor.setNeutralMode(ElevFXMotorConfig.elevNeutralMode);
         m_motor.setSelectedSensorPosition(0);                     // Reset Encoder to zero
     }
     
@@ -247,11 +271,11 @@ public class ElevatorSubSys extends SubsystemBase {
         m_motor.configReverseSoftLimitEnable(false);
     }
 
-    public double getKf() {
-        TalonFXConfiguration FXconfig = new TalonFXConfiguration();
-        m_motor.getAllConfigs(FXconfig);
-        return FXconfig.slot0.kF;
-    }
+    // public double getKf() {
+    //     TalonFXConfiguration FXconfig = new TalonFXConfiguration();
+    //     m_motor.getAllConfigs(FXconfig);
+    //     return FXconfig.slot0.kF;
+    // }
 
     /**
      * Converts meters to falcon units.
@@ -268,7 +292,7 @@ public class ElevatorSubSys extends SubsystemBase {
     }
 
     public static double metersToFalcon(double meters) {
-        return metersToFalcon(meters, config.diameterInches * Math.PI, config.gearRatio);
+        return metersToFalcon(meters, ElevatorConfig.diameterInches * Math.PI, ElevatorConfig.gearRatio);
     }
 
     /**
@@ -298,15 +322,15 @@ public class ElevatorSubSys extends SubsystemBase {
      * @see #extensionToHeight(double)
      */
     public static double heightToExtension(double meters) {
-        meters = meters - config.startingHeight;
+        meters = meters - ElevatorConfig.startingHeight;
         if (meters < 0) {
-            meters = config.startingHeight;
+            meters = ElevatorConfig.startingHeight;
             DriverStation.reportWarning(
                     "Height is below the starting height. See Elevator#heightToExtension", false);
         }
-        meters = meters / Math.sin(Math.toRadians(config.angle));
-        if (meters > config.maxExtension) {
-            meters = config.maxExtension;
+        meters = meters / Math.sin(Math.toRadians(ElevatorConfig.angle));
+        if (meters > ElevatorConfig.maxExtension) {
+            meters = ElevatorConfig.maxExtension;
             DriverStation.reportWarning(
                     "Height is above the max extension. See Elevator#heightToExtension", false);
         }
@@ -322,9 +346,9 @@ public class ElevatorSubSys extends SubsystemBase {
      * @see #extensionToHeight(double)
      */
     public static double heightToHorizontalExtension(double meters) {
-        meters = meters - config.startingHeight;
-        meters = meters / Math.cos(Math.toRadians(config.angle));
-        meters = meters + config.startingHorizontalExtension;
+        meters = meters - ElevatorConfig.startingHeight;
+        meters = meters / Math.cos(Math.toRadians(ElevatorConfig.angle));
+        meters = meters + ElevatorConfig.startingHorizontalExtension;
         return meters;
     }
 
@@ -337,8 +361,8 @@ public class ElevatorSubSys extends SubsystemBase {
      * @see #heightToHorizontalExtension(double)
      */
     public static double extensionToHeight(double meters) {
-        meters = meters * Math.sin(Math.toRadians(config.angle));
-        meters = meters + config.startingHeight;
+        meters = meters * Math.sin(Math.toRadians(ElevatorConfig.angle));
+        meters = meters + ElevatorConfig.startingHeight;
         return meters;
     }
 }
