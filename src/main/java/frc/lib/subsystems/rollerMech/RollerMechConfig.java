@@ -3,9 +3,9 @@
 package frc.lib.subsystems.rollerMech;
 
 import edu.wpi.first.math.util.Units;
-import frc.lib.subsystems.MotorSubsystemConfig;
+import frc.lib.subsystems.MotorFXSubsystemConfig;
 
-public abstract class RollerMechConfig extends MotorSubsystemConfig {
+public abstract class RollerMechConfig extends MotorFXSubsystemConfig {
     // Physical Constants
     public double diameterInches = 2;
     public double gearRatio = 1;

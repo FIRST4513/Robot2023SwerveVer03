@@ -1,40 +1,41 @@
 package frc.robot.arm;
 
 import java.util.function.DoubleSupplier;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
-import frc.lib.subsystems.angleMech.AngleMechSubsystem;
 import frc.robot.RobotConfig.LimitSwitches;
 import frc.robot.RobotConfig.Motors;
 
-public class ArmSubSys extends AngleMechSubsystem {
-    public  WPI_TalonSRX mArmMotor;
-    private DigitalInput upperlimitSwitch;
-    private DigitalInput lowerlimitSwitch;
+public class ArmSubSys extends SubsystemBase {
+    public  ArmSRXMotorConfig   motorConfig;
+    public  WPI_TalonSRX        mArmMotor;
+    private DigitalInput        upperlimitSwitch;
+    private DigitalInput        lowerlimitSwitch;
+    private PIDController       mArmPIDController;
 
     public double mCurrEncoderCnt   = 0; 
     public double mCurrArmAngle     = 0;
     public double mTargetArmAngle   = 0;       // PID Target Angle
 
-    public final PIDController mArmPIDController;
     public double mPIDSetpoint      = 0;
     public double mPIDOutput        = 0;
 
-    public static ArmMMConfig config = new ArmMMConfig();
-
     // ------------- Constructor ----------
     public ArmSubSys() {
-        super(config);
-        mArmMotor        = new WPI_TalonSRX(Motors.armMotorID);
-        upperlimitSwitch = new DigitalInput(LimitSwitches.armUpperLimitSw);
-        lowerlimitSwitch = new DigitalInput(LimitSwitches.armLowerLimitSw);
-        mArmPIDController = new PIDController(ArmConfig.armKP, ArmConfig.armKI, ArmConfig.armKD);
+        motorConfig       = new ArmSRXMotorConfig();
+        mArmMotor         = new WPI_TalonSRX(Motors.armMotorID);
+        upperlimitSwitch  = new DigitalInput(LimitSwitches.armUpperLimitSw);
+        lowerlimitSwitch  = new DigitalInput(LimitSwitches.armLowerLimitSw);
+        mArmPIDController = new PIDController(motorConfig.kP, motorConfig.kI, motorConfig.kD);
         armMotorConfig();
         stopArm();
+        mArmMotor.configForwardSoftLimitThreshold(mCurrArmAngle);
     }
 
     // ------------- Periodic -------------
@@ -105,31 +106,37 @@ public class ArmSubSys extends AngleMechSubsystem {
         angle = limitArmAngle( angle );                             // Dont allow an angle greater than permitted
         mPIDSetpoint = convertAngleToCnt(angle);                    // Convert Angle to Encoder Cnts
         mPIDOutput = mArmPIDController.calculate( mPIDSetpoint );   // Calculate PID Out to send to motor
-        mPIDOutput = mPIDOutput + ArmConfig.armKF;                  // Add feedforward component
+        mPIDOutput = mPIDOutput + motorConfig.kF;                  // Add feedforward component
         setArmMotor( mPIDOutput );                                  // Send Power to motor  Pwr -1 to +1
         //m_motor.setVoltage(mPIDOutput);                           // Voltage -12 to +12 ???????        
     }
 
     // ------------  Set Arm to Angle by Motion Magic  ----------
     public double percentToFalcon(double percent) {
-        return config.armMaxFalcon * (percent / 100);
+        return motorConfig.armMaxFalcon * (percent / 100);
     }
 
     public void setMMPercent(double percent) {
-        setMMPosition(percentToFalcon(percent));
+        setMMPosition( percentToFalcon(percent) );
     }
 
-    public void softLimitsTrue() {
-        motorLeader.configReverseSoftLimitEnable(true);
-    }
-
-    public void softLimitsFalse() {
-        motorLeader.configReverseSoftLimitEnable(false);
+    public void setMMPosition(double position) {
+        mArmMotor.set(ControlMode.MotionMagic, position);
     }
 
     // ------------------------------------------------------------
     // ---------------- Arm Limit Switch Methods ------------------
     // ------------------------------------------------------------
+    
+    // --------------- Set Soft Limits -----------------
+    public void softLimitsTrue() {
+        mArmMotor.configReverseSoftLimitEnable(true);   // ????????????
+    }
+
+    public void softLimitsFalse() {
+        mArmMotor.configReverseSoftLimitEnable(false);  // ?????????????
+    }
+    
     public boolean isLowerLimitSwitchPressed() {
         if (lowerlimitSwitch.get() == ArmConfig.lowerLimitSwitchTrue) {
             return true;
@@ -165,6 +172,10 @@ public class ArmSubSys extends AngleMechSubsystem {
     public void resetEncoder() {
         // Sets encoder to 0
         mArmMotor.setSelectedSensorPosition(0);
+    }
+
+    public void resetEncoder( double position ){
+        mArmMotor.setSelectedSensorPosition(position);
     }
 
     public double getEncoderCnt() {
@@ -207,10 +218,10 @@ public class ArmSubSys extends AngleMechSubsystem {
     public void armMotorConfig(){
         // This config is for the Talon SRX Controller
         mArmMotor.configFactoryDefault();
-        mArmMotor.configAllSettings(ArmConfig.armSRXConfig);
-        mArmMotor.setInverted(ArmConfig.armMotorInvert);
-        mArmMotor.setNeutralMode(ArmConfig.armNeutralMode);
-        mArmMotor.setSelectedSensorPosition(0);                     // Reset Encoder to zero
+        mArmMotor.configAllSettings(ArmSRXMotorConfig.config);
+        mArmMotor.setInverted(ArmSRXMotorConfig.armMotorInvert);
+        mArmMotor.setNeutralMode(ArmSRXMotorConfig.armNeutralMode);
+        mArmMotor.setSelectedSensorPosition(0); // Zero Encoder
     }
     
 }

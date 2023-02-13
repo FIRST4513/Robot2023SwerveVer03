@@ -1,16 +1,11 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.lib.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
-/** Add your docs here. */
-public class MotorSubsystemConfig {
+public class MotorSRXSubsystemConfig {
     public String name;
     /* Inverted */
     public boolean kInverted = false;
@@ -48,26 +43,26 @@ public class MotorSubsystemConfig {
     public SensorInitializationStrategy sensorStrat = SensorInitializationStrategy.BootToZero;
 
     // Falcon Setup
-    public TalonFXConfiguration TalonFXConfig = new TalonFXConfiguration();
+    public TalonSRXConfiguration TalonSRXConfig = new TalonSRXConfiguration();
 
-    public MotorSubsystemConfig(String name) {
+    public MotorSRXSubsystemConfig(String name) {
         this.name = name;
-        updateTalonFXConfig();
+        updateTalonSRXConfig();
     }
 
-    public void updateTalonFXConfig() {
-        TalonFXConfig.slot0.kP = kP;
-        TalonFXConfig.slot0.kI = kI;
-        TalonFXConfig.slot0.kD = kD;
-        TalonFXConfig.slot0.kF = kF;
-        TalonFXConfig.slot0.integralZone = kIz;
-        TalonFXConfig.motionCruiseVelocity = motionCruiseVelocity;
-        TalonFXConfig.motionAcceleration = motionAcceleration;
+    public void updateTalonSRXConfig() {
+        TalonSRXConfig.slot0.kP = kP;
+        TalonSRXConfig.slot0.kI = kI;
+        TalonSRXConfig.slot0.kD = kD;
+        TalonSRXConfig.slot0.kF = kF;
+        TalonSRXConfig.slot0.integralZone = kIz;
+        TalonSRXConfig.motionCruiseVelocity = motionCruiseVelocity;
+        TalonSRXConfig.motionAcceleration = motionAcceleration;
 
-        TalonFXConfig.supplyCurrLimit = supplyLimit;
-        TalonFXConfig.openloopRamp = openLoopRamp;
-        TalonFXConfig.closedloopRamp = closedLoopRamp;
-        TalonFXConfig.voltageCompSaturation = voltageCompSaturation;
-        TalonFXConfig.initializationStrategy = sensorStrat;
+        //TalonSRXConfig.supplyCurrLimit = supplyLimit;                 // Not available in SRX
+        TalonSRXConfig.openloopRamp = openLoopRamp;
+        TalonSRXConfig.closedloopRamp = closedLoopRamp;
+        TalonSRXConfig.voltageCompSaturation = voltageCompSaturation;
+        //TalonSRXConfig.initializationStrategy = sensorStrat;          // Not available in SRX
     }
 }

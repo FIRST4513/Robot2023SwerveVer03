@@ -1,8 +1,5 @@
 package frc.robot.arm;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
-
 public class ArmConfig {
 
     // ------ Speed Constants ------
@@ -32,49 +29,25 @@ public class ArmConfig {
     public final static double minArmAngle = 0.0;
     public final static double maxArmAngle = 180.0;
 
-    /* Neutral Modes */
-    public static final NeutralMode armNeutralMode = NeutralMode.Coast;
-    
-    /* Inverts */
-    public static final boolean armMotorInvert = false;
-    
-    /* Arm Motor PID Values */
-    public static final double armKP = 0.1;
-    public static final double armKI = 0.0;
-    public static final double armKD = 0.0;
-    public static final double armKF = 0.0;
-
-    /* Arm Motor Characterization Values */
-    public static final double armKS = ( 0.32 / 12.0 );  // /12 to convert from volts to %output
-    public static final double armKV = ( 3.00 / 12.0 );
-    public static final double armKA = ( 0.27 / 12.0 );
-
-    // increase to reduce jitter, (2048 * angleGearRatio) / 360.0) = 1 degree = 122 cnts
-    public static final int armAngleAllowableError = 122;  // 1 degree is close enough ????
-
-    // Talon SRX Configuration    
-    public static TalonSRXConfiguration armSRXConfig;       // TalonSRX Config object
-
-    /* Arm Motor Current Limiting */
-    public static final int     armContinuousCurrentLimit   = 25;       // Amps
-    public static final int     armPeakCurrentLimit         = 40;       // Amps
-    public static final int     armPeakCurrentDuration      = 100;      // Time in milliseconds
-    public static final boolean armEnableCurrentLimit = true;
 
 
-    // --------------- Constuctor Setting Up Motor Config values -------------
-    public ArmConfig() {
-        /* Arm Motor Configurations */
-        armSRXConfig = new TalonSRXConfiguration();
+    // ----------------------------------------
+    // ----------  Spectrum Example   --------- 
+    // Positions set as percentage of fourbar
+    public final static int cubeIntake = 95;
+    public final static int cubeMid = 60;
+    public final static int cubeTop = 100;
 
-        armSRXConfig.slot0.kP = armKP;
-        armSRXConfig.slot0.kI = armKI;
-        armSRXConfig.slot0.kD = armKD;
-        armSRXConfig.slot0.kF = armKF;
-        armSRXConfig.slot0.allowableClosedloopError = armAngleAllowableError;
-        armSRXConfig.continuousCurrentLimit         = armContinuousCurrentLimit;
-        armSRXConfig.peakCurrentLimit               = armPeakCurrentLimit;         
-        armSRXConfig.peakCurrentDuration            = armPeakCurrentDuration;
-    }
+    public final static int coneIntake = 100;
+    public final static int coneStandingIntake = 90;
+    public final static int coneShelf = 0;
+
+    public final static int coneMid = 24; // converted from 1800 angle
+    public final static int coneTop = 73; // converted from 54900 angle
+
+    public final static double zeroSpeed = -0.1;
+
+    // Physical Constants
+    public final static double gearRatio = 1; 
 
 }

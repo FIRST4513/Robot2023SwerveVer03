@@ -28,7 +28,7 @@ public class Odometry {
     // --------------------- Reset/Init Odometry ----------------
     public void resetOdometry(Pose2d pose) { 
         // Resets Odometry Pose to current Encodernand Gyro Angle
-        //swerveOdometry.resetPosition(swerve.gyro.getGyroHeading(), swerve.getPositions(), pose);
+        // swerveOdometry.resetPosition(swerve.gyro.getGyroHeading(), swerve.getPositions(), pose);
         swerveOdometry.resetPosition(  swerve.gyro.getGyroYawRotation2d(),     swerve.getPositions(), pose);
     }
 

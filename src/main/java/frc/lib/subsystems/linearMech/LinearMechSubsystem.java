@@ -1,9 +1,9 @@
 package frc.lib.subsystems.linearMech;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import frc.lib.subsystems.MotorSubsystem;
+import frc.lib.subsystems.MotorFXSubsystem;
 
-public abstract class LinearMechSubsystem extends MotorSubsystem {
+public abstract class LinearMechSubsystem extends MotorFXSubsystem {
     public LinearMechConfig config;
 
     public LinearMechSubsystem(LinearMechConfig config) {

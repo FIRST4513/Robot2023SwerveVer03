@@ -232,24 +232,24 @@ public class ElevatorSubSys extends SubsystemBase {
     // ------------------------------------------------------
 
     public void zeroElevator() {
-        motorLeader.setSelectedSensorPosition(0);
+        m_motor.setSelectedSensorPosition(0);
     }
 
     public void resetSensorPosition(double pos) {
-        motorLeader.setSelectedSensorPosition(pos); // 10 for now, will change later
+        m_motor.setSelectedSensorPosition(pos); // 10 for now, will change later
     }
 
     public void softLimitsTrue() {
-        motorLeader.configReverseSoftLimitEnable(true);
+        m_motor.configReverseSoftLimitEnable(true);
     }
 
     public void softLimitsFalse() {
-        motorLeader.configReverseSoftLimitEnable(false);
+        m_motor.configReverseSoftLimitEnable(false);
     }
 
     public double getKf() {
         TalonFXConfiguration FXconfig = new TalonFXConfiguration();
-        motorLeader.getAllConfigs(FXconfig);
+        m_motor.getAllConfigs(FXconfig);
         return FXconfig.slot0.kF;
     }
 

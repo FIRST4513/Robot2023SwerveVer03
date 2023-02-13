@@ -6,9 +6,9 @@
 package frc.lib.subsystems.rollerMech;
 
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import frc.lib.subsystems.MotorSubsystem;
+import frc.lib.subsystems.MotorFXSubsystem;
 
-public abstract class RollerMechSubsystem extends MotorSubsystem {
+public abstract class RollerMechSubsystem extends MotorFXSubsystem {
     public RollerMechConfig config;
 
     public RollerMechSubsystem(RollerMechConfig config) {

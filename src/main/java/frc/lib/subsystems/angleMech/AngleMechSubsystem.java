@@ -1,9 +1,9 @@
 package frc.lib.subsystems.angleMech;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import frc.lib.subsystems.MotorSubsystem;
+import frc.lib.subsystems.MotorFXSubsystem;
 
-public abstract class AngleMechSubsystem extends MotorSubsystem {
+public abstract class AngleMechSubsystem extends MotorFXSubsystem {
     public AngleMechConfig config;
 
     public AngleMechSubsystem(AngleMechConfig config) {

@@ -6,11 +6,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.motorControllers.TalonFXSetup;
 
 /** Creates a FollowerFalcon for a subsystem */
-public class FollowerFalcon extends SubsystemBase {
+public class FollowerFalconFX extends SubsystemBase {
     protected WPI_TalonFX motorFollower;
     protected WPI_TalonFX leader;
 
-    public FollowerFalcon(
+    public FollowerFalconFX(
             int followerID,
             String canBus,
             TalonFXConfiguration config,
@@ -22,7 +22,7 @@ public class FollowerFalcon extends SubsystemBase {
         this.leader = leader;
     }
 
-    public FollowerFalcon(
+    public FollowerFalconFX(
             int followerID, TalonFXConfiguration config, boolean inverted, WPI_TalonFX leader) {
         this(followerID, "rio", config, inverted, leader);
     }
