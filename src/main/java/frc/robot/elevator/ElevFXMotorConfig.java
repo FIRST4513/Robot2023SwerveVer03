@@ -15,6 +15,12 @@ public class ElevFXMotorConfig {
     public static final SensorInitializationStrategy sensorStrat = SensorInitializationStrategy.BootToZero;
     public static final int         allowableError           = 122;
 
+    // Soft Limit Switches - TODO Update as need    
+    public static final boolean     elevForwardSoftLimitEnable          = false;
+    public static final boolean     elevReverseSoftLimitEnable          = false;
+    public static final int         elevForwardSoftLimitThreshold       = 45000;    
+    public static final int         elevReverseSoftLimitThreshold       = 100;
+
     /* Motor Limits (Encoder Cnts) */
     public final int min = 0;
     public final int max = 75000;
@@ -72,12 +78,13 @@ public class ElevFXMotorConfig {
         config.supplyCurrLimit                = supplyLimit;
         config.slot0.allowableClosedloopError = allowableError;
 
-        /*  TODO Enable Soft Limits ????
-            set current limit enable
-            set inverts
-            set neatral mode
+        config.forwardSoftLimitEnable           = elevForwardSoftLimitEnable;
+        config.reverseSoftLimitEnable           = elevReverseSoftLimitEnable;
 
-        */
+        config.forwardSoftLimitThreshold        = elevForwardSoftLimitThreshold;
+        config.reverseSoftLimitThreshold        = elevReverseSoftLimitThreshold;
+
+    
     }
 
 }

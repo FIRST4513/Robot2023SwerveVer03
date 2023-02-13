@@ -220,8 +220,10 @@ public class ArmSubSys extends SubsystemBase {
         mArmMotor.configFactoryDefault();
         mArmMotor.configAllSettings(ArmSRXMotorConfig.config);
         mArmMotor.setInverted(ArmSRXMotorConfig.armMotorInvert);
+        mArmMotor.setSensorPhase(ArmSRXMotorConfig.armEncoderInvert);
         mArmMotor.setNeutralMode(ArmSRXMotorConfig.armNeutralMode);
         mArmMotor.setSelectedSensorPosition(0); // Zero Encoder
+        mArmMotor.enableCurrentLimit(isArmInside());
     }
     
 }

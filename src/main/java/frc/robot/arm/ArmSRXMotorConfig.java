@@ -11,6 +11,7 @@ public class ArmSRXMotorConfig {
     /* Motor Control Sets */
     public static final NeutralMode armNeutralMode          = NeutralMode.Coast;
     public static final boolean     armMotorInvert          = false;
+    public static final boolean     armEncoderInvert        = false;
     public static final boolean     armEnableCurrentLimit   = true;
     public static final SensorInitializationStrategy sensorStrat = SensorInitializationStrategy.BootToZero;
     public static final int         allowableError          = 122;
@@ -20,6 +21,11 @@ public class ArmSRXMotorConfig {
     public final int min = 0;
     public final int max = 75000;
     public final int mid = 37000;
+
+    public static final boolean     armForwardSoftLimitEnable          = false;
+    public static final boolean     armReverseSoftLimitEnable          = false;
+    public static final int         armForwardSoftLimitThreshold       = 45000;    
+    public static final int         armReverseSoftLimitThreshold       = 100;
 
     public final int armMaxFalcon = 60000;
 
@@ -72,12 +78,10 @@ public class ArmSRXMotorConfig {
         config.peakCurrentDuration            = peakCurrentDuration;
         config.slot0.allowableClosedloopError = allowableError;
 
-        /*  TODO Enable Soft Limits ????
-            set current limit enable
-            set inverts
-            set neatral mode
-
-        */
+        config.forwardSoftLimitEnable           = armForwardSoftLimitEnable;
+        config.reverseSoftLimitEnable           = armReverseSoftLimitEnable;
+        config.forwardSoftLimitThreshold        = armForwardSoftLimitThreshold;
+        config.reverseSoftLimitThreshold        = armReverseSoftLimitThreshold;
     }
 
 }

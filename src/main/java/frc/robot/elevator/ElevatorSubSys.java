@@ -239,17 +239,7 @@ public class ElevatorSubSys extends SubsystemBase {
     //public double getTargetTestPos()               { return target_test_pos; }
     public double getTargetPos()                   { return target_pos; }
 
-    // --------------------------------------------------------
-    // ---------------- Configure Elev Motor ------------------
-    // --------------------------------------------------------
-    public void elevatorMotorConfig(){
-        // This config is for the Talon FX Controller
-        m_motor.configFactoryDefault();
-        m_motor.configAllSettings(ElevFXMotorConfig.config);
-        m_motor.setInverted(ElevFXMotorConfig.elevMotorInvert);
-        m_motor.setNeutralMode(ElevFXMotorConfig.elevNeutralMode);
-        m_motor.setSelectedSensorPosition(0);                     // Reset Encoder to zero
-    }
+
     
     // ------------------------------------------------------
     // ---------- Commands from Spectrum 2023 Code ----------
@@ -364,5 +354,17 @@ public class ElevatorSubSys extends SubsystemBase {
         meters = meters * Math.sin(Math.toRadians(ElevatorConfig.angle));
         meters = meters + ElevatorConfig.startingHeight;
         return meters;
+    }
+
+    // --------------------------------------------------------
+    // ---------------- Configure Elev Motor ------------------
+    // --------------------------------------------------------
+    public void elevatorMotorConfig(){
+        // This config is for the Talon FX Controller
+        m_motor.configFactoryDefault();
+        m_motor.configAllSettings(ElevFXMotorConfig.config);
+        m_motor.setInverted(ElevFXMotorConfig.elevMotorInvert);
+        m_motor.setNeutralMode(ElevFXMotorConfig.elevNeutralMode);
+        m_motor.setSelectedSensorPosition(0);                     // Reset Encoder to zero
     }
 }
