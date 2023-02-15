@@ -43,6 +43,9 @@ public class ArmSubSys extends SubsystemBase {
         if (isLowerLimitSwitchPressed() == true) {
             resetEncoder();
         }
+        if (isUpperLimitSwitchPressed() == true) {
+            // setEncoder();        // recalibrate encoder for full forward position Tobe determined
+        }
         updateCurrentArmPosition();
     }
 
@@ -50,19 +53,11 @@ public class ArmSubSys extends SubsystemBase {
     // ---------------- Arm Motor Methods ------------------
     // -----------------------------------------------------
     public void raiseArm() {
-        if (isUpperLimitSwitchPressed() == true) {
-            holdArm();
-        }else {
-            setArmMotor(ArmConfig.kRaiseSpeed);
-        }
+        setArmMotor(ArmConfig.kRaiseSpeed);
     }
 
     public void lowerArm() {
-        if (isLowerLimitSwitchPressed() == true) {
-            stopArm();
-        }else {
-            setArmMotor(ArmConfig.kLowerSpeed);
-        }
+        setArmMotor(ArmConfig.kLowerSpeed);
     }
 
     public void holdArm()   {
@@ -79,11 +74,19 @@ public class ArmSubSys extends SubsystemBase {
             // Were raising Arm
             if ( pwr > ArmConfig.kArmMotorRaiseMaxPwr )  {
                  pwr = ArmConfig.kArmMotorRaiseMaxPwr;
-            }    
+            }  
+            if (isUpperLimitSwitchPressed() == true) {
+                holdArm();
+                return;
+            }  
         } else {
             // Were Lowering Arm
             if ( pwr < ArmConfig.kArmMotorLowerMaxPwr )  {
                  pwr = ArmConfig.kArmMotorLowerMaxPwr; }
+            if (isLowerLimitSwitchPressed() == true) {
+                holdArm();
+                return;
+            }
         }
         mArmMotor.set(pwr);
     }
