@@ -3,10 +3,13 @@ package frc.robot.arm;
 public class ArmConfig {
 
     // ------ Speed Constants ------
-    public final static double zeroSpeed = -0.1;
-    public final static double kRaiseSpeed = 0.5;
-    public final static double kLowerSpeed = -0.35;
-    public final static double kHoldSpeed = 0.1;
+    /* Note Arm is asymytrical raise and lower rates need to change base on angle
+     * fully retract will take more power than just lowering.
+     */
+    public final static double zeroSpeed = -0.01;
+    public final static double kRaiseSpeed = 0.025;
+    public final static double kLowerSpeed = -0.015;
+    public final static double kHoldSpeed = 0.01;
 
     public final static double kArmMotorRaiseMaxPwr =  +0.5;
     public final static double kArmMotorLowerMaxPwr = -0.35;
