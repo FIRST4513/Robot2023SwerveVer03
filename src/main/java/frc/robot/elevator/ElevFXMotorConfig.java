@@ -7,7 +7,7 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 public class ElevFXMotorConfig {
     // TalonSRX Config object
-    public static TalonFXConfiguration config;
+    public static TalonFXConfiguration config = new TalonFXConfiguration();
 
     /* Motor Control Sets */
     public static final NeutralMode elevNeutralMode          = NeutralMode.Brake;

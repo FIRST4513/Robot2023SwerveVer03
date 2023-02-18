@@ -13,7 +13,7 @@ import frc.robot.RobotConfig.LimitSwitches;
 import frc.robot.RobotConfig.Motors;
 
 public class ArmSubSys extends SubsystemBase {
-    public  ArmSRXMotorConfig   motorConfig;
+    public  static ArmSRXMotorConfig   motorConfig;
     public  WPI_TalonSRX        mArmMotor;
     private DigitalInput        upperlimitSwitch;
     private DigitalInput        lowerlimitSwitch;

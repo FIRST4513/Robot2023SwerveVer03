@@ -60,7 +60,7 @@ public class ElevatorCmds {
     
     public static Command ElevByJoystickCmd() {
         return new RunCommand(
-        () -> Robot.elevator.elevSetSpeed(() -> Robot.operatorGamepad.getElevInput()), Robot.arm);
+        () -> Robot.elevator.elevSetSpeed(() -> Robot.operatorGamepad.getElevInput()), Robot.elevator);
     }
 
     // ------------------------------------------------------

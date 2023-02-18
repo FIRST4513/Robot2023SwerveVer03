@@ -9,16 +9,18 @@ import frc.robot.RobotConfig.AnalogPorts;
 import frc.robot.RobotConfig.Motors;
 
 public class IntakeSubSys extends SubsystemBase {
+    public static IntakeConfig config;
     
     //Devices
     public WPI_TalonSRX intakeUpperMotor  = new WPI_TalonSRX(Motors.intakeUpperMotorID);
     public WPI_TalonSRX intakeLowerMotor  = new WPI_TalonSRX(Motors.intakeLowerMotorID);
 
-    private AnalogInput coneDetectSensor = new AnalogInput(AnalogPorts.intakeConeDetectPort);
-    private AnalogInput cubeDetectSensor = new AnalogInput(AnalogPorts.intakeCubeDetectPort);
+    public AnalogInput coneDetectSensor = new AnalogInput(AnalogPorts.intakeConeDetectPort);
+    public AnalogInput cubeDetectSensor = new AnalogInput(AnalogPorts.intakeCubeDetectPort);
 
     //contructor
     public IntakeSubSys() { 
+        config = new IntakeConfig();
         configureTalonSRXControllers();
         stopMotors();
     } 
@@ -31,34 +33,52 @@ public class IntakeSubSys extends SubsystemBase {
         intakeLowerMotor.set(speed); 
     }
 
+    public void setUpperMotor(double speed) {
+        intakeUpperMotor.set(speed);
+    }
+
+    public void setLowerMotor(double speed) {
+        intakeLowerMotor.set(speed);
+    }
+
     public void stopMotors() {
         intakeUpperMotor.stopMotor();
         intakeLowerMotor.stopMotor();
     }
 
     public void setMotorsConeRetract(){
-        intakeUpperMotor.set(IntakeConfig.coneRetractSpeed);
-        intakeLowerMotor.set(IntakeConfig.coneRetractSpeed);
+        intakeUpperMotor.set(IntakeConfig.coneRetractUpperSpeed);
+        intakeLowerMotor.set(IntakeConfig.coneRetractLowerSpeed);
     }
 
     public void setMotorsConeRetractSlow(){
-        intakeUpperMotor.set(IntakeConfig.coneRetractSlowSpeed);
-        intakeLowerMotor.set(IntakeConfig.coneRetractSlowSpeed);
+        intakeUpperMotor.set(IntakeConfig.coneRetractUpperSlowSpeed);
+        intakeLowerMotor.set(IntakeConfig.coneRetractLowerSlowSpeed);
     }
 
     public void setMotorsCubeRetract(){
-        intakeUpperMotor.set(IntakeConfig.cubeRetractSpeed);
-        intakeLowerMotor.set(IntakeConfig.cubeRetractSpeed);
+        intakeUpperMotor.set(IntakeConfig.cubeRetractUpperSpeed);
+        intakeLowerMotor.set(IntakeConfig.cubeRetractLowerSpeed);
     }
 
-    public void setMotorsEject(){
-        if (isCubeDetected()) {
-            intakeUpperMotor.set(IntakeConfig.cubeEjectSpeed);
-            intakeLowerMotor.set(IntakeConfig.cubeEjectSpeed);
-        } else {
-            intakeUpperMotor.set(IntakeConfig.coneEjectSpeed);  // top deals with cone
-            intakeLowerMotor.set(IntakeConfig.coneEjectSpeed);  // bottom deals with cube
-        }
+    // public void setMotorsEject(){
+    //     if (isCubeDetected()) {
+    //         intakeUpperMotor.set(IntakeConfig.cubeEjectSpeed);
+    //         intakeLowerMotor.set(IntakeConfig.cubeEjectSpeed);
+    //     } else {
+    //         intakeUpperMotor.set(IntakeConfig.coneEjectSpeed);  // top deals with cone
+    //         intakeLowerMotor.set(IntakeConfig.coneEjectSpeed);  // bottom deals with cube
+    //     }
+    // }
+
+    public void setMotorsCubeEject() {
+        intakeUpperMotor.set(IntakeConfig.cubeEjectSpeed);
+        intakeLowerMotor.set(IntakeConfig.cubeEjectSpeed);
+    }
+
+    public void setMotorsConeEject() {
+        intakeUpperMotor.set(IntakeConfig.coneEjectSpeed);
+        intakeLowerMotor.set(IntakeConfig.coneEjectSpeed);
     }
 
     public void setBrakeMode(Boolean enabled) {
@@ -85,17 +105,32 @@ public class IntakeSubSys extends SubsystemBase {
         return "Not Detected";
     }
 
-    public boolean isCubeDetected() {
-        if(cubeDetectSensor.getAverageVoltage() == IntakeConfig.cubeDetectTrue) { return true; } 
+    public boolean isCubeEjectDetected() {
+        if(cubeDetectSensor.getAverageVoltage() > IntakeConfig.cubeEjectDetectTrue) { return true; } 
         return false;
     }
 
-    public boolean isCubeNotDetected() {
-        return !isCubeDetected();
+    public boolean isCubeRetractDetected() {
+        if(cubeDetectSensor.getAverageVoltage() > IntakeConfig.cubeRetractDetectTrue) { return true; } 
+        return false;
     }
 
-    public String cubeDetectStatus(){
-        if(isCubeDetected()) { 
+    public boolean isCubeRetractNotDetected() {
+        return !isCubeRetractDetected();
+    }
+
+    public boolean isCubeEjectNotDetected() {
+        return !isCubeRetractDetected();
+    }
+
+    public String cubeEjectDetectStatus() {
+        if(isCubeEjectDetected()) { 
+            return "Detected"; } 
+        return "Not Detected";
+    }
+
+    public String cubeRetractDetectStatus() {
+        if(isCubeEjectDetected()) { 
             return "Detected"; } 
         return "Not Detected";
     }

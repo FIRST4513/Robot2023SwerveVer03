@@ -48,7 +48,7 @@ public class ArmCmds {
     }
 
     public static Command ArmToFullRetractCmd() {
-        return new RunCommand( () -> Robot.arm.lowerArm(), Robot.elevator)
+        return new RunCommand( () -> Robot.arm.lowerArm(), Robot.arm)
             .until(() ->Robot.arm.isLowerLimitSwitchPressed())
             .withName("armToBottomCmd");
     }

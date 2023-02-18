@@ -6,6 +6,7 @@ import java.util.Map;
 
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.Robot;
 import frc.robot.elevator.commands.ElevToPosCmd;
 
 // --------------------------------------------------------
@@ -70,6 +71,7 @@ public class ElevatorTelemetry {
         elevCmdsLayout()        .withPosition(6, 0)  ;
         elevPIDCmdsLayout()     .withPosition(9, 0)  ;
         tab.add("Elev Commands",elevator).withPosition(0, 5).withSize(5, 2);
+        tab.addNumber("Input from Operator Joystick", () -> Robot.operatorGamepad.getElevInput());
     }
 
     // ------------ Elev Motor Data Layout ---------

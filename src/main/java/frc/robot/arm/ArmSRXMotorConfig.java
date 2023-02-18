@@ -6,12 +6,12 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 public class ArmSRXMotorConfig {
     // TalonSRX Config object
-    public static TalonSRXConfiguration config;
+    public static TalonSRXConfiguration config = new TalonSRXConfiguration();
 
     /* Motor Control Sets */
     public static final NeutralMode armNeutralMode          = NeutralMode.Coast;
     public static final boolean     armMotorInvert          = false;
-    public static final boolean     armEncoderInvert        = false;
+    public static final boolean     armEncoderInvert        = true;
     public static final boolean     armEnableCurrentLimit   = true;
     public static final SensorInitializationStrategy sensorStrat = SensorInitializationStrategy.BootToZero;
     public static final int         allowableError          = 122;

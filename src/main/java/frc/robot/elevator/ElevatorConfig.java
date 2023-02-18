@@ -5,8 +5,8 @@ import edu.wpi.first.math.util.Units;
 public class ElevatorConfig {
     // Declare and Initialize needed class objects
 
-    public final boolean lowerLimitTrue = true;
-    public final boolean upperLimitTrue = true;
+    public final boolean lowerLimitTrue = false;
+    public final boolean upperLimitTrue = false;
 
 
     //public final double kElevatorGearing = 10.0;
@@ -23,7 +23,7 @@ public class ElevatorConfig {
 
     public final double KRaiseSpeedDefault = +0.40;
     public final double KRaiseSlowSpeed =    +0.25;
-    public final double KHoldSpeedDefault =  +0.15;
+    public final double KHoldSpeedDefault =  +0.08;  // +0.15;
     public final double KLowerSlowSpeed =    -0.10;
     public final double KLowerSpeedDefault = -0.25;
 

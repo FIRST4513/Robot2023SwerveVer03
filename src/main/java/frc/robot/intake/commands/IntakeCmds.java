@@ -1,13 +1,15 @@
 package frc.robot.intake.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
 
 public class IntakeCmds {
     public static void setupDefaultCommand() {
-        Robot.elevator.setDefaultCommand(IntakeStopCmd());
+        Robot.intake.setDefaultCommand(IntakeStopCmd());
     }
 
     public static Command IntakeStopCmd() {
@@ -18,19 +20,25 @@ public class IntakeCmds {
     public static Command IntakeCubeRetractCmd() {
         return new RunCommand(() -> Robot.intake.setMotorsCubeRetract(), Robot.intake)
             .withName("IntakeCubeRetractCmd")
-            .until(() -> Robot.intake.isCubeDetected());
+            .until(() -> Robot.intake.isCubeRetractDetected());
     }
 
-    public static Command IntakeConeRetractCmd() {
-        return new RunCommand(() -> Robot.intake.setMotorsConeRetract(), Robot.intake)
-            .withName("IntakeConeRetractCmd")
-            .until(() -> Robot.intake.isConeDetected());
-    }
+    // public static Command IntakeConeRetractCmd() {
+    //     return new RunCommand(() -> Robot.intake.setMotorsConeRetract(), Robot.intake)
+    //         .withName("IntakeConeRetractCmd")
+    //         .alongWith(new PrintCommand("cone retract initiated"))
+    //         .until(() -> Robot.intake.isConeDetected());
+    // }
 
     public static Command IntakeEjectCmd() {
-        return new RunCommand(() -> Robot.intake.setMotorsEject(), Robot.intake)
-            .withName("IntakeEjectCmd")
-            .withTimeout(0.5);
+        return new ConditionalCommand(
+            // cube
+            new RunCommand(() -> Robot.intake.setMotorsCubeEject(), Robot.intake).withTimeout(1.0),
+            // cone
+            new RunCommand(() -> Robot.intake.setMotorsConeEject(), Robot.intake).withTimeout(1.0),
+            // condition
+            () -> Robot.intake.isCubeEjectDetected()
+        );
     }
     
 }

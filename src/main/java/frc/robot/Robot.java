@@ -163,6 +163,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().cancelAll(); // Disable any currently running commands
         CommandScheduler.getInstance().getActiveButtonLoop().clear();
         pilotGamepad.resetConfig();     // Reset Config for all gamepads and other button bindings
+        operatorGamepad.resetConfig();
         //LiveWindow.setEnabled(false); // Disable Live Window we don't need that data being sent
         //LiveWindow.disableAllTelemetry();
     }

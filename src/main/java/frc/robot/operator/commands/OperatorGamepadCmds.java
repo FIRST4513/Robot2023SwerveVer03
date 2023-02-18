@@ -20,7 +20,7 @@ public class OperatorGamepadCmds {
 
     public static Command ControlArmElevByJoysticksCmd() {
         return new ParallelCommandGroup(
-            ArmCmds.ArmByJoystickCmd(),
+            // ArmCmds.ArmByJoystickCmd(),
             ElevatorCmds.ElevByJoystickCmd()
         );
     }
@@ -66,7 +66,7 @@ public class OperatorGamepadCmds {
                     new DelayCmd(1.0),
                     ElevatorCmds.ElevGoToBottomCmd()
                 ),
-                () -> Robot.intake.isCubeNotDetected()),
+                () -> Robot.intake.isCubeEjectDetected()),
             // Condition: is arm outside?
             () -> Robot.arm.isArmInside()
         );
@@ -95,7 +95,7 @@ public class OperatorGamepadCmds {
                     new DelayCmd(1.0),
                     ElevatorCmds.ElevGoToBottomCmd()
                 ),
-                () -> Robot.intake.isCubeNotDetected()),
+                () -> Robot.intake.isCubeEjectDetected()),
             // Condition: is arm outside?
             () -> Robot.arm.isArmOutside()
         );
@@ -124,7 +124,7 @@ public class OperatorGamepadCmds {
                     new DelayCmd(1.0),
                     ElevatorCmds.ElevGoToPIDPosCmd(ElevatorConfig.ElevMidPos)
                 ),
-                () -> Robot.intake.isCubeNotDetected()),
+                () -> Robot.intake.isCubeEjectDetected()),
             // Condition: is arm outside?
             () -> Robot.arm.isArmOutside()
         );
@@ -153,7 +153,7 @@ public class OperatorGamepadCmds {
                     new DelayCmd(1.0),
                     ElevatorCmds.ElevGoToPIDPosCmd(ElevatorConfig.ElevHighPos)
                 ),
-                () -> Robot.intake.isCubeNotDetected()),
+                () -> Robot.intake.isCubeEjectDetected()),
             // Condition: is arm outside?
             () -> Robot.arm.isArmOutside()
         );

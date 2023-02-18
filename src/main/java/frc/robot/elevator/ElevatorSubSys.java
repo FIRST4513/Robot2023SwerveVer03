@@ -14,6 +14,7 @@ import frc.robot.RobotConfig.Motors;
 
 public class ElevatorSubSys extends SubsystemBase {
     public ElevatorConfig       config;
+    public static ElevFXMotorConfig configFX;
     public ElevFXMotorConfig    motorConfig;
 
     // Devices
@@ -21,7 +22,7 @@ public class ElevatorSubSys extends SubsystemBase {
     public final DigitalInput elevLowerLimitSw, elevUpperLimitSw;
 
     // PID Controller
-    public final PIDController elevPIDcontroller;
+    // public final PIDController elevPIDcontroller;
 
     // Elevator Variables
     public double target_height;    // Relative to Ground
@@ -37,10 +38,11 @@ public class ElevatorSubSys extends SubsystemBase {
     // -----------  Constructor --------------------
     public ElevatorSubSys() {
         config = new ElevatorConfig();
+        configFX = new ElevFXMotorConfig();
         m_motor = new WPI_TalonFX(Motors.elevatorMotorID);
         elevLowerLimitSw = new DigitalInput(LimitSwitches.elevatorLowerLimitSw);
         elevUpperLimitSw = new DigitalInput(LimitSwitches.elevatorUpperLimitSw);
-        elevPIDcontroller = new PIDController(motorConfig.kP, 0, 0);
+        // elevPIDcontroller = new PIDController(motorConfig.kP, 0, 0);
         elevatorMotorConfig();
     }
 
@@ -83,13 +85,13 @@ public class ElevatorSubSys extends SubsystemBase {
         // Were Raising the elevator
         if ( speed > config.KHoldSpeedDefault ) {
             // Test for hitting Upper Limits
-            if ( ( isUpperLimitSwitchPressed() ) || isUpperLimitReached() ) {
+            if ( ( isUpperLimitSwitchPressed() ) ) {  // || isUpperLimitReached() ) {
                 elevHoldMtr();
                 return;
             }
             //  This is for slowing down as we approach the top
             if ( mCurrElevPos >= config.KLimitElevTopSlowPos )  {
-                speed = config.KRaiseSlowSpeed;
+                // speed = config.KRaiseSlowSpeed;
             }
         }
 
@@ -138,12 +140,13 @@ public class ElevatorSubSys extends SubsystemBase {
     // ---------  PID Out Calculator  --------------
     public double getPidCalcOut(double tgt_setpoint) {
         double tgt = limit_target_pos (tgt_setpoint);
-        double out = elevPIDcontroller.calculate(mCurrElevPos, tgt );
-        out = out + motorConfig.kF;             // Add feedforward Term
-        // Limit max pwr
-        if ( out > config.kMaxPwr )  { out = config.kMaxPwr; }
-        if ( out < -config.kMaxPwr ) { out = -config.kMaxPwr; }
-        return out;
+        // double out = elevPIDcontroller.calculate(mCurrElevPos, tgt );
+        // out = out + motorConfig.kF;             // Add feedforward Term
+        // // Limit max pwr
+        // if ( out > config.kMaxPwr )  { out = config.kMaxPwr; }
+        // if ( out < -config.kMaxPwr ) { out = -config.kMaxPwr; }
+        // return out;
+        return 0;
     }
 
     // Test PID Calc routine

@@ -1,7 +1,9 @@
 package frc.robot.operator;
 
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.lib.gamepads.Gamepad;
 import frc.robot.intake.commands.IntakeCmds;
+import frc.robot.intake.commands.IntakeConeCmd;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 
 public class OperatorGamepad extends Gamepad {
@@ -13,7 +15,8 @@ public class OperatorGamepad extends Gamepad {
         gamepad.aButton.onTrue(IntakeCmds.IntakeEjectCmd());
         gamepad.bButton.onTrue(IntakeCmds.IntakeCubeRetractCmd());
         gamepad.xButton.onTrue(IntakeCmds.IntakeStopCmd());
-        gamepad.yButton.onTrue(IntakeCmds.IntakeConeRetractCmd());
+        gamepad.yButton.onTrue(new IntakeConeCmd());
+        // gamepad.yButton.onTrue(new PrintCommand("Y Pressed"));
 
         gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.SetArmElevToLowPosCmd());
         gamepad.Dpad.Right.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
@@ -33,8 +36,11 @@ public class OperatorGamepad extends Gamepad {
 
     public double getElevInput() {
         double yValue = gamepad.rightStick.getY();
+        if (Math.abs(yValue) < 0.05) {
+            yValue = 0.0;
+        }
         if (OperatorGamepadConfig.yInvert) {
-            return yValue * -1;
+            return yValue * -0.33;
         }
         return yValue;
     }

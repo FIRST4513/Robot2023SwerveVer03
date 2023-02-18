@@ -325,7 +325,7 @@ public class Auto {
     }
 
     private static boolean cube() {
-        if (Robot.intake.isCubeDetected()) { return true; }
+        if (Robot.intake.isCubeEjectDetected()) { return true; }
         return false;
     }
 

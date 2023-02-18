@@ -15,8 +15,8 @@ public class ArmConfig {
     public final static double kArmMotorLowerMaxPwr = -0.35;
 
     // ------ Limit Switch True States ------
-    public final static boolean lowerLimitSwitchTrue = true;
-    public final static boolean upperLimitSwitchTrue = true;
+    public final static boolean lowerLimitSwitchTrue = false;
+    public final static boolean upperLimitSwitchTrue = false;
 
     // ------ Arm Pos Constants (In Degrees) ------
     public final static double ArmAngleFullRetractPos = 0.0;
