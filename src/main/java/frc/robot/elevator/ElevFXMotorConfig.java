@@ -29,14 +29,30 @@ public class ElevFXMotorConfig {
     public final int elevMaxFalcon = 60000;
 
     /* Control Loop Constants */
-    public final double kP = 0.5;   // not accurate value, just testing
-    public final double kI = 0;     // could be 0
-    public final double kD = 0;     // could be 0
-    public final double kF = 0.05;   
-    public final double kIz = 0;
-    public final double motionCruiseVelocity = 0;
-    public final double motionAcceleration = 0;
-    
+    /*
+     * kP Calculation Example:
+     *      if Error after ArbitraryFeedForwrd = 1 inch short we wish to add .02 pwr to get there
+     *      1023 * 0.02 = 20.46 / 3316 = kP 0.0067
+     *      ( 1023 = full Pwr, 3316 = sensor units of error)
+     *      controller will add 0.02 pwr for each inch we are off (up to the max velocity specified)
+     */
+    public final double kP = 0.0;     // Start test with 0 kP and only use arbitraryFeedForward and test adding kP
+    public final double kI = 0.0;     // could be 0
+    public final double kD = 0.0;     // could be 0
+    public final double kF = 0.0;     // Leave as 0 we will be using ArbitraryFeedForward for position control
+    public final double kIz = 0.0;
+
+    /*
+     * Cruise velocity Calculation: 30 inch in 3 seconds (elev length)
+     *                              10 inch in 1 second
+     *                              1  inch in 1/100 second ( 100 ms)
+     *                              1 inch = 3,316 sensor units
+     */
+    public final double motionCruiseVelocity        = 1500; // 3316; // 10 inches per second (test starting slower ie 1500)
+    public final double motionAcceleration          = 1500; // 1 second to get up to cruise velocity
+    public final static double arbitraryFeedForward = 0.08; // Measured value to hold elev
+
+
     /* Current Limiting */
     public final int            currentLimit            = 30;
     public final int            triggerThresholdLimit   = 0;
@@ -55,6 +71,7 @@ public class ElevFXMotorConfig {
     /* Ramp Rate */
     public final double openLoopRamp = 0;
     public final double closedLoopRamp = 0;
+
 
     /* Motor Characterization Values */
     public final double kS = 0;

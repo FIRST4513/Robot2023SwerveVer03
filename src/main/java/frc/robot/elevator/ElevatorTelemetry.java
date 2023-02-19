@@ -72,6 +72,23 @@ public class ElevatorTelemetry {
         elevPIDCmdsLayout()     .withPosition(9, 0)  ;
         tab.add("Elev Commands",elevator).withPosition(0, 5).withSize(5, 2);
         tab.addNumber("Input from Operator Joystick", () -> Robot.operatorGamepad.getElevInput());
+
+        tab.add("MM To 5.0", 
+            new RunCommand( () -> Robot.elevator.setMMPosition( 5.0 ), Robot.elevator))
+            .withPosition(0, 0)    .withSize(12, 1);
+
+        tab.add("MM To 10.0", 
+            new RunCommand( () -> Robot.elevator.setMMPosition( 10.0 ), Robot.elevator))
+            .withPosition(0, 0)    .withSize(12, 3);
+
+        tab.add("MM To 15.0", 
+            new RunCommand( () -> Robot.elevator.setMMPosition( 15.0 ), Robot.elevator))
+            .withPosition(0, 0)    .withSize(12, 5);
+            
+        tab.add("MM To 20.0", 
+            new RunCommand( () -> Robot.elevator.setMMPosition( 20.0 ), Robot.elevator))
+            .withPosition(0, 0)    .withSize(12, 7);
+
     }
 
     // ------------ Elev Motor Data Layout ---------

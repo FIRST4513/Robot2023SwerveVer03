@@ -3,6 +3,7 @@ package frc.robot.elevator;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenixpro.controls.VoltageOut;
 
@@ -143,7 +144,10 @@ public class ElevatorSubSys extends SubsystemBase {
     // ------------  Set Elev to Height by Motion Magic  ----------
     public void setMMPosition(double height) {
         double position = convertHeightToFalconCnt(height);
-        m_motor.set(ControlMode.MotionMagic, position);
+        //m_motor.set(ControlMode.MotionMagic, position);
+        m_motor.set( ControlMode.MotionMagic, position,
+                     DemandType.ArbitraryFeedForward,
+                     ElevFXMotorConfig.arbitraryFeedForward);
     }
 
 // -----------------  Encoder Sensor Methods --------------------

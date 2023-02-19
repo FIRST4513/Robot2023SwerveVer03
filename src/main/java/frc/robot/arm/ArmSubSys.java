@@ -3,6 +3,7 @@ package frc.robot.arm;
 import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.math.controller.PIDController;
@@ -135,8 +136,12 @@ public class ArmSubSys extends SubsystemBase {
         setMMPosition( percentToFalcon(percent) );
     }
 
-    public void setMMPosition(double position) {
-        mArmMotor.set(ControlMode.MotionMagic, position);
+    public void setMMPosition(double angle) {
+        //mArmMotor.set(ControlMode.MotionMagic, angle);
+        double aff = Math.cos(Math.toRadians(angle)) * motorConfig.arbitraryFeedForwardScaler;
+        mArmMotor.set(  ControlMode.MotionMagic, angle,
+                        DemandType.ArbitraryFeedForward,
+                        aff);
     }
 
     // ------------------------------------------------------------

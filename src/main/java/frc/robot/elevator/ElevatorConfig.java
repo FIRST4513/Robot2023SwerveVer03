@@ -30,6 +30,7 @@ public class ElevatorConfig {
     // ------ Position Constatnts ------
     public final double KheightDeadBand     = +0.15;             // How close to target is close enough
     public final double ELEV_ENCODER_CONV   = 0.000301584;       // Inches the elevator rises for each encoder count
+    // Measured 2/18/23 25.375 inches = 84,139 sensor units
 
     public final double KElevMaxTopHt       = 25.0;             // This is the top GO NO FURTHER!
     public final double KLimitElevTopSlowHt = 22.0;		        // Start slowing the raise at this position   

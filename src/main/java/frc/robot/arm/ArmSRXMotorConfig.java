@@ -37,8 +37,10 @@ public class ArmSRXMotorConfig {
     public final double kD = 0;     // could be 0
     public final double kF = 0.3;   
     public final double kIz = 0;
+
     public final double motionCruiseVelocity = 0;
     public final double motionAcceleration = 0;
+    public final double arbitraryFeedForwardScaler = 0.08;
     
     /* Current Limiting */
     public static final int     continuousCurrentLimit   = 25;       // Amps
