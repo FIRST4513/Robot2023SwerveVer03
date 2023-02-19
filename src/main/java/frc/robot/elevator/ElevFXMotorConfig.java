@@ -50,6 +50,7 @@ public class ElevFXMotorConfig {
      */
     public final double motionCruiseVelocity        = 1500; // 3316; // 10 inches per second (test starting slower ie 1500)
     public final double motionAcceleration          = 1500; // 1 second to get up to cruise velocity
+    public final int motionCurveStrength            = 0;    // Round off jerks in motion ( 0 no smoothing to 8 max smoothing)
     public final static double arbitraryFeedForward = 0.08; // Measured value to hold elev
 
 
@@ -88,6 +89,8 @@ public class ElevFXMotorConfig {
         config.slot0.integralZone = kIz;
         config.motionCruiseVelocity           = motionCruiseVelocity;
         config.motionAcceleration             = motionAcceleration;
+        config.motionCurveStrength            = motionCurveStrength;
+
 
         config.openloopRamp                   = openLoopRamp;
         config.closedloopRamp                 = closedLoopRamp;

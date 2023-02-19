@@ -280,5 +280,6 @@ public class ElevatorSubSys extends SubsystemBase {
         m_motor.setInverted(ElevFXMotorConfig.elevMotorInvert);
         m_motor.setNeutralMode(ElevFXMotorConfig.elevNeutralMode);
         m_motor.setSelectedSensorPosition(0);                     // Reset Encoder to zero
+        m_motor.configMotionSCurveStrength(configFX.motionCurveStrength); // Possible redundant in config
     }
 }
