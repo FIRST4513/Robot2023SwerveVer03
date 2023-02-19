@@ -37,7 +37,7 @@ public class ZeroElevator extends CommandBase {
         // enable soft limits
         Robot.elevator.resetSensorPosition(-500);
         Robot.elevator.softLimitsTrue();
-        Robot.elevator.setMMPosition(0);
+        Robot.elevator.setMMheight(0);
     }
 
     // Returns true when the command should end.

@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
 public class ElevatorHoldPosition extends CommandBase {
-    private double position = 0;
+    private double height = 0;
     /** Creates a new ElevatorHoldPosition. */
     public ElevatorHoldPosition() {
         // Use addRequirements() here to declare subsystem dependencies.
@@ -18,7 +18,7 @@ public class ElevatorHoldPosition extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        position = Robot.elevator.getElevEncoderCnt();
+        height = Robot.elevator.getElevHeightInches();
         // Robot.elevator.setEncoder(Elevator.config.maxExtension);
         // Robot.elevator.setMMPosition(0);
         // moves elevator down to lowest position
@@ -27,7 +27,7 @@ public class ElevatorHoldPosition extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        Robot.elevator.setMMPosition(position);
+        Robot.elevator.setMMheight(height);
     }
 
     // Called once the command ends or is interrupted.

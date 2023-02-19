@@ -142,8 +142,9 @@ public class ElevatorSubSys extends SubsystemBase {
     }
 
     // ------------  Set Elev to Height by Motion Magic  ----------
-    public void setMMPosition(double height) {
+    public void setMMheight(double height) {
         double position = convertHeightToFalconCnt(height);
+        target_height = height;     // Store to be used in test for there yet
         //m_motor.set(ControlMode.MotionMagic, position);
         m_motor.set( ControlMode.MotionMagic, position,
                      DemandType.ArbitraryFeedForward,
@@ -188,6 +189,12 @@ public class ElevatorSubSys extends SubsystemBase {
         if (ht > config.KElevMaxTopHt)     { ht = config.KElevMaxTopHt; }
         if (ht < 0)                        { ht = 0; }
         return ht;
+    }
+
+    public boolean isMMtargetReached(){
+        // If we are within the deadband of our target we can stop
+        if (Math.abs(target_height-mCurrElevHt) <= config.KheightDeadBand) { return true; }
+        return false;
     }
 
     // -----------------  Lower/Upper Limits ----------------

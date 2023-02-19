@@ -74,20 +74,27 @@ public class ElevatorTelemetry {
         tab.addNumber("Input from Operator Joystick", () -> Robot.operatorGamepad.getElevInput());
 
         tab.add("MM To 5.0", 
-            new RunCommand( () -> Robot.elevator.setMMPosition( 5.0 ), Robot.elevator))
+            new RunCommand( () -> Robot.elevator.setMMheight( 5.0 ), Robot.elevator))
             .withPosition(0, 0)    .withSize(12, 1);
 
         tab.add("MM To 10.0", 
-            new RunCommand( () -> Robot.elevator.setMMPosition( 10.0 ), Robot.elevator))
+            new RunCommand( () -> Robot.elevator.setMMheight( 10.0 ), Robot.elevator))
             .withPosition(0, 0)    .withSize(12, 3);
 
         tab.add("MM To 15.0", 
-            new RunCommand( () -> Robot.elevator.setMMPosition( 15.0 ), Robot.elevator))
+            new RunCommand( () -> Robot.elevator.setMMheight( 15.0 ), Robot.elevator))
             .withPosition(0, 0)    .withSize(12, 5);
             
         tab.add("MM To 20.0", 
-            new RunCommand( () -> Robot.elevator.setMMPosition( 20.0 ), Robot.elevator))
+            new RunCommand( () -> Robot.elevator.setMMheight( 20.0 ), Robot.elevator))
             .withPosition(0, 0)    .withSize(12, 7);
+
+        tab.add("Goto Bottom", 
+            new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
+                                .until(() ->Robot.elevator.isLowerLimitSwitchPressed()))
+            .withPosition(0, 0)    .withSize(12, 1);
+
+        tab.addBoolean("MM Tgt Reached", () ->Robot.elevator.isMMtargetReached());
 
     }
 

@@ -36,10 +36,10 @@ public class ElevatorDelay extends CommandBase {
     @Override
     public void execute() {
         if (Robot.elevator.getElevEncoderCnt() < safePos) {
-            Robot.elevator.setMMPosition(safePos);
+            Robot.elevator.setMMheight(safePos);
         }
         if (Robot.arm.getEncoderCnt() >= Robot.arm.percentToFalcon(conditionalPercent)) {
-            Robot.elevator.setMMPosition(finalPos);
+            Robot.elevator.setMMheight(finalPos);
         }
     }
 

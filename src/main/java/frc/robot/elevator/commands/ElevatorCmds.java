@@ -70,7 +70,7 @@ public class ElevatorCmds {
     }
 
     public static Command setMMPosition(double position) {
-        return new RunCommand(() -> Robot.elevator.setMMPosition(position), Robot.elevator);
+        return new RunCommand(() -> Robot.elevator.setMMheight(position), Robot.elevator);
     }
 
 
