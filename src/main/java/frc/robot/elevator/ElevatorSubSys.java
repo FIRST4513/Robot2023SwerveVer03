@@ -4,6 +4,8 @@ import java.util.function.DoubleSupplier;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenixpro.controls.VoltageOut;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -13,36 +15,34 @@ import frc.robot.RobotConfig.LimitSwitches;
 import frc.robot.RobotConfig.Motors;
 
 public class ElevatorSubSys extends SubsystemBase {
-    public ElevatorConfig       config;
+    public ElevatorConfig           config;
     public static ElevFXMotorConfig configFX;
-    public ElevFXMotorConfig    motorConfig;
+    public ElevFXMotorConfig        motorConfig;
 
     // Devices
     public final WPI_TalonFX m_motor;
     public final DigitalInput elevLowerLimitSw, elevUpperLimitSw;
 
     // PID Controller
-    // public final PIDController elevPIDcontroller;
+    public final PIDController elevPIDcontroller;
 
     // Elevator Variables
-    public double target_height;    // Relative to Ground
-    public double target_pos;       // Relative to zero
+    public double target_height;
 
     public double mCurrPwr = 0;
     public double mCurrElevPwr;
     public double PID_output = 0;
     public double mCurrEncoderCnt = 0;
-    public double mCurrElevPos;     // Elevator Height Zero at bottom (Inches)
-    public double mCurrElevHt;      // Grabber Height off the floor (Inches)
+    public double mCurrElevHt;      // Elevator Height Zero at bottom (Inches)
 
     // -----------  Constructor --------------------
     public ElevatorSubSys() {
-        config = new ElevatorConfig();
-        configFX = new ElevFXMotorConfig();
-        m_motor = new WPI_TalonFX(Motors.elevatorMotorID);
-        elevLowerLimitSw = new DigitalInput(LimitSwitches.elevatorLowerLimitSw);
-        elevUpperLimitSw = new DigitalInput(LimitSwitches.elevatorUpperLimitSw);
-        // elevPIDcontroller = new PIDController(motorConfig.kP, 0, 0);
+        config              = new ElevatorConfig();
+        configFX            = new ElevFXMotorConfig();
+        m_motor             = new WPI_TalonFX(Motors.elevatorMotorID);
+        elevLowerLimitSw    = new DigitalInput(LimitSwitches.elevatorLowerLimitSw);
+        elevUpperLimitSw    = new DigitalInput(LimitSwitches.elevatorUpperLimitSw);
+        elevPIDcontroller   = new PIDController(config.kP, config.kI, config.kD);
         elevatorMotorConfig();
     }
 
@@ -85,13 +85,13 @@ public class ElevatorSubSys extends SubsystemBase {
         // Were Raising the elevator
         if ( speed > config.KHoldSpeedDefault ) {
             // Test for hitting Upper Limits
-            if ( ( isUpperLimitSwitchPressed() ) ) {  // || isUpperLimitReached() ) {
+            if ( isUpperLimitReached() ) {
                 elevHoldMtr();
                 return;
             }
             //  This is for slowing down as we approach the top
-            if ( mCurrElevPos >= config.KLimitElevTopSlowPos )  {
-                // speed = config.KRaiseSlowSpeed;
+            if ( mCurrElevHt >= config.KLimitElevTopSlowHt )  {
+                speed = config.KRaiseSlowSpeed;
             }
         }
 
@@ -103,50 +103,36 @@ public class ElevatorSubSys extends SubsystemBase {
                 return;
             }
             //  This is for slowing down as we approach the bottom    		
-            if ( mCurrElevPos <= config.KLimitElevBottomSlowPos ) {
+            if ( mCurrElevHt <= config.KLimitElevBottomSlowHt ) {
                 speed = config.KLowerSlowSpeed;
             }
         }
 
         mCurrElevPwr = speed;
-        m_motor.set(mCurrElevPwr);      // Send Power to motor  
+        //m_motor.setVoltage( speed * 12.0);      // This is supposed to be more constant
+        m_motor.set(mCurrElevPwr);              // Send Power to motor  
     }
 
     public void elevSetSpeed(DoubleSupplier speed) {
         elevSetSpeed(speed.getAsDouble());
     }
 
-    // ------------  Set Elevator to Position by PID  ----------
-    public void setPIDposition( double pos ) {
-        // All motion controlled relative to bottom of the elevator (not height from floor)
-        target_pos = limit_target_pos (pos);
-        target_height = convertPosToHeight(target_pos);
-        mCurrElevPwr = getPidCalcOut( target_pos );
-        m_motor.set(mCurrElevPwr);                       // Send Power to motor  Pwr -1 to +1
-        //m_motor.setVoltage(mCurrElevPwr);              // Voltage -12 to +12 ???????        
-    }
 
     // ------------  Set Elevator to Height by PID  ----------    
     public void setPIDheight( double ht ) {
         // All motion controlled relative to Floor
-        target_pos = limit_target_pos(convertHeightToPos( ht ));
-        target_height = convertPosToHeight( target_pos);
-        mCurrElevPwr = getPidCalcOut( target_pos );
-        System.out.println("    PID to " + ht + "   CurPos=" + mCurrElevPos + " out=" + mCurrElevPwr);
-        m_motor.set(mCurrElevPwr);                       // Send Power to motor  Pwr -1 to +1
-        //m_motor.setVoltage(mCurrElevPwr);              // Voltage -12 to +12 ???????  
+        target_height = limit_target_ht( ht);
+        mCurrElevPwr = getPidCalcOut( target_height );
+        System.out.println("    PID to " + ht + "   CurPos=" + mCurrElevHt + " out=" + mCurrElevPwr);
+        elevSetSpeed(mCurrElevPwr); 
     }
 
     // ---------  PID Out Calculator  --------------
     public double getPidCalcOut(double tgt_setpoint) {
-        double tgt = limit_target_pos (tgt_setpoint);
-        // double out = elevPIDcontroller.calculate(mCurrElevPos, tgt );
-        // out = out + motorConfig.kF;             // Add feedforward Term
-        // // Limit max pwr
-        // if ( out > config.kMaxPwr )  { out = config.kMaxPwr; }
-        // if ( out < -config.kMaxPwr ) { out = -config.kMaxPwr; }
-        // return out;
-        return 0;
+        double tgt = limit_target_ht (tgt_setpoint);
+        double out = elevPIDcontroller.calculate(mCurrElevHt, tgt );
+        out = out + config.kF;             // Add feedforward Term
+        return out;
     }
 
     // Test PID Calc routine
@@ -154,48 +140,50 @@ public class ElevatorSubSys extends SubsystemBase {
         return getPidCalcOut(test_setpoint);
     }
 
-    // ------------  Set Arm to Angle by Motion Magic  ----------
-    public double percentToFalcon(double percent) {
-        return motorConfig.elevMaxFalcon * (percent / 100);
-    }
-
-    public void setMMPercent(double percent) {
-        setMMPosition( percentToFalcon(percent) );
-    }
-
-    public void setMMPosition(double position) {
+    // ------------  Set Elev to Height by Motion Magic  ----------
+    public void setMMPosition(double height) {
+        double position = convertHeightToFalconCnt(height);
         m_motor.set(ControlMode.MotionMagic, position);
     }
-// -----------------  Encoder Sensor Methods --------------------
-    public void updateCurrentElevPosition() {
-        mCurrEncoderCnt = m_motor.getSelectedSensorPosition();
-        mCurrElevPos = Rmath.mRound((mCurrEncoderCnt * config.ELEV_ENCODER_CONV) , 2);
-        mCurrElevHt =  Rmath.mRound( convertPosToHeight(mCurrElevPos) , 2 );
-    }
 
+// -----------------  Encoder Sensor Methods --------------------
     public double getElevEncoderCnt()               { return mCurrEncoderCnt;}
-    public double getElevPosInches()                { return mCurrElevPos; }
     public double getElevHeightInches()             { return mCurrElevHt; }
 
-    public double convertHeightToPos( double tgt)   { return tgt - config.ELEV_INCH_ABOVE_GROUND; }
-    public double convertPosToHeight( double tgt)   { return tgt + config.ELEV_INCH_ABOVE_GROUND; }
+    public void updateCurrentElevPosition() {
+        // Called in subsystem periodic so only one CAN call needed per command loop 20ms
+        mCurrEncoderCnt = m_motor.getSelectedSensorPosition();
+        mCurrElevHt = Rmath.mRound(convertFalconCntToHeight(mCurrEncoderCnt) , 2);
+    }
+
+    public double convertHeightToFalconCnt( double height) {
+        return height / config.kElevatorEncoderDistPerPulse;
+    }
+
+    public double convertFalconCntToHeight( double cnt) {
+        return config.kElevatorEncoderDistPerPulse * cnt;
+    }
 
     public void resetEncoder(){
         m_motor.setSelectedSensorPosition(0);
+        mCurrEncoderCnt = 0.0 ;
+        mCurrElevHt = 0.0;
     }
 
     public void resetEncoder( double position ){
         m_motor.setSelectedSensorPosition(position);
+        mCurrEncoderCnt = position;
+        mCurrElevHt = Rmath.mRound(convertFalconCntToHeight(position) , 2);
     }
 
     // ------------- Other Misc Methods  ---------------
     public double getTargetHeight()         { return target_height; }
     public double getElevMotorPwr()         { return mCurrElevPwr; }
 
-    public double limit_target_pos( double pos ){
-        if (pos > config.KElevMaxTopPos)    { pos = config.KElevMaxTopPos; }
-        if (pos < 0)                        { pos = 0; }
-        return pos;
+    public double limit_target_ht( double ht ){
+        if (ht > config.KElevMaxTopHt)     { ht = config.KElevMaxTopHt; }
+        if (ht < 0)                        { ht = 0; }
+        return ht;
     }
 
     // -----------------  Lower/Upper Limits ----------------
@@ -214,7 +202,7 @@ public class ElevatorSubSys extends SubsystemBase {
     }
 
     public boolean isUpperLimitReached() {
-        if ( mCurrElevPos >= config.KElevMaxTopPos ) {
+        if ( mCurrElevHt >= config.KElevMaxTopHt ) {
             return true;
         }
         return false;
@@ -238,10 +226,6 @@ public class ElevatorSubSys extends SubsystemBase {
             return "Not Pressed";
         }
     }
-
-    //public double getTargetTestPos()               { return target_test_pos; }
-    public double getTargetPos()                   { return target_pos; }
-
 
     
     // ------------------------------------------------------
@@ -270,23 +254,6 @@ public class ElevatorSubSys extends SubsystemBase {
     //     return FXconfig.slot0.kF;
     // }
 
-    /**
-     * Converts meters to falcon units.
-     *
-     * @param meters
-     * @param circumference
-     * @param gearRatio
-     * @return falcon units
-     */
-    public static double metersToFalcon(double meters, double circumference, double gearRatio) {
-        meters = meters / circumference;
-        meters = meters * 2048 * gearRatio;
-        return meters;
-    }
-
-    public static double metersToFalcon(double meters) {
-        return metersToFalcon(meters, ElevatorConfig.diameterInches * Math.PI, ElevatorConfig.gearRatio);
-    }
 
     /**
      * Converts inches to meters.
@@ -296,66 +263,6 @@ public class ElevatorSubSys extends SubsystemBase {
      */
     public static double inchesToMeters(double inches) {
         double meters = inches * 0.0254;
-        return meters;
-    }
-
-    public static double inchesToFalcon(double inches) {
-        double meters = inchesToMeters(inches);
-        double falcon = metersToFalcon(meters);
-        return falcon;
-    }
-    /**
-     * Converts real height to extension for the elevator. Subtracts the height of the elevator at
-     * the bottom. So that the height of the elevator at the bottom is 0. Does trigonomic
-     * calculations to find the relative height.
-     *
-     * @param meters height in meters
-     * @return relative height in meters
-     * @see #heightToHorizontalExtension(double)
-     * @see #extensionToHeight(double)
-     */
-    public static double heightToExtension(double meters) {
-        meters = meters - ElevatorConfig.startingHeight;
-        if (meters < 0) {
-            meters = ElevatorConfig.startingHeight;
-            DriverStation.reportWarning(
-                    "Height is below the starting height. See Elevator#heightToExtension", false);
-        }
-        meters = meters / Math.sin(Math.toRadians(ElevatorConfig.angle));
-        if (meters > ElevatorConfig.maxExtension) {
-            meters = ElevatorConfig.maxExtension;
-            DriverStation.reportWarning(
-                    "Height is above the max extension. See Elevator#heightToExtension", false);
-        }
-        return meters;
-    }
-
-    /**
-     * converts real height to horizontal extension for the elevator.
-     *
-     * @param meters height in meters
-     * @return horizontal extension in meters relative to the robot's frame perimeter.
-     * @see #heightToExtension(double)
-     * @see #extensionToHeight(double)
-     */
-    public static double heightToHorizontalExtension(double meters) {
-        meters = meters - ElevatorConfig.startingHeight;
-        meters = meters / Math.cos(Math.toRadians(ElevatorConfig.angle));
-        meters = meters + ElevatorConfig.startingHorizontalExtension;
-        return meters;
-    }
-
-    /**
-     * converts elevator extension to real height.
-     *
-     * @param meters extension in meters
-     * @return height in meters
-     * @see #heightToExtension(double)
-     * @see #heightToHorizontalExtension(double)
-     */
-    public static double extensionToHeight(double meters) {
-        meters = meters * Math.sin(Math.toRadians(ElevatorConfig.angle));
-        meters = meters + ElevatorConfig.startingHeight;
         return meters;
     }
 

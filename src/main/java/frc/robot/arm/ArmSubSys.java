@@ -32,7 +32,7 @@ public class ArmSubSys extends SubsystemBase {
         mArmMotor         = new WPI_TalonSRX(Motors.armMotorID);
         upperlimitSwitch  = new DigitalInput(LimitSwitches.armUpperLimitSw);
         lowerlimitSwitch  = new DigitalInput(LimitSwitches.armLowerLimitSw);
-        mArmPIDController = new PIDController(motorConfig.kP, motorConfig.kI, motorConfig.kD);
+        mArmPIDController = new PIDController(ArmConfig.kP, ArmConfig.kI, ArmConfig.kD);
         armMotorConfig();
         stopArm();
         mArmMotor.configForwardSoftLimitThreshold(mCurrArmAngle);
@@ -41,10 +41,10 @@ public class ArmSubSys extends SubsystemBase {
     // ------------- Periodic -------------
     public void periodic() {
         if (isLowerLimitSwitchPressed() == true) {
-            resetEncoder();
+            resetEncoder(ArmConfig.lowerLimitPos);      // recalibrate encoder at retracted position
         }
         if (isUpperLimitSwitchPressed() == true) {
-            // setEncoder();        // recalibrate encoder for full forward position Tobe determined
+            resetEncoder(ArmConfig.upperLimitPos);      // recalibrate encoder at extended position
         }
         updateCurrentArmPosition();
     }
@@ -61,7 +61,13 @@ public class ArmSubSys extends SubsystemBase {
     }
 
     public void holdArm()   {
-        setArmMotor(ArmConfig.kHoldSpeed);
+        // set hold power as needed based on current angle ( 0 = full down)
+        if ( Math.abs(mCurrArmAngle) < 5.0) {
+            stopArm();
+            return;
+        }
+        double hold_pwr = Math.cos(Math.toRadians(mCurrArmAngle)) * ArmConfig.kHoldkP;
+        setArmMotor(hold_pwr);
     }
 
     public void stopArm()   { 
@@ -70,21 +76,23 @@ public class ArmSubSys extends SubsystemBase {
 
     public void setArmMotor( double pwr ) {
         // Limit power if needed
-        if ( pwr > ArmConfig.kHoldSpeed) {
-            // Were raising Arm
+        if ( pwr > 0) {
+            // Were raising Arm Forward
             if ( pwr > ArmConfig.kArmMotorRaiseMaxPwr )  {
                  pwr = ArmConfig.kArmMotorRaiseMaxPwr;
             }  
             if (isUpperLimitSwitchPressed() == true) {
-                holdArm();
+                stopArm();  // This is temporary until hold is tested
+                //holdArm();
                 return;
             }  
         } else {
-            // Were Lowering Arm
+            // Were Moving Arm Reverse
             if ( pwr < ArmConfig.kArmMotorLowerMaxPwr )  {
                  pwr = ArmConfig.kArmMotorLowerMaxPwr; }
             if (isLowerLimitSwitchPressed() == true) {
-                holdArm();
+                stopArm();  // This is temporary until hold is tested
+                //holdArm();
                 return;
             }
         }
@@ -105,11 +113,15 @@ public class ArmSubSys extends SubsystemBase {
  
     // ------------  Set Arm to Angle by PID  ----------
     public void setPIDArmToAngle( double angle ) {
-        // Angle 0 = fully retracted  90 = fully extended
-        angle = limitArmAngle( angle );                             // Dont allow an angle greater than permitted
-        mPIDSetpoint = convertAngleToCnt(angle);                    // Convert Angle to Encoder Cnts
+        // Angle 0 = Straight down 90 = fully extended -90 = fully retracted
+        angle = limitArmAngle( angle );    // Dont allow an angle greater than permitted
+
+        double hold_pwr = Math.cos(Math.toRadians(angle)) * ArmConfig.kHoldkP;
+                         
+        mPIDSetpoint = convertAngleToCnt(angle);                    // Convert Angle to Encoder Cnts ??????
         mPIDOutput = mArmPIDController.calculate( mPIDSetpoint );   // Calculate PID Out to send to motor
-        mPIDOutput = mPIDOutput + motorConfig.kF;                  // Add feedforward component
+        mPIDOutput = mPIDOutput + hold_pwr;                  // Add feedforward component
+
         setArmMotor( mPIDOutput );                                  // Send Power to motor  Pwr -1 to +1
         //m_motor.setVoltage(mPIDOutput);                           // Voltage -12 to +12 ???????        
     }

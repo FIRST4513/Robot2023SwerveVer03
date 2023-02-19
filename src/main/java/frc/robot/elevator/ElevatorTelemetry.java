@@ -97,10 +97,6 @@ public class ElevatorTelemetry {
         m_encoderCntWidget = elevEncoderLayout.addNumber("Cnt", ()-> elevator.getElevEncoderCnt())
             .withPosition(0,0).withSize(2, 1);
 
-        // Elev Position Widget
-        m_posWidget = elevEncoderLayout.addNumber("Pos", ()-> elevator.getElevPosInches())
-            .withPosition(0,1).withSize(2, 1);
-
         // Elev Height Widget
         m_heightWidget = elevEncoderLayout.addNumber("Height", ()-> elevator.getElevHeightInches())
             .withPosition(0,2).withSize(2, 1);
@@ -113,11 +109,7 @@ public class ElevatorTelemetry {
         elevPIDLayout = tab.getLayout("PID", BuiltInLayouts.kGrid);
         elevPIDLayout.withProperties(Map.of("Label position", "TOP"));
         elevPIDLayout.withSize(2, 4);
-
-        // Target Pos Widget
-        m_PIDtargetPosWidget = elevPIDLayout.addNumber("Tgt Pos.",()-> elevator.getTargetPos())
-            .withPosition(0,0).withSize(2, 1);
-            
+         
         // Target Height Widget
         m_PIDtargetHtWidget = elevPIDLayout.addNumber("Tgt Ht.",()-> elevator.getTargetHeight())
             .withPosition(0,1).withSize(2, 1);        
@@ -136,13 +128,13 @@ public class ElevatorTelemetry {
         elevPIDCmdsLayout.withSize(3, 5);
 
         elevPIDCmdsLayout.add("PID To 14.0", 
-            new RunCommand( () -> elevator.setPIDposition( 14.0 ), elevator))
+            new RunCommand( () -> elevator.setPIDheight( 14.0 ), elevator))
             .withPosition(0, 0)    .withSize(2, 1);
         elevPIDCmdsLayout.add("PID To 0.0", 
-            new RunCommand( () -> elevator.setPIDposition( 0.0 ), elevator))
+            new RunCommand( () -> elevator.setPIDheight( 0.0 ), elevator))
             .withPosition(0, 1)    .withSize(2, 1);
         elevPIDCmdsLayout.add("PID To 35.0", 
-            new RunCommand( () -> elevator.setPIDposition( 35.0 ), elevator))
+            new RunCommand( () -> elevator.setPIDheight( 35.0 ), elevator))
             .withPosition(0, 2)    .withSize(2, 1);
 
         return elevPIDCmdsLayout;            

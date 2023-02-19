@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.Robot;
-import frc.robot.elevator.ElevatorConfig;
 
 // -----------------------------------------------------
 // --------------   Elevator Commands    ---------------
@@ -40,15 +39,9 @@ public class ElevatorCmds {
             .withName("ElevRaiseCmd");
     }
 
-    // relative to floor, considering robot height
-    public static Command ElevGoToPIDheightCmd(double height) {
-        return new InstantCommand( () -> Robot.elevator.setPIDheight(height), Robot.elevator)
-            .withName("ElevGoToPIDHeightCmd");
-    }
-
     // pure elevator height
-    public static Command ElevGoToPIDPosCmd(double inches) {
-        return new RunCommand( () -> Robot.elevator.setPIDposition(inches), Robot.elevator)
+    public static Command ElevGoToPIDheightCmd(double inches) {
+        return new RunCommand( () -> Robot.elevator.setPIDheight(inches), Robot.elevator)
             .withName("ElevGoToPIDPosCmd");
     }
 
@@ -80,37 +73,38 @@ public class ElevatorCmds {
         return new RunCommand(() -> Robot.elevator.setMMPosition(position), Robot.elevator);
     }
 
-    public static Command coneIntake() {
-        return setMMPosition(ElevatorConfig.coneIntake);
-    }
 
-    public static Command coneStandingIntake() {
-        return setMMPosition(ElevatorConfig.coneStandingIntake);
-    }
+    // public static Command coneIntake() {
+    //     return setMMPosition(ElevatorConfig.coneIntake);
+    // }
 
-    public static Command coneMid() {
-        return setMMPosition(ElevatorConfig.coneMid);
-    }
+    // public static Command coneStandingIntake() {
+    //     return setMMPosition(ElevatorConfig.coneStandingIntake);
+    // }
 
-    public static Command coneTop() {
-        return setMMPosition(ElevatorConfig.coneTop);
-    }
+    // public static Command coneMid() {
+    //     return setMMPosition(ElevatorConfig.coneMid);
+    // }
 
-    public static Command coneShelf() {
-        return setMMPosition(ElevatorConfig.coneShelf);
-    }
+    // public static Command coneTop() {
+    //     return setMMPosition(ElevatorConfig.coneTop);
+    // }
 
-    public static Command cubeIntake() {
-        return setMMPosition(ElevatorConfig.cubeIntake);
-    }
+    // public static Command coneShelf() {
+    //     return setMMPosition(ElevatorConfig.coneShelf);
+    // }
 
-    public static Command cubeMid() {
-        return setMMPosition(ElevatorConfig.cubeMid);
-    }
+    // public static Command cubeIntake() {
+    //     return setMMPosition(ElevatorConfig.cubeIntake);
+    // }
 
-    public static Command cubeTop() {
-        return setMMPosition(ElevatorConfig.cubeTop);
-    }
+    // public static Command cubeMid() {
+    //     return setMMPosition(ElevatorConfig.cubeMid);
+    // }
+
+    // public static Command cubeTop() {
+    //     return setMMPosition(ElevatorConfig.cubeTop);
+    // }
 
     public static Command home() {
         return setMMPosition(0);

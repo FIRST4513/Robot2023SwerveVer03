@@ -14,7 +14,7 @@ public class ArmSRXMotorConfig {
     public static final boolean     armEncoderInvert        = true;
     public static final boolean     armEnableCurrentLimit   = true;
     public static final SensorInitializationStrategy sensorStrat = SensorInitializationStrategy.BootToZero;
-    public static final int         allowableError          = 122;
+    public static final int         allowableError          = 1000;
     // increase AllowableError to reduce jitter, (2048 * angleGearRatio) / 360.0) = 1 degree = 122 cnts
 
     /* Motor Limits (Encoder Cnts) */

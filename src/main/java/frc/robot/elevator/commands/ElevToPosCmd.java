@@ -34,12 +34,9 @@ public class ElevToPosCmd extends CommandBase {
     	commandTmr.start();
         System.out.println("");
         System.out.println("********* Starting ElevToPosCmd Target Pos = " + tgt_pos);
-        curr_pos = Robot.elevator.getElevPosInches();
-        if (m_relative == "Elev") {
-            tgt_pos = Robot.elevator.limit_target_pos(tgt_pos);
-        } else {
-            tgt_pos = Robot.elevator.limit_target_pos(Robot.elevator.convertHeightToPos(tgt_pos));
-        }
+        curr_pos = Robot.elevator.getElevHeightInches();
+        tgt_pos = Robot.elevator.limit_target_ht(tgt_pos);
+
         diff =  curr_pos - tgt_pos;
         dir = Dir.DONE;
         if ( diff > 0 )     { dir = Dir.DN; }
@@ -50,7 +47,7 @@ public class ElevToPosCmd extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        curr_pos = Robot.elevator.getElevPosInches(); 
+        curr_pos = Robot.elevator.getElevHeightInches(); 
         diff =  curr_pos - tgt_pos;
         if (dir == Dir.DN) {
             // Were Lowering

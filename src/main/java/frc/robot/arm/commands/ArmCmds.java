@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
 import frc.robot.arm.ArmConfig;
 
-//the funny code
-
 public class ArmCmds {
     
     // Default Command
@@ -26,6 +24,17 @@ public class ArmCmds {
     public static Command StopArmCmd() {
         return new InstantCommand( () -> Robot.arm.stopArm(), Robot.arm)
             .withName("StopArmCmd");
+    }
+
+    public static Command ResetArmEncoderCmd() {
+        return new InstantCommand( () -> Robot.arm.resetEncoder(), Robot.arm);
+    }
+
+    public static Command SetArmBrakeCmd() {
+        return new InstantCommand( () -> Robot.arm.setBrakeMode(true), Robot.arm);
+    }
+    public static Command SetArmCoastCmd() {
+        return new InstantCommand( () -> Robot.arm.setBrakeMode(false), Robot.arm);
     }
 
     public static Command RaiseArmCmd() {

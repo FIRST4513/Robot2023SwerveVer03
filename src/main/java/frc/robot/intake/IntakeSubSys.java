@@ -100,8 +100,7 @@ public class IntakeSubSys extends SubsystemBase {
     }
 
     public String coneDetectStatus(){
-        if(isConeDetected()) { 
-            return "Detected"; } 
+        if(isConeDetected())    { return "Detected"; } 
         return "Not Detected";
     }
 
