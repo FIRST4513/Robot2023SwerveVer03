@@ -2,6 +2,7 @@ package frc.robot.operator;
 
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.lib.gamepads.Gamepad;
+import frc.robot.arm.commands.ArmCmds;
 import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.intake.commands.IntakeConeCmd;
 import frc.robot.operator.commands.OperatorGamepadCmds;
@@ -18,12 +19,13 @@ public class OperatorGamepad extends Gamepad {
         gamepad.yButton.onTrue(new IntakeConeCmd());
         // gamepad.yButton.onTrue(new PrintCommand("Y Pressed"));
 
+        gamepad.startButton.onTrue(ArmCmds.ResetArmEncoderCmd());
+        gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullBackPosCmd());
+
         gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.SetArmElevToLowPosCmd());
         gamepad.Dpad.Right.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
         gamepad.Dpad.Left.onTrue(OperatorGamepadCmds.SetArmElevToMidPosCmd());
         gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.SetArmElevToHighPosCmd());
-
-        gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullBackPosCmd());
 
         gamepad.rightBumper.whileTrue(OperatorGamepadCmds.ControlArmElevByJoysticksCmd());
     }
