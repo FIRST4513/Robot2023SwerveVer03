@@ -143,6 +143,7 @@ public class ElevatorSubSys extends SubsystemBase {
 
     // ------------  Set Elev to Height by Motion Magic  ----------
     public void setMMheight(double height) {
+        height = limit_target_ht(height);
         double position = convertHeightToFalconCnt(height);
         target_height = height;     // Store to be used in test for there yet
         //m_motor.set(ControlMode.MotionMagic, position);
@@ -162,11 +163,11 @@ public class ElevatorSubSys extends SubsystemBase {
     }
 
     public double convertHeightToFalconCnt( double height) {
-        return height / config.kElevatorEncoderDistPerPulse;
+        return height / config.ELEV_ENCODER_CONV;
     }
 
     public double convertFalconCntToHeight( double cnt) {
-        return config.kElevatorEncoderDistPerPulse * cnt;
+        return config.ELEV_ENCODER_CONV * cnt;
     }
 
     public void resetEncoder(){

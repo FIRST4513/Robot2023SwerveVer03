@@ -75,24 +75,24 @@ public class ElevatorTelemetry {
 
         tab.add("MM To 5.0", 
             new RunCommand( () -> Robot.elevator.setMMheight( 5.0 ), Robot.elevator))
-            .withPosition(0, 0)    .withSize(12, 1);
+            .withPosition(0, 0)    .withPosition(14, 1);
 
         tab.add("MM To 10.0", 
             new RunCommand( () -> Robot.elevator.setMMheight( 10.0 ), Robot.elevator))
-            .withPosition(0, 0)    .withSize(12, 3);
+            .withPosition(0, 0)    .withPosition(14, 2);
 
         tab.add("MM To 15.0", 
             new RunCommand( () -> Robot.elevator.setMMheight( 15.0 ), Robot.elevator))
-            .withPosition(0, 0)    .withSize(12, 5);
+            .withPosition(0, 0)    .withPosition(14, 3);
             
         tab.add("MM To 20.0", 
             new RunCommand( () -> Robot.elevator.setMMheight( 20.0 ), Robot.elevator))
-            .withPosition(0, 0)    .withSize(12, 7);
+            .withPosition(0, 0)    .withPosition(14, 4);
 
         tab.add("Goto Bottom", 
             new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
                                 .until(() ->Robot.elevator.isLowerLimitSwitchPressed()))
-            .withPosition(0, 0)    .withSize(12, 9);
+            .withPosition(0, 0)    .withPosition(14, 5);
 
         tab.addBoolean("MM Tgt Reached", () ->Robot.elevator.isMMtargetReached());
 

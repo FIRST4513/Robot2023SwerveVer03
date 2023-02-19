@@ -36,7 +36,7 @@ public class ElevFXMotorConfig {
      *      ( 1023 = full Pwr, 3316 = sensor units of error)
      *      controller will add 0.02 pwr for each inch we are off (up to the max velocity specified)
      */
-    public final double kP = 0.0;     // Start test with 0 kP and only use arbitraryFeedForward and test adding kP
+    public final double kP = 0.07;     // Start test with 0 kP and only use arbitraryFeedForward and test adding kP
     public final double kI = 0.0;     // could be 0
     public final double kD = 0.0;     // could be 0
     public final double kF = 0.0;     // Leave as 0 we will be using ArbitraryFeedForward for position control
@@ -48,8 +48,8 @@ public class ElevFXMotorConfig {
      *                              1  inch in 1/100 second ( 100 ms)
      *                              1 inch = 3,316 sensor units
      */
-    public final double motionCruiseVelocity        = 1500; // 3316; // 10 inches per second (test starting slower ie 1500)
-    public final double motionAcceleration          = 1500; // 1 second to get up to cruise velocity
+    public final double motionCruiseVelocity        = 3316; // 3316; // 10 inches per second (test starting slower ie 1500)
+    public final double motionAcceleration          = 3316; // 1 second to get up to cruise velocity
     public final int motionCurveStrength            = 0;    // Round off jerks in motion ( 0 no smoothing to 8 max smoothing)
     public final static double arbitraryFeedForward = 0.08; // Measured value to hold elev
 

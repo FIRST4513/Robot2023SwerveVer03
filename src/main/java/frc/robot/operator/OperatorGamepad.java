@@ -43,8 +43,9 @@ public class OperatorGamepad extends Gamepad {
         }
         if (OperatorGamepadConfig.yInvert) {
             return yValue * -0.33;
+        } else {
+            return yValue * 0.33;
         }
-        return yValue;
     }
 
     public double getArmInput() {

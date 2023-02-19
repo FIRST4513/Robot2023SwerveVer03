@@ -5,8 +5,10 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.robot.Robot;
+import frc.robot.auto.commands.DelayCmd;
 
 // -----------------------------------------------------
 // --------------   Elevator Commands    ---------------
@@ -46,9 +48,15 @@ public class ElevatorCmds {
     }
 
     public static Command ElevGoToBottomCmd() {
-        return new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
-            .until(() ->Robot.elevator.isLowerLimitSwitchPressed())
-            .withName("ElevGoToBottomCmd");
+        return new SequentialCommandGroup(
+            new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
+                .until(() ->Robot.elevator.isLowerLimitSwitchPressed()),
+            new DelayCmd(0.25),
+            new InstantCommand( () -> Robot.elevator.resetEncoder())
+        ).withName("ElevGoToBottomCmd");
+        // return new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
+        //     .until(() ->Robot.elevator.isLowerLimitSwitchPressed())
+        //     .withName("ElevGoToBottomCmd");
     }
     
     public static Command ElevByJoystickCmd() {
