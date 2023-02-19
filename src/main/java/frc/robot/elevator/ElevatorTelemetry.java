@@ -92,7 +92,7 @@ public class ElevatorTelemetry {
         tab.add("Goto Bottom", 
             new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
                                 .until(() ->Robot.elevator.isLowerLimitSwitchPressed()))
-            .withPosition(0, 0)    .withSize(12, 1);
+            .withPosition(0, 0)    .withSize(12, 9);
 
         tab.addBoolean("MM Tgt Reached", () ->Robot.elevator.isMMtargetReached());
 
