@@ -22,10 +22,8 @@ public class ElevatorSubSys extends SubsystemBase {
 
     // Elevator Variables
     public double target_height;
-
-    public double mCurrPwr = 0;
     public double mCurrElevPwr;
-    public double PID_output = 0;
+
     public double mCurrEncoderCnt = 0;
     public double mCurrElevHt;      // Elevator Height Zero at bottom (Inches)
 
@@ -61,6 +59,7 @@ public class ElevatorSubSys extends SubsystemBase {
     // ------------ Hold Elevator Position ----------
     public void elevHoldMtr(){
         elevSetSpeed( config.KHoldSpeedDefault ); 
+        mCurrElevPwr = config.KHoldSpeedDefault;
     }
 
     // ------------ Stop Elevator Motor  ----------
@@ -69,7 +68,17 @@ public class ElevatorSubSys extends SubsystemBase {
         m_motor.stopMotor();
     }
 
-    // ------------ This does all the work (Non PID) to Drive the Elevator ----------
+    // ------------  Set Elev to Height by Motion Magic  ----------
+    public void setMMheight(double height) {
+        height = limit_target_ht(height);
+        double position = convertHeightToFalconCnt(height);
+        target_height = height;
+        m_motor.set( ControlMode.MotionMagic, position,
+                     DemandType.ArbitraryFeedForward,
+                     ElevFXMotorConfig.arbitraryFeedForward);
+    }
+
+    // ------------ This Drives the Elevator Manually during TeleOp ----------
     public void elevSetSpeed(double speed){
         // Cap speed to max
         if ( speed > config.raiseMaxSpeed )  { speed = config.raiseMaxSpeed; }
@@ -102,7 +111,6 @@ public class ElevatorSubSys extends SubsystemBase {
         }
 
         mCurrElevPwr = speed;
-        //m_motor.setVoltage( speed * 12.0);      // This is supposed to be more constant
         m_motor.set(mCurrElevPwr);              // Send Power to motor  
     }
 
@@ -111,16 +119,6 @@ public class ElevatorSubSys extends SubsystemBase {
     }
 
 
-    // ------------  Set Elev to Height by Motion Magic  ----------
-    public void setMMheight(double height) {
-        height = limit_target_ht(height);
-        double position = convertHeightToFalconCnt(height);
-        target_height = height;     // Store to be used in test for there yet
-        //m_motor.set(ControlMode.MotionMagic, position);
-        m_motor.set( ControlMode.MotionMagic, position,
-                     DemandType.ArbitraryFeedForward,
-                     ElevFXMotorConfig.arbitraryFeedForward);
-    }
 
 // -----------------  Encoder Sensor Methods --------------------
     public double getElevEncoderCnt()               { return mCurrEncoderCnt;}
@@ -179,23 +177,17 @@ public class ElevatorSubSys extends SubsystemBase {
 
     // -----------------  Lower/Upper Limits ----------------
     public boolean isLowerLimitSwitchPressed() {
-        if (elevLowerLimitSw.get() == config.lowerLimitTrue) {
-            return true;
-        }
+        if (elevLowerLimitSw.get() == config.lowerLimitTrue) { return true; }
         return false;
     }
 
     public boolean isUpperLimitSwitchPressed() {
-        if (elevUpperLimitSw.get() == config.lowerLimitTrue) {
-            return true;
-        }
+        if (elevUpperLimitSw.get() == config.lowerLimitTrue) { return true; }
         return false;
     }
 
     public boolean isUpperLimitReached() {
-        if ( mCurrElevHt >= config.KElevMaxTopHt ) {
-            return true;
-        }
+        if ( mCurrElevHt >= config.KElevMaxTopHt )           { return true; }
         return false;
     }
 
@@ -203,19 +195,13 @@ public class ElevatorSubSys extends SubsystemBase {
     public boolean isUpperLmtNotReached()   { return !isUpperLimitSwitchPressed(); }
 
     public String getUpperLimitSwStatus(){
-        if ( isUpperLimitSwitchPressed() ) {
-            return "Pressed"; 
-        } else {
-            return "Not Pressed";
-        }
+        if ( isUpperLimitSwitchPressed() )  { return "Pressed"; }
+        return "Not Pressed";
     }
 
     public String getLowerLimitSwStatus(){
-        if ( isLowerLimitSwitchPressed() ) {
-            return "Pressed"; 
-        } else {
-            return "Not Pressed";
-        }
+        if ( isLowerLimitSwitchPressed() ) { return "Pressed"; }
+        return "Not Pressed";
     }
 
     public void softLimitsTrue() {

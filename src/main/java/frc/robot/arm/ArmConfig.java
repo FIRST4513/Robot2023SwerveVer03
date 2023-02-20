@@ -5,6 +5,7 @@ public class ArmConfig {
     // ------- Encoder Conversion Factor --------------
     // 76815 encoder Cnts = 42.5 degrees (1807.41176 cnts per degree)
     public final static double kEncoderConversion = 1807.41176;      // Convert cnt to degrees of angle
+    public final static double KAngleDeadBand     = +1.0;            // How close to target degree is close enough
 
     // ------ Speed Constants ------
     public final static double kRaiseSpeed  = +0.25;

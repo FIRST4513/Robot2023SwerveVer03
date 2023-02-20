@@ -18,12 +18,12 @@ public class ArmSubSys extends SubsystemBase {
     private DigitalInput        upperlimitSwitch;
     private DigitalInput        lowerlimitSwitch;
 
-    public double mCurrEncoderCnt   = 0; 
-    public double mCurrArmAngle     = 0;
+    // Arm Variables
+    public double mCurrArmPwr       = 0;
     public double mTargetArmAngle   = 0;       // PID Target Angle
 
-    public double mPIDSetpoint      = 0;
-    public double mPIDOutput        = 0;
+    public double mCurrEncoderCnt   = 0; 
+    public double mCurrArmAngle     = 0;
 
     // ------------- Constructor ----------
     public ArmSubSys() {
@@ -67,12 +67,25 @@ public class ArmSubSys extends SubsystemBase {
         }
         double hold_pwr = Math.cos(Math.toRadians(mCurrArmAngle)) * motorConfig.arbitraryFeedForwardScaler;
         setArmMotor(hold_pwr);
+        mCurrArmPwr = hold_pwr;
     }
 
     public void stopArm()   { 
         mArmMotor.stopMotor();
+        mCurrArmPwr = 0.0;
     }
 
+    // ------------  Set Arm to Angle by Motion Magic  ----------
+    public void setMMangle(double angle) {
+        angle = limitArmAngle( angle );     // Limit range to max allowed
+        mTargetArmAngle = angle;     // Store to be used in test for there yet
+        double aff = Math.cos(Math.toRadians(angle)) * motorConfig.arbitraryFeedForwardScaler;
+        mArmMotor.set(  ControlMode.MotionMagic, angle,
+                        DemandType.ArbitraryFeedForward,
+                        aff);
+        }
+
+    // ------------  Set Arm Manually during TeleOP  ----------
     public void setArmMotor( double pwr ) {
         // Limit power if needed
         if ( pwr > ArmConfig.kArmMotorRaiseMaxPwr) { pwr = ArmConfig.kArmMotorRaiseMaxPwr; }
@@ -97,12 +110,15 @@ public class ArmSubSys extends SubsystemBase {
             }
         }
         mArmMotor.set(pwr);
+        mCurrArmPwr = pwr;
     }
 
     public void setArmMotor(DoubleSupplier pwr) {
         setArmMotor(pwr.getAsDouble());
+        mCurrArmPwr = pwr.getAsDouble();
     }
  
+    // -------- Set Brake Mode ----------
     public void setBrakeMode(Boolean enabled) {
         if (enabled) {
             mArmMotor.setNeutralMode(NeutralMode.Brake);
@@ -110,21 +126,32 @@ public class ArmSubSys extends SubsystemBase {
             mArmMotor.setNeutralMode(NeutralMode.Coast);
         }
     }
- 
-    // ------------  Set Arm to Angle by Motion Magic  ----------
 
-    public void setMMangle(double angle) {
-        angle = limitArmAngle( angle );     // Limit range to max allowed
-        double aff = Math.cos(Math.toRadians(angle)) * motorConfig.arbitraryFeedForwardScaler;
-        mArmMotor.set(  ControlMode.MotionMagic, angle,
-                        DemandType.ArbitraryFeedForward,
-                        aff);
-    }
 
     // ------------------------------------------------------------
     // ---------------- Arm Limit Switch Methods ------------------
     // ------------------------------------------------------------
     
+    public boolean isLowerLimitSwitchPressed() {
+        if (lowerlimitSwitch.get() == ArmConfig.lowerLimitSwitchTrue) { return true; }
+        return false;
+    }
+
+    public boolean isUpperLimitSwitchPressed() {
+        if (upperlimitSwitch.get() == ArmConfig.upperLimitSwitchTrue) { return true; }
+        return false;
+    }
+
+    public String lowerLimitSwitchStatus(){
+        if (lowerlimitSwitch.get() == ArmConfig.lowerLimitSwitchTrue) { return "Pressed"; }
+        return "Not Pressed";
+    }
+
+    public String upperLimitSwitchStatus() {
+        if (upperlimitSwitch.get() == ArmConfig.upperLimitSwitchTrue) { return "Pressed"; }
+        return "Not Pressed";
+    }
+
     // --------------- Set Soft Limits -----------------
     public void softLimitsTrue() {
         mArmMotor.configReverseSoftLimitEnable(true);   // ????????????
@@ -133,69 +160,43 @@ public class ArmSubSys extends SubsystemBase {
     public void softLimitsFalse() {
         mArmMotor.configReverseSoftLimitEnable(false);  // ?????????????
     }
-    
-    public boolean isLowerLimitSwitchPressed() {
-        if (lowerlimitSwitch.get() == ArmConfig.lowerLimitSwitchTrue) {
-            return true;
-        }
-        return false;
-    }
 
-    public boolean isUpperLimitSwitchPressed() {
-        if (upperlimitSwitch.get() == ArmConfig.upperLimitSwitchTrue) {
-            return true;
-        }
-        return false;
-    }
-
-    public String lowerLimitSwitchStatus(){
-        if (lowerlimitSwitch.get() == ArmConfig.lowerLimitSwitchTrue) {
-            return "Pressed";
-        }
-        return "Not Pressed";
-    }
-
-    public String upperLimitSwitchStatus() {
-        if (upperlimitSwitch.get() == ArmConfig.upperLimitSwitchTrue) {
-            return "Pressed";
-        }
-        return "Not Pressed";
-    }
-    
     // -------------------------------------------------------
     // ---------------- Arm Encoder Methods ------------------
     // -------------------------------------------------------
-
-    public void resetEncoder() {
-        // Sets encoder to 0
-        mArmMotor.setSelectedSensorPosition(0);
-    }
-
-    public void resetEncoder( double position ){
-        mArmMotor.setSelectedSensorPosition(position);
-    }
-
-    public void resetEncoderAngle( double angle ){
-        mArmMotor.setSelectedSensorPosition(convertAngleToCnt(angle));
-    }    
-
-    public double getEncoderCnt() {
-        return mArmMotor.getSelectedSensorPosition();
-    }
-
-    public double getArmAngle() {
-        return convertCntToAngle(getEncoderCnt());
-    }
-
+    
     public void updateCurrentArmPosition() {
-        mCurrEncoderCnt = getEncoderCnt(); 
+        // Called from Periodic so only 1 CAN call is needed per command loop 20ms
+        mCurrEncoderCnt = mArmMotor.getSelectedSensorPosition();
         mCurrArmAngle = Rmath.mRound((mCurrEncoderCnt * ArmConfig.kEncoderConversion) , 2);
      }
+
+    public double getEncoderCnt()   { return mCurrEncoderCnt; }
+    public double getArmAngle()     { return mCurrArmAngle;   }
+
+    public double convertAngleToCnt( double angle )   { return angle * ArmConfig.kEncoderConversion; }
+    public double convertCntToAngle( double cnt )     { return cnt / ArmConfig.kEncoderConversion; }
+
+
+    public void resetEncoder()                    { mArmMotor.setSelectedSensorPosition(0); }
+    public void resetEncoder( double position )   { mArmMotor.setSelectedSensorPosition(position); }
+    public void resetEncoderAngle( double angle ) { mArmMotor.setSelectedSensorPosition(convertAngleToCnt(angle)); }    
+
+    // ---- Misc Methods ----
+
+    public double getTargetAngle()         { return mTargetArmAngle; }
+    public double getArmMotorPwr()         { return mCurrArmPwr; }
 
      public double limitArmAngle( double angle ){
         if (angle > ArmConfig.maxArmAngle)      { angle = ArmConfig.maxArmAngle; }
         if (angle < ArmConfig.minArmAngle)      { angle = ArmConfig.minArmAngle; }
         return angle;
+    }
+
+    public boolean isMMtargetReached(){
+        // If we are within the deadband of our target we can stop
+        if (Math.abs(mTargetArmAngle-mCurrArmAngle) <= ArmConfig.KAngleDeadBand) { return true; }
+        return false;
     }
 
     public boolean isArmInside() {
@@ -206,12 +207,8 @@ public class ArmSubSys extends SubsystemBase {
         }
     }
 
-    public boolean isArmOutside() {
-        return !isArmInside();
-    }
+    public boolean isArmOutside() { return !isArmInside(); }
 
-    public double convertAngleToCnt( double angle)   { return angle * ArmConfig.kEncoderConversion; }
-    public double convertCntToAngle( double cnt)     { return cnt / ArmConfig.kEncoderConversion; }
 
     // -------------------------------------------------------
     // ---------------- Configure Arm Motor ------------------

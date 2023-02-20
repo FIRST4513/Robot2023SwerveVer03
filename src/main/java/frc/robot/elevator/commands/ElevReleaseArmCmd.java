@@ -17,7 +17,7 @@ public class ElevReleaseArmCmd extends CommandBase {
 
     @Override
     public void initialize() {
-        Robot.elevator.setMMheight(ElevatorConfig.ElevInitReleaseHt);
+        cmdState = CmdState.RAISING;
     }
 
     @Override
