@@ -25,6 +25,14 @@ public class OperatorGamepadCmds {
         );
     }
 
+    public static Command ControlArmByJoysticksCmd() {
+        return ArmCmds.ArmByJoystickCmd();
+    }
+
+    public static Command ControlElevByJoysticksCmd() {
+        return ElevatorCmds.ElevByJoystickCmd();
+    }
+
     /** Command that can be used to rumble the pilot controller */
     public static Command RumbleOperatorCmd(double intensity) {
         return new RunCommand(() -> Robot.pilotGamepad.rumble(intensity), Robot.pilotGamepad);

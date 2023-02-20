@@ -16,17 +16,17 @@ public class OperatorGamepad extends Gamepad {
         gamepad.bButton.onTrue(IntakeCmds.IntakeCubeRetractCmd());
         gamepad.xButton.onTrue(IntakeCmds.IntakeStopCmd());
         gamepad.yButton.onTrue(new IntakeConeCmd());
-        // gamepad.yButton.onTrue(new PrintCommand("Y Pressed"));
 
-        gamepad.startButton.onTrue(ArmCmds.ResetArmEncoderCmd());
+        gamepad.startButton .onTrue(ArmCmds.ResetArmEncoderCmd());
         gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullBackPosCmd());
 
-        gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.SetArmElevToLowPosCmd());
+        gamepad.Dpad.Down .onTrue(OperatorGamepadCmds.SetArmElevToLowPosCmd());
         gamepad.Dpad.Right.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
-        gamepad.Dpad.Left.onTrue(OperatorGamepadCmds.SetArmElevToMidPosCmd());
-        gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.SetArmElevToHighPosCmd());
+        gamepad.Dpad.Left .onTrue(OperatorGamepadCmds.SetArmElevToMidPosCmd());
+        gamepad.Dpad.Up   .onTrue(OperatorGamepadCmds.SetArmElevToHighPosCmd());
 
-        gamepad.rightBumper.whileTrue(OperatorGamepadCmds.ControlArmElevByJoysticksCmd());
+        gamepad.rightBumper.whileTrue(OperatorGamepadCmds.ControlElevByJoysticksCmd());
+        gamepad.leftBumper .whileTrue(OperatorGamepadCmds.ControlArmByJoysticksCmd());
     }
 
     public void setupDisabledButtons() {
