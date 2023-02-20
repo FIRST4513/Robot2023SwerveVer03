@@ -6,7 +6,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
@@ -18,7 +17,6 @@ public class ArmSubSys extends SubsystemBase {
     public  WPI_TalonSRX        mArmMotor;
     private DigitalInput        upperlimitSwitch;
     private DigitalInput        lowerlimitSwitch;
-    private PIDController       mArmPIDController;
 
     public double mCurrEncoderCnt   = 0; 
     public double mCurrArmAngle     = 0;
@@ -33,7 +31,6 @@ public class ArmSubSys extends SubsystemBase {
         mArmMotor         = new WPI_TalonSRX(Motors.armMotorID);
         upperlimitSwitch  = new DigitalInput(LimitSwitches.armUpperLimitSw);
         lowerlimitSwitch  = new DigitalInput(LimitSwitches.armLowerLimitSw);
-        mArmPIDController = new PIDController(ArmConfig.kP, ArmConfig.kI, ArmConfig.kD);
         armMotorConfig();
         stopArm();
         mArmMotor.configForwardSoftLimitThreshold(mCurrArmAngle);
@@ -41,12 +38,13 @@ public class ArmSubSys extends SubsystemBase {
 
     // ------------- Periodic -------------
     public void periodic() {
-        if (isLowerLimitSwitchPressed() == true) {
-            resetEncoder(ArmConfig.lowerLimitPos);      // recalibrate encoder at retracted position
-        }
-        if (isUpperLimitSwitchPressed() == true) {
-            resetEncoder(ArmConfig.upperLimitPos);      // recalibrate encoder at extended position
-        }
+        // DO NOT RESET ENCODERS at Ends of travel Init at begining and leave
+        // if (isLowerLimitSwitchPressed() == true) {
+        //     resetEncoder(ArmConfig.lowerLimitPos);      // recalibrate encoder at retracted position
+        // }
+        // if (isUpperLimitSwitchPressed() == true) {
+        //     resetEncoder(ArmConfig.upperLimitPos);      // recalibrate encoder at extended position
+        // }
         updateCurrentArmPosition();
     }
 
@@ -67,7 +65,7 @@ public class ArmSubSys extends SubsystemBase {
             stopArm();
             return;
         }
-        double hold_pwr = Math.cos(Math.toRadians(mCurrArmAngle)) * ArmConfig.kHoldkP;
+        double hold_pwr = Math.cos(Math.toRadians(mCurrArmAngle)) * motorConfig.arbitraryFeedForwardScaler;
         setArmMotor(hold_pwr);
     }
 
@@ -111,32 +109,10 @@ public class ArmSubSys extends SubsystemBase {
         }
     }
  
-    // ------------  Set Arm to Angle by PID  ----------
-    public void setPIDArmToAngle( double angle ) {
-        // Angle 0 = Straight down 90 = fully extended -90 = fully retracted
-        angle = limitArmAngle( angle );    // Dont allow an angle greater than permitted
-
-        double hold_pwr = Math.cos(Math.toRadians(angle)) * ArmConfig.kHoldkP;
-                         
-        mPIDSetpoint = convertAngleToCnt(angle);                    // Convert Angle to Encoder Cnts ??????
-        mPIDOutput = mArmPIDController.calculate( mPIDSetpoint );   // Calculate PID Out to send to motor
-        mPIDOutput = mPIDOutput + hold_pwr;                  // Add feedforward component
-
-        setArmMotor( mPIDOutput );                                  // Send Power to motor  Pwr -1 to +1
-        //m_motor.setVoltage(mPIDOutput);                           // Voltage -12 to +12 ???????        
-    }
-
     // ------------  Set Arm to Angle by Motion Magic  ----------
-    public double percentToFalcon(double percent) {
-        return motorConfig.armMaxFalcon * (percent / 100);
-    }
 
-    public void setMMPercent(double percent) {
-        setMMPosition( percentToFalcon(percent) );
-    }
-
-    public void setMMPosition(double angle) {
-        //mArmMotor.set(ControlMode.MotionMagic, angle);
+    public void setMMangle(double angle) {
+        angle = limitArmAngle( angle );     // Limit range to max allowed
         double aff = Math.cos(Math.toRadians(angle)) * motorConfig.arbitraryFeedForwardScaler;
         mArmMotor.set(  ControlMode.MotionMagic, angle,
                         DemandType.ArbitraryFeedForward,
@@ -217,7 +193,7 @@ public class ArmSubSys extends SubsystemBase {
     }
 
     public boolean isArmInside() {
-        if (getArmAngle() < ArmConfig.ArmInsidePos) {
+        if (getArmAngle() < 0) {
             return true;
         } else {
             return false;
