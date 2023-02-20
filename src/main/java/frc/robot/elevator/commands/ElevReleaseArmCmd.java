@@ -1,14 +1,12 @@
 package frc.robot.elevator.commands;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.arm.ArmConfig;
 import frc.robot.elevator.ElevatorConfig;
 
 public class ElevReleaseArmCmd extends CommandBase {
     
-    Timer delayTimer = new Timer();
     static enum CmdState {RAISING, ONSWITCH, DONE};
     CmdState cmdState = CmdState.RAISING;
 
@@ -20,9 +18,6 @@ public class ElevReleaseArmCmd extends CommandBase {
     @Override
     public void initialize() {
         Robot.elevator.setMMheight(ElevatorConfig.ElevInitReleaseHt);
-
-        delayTimer.reset();
-        delayTimer.start();
     }
 
     @Override
