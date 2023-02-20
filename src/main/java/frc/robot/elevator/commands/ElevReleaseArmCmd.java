@@ -9,6 +9,8 @@ import frc.robot.elevator.ElevatorConfig;
 public class ElevReleaseArmCmd extends CommandBase {
     
     Timer delayTimer = new Timer();
+    static enum CmdState {RAISING, ONSWITCH, DONE};
+    CmdState cmdState = CmdState.RAISING;
 
     // Command Constructor
     public ElevReleaseArmCmd() {
@@ -18,6 +20,7 @@ public class ElevReleaseArmCmd extends CommandBase {
     @Override
     public void initialize() {
         Robot.elevator.setMMheight(ElevatorConfig.ElevInitReleaseHt);
+
         delayTimer.reset();
         delayTimer.start();
     }
@@ -27,10 +30,20 @@ public class ElevReleaseArmCmd extends CommandBase {
         // Raise Elevator to clear arm and let fall
         Robot.elevator.setMMheight(ElevatorConfig.ElevInitReleaseHt);
 
-        // Lets look to see when it passes the back limit switch
-        // And the set counter for that position
-        if (Robot.arm.isLowerLimitSwitchPressed()) {
-            Robot.arm.resetEncoder(ArmConfig.lowerSoftLimitPos);
+        if (cmdState == CmdState.RAISING) {
+            // Lets look to see when it hits the switch on way down
+            if (Robot.arm.isLowerLimitSwitchPressed()) {
+                cmdState = CmdState.ONSWITCH;
+            }
+        }
+        if (cmdState == CmdState.ONSWITCH) {
+            if (Robot.arm.isLowerLimitSwitchPressed()) {
+                // Were still on the switch keep resetting the encoder
+                Robot.arm.resetEncoder(ArmConfig.lowerSoftLimitPos);
+            } else {
+                // We have passed through switch, were done
+                cmdState = CmdState.DONE;
+            }
         }
     }
 
@@ -40,7 +53,7 @@ public class ElevReleaseArmCmd extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        if (Robot.elevator.getElevHeightInches() >= ElevatorConfig.ElevInitReleaseHt) { return true; }
+        if (cmdState == CmdState.DONE) { return true; }
         return false;
     }
 }
