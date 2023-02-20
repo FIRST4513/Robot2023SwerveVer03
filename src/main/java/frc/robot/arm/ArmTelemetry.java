@@ -2,8 +2,10 @@ package frc.robot.arm;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
+import frc.robot.elevator.commands.ElevReleaseArmCmd;
 
 public class ArmTelemetry {
     protected ShuffleboardTab tab;
@@ -23,7 +25,8 @@ public class ArmTelemetry {
         tab.addNumber("Input from Operator Joystick",
                         () -> Robot.operatorGamepad.getArmInput())           .withPosition(6, 2).withSize(3, 2);
         
-
+        //SmartDashboard.putData("Release Arm", new ElevReleaseArmCmd());
+        tab.add("Release Arm", new ElevReleaseArmCmd())                     .withPosition(16, 0).withSize(3, 2);;
 
         tab.add("MM To 5", 
         new RunCommand( () -> Robot.arm.setMMangle( 5.0 ), Robot.arm))      .withPosition(10, 0).withSize(3, 2);
