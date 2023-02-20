@@ -7,7 +7,6 @@ import java.util.Map;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
-import frc.robot.elevator.commands.ElevToPosCmd;
 
 // --------------------------------------------------------
 // ------------   Elevator Telemetry Class   --------------
@@ -25,10 +24,7 @@ public class ElevatorTelemetry {
     private static ShuffleboardTab    tab;
     private static ShuffleboardLayout elevEncoderLayout;
     private static ShuffleboardLayout elevMotorLayout;
-    private static ShuffleboardLayout elevPIDLayout;
     private static ShuffleboardLayout elevStatusLayout;
-    private static ShuffleboardLayout elevCmdsLayout;
-    private static ShuffleboardLayout elevPIDCmdsLayout;
 
     // --- Widgets ---
     SuppliedValueWidget<Double>  m_motorPwrWidget;
@@ -67,9 +63,6 @@ public class ElevatorTelemetry {
         elevMotorLayout()       .withPosition(0, 0)  ;
         elevStatusLayout()      .withPosition(0, 2)  ;
         elevEncoderLayout()     .withPosition(2, 0)  ;
-        elevPIDLayout()         .withPosition(4, 0)  ;
-        elevCmdsLayout()        .withPosition(6, 0)  ;
-        elevPIDCmdsLayout()     .withPosition(9, 0)  ;
         tab.add("Elev Commands",elevator).withPosition(0, 5).withSize(5, 2);
         tab.addNumber("Input from Operator Joystick", () -> Robot.operatorGamepad.getElevInput());
 
@@ -128,62 +121,6 @@ public class ElevatorTelemetry {
         return elevEncoderLayout;
     }
 
-    // ------------ PID Data Layout ---------
-    public ShuffleboardLayout elevPIDLayout() {
-        elevPIDLayout = tab.getLayout("PID", BuiltInLayouts.kGrid);
-        elevPIDLayout.withProperties(Map.of("Label position", "TOP"));
-        elevPIDLayout.withSize(2, 4);
-         
-        // Target Height Widget
-        m_PIDtargetHtWidget = elevPIDLayout.addNumber("Tgt Ht.",()-> elevator.getTargetHeight())
-            .withPosition(0,1).withSize(2, 1);        
-
-        // PID Calc Output Widget
-        m_PIDoutWidget = elevPIDLayout.addNumber("PID 14.0 Test",()-> elevator.getPidCalcTestOut( 14.0 ))
-            .withPosition(0,2).withSize(2, 1);
-                
-        return elevPIDLayout;
-    }
-
-    // --------------- Elev Commands Layout -------------
-    public ShuffleboardLayout elevPIDCmdsLayout(){
-        elevPIDCmdsLayout = tab.getLayout("Elev PID Cmds", BuiltInLayouts.kList);
-        elevPIDCmdsLayout.withProperties(Map.of("Label position", "TOP"));
-        elevPIDCmdsLayout.withSize(3, 5);
-
-        elevPIDCmdsLayout.add("PID To 14.0", 
-            new RunCommand( () -> elevator.setPIDheight( 14.0 ), elevator))
-            .withPosition(0, 0)    .withSize(2, 1);
-        elevPIDCmdsLayout.add("PID To 0.0", 
-            new RunCommand( () -> elevator.setPIDheight( 0.0 ), elevator))
-            .withPosition(0, 1)    .withSize(2, 1);
-        elevPIDCmdsLayout.add("PID To 35.0", 
-            new RunCommand( () -> elevator.setPIDheight( 35.0 ), elevator))
-            .withPosition(0, 2)    .withSize(2, 1);
-
-        return elevPIDCmdsLayout;            
-    }
-    // --------------- Elev Commands Layout -------------
-    public ShuffleboardLayout elevCmdsLayout(){
-        elevCmdsLayout = tab.getLayout("Elev Cmds", BuiltInLayouts.kList);
-        elevCmdsLayout.withProperties(Map.of("Label position", "TOP"));
-        elevCmdsLayout.withSize(3, 6);
-
-        elevCmdsLayout.add("TO Pos 5.0", new ElevToPosCmd( 5.0,    "Elev", 5.0))
-            .withPosition(0, 0)    .withSize(2, 1);
-        elevCmdsLayout.add("TO Pos 10.0", new ElevToPosCmd( 10.0 , "Elev", 5.0))
-            .withPosition(0, 1)    .withSize(2, 1);
-        elevCmdsLayout.add("TO Pos 99.0", new ElevToPosCmd( 99.0 , "Elev", 5.0))
-            .withPosition(0, 2)    .withSize(2, 1);
-        elevCmdsLayout.add("TO Pos 0.0", new ElevToPosCmd( 0.0 ,  "Elev", 5.0)) 
-            .withPosition(0, 3)    .withSize(2, 1);
-
-        elevCmdsLayout.add("TO Bottom", new RunCommand( () -> elevator.elevLower(), elevator)
-            .until(() ->elevator.isLowerLimitSwitchPressed()))
-            .withPosition(0, 4)    .withSize(2, 1);
-
-        return elevCmdsLayout;
-    }
 
     // ------------ Elevator Status Layout ---------
     public ShuffleboardLayout elevStatusLayout() {
@@ -197,7 +134,7 @@ public class ElevatorTelemetry {
         // Upper Limit Switch Widget
         m_upperLimitSwWidget = elevStatusLayout.addString("Limit Upper",()-> elevator.getUpperLimitSwStatus())
             .withPosition(0,2).withSize(2, 1);
-
+            
         return elevStatusLayout;
     }
         

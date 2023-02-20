@@ -1,18 +1,10 @@
 package frc.robot.elevator;
 
-import edu.wpi.first.math.util.Units;
-
 public class ElevatorConfig {
     // Declare and Initialize needed class objects
 
     public final boolean lowerLimitTrue = false;
     public final boolean upperLimitTrue = false;
-
-
-    //public final double kElevatorGearing = 10.0;
-    public final double kElevatorDrumRadius = Units.inchesToMeters(2.0);
-
-    // public final double kElevatorEncoderDistPerPulse = 2.0 * Math.PI * kElevatorDrumRadius / 4096;
 
     // ------ Orig Elevator Speed Constants -----
     public final double kMaxPwr             = 0.25;
@@ -41,11 +33,5 @@ public class ElevatorConfig {
     public final static double ElevMidHt    = 20.0;             // Position to Score a Cube/Cone in MID Position
     public final static double ElevHighHt   = 30.0;             // Position to Score a Cube/Cone in Hi Position
     public final static double ElevInitReleaseHt = 24.0;        // Position needed to release arm on startup
-
-    // ---------- PID Constants ------------------
-    public final double  kP  = 0.02;
-    public final double  kI  = 0.0;
-    public final double  kD   = 0.0;
-    public final double  kF   = 0.08;       // same as hold speed
 
 }

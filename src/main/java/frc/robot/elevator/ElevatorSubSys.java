@@ -1,15 +1,10 @@
 package frc.robot.elevator;
 
 import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenixpro.controls.VoltageOut;
-
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
 import frc.robot.RobotConfig.LimitSwitches;
@@ -23,9 +18,6 @@ public class ElevatorSubSys extends SubsystemBase {
     // Devices
     public final WPI_TalonFX m_motor;
     public final DigitalInput elevLowerLimitSw, elevUpperLimitSw;
-
-    // PID Controller
-    public final PIDController elevPIDcontroller;
 
     // Elevator Variables
     public double target_height;
@@ -43,7 +35,6 @@ public class ElevatorSubSys extends SubsystemBase {
         m_motor             = new WPI_TalonFX(Motors.elevatorMotorID);
         elevLowerLimitSw    = new DigitalInput(LimitSwitches.elevatorLowerLimitSw);
         elevUpperLimitSw    = new DigitalInput(LimitSwitches.elevatorUpperLimitSw);
-        elevPIDcontroller   = new PIDController(config.kP, config.kI, config.kD);
         elevatorMotorConfig();
     }
 
@@ -118,28 +109,6 @@ public class ElevatorSubSys extends SubsystemBase {
         elevSetSpeed(speed.getAsDouble());
     }
 
-
-    // ------------  Set Elevator to Height by PID  ----------    
-    public void setPIDheight( double ht ) {
-        // All motion controlled relative to Floor
-        target_height = limit_target_ht( ht);
-        mCurrElevPwr = getPidCalcOut( target_height );
-        System.out.println("    PID to " + ht + "   CurPos=" + mCurrElevHt + " out=" + mCurrElevPwr);
-        elevSetSpeed(mCurrElevPwr); 
-    }
-
-    // ---------  PID Out Calculator  --------------
-    public double getPidCalcOut(double tgt_setpoint) {
-        double tgt = limit_target_ht (tgt_setpoint);
-        double out = elevPIDcontroller.calculate(mCurrElevHt, tgt );
-        out = out + config.kF;             // Add feedforward Term
-        return out;
-    }
-
-    // Test PID Calc routine
-    public double getPidCalcTestOut(double test_setpoint) {
-        return getPidCalcOut(test_setpoint);
-    }
 
     // ------------  Set Elev to Height by Motion Magic  ----------
     public void setMMheight(double height) {
@@ -239,43 +208,12 @@ public class ElevatorSubSys extends SubsystemBase {
         }
     }
 
-    
-    // ------------------------------------------------------
-    // ---------- Commands from Spectrum 2023 Code ----------
-    // ------------------------------------------------------
-
-    public void zeroElevator() {
-        m_motor.setSelectedSensorPosition(0);
-    }
-
-    public void resetSensorPosition(double pos) {
-        m_motor.setSelectedSensorPosition(pos); // 10 for now, will change later
-    }
-
     public void softLimitsTrue() {
         m_motor.configReverseSoftLimitEnable(true);
     }
 
     public void softLimitsFalse() {
         m_motor.configReverseSoftLimitEnable(false);
-    }
-
-    // public double getKf() {
-    //     TalonFXConfiguration FXconfig = new TalonFXConfiguration();
-    //     m_motor.getAllConfigs(FXconfig);
-    //     return FXconfig.slot0.kF;
-    // }
-
-
-    /**
-     * Converts inches to meters.
-     *
-     * @param inches
-     * @return meters
-     */
-    public static double inchesToMeters(double inches) {
-        double meters = inches * 0.0254;
-        return meters;
     }
 
     // --------------------------------------------------------

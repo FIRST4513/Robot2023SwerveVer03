@@ -27,7 +27,7 @@ public class ZeroElevator extends CommandBase {
     public void execute() {
         // Set elevator to slowly lower
         Robot.elevator.elevSetSpeed(ElevatorConfig.zeroSpeed);
-        Robot.elevator.zeroElevator();
+        //Robot.elevator.zeroElevator();
     }
 
     // Called once the command ends or is interrupted.
@@ -35,7 +35,7 @@ public class ZeroElevator extends CommandBase {
     public void end(boolean interrupted) {
         // Set elevator position to zero
         // enable soft limits
-        Robot.elevator.resetSensorPosition(-500);
+        //Robot.elevator.resetSensorPosition(-500);
         Robot.elevator.softLimitsTrue();
         Robot.elevator.setMMheight(0);
     }

@@ -60,7 +60,7 @@ public class OperatorGamepadCmds {
                 // False condition: cube, must avoid bumper collision;
                 // raise elevator for clearance, set arm, then move elev back to correct pos
                 new SequentialCommandGroup(
-                    ElevatorCmds.ElevGoToPIDheightCmd(ElevatorConfig.ElevClearHt),
+                    ElevatorCmds.setMMPosition(ElevatorConfig.ElevClearHt),
                     new DelayCmd(2.0),
                     ArmCmds.ArmToPIDPositionCmd(ArmConfig.ArmAngleStorePos),
                     new DelayCmd(1.0),
@@ -89,7 +89,7 @@ public class OperatorGamepadCmds {
                 // False condition: cube, must avoid bumper collision;
                 // raise elevator for clearance, set arm, then move elev back to correct pos
                 new SequentialCommandGroup(
-                    ElevatorCmds.ElevGoToPIDheightCmd(ElevatorConfig.ElevClearHt),
+                    ElevatorCmds.setMMPosition(ElevatorConfig.ElevClearHt),
                     new DelayCmd(2.0),
                     ArmCmds.ArmToPIDPositionCmd(ArmConfig.ArmAngleLowPos),
                     new DelayCmd(1.0),
@@ -105,24 +105,24 @@ public class OperatorGamepadCmds {
         return new ConditionalCommand(
             // True condition: arm outside robot, no worry of bumper collision (out-to-out movement)
             new ParallelCommandGroup(
-                ElevatorCmds.ElevGoToPIDheightCmd(ElevatorConfig.ElevMidHt),
+                ElevatorCmds.setMMPosition(ElevatorConfig.ElevMidHt),
                 ArmCmds.ArmToPIDPositionCmd(ArmConfig.ArmAngleMidPos)
             ),
             // False condition: arm inside robot, check for cube
             new ConditionalCommand(
                 // True condition: no cube, good to go, parallel motion used
                 new ParallelCommandGroup(
-                    ElevatorCmds.ElevGoToPIDheightCmd(ElevatorConfig.ElevMidHt),
+                    ElevatorCmds.setMMPosition(ElevatorConfig.ElevMidHt),
                     ArmCmds.ArmToPIDPositionCmd(ArmConfig.ArmAngleMidPos)
                 ),
                 // False condition: cube, must avoid bumper collision;
                 // raise elevator for clearance, set arm, then move elev back to correct pos
                 new SequentialCommandGroup(
-                    ElevatorCmds.ElevGoToPIDheightCmd(ElevatorConfig.ElevClearHt),
+                    ElevatorCmds.setMMPosition(ElevatorConfig.ElevClearHt),
                     new DelayCmd(2.0),
                     ArmCmds.ArmToPIDPositionCmd(ArmConfig.ArmAngleMidPos),
                     new DelayCmd(1.0),
-                    ElevatorCmds.ElevGoToPIDheightCmd(ElevatorConfig.ElevMidHt)
+                    ElevatorCmds.setMMPosition(ElevatorConfig.ElevMidHt)
                 ),
                 () -> Robot.intake.isCubeEjectDetected()),
             // Condition: is arm outside?
@@ -134,24 +134,24 @@ public class OperatorGamepadCmds {
         return new ConditionalCommand(
             // True condition: arm outside robot, no worry of bumper collision (out-to-out movement)
             new ParallelCommandGroup(
-                ElevatorCmds.ElevGoToPIDheightCmd(ElevatorConfig.ElevHighHt),
+                ElevatorCmds.setMMPosition(ElevatorConfig.ElevHighHt),
                 ArmCmds.ArmToPIDPositionCmd(ArmConfig.ArmAngleHighPos)
             ),
             // False condition: arm inside robot, check for cube
             new ConditionalCommand(
                 // True condition: no cube, good to go, parallel motion used
                 new ParallelCommandGroup(
-                    ElevatorCmds.ElevGoToPIDheightCmd(ElevatorConfig.ElevHighHt),
+                    ElevatorCmds.setMMPosition(ElevatorConfig.ElevHighHt),
                     ArmCmds.ArmToPIDPositionCmd(ArmConfig.ArmAngleHighPos)
                 ),
                 // False condition: cube, must avoid bumper collision;
                 // raise elevator for clearance, set arm, then move elev back to correct pos
                 new SequentialCommandGroup(
-                    ElevatorCmds.ElevGoToPIDheightCmd(ElevatorConfig.ElevClearHt),
+                    ElevatorCmds.setMMPosition(ElevatorConfig.ElevClearHt),
                     new DelayCmd(2.0),
                     ArmCmds.ArmToPIDPositionCmd(ArmConfig.ArmAngleHighPos),
                     new DelayCmd(1.0),
-                    ElevatorCmds.ElevGoToPIDheightCmd(ElevatorConfig.ElevHighHt)
+                    ElevatorCmds.setMMPosition(ElevatorConfig.ElevHighHt)
                 ),
                 () -> Robot.intake.isCubeEjectDetected()),
             // Condition: is arm outside?
