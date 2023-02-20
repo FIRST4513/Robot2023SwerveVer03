@@ -67,4 +67,13 @@ public class ElevatorCmds {
         return new InstantCommand( () -> Robot.elevator.resetEncoder( position ));
     }
 
+    public static Command ElevSetBrakeOnCmd() {
+        return new InstantCommand( () -> Robot.elevator.setBrake( true ));
+    }
+
+    public static Command ElevSetBrakeOffCmd() {
+        return new InstantCommand( () -> Robot.elevator.setBrake( false ));
+    }
+
 }
+

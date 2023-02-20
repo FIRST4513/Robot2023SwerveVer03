@@ -7,6 +7,7 @@ import java.util.Map;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
+import frc.robot.elevator.commands.ElevatorCmds;
 
 // --------------------------------------------------------
 // ------------   Elevator Telemetry Class   --------------
@@ -68,26 +69,33 @@ public class ElevatorTelemetry {
 
         tab.add("MM To 5.0", 
             new RunCommand( () -> Robot.elevator.setMMheight( 5.0 ), Robot.elevator))
-            .withPosition(0, 0)    .withPosition(14, 1);
+            .withSize(3, 2)    .withPosition(14, 1);
 
         tab.add("MM To 10.0", 
             new RunCommand( () -> Robot.elevator.setMMheight( 10.0 ), Robot.elevator))
-            .withPosition(0, 0)    .withPosition(14, 2);
+            .withSize(3, 2)    .withPosition(14, 2);
 
         tab.add("MM To 15.0", 
             new RunCommand( () -> Robot.elevator.setMMheight( 15.0 ), Robot.elevator))
-            .withPosition(0, 0)    .withPosition(14, 3);
+            .withSize(3, 2)    .withPosition(14, 3);
             
         tab.add("MM To 20.0", 
             new RunCommand( () -> Robot.elevator.setMMheight( 20.0 ), Robot.elevator))
-            .withPosition(0, 0)    .withPosition(14, 4);
+            .withSize(3, 2)    .withPosition(14, 4);
 
         tab.add("Goto Bottom", 
             new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
                                 .until(() ->Robot.elevator.isLowerLimitSwitchPressed()))
-            .withPosition(0, 0)    .withPosition(14, 5);
+            .withSize(3, 2)    .withPosition(14, 5);
 
-        tab.addBoolean("MM Tgt Reached", () ->Robot.elevator.isMMtargetReached());
+        tab.addBoolean("MM Tgt Reached", () ->Robot.elevator.isMMtargetReached())
+            .withSize(2, 2)    .withPosition(14, 7);
+
+        tab.add("Brake On", ElevatorCmds.ElevSetBrakeOnCmd())
+            .withSize(3, 2).withPosition(16, 0);
+
+        tab.add("Brake Off", ElevatorCmds.ElevSetBrakeOffCmd())
+            .withSize(3, 2).withPosition(16, 0);
 
     }
 

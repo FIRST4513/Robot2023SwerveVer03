@@ -26,7 +26,7 @@ public class ArmTelemetry {
                         () -> Robot.operatorGamepad.getArmInput())           .withPosition(6, 2).withSize(3, 2);
         
         //SmartDashboard.putData("Release Arm", new ElevReleaseArmCmd());
-        tab.add("Release Arm", new ElevReleaseArmCmd())                     .withPosition(16, 0).withSize(3, 2);;
+        tab.add("Release Arm", new ElevReleaseArmCmd())                     .withPosition(16, 0).withSize(3, 2);
 
         tab.add("MM To 5", 
         new RunCommand( () -> Robot.arm.setMMangle( 5.0 ), Robot.arm))      .withPosition(10, 0).withSize(3, 2);

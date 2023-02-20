@@ -3,6 +3,7 @@ package frc.robot.elevator;
 import java.util.function.DoubleSupplier;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -166,6 +167,15 @@ public class ElevatorSubSys extends SubsystemBase {
         if (Math.abs(target_height-mCurrElevHt) <= config.KheightDeadBand) { return true; }
         return false;
     }
+
+    public void setBrake( boolean value){
+        if (value) {
+            m_motor.setNeutralMode(NeutralMode.Brake);
+        } else {
+            m_motor.setNeutralMode(NeutralMode.Coast);
+        }
+    }
+
 
     // -----------------  Lower/Upper Limits ----------------
     public boolean isLowerLimitSwitchPressed() {
