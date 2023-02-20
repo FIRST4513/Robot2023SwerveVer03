@@ -20,7 +20,7 @@ public class OperatorGamepadCmds {
 
     public static Command ControlArmElevByJoysticksCmd() {
         return new ParallelCommandGroup(
-            // ArmCmds.ArmByJoystickCmd(),
+            ArmCmds.ArmByJoystickCmd(),
             ElevatorCmds.ElevByJoystickCmd()
         );
     }

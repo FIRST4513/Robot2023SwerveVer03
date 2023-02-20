@@ -77,20 +77,19 @@ public class ArmSubSys extends SubsystemBase {
 
     public void setArmMotor( double pwr ) {
         // Limit power if needed
+        if ( pwr > ArmConfig.kArmMotorRaiseMaxPwr) { pwr = ArmConfig.kArmMotorRaiseMaxPwr; }
+        if ( pwr < ArmConfig.kArmMotorLowerMaxPwr) { pwr = ArmConfig.kArmMotorLowerMaxPwr; }
+
+        // We're extending the arm
         if ( pwr > 0) {
-            // Were raising Arm Forward
-            if ( pwr > ArmConfig.kArmMotorRaiseMaxPwr )  {
-                 pwr = ArmConfig.kArmMotorRaiseMaxPwr;
-            }  
             if (isUpperLimitSwitchPressed() == true) {
                 stopArm();  // This is temporary until hold is tested
                 //holdArm();
                 return;
             }  
-        } else {
-            // Were Moving Arm Reverse
-            if ( pwr < ArmConfig.kArmMotorLowerMaxPwr )  {
-                 pwr = ArmConfig.kArmMotorLowerMaxPwr; }
+        }
+        // We're retracting the arm
+        else {
             if (isLowerLimitSwitchPressed() == true) {
                 stopArm();  // This is temporary until hold is tested
                 //holdArm();

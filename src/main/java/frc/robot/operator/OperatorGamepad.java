@@ -41,7 +41,7 @@ public class OperatorGamepad extends Gamepad {
         if (Math.abs(yValue) < 0.05) {
             yValue = 0.0;
         }
-        if (OperatorGamepadConfig.yInvert) {
+        if (OperatorGamepadConfig.elevYInvert) {
             return yValue * -0.33;
         } else {
             return yValue * 0.33;
@@ -50,10 +50,14 @@ public class OperatorGamepad extends Gamepad {
 
     public double getArmInput() {
         double yValue = gamepad.leftStick.getY();
-        if (OperatorGamepadConfig.yInvert) {
-            return yValue * -1;
+        if (Math.abs(yValue) < 0.175) {
+            yValue = 0.0;
         }
-        return yValue;
+        if (OperatorGamepadConfig.armYInvert) {
+            return yValue * -0.33;
+        } else {
+            return yValue * 0.33;
+        }
     }
 
     public void rumble(double intensity) {
