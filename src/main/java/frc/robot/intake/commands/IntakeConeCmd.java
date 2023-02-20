@@ -7,10 +7,9 @@ import frc.robot.intake.IntakeConfig;
 public class IntakeConeCmd extends CommandBase{
     
     static enum IntakeState {EMPTY, INTAKE, TRANSIT, STAGED, INPLACE};
+    IntakeState intakeState;
 
     public static String intakeStateStr = "Empty";
-
-    IntakeState intakeState;
 
     double upperSpeed = 0.0;
     double lowerSpeed = 0.0;

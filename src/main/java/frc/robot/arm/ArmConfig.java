@@ -13,11 +13,15 @@ public class ArmConfig {
     public final static double kArmMotorRaiseMaxPwr = +0.5;
     public final static double kArmMotorLowerMaxPwr = -0.35;
 
-    // ------ Limit Switch True States ------
+    // ------ Limit Switch ------
     public final static boolean lowerLimitSwitchTrue = false;
     public final static boolean upperLimitSwitchTrue = false;
-    public final static double lowerSoftLimitPos = -45.0 * kEncoderConversion; // Encoder Cnts at this angle
-    public final static double upperSoftLimitPos = +45 * kEncoderConversion;
+
+    public final static double upperLimitSwitchAngle = +45.0;
+    public final static double lowerLimitSwitchAngle = -45.0;
+
+    public final static double lowerSoftLimitPos = lowerLimitSwitchAngle * kEncoderConversion;
+    public final static double upperSoftLimitPos = upperLimitSwitchAngle * kEncoderConversion;
 
     // ------ Arm Angle Constants (In Degrees) ------
     public final static double minArmAngle = -20.0;

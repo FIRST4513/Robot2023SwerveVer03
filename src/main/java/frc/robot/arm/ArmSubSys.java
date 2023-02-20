@@ -173,6 +173,10 @@ public class ArmSubSys extends SubsystemBase {
         mArmMotor.setSelectedSensorPosition(position);
     }
 
+    public void resetEncoderAngle( double angle ){
+        mArmMotor.setSelectedSensorPosition(convertAngleToCnt(angle));
+    }    
+
     public double getEncoderCnt() {
         return mArmMotor.getSelectedSensorPosition();
     }
