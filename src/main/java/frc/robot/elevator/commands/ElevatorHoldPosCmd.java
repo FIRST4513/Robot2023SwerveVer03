@@ -3,11 +3,11 @@ package frc.robot.elevator.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
-public class ElevatorHoldPosition extends CommandBase {
+public class ElevatorHoldPosCmd extends CommandBase {
     private double height = 0;
 
     // Command Constructor
-    public ElevatorHoldPosition() {
+    public ElevatorHoldPosCmd() {
         addRequirements(Robot.elevator);
     }
 
