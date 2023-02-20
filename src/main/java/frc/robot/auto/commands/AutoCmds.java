@@ -28,14 +28,14 @@ public class AutoCmds {
             // 4. Turn on arm brake mode
             ArmCmds.SetArmBrakeCmd(),
             // 5. raise arm to target pos
-            ArmCmds.ArmSetMMangle(Auto.armPosition).withTimeout(2),
+            ArmCmds.ArmSetMMangleCmd(Auto.armPosition).withTimeout(2),
             // 6. elev lower to final target pos
             ElevatorCmds.setMMPosition(Auto.elevEndPos).withTimeout(2),
             // 7. eject
             IntakeCmds.IntakeEjectCmd(),
             // 8. Intake Arm to get ready for following path
             ElevatorCmds.setMMPosition(AutoConfig.kElevTop).withTimeout(2),
-            ArmCmds.ArmSetMMangle(ArmConfig.ArmAngleStorePos),
+            ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleStorePos),
             ElevatorCmds.ElevGoToBottomCmd().withTimeout(2)
         );
     }
