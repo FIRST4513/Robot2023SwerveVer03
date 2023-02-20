@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
+import frc.robot.arm.commands.ArmCalibrateCmd;
 import frc.robot.elevator.commands.ElevReleaseArmCmd;
 
 public class ArmTelemetry {
@@ -45,5 +46,6 @@ public class ArmTelemetry {
         tab.add("MM To 0", 
         new RunCommand( () -> Robot.arm.setMMangle( 0.0 ), Robot.arm))      .withPosition(13, 6).withSize(3, 2);
         
+        tab.add("Recal Arm", new ArmCalibrateCmd())                         .withPosition(16, 0).withSize(3, 2);
     }
 }
