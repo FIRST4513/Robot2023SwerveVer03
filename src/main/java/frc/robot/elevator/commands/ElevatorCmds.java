@@ -68,11 +68,11 @@ public class ElevatorCmds {
     }
 
     public static Command ElevSetBrakeOnCmd() {
-        return new InstantCommand( () -> Robot.elevator.setBrake( true ));
+        return new InstantCommand( () -> Robot.elevator.setBrakeMode( true ));
     }
 
     public static Command ElevSetBrakeOffCmd() {
-        return new InstantCommand( () -> Robot.elevator.setBrake( false ));
+        return new InstantCommand( () -> Robot.elevator.setBrakeMode( false ));
     }
 
 }

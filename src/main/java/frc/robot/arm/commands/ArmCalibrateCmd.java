@@ -47,12 +47,14 @@ public class ArmCalibrateCmd  extends CommandBase {
                 // We Have reached limit sw
                 Robot.arm.resetEncoderAngle(ArmConfig.upperLimitSwitchAngle);   // Reset Encoder to Back Angle
                 armState = ArmState.EXTENDING;                                  // Update State
+                armStateStr = "EXTENDING";
             }
         }
         if (armState == ArmState.EXTENDING) {
             if ( Robot.arm.getArmAngle() >= 0) {
                 // we have reached botttom
                 armState = ArmState.DONE;                                       // Update State
+                armStateStr = "DONE";
                 return;                                  
             } else {
                 // We havent reached bottom yet so keep on driving

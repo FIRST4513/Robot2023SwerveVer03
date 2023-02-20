@@ -81,6 +81,7 @@ public class ArmSubSys extends SubsystemBase {
         // We're extending the arm
         if ( pwr > 0) {
             if (isUpperLimitSwitchPressed() == true) {
+                // Consider Reseting Encoder Count Here
                 stopArm();  // This is temporary until hold is tested
                 //holdArm();
                 return;
@@ -89,6 +90,7 @@ public class ArmSubSys extends SubsystemBase {
         // We're retracting the arm
         else {
             if (isLowerLimitSwitchPressed() == true) {
+                // Consider Reseting Encoder Count Here
                 stopArm();  // This is temporary until hold is tested
                 //holdArm();
                 return;

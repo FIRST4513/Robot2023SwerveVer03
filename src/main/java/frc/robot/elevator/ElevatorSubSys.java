@@ -168,7 +168,7 @@ public class ElevatorSubSys extends SubsystemBase {
         return false;
     }
 
-    public void setBrake( boolean value){
+    public void setBrakeMode( boolean value){
         if (value) {
             m_motor.setNeutralMode(NeutralMode.Brake);
         } else {
