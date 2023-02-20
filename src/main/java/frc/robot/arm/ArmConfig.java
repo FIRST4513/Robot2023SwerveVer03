@@ -16,7 +16,7 @@ public class ArmConfig {
     // ------ Limit Switch True States ------
     public final static boolean lowerLimitSwitchTrue = false;
     public final static boolean upperLimitSwitchTrue = false;
-    public final static double lowerSoftLimitPos = -45.0 * kEncoderConversion;      // Encoder Cnts at this angle
+    public final static double lowerSoftLimitPos = -45.0 * kEncoderConversion; // Encoder Cnts at this angle
     public final static double upperSoftLimitPos = +45 * kEncoderConversion;
 
     // ------ Arm Angle Constants (In Degrees) ------

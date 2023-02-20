@@ -60,10 +60,6 @@ public class ArmCmds {
             .withName("armToBottomCmd");
     }
 
-    public static Command ArmToPIDPositionCmd(double angle) {
-        return new InstantCommand(() -> Robot.arm.setMMangle(angle), Robot.arm )
-            .withName("ArmToPIDPosistionCmd");
-    }
 
     public static Command ArmByJoystickCmd() {
         return new RunCommand(
@@ -71,13 +67,8 @@ public class ArmCmds {
     }
 
 // ----------------- Motion Magic Commands ----------------------
-    public static Command setMMPosition(double position) {
-        return new RunCommand(() -> Robot.arm.setMMangle(position), Robot.arm);
+    public static Command ArmSetMMangleCmd(double angle) {
+        return new RunCommand(() -> Robot.arm.setMMangle(angle), Robot.arm);
     }
-
-    public static Command setMMPercent(double percent) {
-        return new RunCommand(() -> Robot.arm.setMMangle(percent), Robot.arm);
-    }
-
 
 }
