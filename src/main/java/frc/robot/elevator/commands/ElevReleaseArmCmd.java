@@ -40,7 +40,7 @@ public class ElevReleaseArmCmd extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        if (delayTimer.get() > 1.5) { return true; }
+        if (Robot.elevator.getElevHeightInches() >= ElevatorConfig.ElevInitReleaseHt) { return true; }
         return false;
     }
 }
