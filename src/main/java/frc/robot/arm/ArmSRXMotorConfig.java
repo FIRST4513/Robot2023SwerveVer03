@@ -10,8 +10,8 @@ public class ArmSRXMotorConfig {
 
     /* Motor Control Sets */
     public static final NeutralMode armNeutralMode          = NeutralMode.Coast;
-    public static final boolean     armMotorInvert          = false;
-    public static final boolean     armEncoderInvert        = true;
+    public static final boolean     armMotorInvert          = true;
+    public static final boolean     armEncoderInvert        = false;
     public static final boolean     armEnableCurrentLimit   = true;
     public static final SensorInitializationStrategy sensorStrat = SensorInitializationStrategy.BootToZero;
 
@@ -26,7 +26,7 @@ public class ArmSRXMotorConfig {
     public static final int         armReverseSoftLimitThreshold       = -80000;   // TEST !!!
 
     /* Motion Magic Control Loop Constants */
-    public final double kP = 0.01;    // Needs to be Determined by testing
+    public final double kP = 0.5;    // Needs to be Determined by testing
     public final double kI = 0.0;     // could be 0
     public final double kD = 0.0;     // could be 0
     public final double kF = 0.0;     // 0 we will be using ArbitraryFeedForward for position control

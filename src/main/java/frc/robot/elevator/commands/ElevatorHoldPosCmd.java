@@ -18,7 +18,11 @@ public class ElevatorHoldPosCmd extends CommandBase {
 
     @Override
     public void execute() {
-        Robot.elevator.setMMheight(height);
+        if (Robot.elevator.isLowerLimitSwitchPressed()) {
+            Robot.elevator.elevStop();
+        } else {
+            Robot.elevator.setMMheight(height);
+        }
     }
 
     @Override

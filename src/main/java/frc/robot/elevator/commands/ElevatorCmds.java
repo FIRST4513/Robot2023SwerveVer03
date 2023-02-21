@@ -15,7 +15,7 @@ public class ElevatorCmds {
 
     // Default Command
     public static void setupDefaultCommand() {
-        Robot.elevator.setDefaultCommand(ElevHoldCmd());
+        Robot.elevator.setDefaultCommand(new ElevatorHoldPosCmd());
     }
 
     public static Command ElevHoldCmd() {

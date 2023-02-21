@@ -5,6 +5,7 @@ package frc.robot.elevator;
 import java.util.Map;
 
 import edu.wpi.first.wpilibj.shuffleboard.*;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
 import frc.robot.elevator.commands.ElevatorCmds;
@@ -91,10 +92,12 @@ public class ElevatorTelemetry {
         tab.addBoolean("MM Tgt Reached", () ->Robot.elevator.isMMtargetReached())
             .withSize(2, 2)    .withPosition(14, 7);
 
-        tab.add("Brake On", ElevatorCmds.ElevSetBrakeOnCmd())
+        tab.add("Brake On",
+            new InstantCommand(() -> Robot.elevator.setBrakeMode(true)))
             .withSize(3, 2).withPosition(16, 0);
 
-        tab.add("Brake Off", ElevatorCmds.ElevSetBrakeOffCmd())
+        tab.add("Brake Off",
+            new InstantCommand(() -> Robot.elevator.setBrakeMode(false)))
             .withSize(3, 2).withPosition(16, 0);
 
     }

@@ -34,7 +34,7 @@ public class ElevReleaseArmCmd extends CommandBase {
         if (cmdState == CmdState.ONSWITCH) {
             if (Robot.arm.isLowerLimitSwitchPressed()) {
                 // Were still on the switch keep resetting the encoder
-                Robot.arm.resetEncoder(ArmConfig.lowerSoftLimitPos);
+                Robot.arm.resetEncoderAngle(ArmConfig.lowerLimitSwitchAngle);;
             } else {
                 // We have passed through switch, were done
                 cmdState = CmdState.DONE;

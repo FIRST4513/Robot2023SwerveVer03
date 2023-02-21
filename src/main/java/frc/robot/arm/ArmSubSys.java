@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
 import frc.robot.RobotConfig.LimitSwitches;
 import frc.robot.RobotConfig.Motors;
+import frc.robot.arm.commands.ArmHoldPosition;
 
 public class ArmSubSys extends SubsystemBase {
     public  static ArmSRXMotorConfig   motorConfig;
@@ -24,6 +25,8 @@ public class ArmSubSys extends SubsystemBase {
 
     public double mCurrEncoderCnt   = 0; 
     public double mCurrArmAngle     = 0;
+
+    public double hold_pwr = 0;
 
     // ------------- Constructor ----------
     public ArmSubSys() {
@@ -39,12 +42,12 @@ public class ArmSubSys extends SubsystemBase {
     // ------------- Periodic -------------
     public void periodic() {
         // DO NOT RESET ENCODERS at Ends of travel Init at begining and leave
-        // if (isLowerLimitSwitchPressed() == true) {
-        //     resetEncoder(ArmConfig.lowerLimitPos);      // recalibrate encoder at retracted position
-        // }
-        // if (isUpperLimitSwitchPressed() == true) {
-        //     resetEncoder(ArmConfig.upperLimitPos);      // recalibrate encoder at extended position
-        // }
+        if (isLowerLimitSwitchPressed() == true) {
+            resetEncoderAngle(ArmConfig.lowerLimitSwitchAngle);      // recalibrate encoder at retracted position
+        }
+        if (isUpperLimitSwitchPressed() == true) {
+            resetEncoderAngle(ArmConfig.upperLimitSwitchAngle);      // recalibrate encoder at extended position
+        }
         updateCurrentArmPosition();
     }
 
@@ -61,12 +64,11 @@ public class ArmSubSys extends SubsystemBase {
 
     public void holdArm()   {
         // set hold power as needed based on current angle ( 0 = full down)
-        if ( Math.abs(mCurrArmAngle) < 5.0) {
+        if ( Math.abs(mCurrArmAngle) < 10.0) {
             stopArm();
             return;
         }
-        double hold_pwr = Math.cos(Math.toRadians(mCurrArmAngle)) * motorConfig.arbitraryFeedForwardScaler;
-        setArmMotor(hold_pwr);
+        setArmMotor(getArbFeedFwd());
         mCurrArmPwr = hold_pwr;
     }
 
@@ -79,7 +81,9 @@ public class ArmSubSys extends SubsystemBase {
     public void setMMangle(double angle) {
         angle = limitArmAngle( angle );     // Limit range to max allowed
         mTargetArmAngle = angle;     // Store to be used in test for there yet
-        double aff = Math.cos(Math.toRadians(angle)) * motorConfig.arbitraryFeedForwardScaler;
+        double aff = getArbFeedFwd();
+        if ( aff < 0.2 ) aff = 0.21;
+        hold_pwr = Math.cos(Math.toRadians(angle)) * motorConfig.arbitraryFeedForwardScaler;
         mArmMotor.set(  ControlMode.MotionMagic, angle,
                         DemandType.ArbitraryFeedForward,
                         aff);
@@ -91,31 +95,24 @@ public class ArmSubSys extends SubsystemBase {
         if ( pwr > ArmConfig.kArmMotorRaiseMaxPwr) { pwr = ArmConfig.kArmMotorRaiseMaxPwr; }
         if ( pwr < ArmConfig.kArmMotorLowerMaxPwr) { pwr = ArmConfig.kArmMotorLowerMaxPwr; }
 
-        // We're extending the arm
         if ( pwr > 0) {
-            if (isUpperLimitSwitchPressed() == true) {
-                // Consider Reseting Encoder Count Here
-                stopArm();  // This is temporary until hold is tested
-                //holdArm();
-                return;
-            }  
-        }
-        // We're retracting the arm
-        else {
-            if (isLowerLimitSwitchPressed() == true) {
-                // Consider Reseting Encoder Count Here
-                stopArm();  // This is temporary until hold is tested
-                //holdArm();
-                return;
+            // check Upper Limit Switch hit
+            if (isUpperLimitSwitchPressed()) {
+                pwr = getArbFeedFwd();      // Upper Limit switch hit while raising so HOLD
+            }
+        } else {
+            // check Lower Limit Switch hit
+            if (isLowerLimitSwitchPressed()) {
+                pwr = getArbFeedFwd();      // Lower Limit switch hit while lowering so HOLD
             }
         }
+
         mArmMotor.set(pwr);
         mCurrArmPwr = pwr;
     }
 
     public void setArmMotor(DoubleSupplier pwr) {
         setArmMotor(pwr.getAsDouble());
-        mCurrArmPwr = pwr.getAsDouble();
     }
  
     // -------- Set Brake Mode ----------
@@ -168,14 +165,14 @@ public class ArmSubSys extends SubsystemBase {
     public void updateCurrentArmPosition() {
         // Called from Periodic so only 1 CAN call is needed per command loop 20ms
         mCurrEncoderCnt = mArmMotor.getSelectedSensorPosition();
-        mCurrArmAngle = Rmath.mRound((mCurrEncoderCnt * ArmConfig.kEncoderConversion) , 2);
+        mCurrArmAngle = Rmath.mRound((convertCntToAngle(mCurrEncoderCnt)) , 2);
      }
 
     public double getEncoderCnt()   { return mCurrEncoderCnt; }
     public double getArmAngle()     { return mCurrArmAngle;   }
 
-    public double convertAngleToCnt( double angle )   { return angle * ArmConfig.kEncoderConversion; }
-    public double convertCntToAngle( double cnt )     { return cnt / ArmConfig.kEncoderConversion; }
+    public double convertAngleToCnt( double angle )   { return angle * ArmConfig.kCntsPerDeg; }
+    public double convertCntToAngle( double cnt )     { return cnt * ArmConfig.kDegsPerCnt; }
 
 
     public void resetEncoder()                    { mArmMotor.setSelectedSensorPosition(0); }
@@ -209,6 +206,13 @@ public class ArmSubSys extends SubsystemBase {
 
     public boolean isArmOutside() { return !isArmInside(); }
 
+    public double getArbFeedFwd(){
+        hold_pwr = -Math.sin(Math.toRadians(-mCurrArmAngle)) * motorConfig.arbitraryFeedForwardScaler;
+        if (mCurrArmAngle > 0) {
+            hold_pwr *= 0.75;
+        }
+        return hold_pwr;
+    }
 
     // -------------------------------------------------------
     // ---------------- Configure Arm Motor ------------------

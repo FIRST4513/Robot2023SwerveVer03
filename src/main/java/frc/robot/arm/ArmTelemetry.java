@@ -2,6 +2,7 @@ package frc.robot.arm;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
 import frc.robot.arm.commands.ArmCalibrateCmd;
@@ -24,9 +25,11 @@ public class ArmTelemetry {
 
         tab.addNumber("Input from Operator Joystick",
                         () -> Robot.operatorGamepad.getArmInput())           .withPosition(6, 2).withSize(3, 2);
+
+        tab.addNumber("Arb FF Val", () -> arm.getArbFeedFwd())                .withPosition(6, 4).withSize(3, 2);
         
-        //SmartDashboard.putData("Release Arm", new ElevReleaseArmCmd());
-        tab.add("Release Arm", new ElevReleaseArmCmd())                     .withPosition(16, 0).withSize(3, 2);
+        SmartDashboard.putData("Release Arm", new ElevReleaseArmCmd());
+        // tab.add("Release Arm", new ElevReleaseArmCmd())                     .withPosition(16, 0).withSize(3, 2);
 
         tab.add("MM To 5", 
         new RunCommand( () -> Robot.arm.setMMangle( 5.0 ), Robot.arm))      .withPosition(10, 0).withSize(3, 2);
@@ -46,6 +49,7 @@ public class ArmTelemetry {
         tab.add("MM To 0", 
         new RunCommand( () -> Robot.arm.setMMangle( 0.0 ), Robot.arm))      .withPosition(13, 6).withSize(3, 2);
         
-        tab.add("Recal Arm", new ArmCalibrateCmd())                         .withPosition(16, 0).withSize(3, 2);
+        SmartDashboard.putData("Recal Arm", new ArmCalibrateCmd());
+        // tab.add("Recal Arm", new ArmCalibrateCmd())                         .withPosition(16, 0).withSize(3, 2);
     }
 }
