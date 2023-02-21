@@ -3,7 +3,6 @@ package frc.robot.operator;
 import frc.lib.gamepads.Gamepad;
 import frc.robot.arm.commands.ArmCmds;
 import frc.robot.intake.commands.IntakeCmds;
-import frc.robot.intake.commands.IntakeConeMainCmd;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 
 public class OperatorGamepad extends Gamepad {
@@ -12,8 +11,10 @@ public class OperatorGamepad extends Gamepad {
     }
     
     public void setupTeleopButtons() {
-        gamepad.bButton.onTrue(OperatorGamepadCmds.IntakeCubeCmd());
-        gamepad.yButton.onTrue(OperatorGamepadCmds.IntakeConeCmd());
+        //gamepad.bButton.onTrue(OperatorGamepadCmds.IntakeCubeCmd());
+        //gamepad.yButton.onTrue(OperatorGamepadCmds.IntakeConeCmd());
+        gamepad.bButton.onTrue(IntakeCmds.IntakeCubeCmd());
+        gamepad.yButton.onTrue(IntakeCmds.IntakeConeCmd());
         gamepad.xButton.onTrue(IntakeCmds.IntakeStopCmd());
         gamepad.aButton.onTrue(IntakeCmds.IntakeEjectCmd());
 

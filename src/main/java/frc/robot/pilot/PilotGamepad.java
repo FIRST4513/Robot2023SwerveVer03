@@ -2,7 +2,6 @@ package frc.robot.pilot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
 import frc.robot.intake.commands.IntakeCmds;
@@ -37,23 +36,18 @@ public class PilotGamepad extends Gamepad {
     public PilotGamepad() {
         super("Pilot", PilotGamepadConfig.port);
         setupSpeedMenu();
-        //telemetry = new PilotGamepadTelemetry(this);
     }
 
     public void setupTeleopButtons() {
         // "A" Button - Teleop Drive with Robot Perspective
-        gamepad.aButton.whileTrue(PilotGamepadCmds.RpvPilotSwerveCmd());
-        // gamepad.bButton.onTrue(IntakeCmds.IntakeEjectCmd());
-        gamepad.bButton.onTrue(new PrintCommand("B Pressed"));
-        gamepad.xButton.onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
+        gamepad.aButton.onTrue(OperatorGamepadCmds.SetArmElevToIntakeConePosCmd());
+        gamepad.bButton.onTrue(IntakeCmds.IntakeEjectCmd());
         gamepad.yButton.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
+        gamepad.xButton.whileTrue(PilotGamepadCmds.RpvPilotSwerveCmd());
 
         gamepad.leftBumper.onTrue(IntakeCmds.IntakeStopCmd());
         gamepad.rightBumper.onTrue(PilotGamepadCmds.BasicSnapCmd());  // basic snap (turn-in-place)
-        
-        
-        gamepad.Dpad.Down .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
-        
+         
         // "Start" Button - Rest Gyro to 0
         gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());
         gamepad.selectButton.onTrue(PilotGamepadCmds.FpvDriveAndAutoRotateCmd());  // snap to angle while driving
