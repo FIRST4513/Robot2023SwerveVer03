@@ -56,18 +56,18 @@ public class Swerve extends SubsystemBase {
     // -------------------------------------------------------------------
 
     // This drive method (overloaded) does'nt need the translation component
-    public void drive( double fwdPositive,
-                    double leftPositive,
-                    double omegaRadiansPerSecond,
-                    boolean fieldRelative,
-                    boolean isOpenLoop) {
-    // call real method to get job done
-    drive ( fwdPositive,
-            leftPositive,
-            omegaRadiansPerSecond,
-            fieldRelative,
-            isOpenLoop,
-            new Translation2d ());      // Zeros out Translation by default
+    public void drive(  double fwdPositive,
+                        double leftPositive,
+                        double omegaRadiansPerSecond,
+                        boolean fieldRelative,
+                        boolean isOpenLoop) {
+        // call real constructor to get job done
+        drive ( fwdPositive,
+                leftPositive,
+                omegaRadiansPerSecond,
+                fieldRelative,
+                isOpenLoop,
+                new Translation2d ());      // Zeros out Translation by default
     }
 
     /**
@@ -81,22 +81,13 @@ public class Swerve extends SubsystemBase {
      * @param centerOfRotationMeters The center of rotation in meters
      */
 
-     public void drive(
-        double fwdPositive,
-        double leftPositive,
-        double omegaRadiansPerSecond,
-        boolean fieldRelative,
-        boolean isOpenLoop,
-        Translation2d centerOfRotationMeters) {{
-        drive(
-            fwdPositive,
-            leftPositive,
-            omegaRadiansPerSecond,
-            fieldRelative,
-            isOpenLoop,
-            new Translation2d ());
-        }
-
+     public void drive( double fwdPositive,
+                        double leftPositive,
+                        double omegaRadiansPerSecond,
+                        boolean fieldRelative,
+                        boolean isOpenLoop,
+                        Translation2d centerOfRotationMeters) {
+    
         // ------------------- Step 1 Set Chassis Speeds ----------------------
         // mps (Meters Per Second) and rps (Radians Per Second)
         ChassisSpeeds speeds;

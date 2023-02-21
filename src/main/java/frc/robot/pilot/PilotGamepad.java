@@ -98,7 +98,7 @@ public class PilotGamepad extends Gamepad {
 
     public MaxSpeeds getSelectedSpeed(){
         String speed = speedChooser.getSelected();;
-        if ( speed == "Fast") return MaxSpeeds.FAST;
+        if ( speed == "Fast")    return MaxSpeeds.FAST;
         if ( speed == "MedFast") return MaxSpeeds.MEDFAST;
         if ( speed == "MedSlow") return MaxSpeeds.MEDSLOW;
         return MaxSpeeds.SLOW;
@@ -106,10 +106,10 @@ public class PilotGamepad extends Gamepad {
 
     public void setupSpeedMenu(){
             // Setup Speed Selector
-            speedChooser.setDefaultOption("1. SLOW", 	"Slow");
-            speedChooser.addOption ("2. MED. Slow",	    "MedSlow");
-            speedChooser.addOption ("3. MED. Fast", 	"MedFast");
-            speedChooser.addOption ("4. Fast", 	        "Fast");
+            speedChooser.setDefaultOption   ("1. SLOW",         "Slow");
+            speedChooser.addOption          ("2. MED. Slow",	"MedSlow");
+            speedChooser.addOption          ("3. MED. Fast", 	"MedFast");
+            speedChooser.addOption          ("4. Fast", 	    "Fast");
             SmartDashboard.putData(speedChooser);
     }
     
