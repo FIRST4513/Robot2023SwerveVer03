@@ -1,7 +1,6 @@
 package frc.robot.arm;
 
 import java.util.function.DoubleSupplier;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -11,13 +10,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
 import frc.robot.RobotConfig.LimitSwitches;
 import frc.robot.RobotConfig.Motors;
-import frc.robot.arm.commands.ArmHoldPosition;
 
 public class ArmSubSys extends SubsystemBase {
-    public  static ArmSRXMotorConfig   motorConfig;
-    public  WPI_TalonSRX        mArmMotor;
-    private DigitalInput        upperlimitSwitch;
-    private DigitalInput        lowerlimitSwitch;
+    public  static ArmSRXMotorConfig    motorConfig;
+    public  WPI_TalonSRX                mArmMotor;
+    private DigitalInput                extendLimitSwitch;
+    private DigitalInput                retractLimitSwitch;
 
     // Arm Variables
     public double mCurrArmPwr       = 0;
@@ -30,10 +28,10 @@ public class ArmSubSys extends SubsystemBase {
 
     // ------------- Constructor ----------
     public ArmSubSys() {
-        motorConfig       = new ArmSRXMotorConfig();
-        mArmMotor         = new WPI_TalonSRX(Motors.armMotorID);
-        upperlimitSwitch  = new DigitalInput(LimitSwitches.armUpperLimitSw);
-        lowerlimitSwitch  = new DigitalInput(LimitSwitches.armLowerLimitSw);
+        motorConfig         = new ArmSRXMotorConfig();
+        mArmMotor           = new WPI_TalonSRX(Motors.armMotorID);
+        extendLimitSwitch  = new DigitalInput(LimitSwitches.armExtendLimitSw);
+        retractLimitSwitch  = new DigitalInput(LimitSwitches.armRetractLimitSw);
         armMotorConfig();
         stopArm();
         mArmMotor.configForwardSoftLimitThreshold(mCurrArmAngle);
@@ -42,11 +40,11 @@ public class ArmSubSys extends SubsystemBase {
     // ------------- Periodic -------------
     public void periodic() {
         // DO NOT RESET ENCODERS at Ends of travel Init at begining and leave
-        if (isLowerLimitSwitchPressed() == true) {
-            resetEncoderAngle(ArmConfig.lowerLimitSwitchAngle);      // recalibrate encoder at retracted position
+        if (isRetractLimitSwitchPressed() == true) {
+            resetEncoderAngle(ArmConfig.RetractLimitSwitchAngle);      // recalibrate encoder at retracted position
         }
-        if (isUpperLimitSwitchPressed() == true) {
-            resetEncoderAngle(ArmConfig.upperLimitSwitchAngle);      // recalibrate encoder at extended position
+        if (isExtendLimitSwitchPressed() == true) {
+            resetEncoderAngle(ArmConfig.ExtendLimitSwitchAngle);      // recalibrate encoder at extended position
         }
         updateCurrentArmPosition();
     }
@@ -54,22 +52,16 @@ public class ArmSubSys extends SubsystemBase {
     // -----------------------------------------------------
     // ---------------- Arm Motor Methods ------------------
     // -----------------------------------------------------
-    public void raiseArm() {
-        setArmMotor(ArmConfig.kRaiseSpeed);
-    }
+    public void raiseArm() { setArmMotor(ArmConfig.kRaiseSpeed); }
+    public void lowerArm() { setArmMotor(ArmConfig.kLowerSpeed); }
 
-    public void lowerArm() {
-        setArmMotor(ArmConfig.kLowerSpeed);
-    }
-
-    public void holdArm()   {
-        // set hold power as needed based on current angle ( 0 = full down)
-        if ( Math.abs(mCurrArmAngle) < 10.0) {
+    public void holdArm() {
+        if ( Math.abs(mCurrArmAngle) < 8.0) {
             stopArm();
             return;
         }
-        setArmMotor(getArbFeedFwd());
-        mCurrArmPwr = hold_pwr;
+        mCurrArmPwr = getArbFeedFwd();
+        mArmMotor.set(mCurrArmPwr);       
     }
 
     public void stopArm()   { 
@@ -80,33 +72,30 @@ public class ArmSubSys extends SubsystemBase {
     // ------------  Set Arm to Angle by Motion Magic  ----------
     public void setMMangle(double angle) {
         angle = limitArmAngle( angle );     // Limit range to max allowed
-        mTargetArmAngle = angle;     // Store to be used in test for there yet
-        double aff = getArbFeedFwd();
-        if ( aff < 0.2 ) aff = 0.21;
-        hold_pwr = Math.cos(Math.toRadians(angle)) * motorConfig.arbitraryFeedForwardScaler;
-        mArmMotor.set(  ControlMode.MotionMagic, angle,
-                        DemandType.ArbitraryFeedForward,
-                        aff);
+        mTargetArmAngle = angle;
+        mArmMotor.set(  ControlMode.MotionMagic,            convertAngleToCnt(angle),
+                        DemandType.ArbitraryFeedForward,    getArbFeedFwd());
         }
 
     // ------------  Set Arm Manually during TeleOP  ----------
     public void setArmMotor( double pwr ) {
         // Limit power if needed
-        if ( pwr > ArmConfig.kArmMotorRaiseMaxPwr) { pwr = ArmConfig.kArmMotorRaiseMaxPwr; }
-        if ( pwr < ArmConfig.kArmMotorLowerMaxPwr) { pwr = ArmConfig.kArmMotorLowerMaxPwr; }
+        if ( pwr > ArmConfig.kArmMotorExtendMaxPwr)  { pwr = ArmConfig.kArmMotorExtendMaxPwr; }
+        if ( pwr < ArmConfig.kArmMotorRetractMaxPwr) { pwr = ArmConfig.kArmMotorRetractMaxPwr; }
 
         if ( pwr > 0) {
-            // check Upper Limit Switch hit
-            if (isUpperLimitSwitchPressed()) {
-                pwr = getArbFeedFwd();      // Upper Limit switch hit while raising so HOLD
+            // Were extending so check if Extend Limit Switch has been hit
+            if (isExtendLimitSwitchPressed()) {
+                holdArm();
+                return;
             }
         } else {
-            // check Lower Limit Switch hit
-            if (isLowerLimitSwitchPressed()) {
-                pwr = getArbFeedFwd();      // Lower Limit switch hit while lowering so HOLD
+            // Were retracting check if Retract Lower Limit Switch has been hit
+            if (isRetractLimitSwitchPressed()) {
+                holdArm();
+                return;
             }
         }
-
         mArmMotor.set(pwr);
         mCurrArmPwr = pwr;
     }
@@ -129,33 +118,35 @@ public class ArmSubSys extends SubsystemBase {
     // ---------------- Arm Limit Switch Methods ------------------
     // ------------------------------------------------------------
     
-    public boolean isLowerLimitSwitchPressed() {
-        if (lowerlimitSwitch.get() == ArmConfig.lowerLimitSwitchTrue) { return true; }
+    public boolean isRetractLimitSwitchPressed() {
+        if (retractLimitSwitch.get() == ArmConfig.RetractLimitSwitchTrue) { return true; }
         return false;
     }
 
-    public boolean isUpperLimitSwitchPressed() {
-        if (upperlimitSwitch.get() == ArmConfig.upperLimitSwitchTrue) { return true; }
+    public boolean isExtendLimitSwitchPressed() {
+        if (extendLimitSwitch.get() == ArmConfig.ExtendLimitSwitchTrue)   { return true; }
         return false;
     }
 
-    public String lowerLimitSwitchStatus(){
-        if (lowerlimitSwitch.get() == ArmConfig.lowerLimitSwitchTrue) { return "Pressed"; }
+    public String retractLimitSwitchStatus(){
+        if (retractLimitSwitch.get() == ArmConfig.RetractLimitSwitchTrue) { return "Pressed"; }
         return "Not Pressed";
     }
 
-    public String upperLimitSwitchStatus() {
-        if (upperlimitSwitch.get() == ArmConfig.upperLimitSwitchTrue) { return "Pressed"; }
+    public String extendLimitSwitchStatus() {
+        if (extendLimitSwitch.get() == ArmConfig.ExtendLimitSwitchTrue)   { return "Pressed"; }
         return "Not Pressed";
     }
 
     // --------------- Set Soft Limits -----------------
     public void softLimitsTrue() {
         mArmMotor.configReverseSoftLimitEnable(true);   // ????????????
+        mArmMotor.configForwardSoftLimitEnable(true);   // ????????????
     }
 
     public void softLimitsFalse() {
         mArmMotor.configReverseSoftLimitEnable(false);  // ?????????????
+        mArmMotor.configForwardSoftLimitEnable(false);  // ?????????????
     }
 
     // -------------------------------------------------------
@@ -180,13 +171,12 @@ public class ArmSubSys extends SubsystemBase {
     public void resetEncoderAngle( double angle ) { mArmMotor.setSelectedSensorPosition(convertAngleToCnt(angle)); }    
 
     // ---- Misc Methods ----
-
     public double getTargetAngle()         { return mTargetArmAngle; }
     public double getArmMotorPwr()         { return mCurrArmPwr; }
 
      public double limitArmAngle( double angle ){
-        if (angle > ArmConfig.maxArmAngle)      { angle = ArmConfig.maxArmAngle; }
-        if (angle < ArmConfig.minArmAngle)      { angle = ArmConfig.minArmAngle; }
+        if (angle > ArmConfig.ExtendLimitSwitchAngle)       { angle = ArmConfig.ExtendLimitSwitchAngle; }
+        if (angle < ArmConfig.RetractLimitSwitchAngle)      { angle = ArmConfig.RetractLimitSwitchAngle; }
         return angle;
     }
 
@@ -207,11 +197,11 @@ public class ArmSubSys extends SubsystemBase {
     public boolean isArmOutside() { return !isArmInside(); }
 
     public double getArbFeedFwd(){
-        hold_pwr = -Math.sin(Math.toRadians(-mCurrArmAngle)) * motorConfig.arbitraryFeedForwardScaler;
+        double pwr = -Math.sin(Math.toRadians(-mCurrArmAngle)) * motorConfig.arbitraryFeedForwardScaler;
         if (mCurrArmAngle > 0) {
-            hold_pwr *= 0.75;
+            pwr *= 0.75;
         }
-        return hold_pwr;
+        return pwr;
     }
 
     // -------------------------------------------------------
@@ -223,7 +213,7 @@ public class ArmSubSys extends SubsystemBase {
         mArmMotor.configAllSettings(ArmSRXMotorConfig.config);
         mArmMotor.setInverted(ArmSRXMotorConfig.armMotorInvert);
         mArmMotor.setSensorPhase(ArmSRXMotorConfig.armEncoderInvert);
-        mArmMotor.setNeutralMode(ArmSRXMotorConfig.armNeutralMode);
+        mArmMotor.setNeutralMode(ArmSRXMotorConfig.armDefaultNeutralMode);
         mArmMotor.setSelectedSensorPosition(0); // Zero Encoder
         mArmMotor.enableCurrentLimit(isArmInside());
     }

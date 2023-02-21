@@ -13,8 +13,8 @@ public class ArmTelemetry {
 
     public ArmTelemetry( ArmSubSys arm) {
         tab = Shuffleboard.getTab("Arm");
-        tab.addString("Lower Limit Switch",()-> arm.lowerLimitSwitchStatus()).withPosition(0, 0).withSize(3, 2);
-        tab.addString("Upper Limit Switch",()-> arm.upperLimitSwitchStatus()).withPosition(0, 2).withSize(3, 2);
+        tab.addString("Retract Limit Switch",()-> arm.retractLimitSwitchStatus()).withPosition(0, 0).withSize(3, 2);
+        tab.addString("Extend Limit Switch", ()-> arm.extendLimitSwitchStatus()) .withPosition(0, 2).withSize(3, 2);
 
         tab.add("Arm Commands",arm)                                          .withPosition(0, 4).withSize(5, 2);
 

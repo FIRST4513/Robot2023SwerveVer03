@@ -12,21 +12,18 @@ public class ArmConfig {
     public final static double kRaiseSpeed  = +0.25;
     public final static double kLowerSpeed  = -0.15;
 
-    public final static double kArmMotorRaiseMaxPwr = +0.5;
-    public final static double kArmMotorLowerMaxPwr = -0.35;
+    public final static double kArmMotorExtendMaxPwr  = +0.5;
+    public final static double kArmMotorRetractMaxPwr = -0.35;
 
     // ------ Limit Switch ------
-    public final static boolean lowerLimitSwitchTrue = false;
-    public final static boolean upperLimitSwitchTrue = false;
+    public final static boolean RetractLimitSwitchTrue  = false;
+    public final static double  RetractLimitSwitchAngle = -47.0; // Max angle retract
 
-    public final static double lowerLimitSwitchAngle = +56.0;
-    public final static double upperLimitSwitchAngle = -47.0;
+    public final static boolean ExtendLimitSwitchTrue   = false;
+    public final static double  ExtendLimitSwitchAngle  = +56.0; // Max angle extended
 
-    // ------ Arm Angle Constants (In Degrees) ------
-    public final static double minArmAngle = -20.0;
-    public final static double maxArmAngle = +30.0;
-
-    public final static double ArmAngleFullRetractPos = -25.0;
+    // Arm Position Constants
+    //public final static double ArmAngleFullRetractPos = -25.0;  // ?????
     public final static double ArmAngleStorePos       = -15.0;
 
     // These would be for single value for Cone or Cube
@@ -34,7 +31,7 @@ public class ArmConfig {
     public final static double ArmAngleMidPos         = +15.0;  // Pickup position
     public final static double ArmAngleHighPos        = +25.0;  // Pickup position
 
-    // These would be for separate values for Cone or Cube
+    // These would be for separate values for Cone or Cube (May not be needed)
     public final static double ArmAngleConeLowPos         = +15.0;  // Angle to Eject Cone for Low Score 
     public final static double ArmAngleConeMidPos         = +20.0;
     public final static double ArmAngleConeHighPos        = +30.0;

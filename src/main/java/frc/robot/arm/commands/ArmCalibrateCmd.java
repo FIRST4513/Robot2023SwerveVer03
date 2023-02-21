@@ -39,13 +39,13 @@ public class ArmCalibrateCmd  extends CommandBase {
     public void execute() {
         if (armState == ArmState.RETRACTING) {
             // Check If we have reached the retract limit switch
-            if (Robot.arm.isLowerLimitSwitchPressed() == false) {
+            if (Robot.arm.isRetractLimitSwitchPressed() == false) {
                 // Have Not reached limit sw keep retracting
                 Robot.arm.setArmMotor(ArmConfig.kLowerSpeed);
                 return;
             } else {
                 // We Have reached limit sw
-                Robot.arm.resetEncoderAngle(ArmConfig.upperLimitSwitchAngle);   // Reset Encoder to Back Angle
+                Robot.arm.resetEncoderAngle(ArmConfig.ExtendLimitSwitchAngle);   // Reset Encoder to Back Angle
                 armState = ArmState.EXTENDING;                                  // Update State
                 armStateStr = "EXTENDING";
             }

@@ -71,11 +71,9 @@ public class ElevatorSubSys extends SubsystemBase {
     // ------------  Set Elev to Height by Motion Magic  ----------
     public void setMMheight(double height) {
         height = limit_target_ht(height);
-        double position = convertHeightToFalconCnt(height);
         target_height = height;
-        m_motor.set( ControlMode.MotionMagic, position,
-                     DemandType.ArbitraryFeedForward,
-                     ElevFXMotorConfig.arbitraryFeedForward);
+        m_motor.set( ControlMode.MotionMagic, convertHeightToFalconCnt(height),
+                     DemandType.ArbitraryFeedForward, ElevFXMotorConfig.arbitraryFeedForward);
     }
 
     // ------------ This Drives the Elevator Manually during TeleOp ----------
