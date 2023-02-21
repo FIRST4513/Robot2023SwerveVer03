@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
-import frc.robot.elevator.commands.ElevatorCmds;
 
 // --------------------------------------------------------
 // ------------   Elevator Telemetry Class   --------------

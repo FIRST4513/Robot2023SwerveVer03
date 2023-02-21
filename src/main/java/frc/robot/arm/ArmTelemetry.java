@@ -19,9 +19,9 @@ public class ArmTelemetry {
         tab.add("Arm Commands",arm)                                          .withPosition(0, 4).withSize(5, 2);
 
         tab.addDouble("Encoder Cnt", ()->arm.getEncoderCnt())                .withPosition(3, 0).withSize(3, 2);
-        tab.addDouble("Arm Angle", ()->arm.getArmAngle())                    .withPosition(3, 2).withSize(3, 2);
+        tab.addDouble("Arm Angle",   ()->arm.getArmAngle())                  .withPosition(3, 2).withSize(3, 2);
 
-        tab.addNumber("Motor Pwr", () -> arm.mArmMotor.get())                .withPosition(6, 0).withSize(3, 2);
+        tab.addNumber("Motor Pwr",   () -> arm.mArmMotor.get())              .withPosition(6, 0).withSize(3, 2);
 
         tab.addNumber("Input from Operator Joystick",
                         () -> Robot.operatorGamepad.getArmInput())           .withPosition(6, 2).withSize(3, 2);
@@ -29,7 +29,6 @@ public class ArmTelemetry {
         tab.addNumber("Arb FF Val", () -> arm.getArbFeedFwd())                .withPosition(6, 4).withSize(3, 2);
         
         SmartDashboard.putData("Release Arm", new ElevReleaseArmCmd());
-        // tab.add("Release Arm", new ElevReleaseArmCmd())                     .withPosition(16, 0).withSize(3, 2);
 
         tab.add("MM To 5", 
         new RunCommand( () -> Robot.arm.setMMangle( 5.0 ), Robot.arm))      .withPosition(10, 0).withSize(3, 2);
@@ -50,6 +49,5 @@ public class ArmTelemetry {
         new RunCommand( () -> Robot.arm.setMMangle( 0.0 ), Robot.arm))      .withPosition(13, 6).withSize(3, 2);
         
         SmartDashboard.putData("Recal Arm", new ArmCalibrateCmd());
-        // tab.add("Recal Arm", new ArmCalibrateCmd())                         .withPosition(16, 0).withSize(3, 2);
     }
 }
