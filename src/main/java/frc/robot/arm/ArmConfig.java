@@ -4,16 +4,16 @@ public class ArmConfig {
 
     // ------- Encoder Conversion Factor --------------
     // 1797.41176 cnts per degree
-    public final static double kCntsPerDeg = 1797.41176;      // Convert cnt to degrees of angle
-    public final static double kDegsPerCnt = 0.00055636;      // Convert cnt to degrees of angle
-    public final static double KAngleDeadBand     = +1.0;            // How close to target degree is close enough
+    public final static double kCntsPerDeg      = 1797.41176;      // Convert cnt to degrees of angle
+    public final static double kDegsPerCnt      = 0.00055636;      // Convert cnt to degrees of angle
+    public final static double KAngleDeadBand   = +1.0;            // How close to target degree is close enough
 
     // ------ Speed Constants ------
-    public final static double kRaiseSpeed  = +0.25;
-    public final static double kLowerSpeed  = -0.15;
+    public final static double kDefaultExtendPwr    = +0.25;
+    public final static double kExtendMaxPwr        = +0.5;
 
-    public final static double kArmMotorExtendMaxPwr  = +0.5;
-    public final static double kArmMotorRetractMaxPwr = -0.35;
+    public final static double kDefaultRetractPwr   = -0.15;
+    public final static double kRetractMaxPwr       = -0.35;
 
     // ------ Limit Switch ------
     public final static boolean RetractLimitSwitchTrue  = false;

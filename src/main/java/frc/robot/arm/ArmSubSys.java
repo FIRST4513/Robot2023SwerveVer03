@@ -39,12 +39,11 @@ public class ArmSubSys extends SubsystemBase {
 
     // ------------- Periodic -------------
     public void periodic() {
-        // DO NOT RESET ENCODERS at Ends of travel Init at begining and leave
         if (isRetractLimitSwitchPressed() == true) {
-            resetEncoderAngle(ArmConfig.RetractLimitSwitchAngle);      // recalibrate encoder at retracted position
+            resetEncoderAngle(ArmConfig.RetractLimitSwitchAngle);  // recalibrate encoder at retracted position
         }
         if (isExtendLimitSwitchPressed() == true) {
-            resetEncoderAngle(ArmConfig.ExtendLimitSwitchAngle);      // recalibrate encoder at extended position
+            resetEncoderAngle(ArmConfig.ExtendLimitSwitchAngle);   // recalibrate encoder at extended position
         }
         updateCurrentArmPosition();
     }
@@ -52,8 +51,8 @@ public class ArmSubSys extends SubsystemBase {
     // -----------------------------------------------------
     // ---------------- Arm Motor Methods ------------------
     // -----------------------------------------------------
-    public void raiseArm() { setArmMotor(ArmConfig.kRaiseSpeed); }
-    public void lowerArm() { setArmMotor(ArmConfig.kLowerSpeed); }
+    public void raiseArm() { setArmMotor(ArmConfig.kDefaultExtendPwr); }
+    public void lowerArm() { setArmMotor(ArmConfig.kDefaultRetractPwr); }
 
     public void holdArm() {
         if ( Math.abs(mCurrArmAngle) < 8.0) {
@@ -80,8 +79,8 @@ public class ArmSubSys extends SubsystemBase {
     // ------------  Set Arm Manually during TeleOP  ----------
     public void setArmMotor( double pwr ) {
         // Limit power if needed
-        if ( pwr > ArmConfig.kArmMotorExtendMaxPwr)  { pwr = ArmConfig.kArmMotorExtendMaxPwr; }
-        if ( pwr < ArmConfig.kArmMotorRetractMaxPwr) { pwr = ArmConfig.kArmMotorRetractMaxPwr; }
+        if ( pwr > ArmConfig.kExtendMaxPwr)  { pwr = ArmConfig.kExtendMaxPwr; }
+        if ( pwr < ArmConfig.kRetractMaxPwr) { pwr = ArmConfig.kRetractMaxPwr; }
 
         if ( pwr > 0) {
             // Were extending so check if Extend Limit Switch has been hit

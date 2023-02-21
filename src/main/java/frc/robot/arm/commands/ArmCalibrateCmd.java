@@ -41,7 +41,7 @@ public class ArmCalibrateCmd  extends CommandBase {
             // Check If we have reached the retract limit switch
             if (Robot.arm.isRetractLimitSwitchPressed() == false) {
                 // Have Not reached limit sw keep retracting
-                Robot.arm.setArmMotor(ArmConfig.kLowerSpeed);
+                Robot.arm.setArmMotor(ArmConfig.kDefaultRetractPwr);
                 return;
             } else {
                 // We Have reached limit sw
