@@ -24,7 +24,6 @@ public class Swerve extends SubsystemBase {
     public      SwerveModule[] mSwerveMods;
     private     SwerveModuleState[] mSwerveModStates;
 
-
     // --------------------- Constructor ------------------
     public Swerve() {
         setName("Swerve");
@@ -61,7 +60,7 @@ public class Swerve extends SubsystemBase {
                         double omegaRadiansPerSecond,
                         boolean fieldRelative,
                         boolean isOpenLoop) {
-        // call real constructor to get job done
+        // call real drive method to get job done
         drive ( fwdPositive,
                 leftPositive,
                 omegaRadiansPerSecond,
