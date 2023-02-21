@@ -23,7 +23,7 @@ public class ElevReleaseArmCmd extends CommandBase {
     @Override
     public void execute() {
         // Raise Elevator to clear arm and let fall
-        Robot.elevator.setMMheight(ElevatorConfig.ElevInitReleaseHt);
+        Robot.elevator.setMMheight(ElevatorConfig.ElevArmReleaseHt);
 
         if (cmdState == CmdState.ELEVRAISING) {
             // Lets look to see when it hits the switch on way down

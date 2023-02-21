@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.auto.commands.DelayCmd;
+import frc.robot.elevator.ElevatorConfig;
 
 // -----------------------------------------------------
 // --------------   Elevator Commands    ---------------
@@ -41,10 +42,12 @@ public class ElevatorCmds {
 
     public static Command ElevGoToBottomCmd() {
         return new SequentialCommandGroup(
+            // turn off soft limits here (InstantCommand) ??
             new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
                 .until(() ->Robot.elevator.isLowerLimitSwitchPressed()),
             new DelayCmd(0.25),
             new InstantCommand( () -> Robot.elevator.resetEncoder())
+            // turn on soft limits here ??
         ).withName("ElevGoToBottomCmd");
     }
     
@@ -73,6 +76,42 @@ public class ElevatorCmds {
 
     public static Command ElevSetBrakeOffCmd() {
         return new InstantCommand( () -> Robot.elevator.setBrakeMode( false ));
+    }
+
+    
+    // -------- Intake Position Commands -------
+    public static Command ElevToIntakeConePosCmd()  { return ElevatorCmds.ElevGoToBottomCmd(); }
+
+    public static Command ElevToIntakeCubePosCmd()  { return ElevatorCmds.ElevGoToBottomCmd(); }
+
+
+    // -------- Eject Position Commands -------
+    public static Command ElevToEjectLowPosCmd()    { return ElevatorCmds.ElevGoToBottomCmd(); }
+
+    public static Command ElevToEjectMidPosCmd() {
+        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevEjectMidHt)
+                .until(() -> Robot.elevator.isMMtargetReached());
+    }
+
+    public static Command ElevToEjectHighPosCmd() {
+        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevEjectMidHt)
+                .until(() -> Robot.elevator.isMMtargetReached());
+    }
+
+    
+    // -------- Misc Position Commands -------
+    public static Command ElevToBumperClearPosCmd() {
+        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevBumperClearHt)
+                .until(() -> Robot.elevator.isMMtargetReached());
+    }
+
+    public static Command ElevToStorePosCmd()  { return ElevatorCmds.ElevGoToBottomCmd(); }
+
+    public static Command ElevToRetractPosCmd()     { return ElevatorCmds.ElevGoToBottomCmd(); }
+
+    public static Command ElevToArmReleasePosCmd() {
+        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevArmReleaseHt)
+                .until(() -> Robot.elevator.isMMtargetReached());
     }
 
 }

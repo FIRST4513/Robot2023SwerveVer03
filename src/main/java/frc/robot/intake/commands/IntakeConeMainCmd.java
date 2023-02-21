@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.intake.IntakeConfig;
 
-public class IntakeConeCmd extends CommandBase{
+public class IntakeConeMainCmd extends CommandBase{
     
     static enum IntakeState {EMPTY, INTAKE, TRANSIT, STAGED, INPLACE};
     IntakeState intakeState;
@@ -14,7 +14,7 @@ public class IntakeConeCmd extends CommandBase{
     double upperSpeed = 0.0;
     double lowerSpeed = 0.0;
 
-    public IntakeConeCmd() {
+    public IntakeConeMainCmd() {
         addRequirements(Robot.intake);
     }
 

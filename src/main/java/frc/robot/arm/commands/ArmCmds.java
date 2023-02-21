@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
+import frc.robot.arm.ArmConfig;
 
 public class ArmCmds {
     
@@ -66,9 +67,35 @@ public class ArmCmds {
         () -> Robot.arm.setArmMotor(() -> Robot.operatorGamepad.getArmInput()), Robot.arm);
     }
 
-// ----------------- Motion Magic Commands ----------------------
+    // ----------------- Motion Magic Commands ----------------------
     public static Command ArmSetMMangleCmd(double angle) {
         return new RunCommand(() -> Robot.arm.setMMangle(angle), Robot.arm);
+    }
+
+    // -------- Eject Position Commands -------
+    public static Command ArmToEjectLowPosCmd() {
+        return ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleEjectLowPos)
+                .until(() -> Robot.arm.isMMtargetReached());
+    }
+
+    public static Command ArmToEjectMidPosCmd() {
+        return ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleEjectMidPos)
+                .until(() -> Robot.arm.isMMtargetReached());
+    }
+
+    public static Command ArmToEjectHighPosCmd() {
+        return ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleEjectHighPos)
+                .until(() -> Robot.arm.isMMtargetReached());
+    }
+
+    // -------- Intake Position Commands -------
+    public static Command ArmToIntakeCubePosCmd() {
+        return ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleIntakeCubePos)
+                .until(() -> Robot.arm.isMMtargetReached());
+    }
+    public static Command ArmToIntakeConePosCmd() {
+        return ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleIntakeConePos)
+                .until(() -> Robot.arm.isMMtargetReached());
     }
 
 }

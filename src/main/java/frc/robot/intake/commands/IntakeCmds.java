@@ -16,18 +16,15 @@ public class IntakeCmds {
             .withName("IntakeStopCmd");
     }
 
-    public static Command IntakeCubeRetractCmd() {
+    public static Command IntakeCubeCmd() {
         return new RunCommand(() -> Robot.intake.setMotorsCubeRetract(), Robot.intake)
             .withName("IntakeCubeRetractCmd")
             .until(() -> Robot.intake.isCubeRetractDetected());
     }
 
-    // public static Command IntakeConeRetractCmd() {
-    //     return new RunCommand(() -> Robot.intake.setMotorsConeRetract(), Robot.intake)
-    //         .withName("IntakeConeRetractCmd")
-    //         .alongWith(new PrintCommand("cone retract initiated"))
-    //         .until(() -> Robot.intake.isConeDetected());
-    // }
+    public static Command IntakeConeCmd() {
+        return new IntakeConeMainCmd();
+    }
 
     public static Command IntakeEjectCmd() {
         return new ConditionalCommand(

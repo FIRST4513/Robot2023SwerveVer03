@@ -3,7 +3,7 @@ package frc.robot.operator;
 import frc.lib.gamepads.Gamepad;
 import frc.robot.arm.commands.ArmCmds;
 import frc.robot.intake.commands.IntakeCmds;
-import frc.robot.intake.commands.IntakeConeCmd;
+import frc.robot.intake.commands.IntakeConeMainCmd;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 
 public class OperatorGamepad extends Gamepad {
@@ -12,21 +12,22 @@ public class OperatorGamepad extends Gamepad {
     }
     
     public void setupTeleopButtons() {
-        gamepad.aButton.onTrue(IntakeCmds.IntakeEjectCmd());
-        gamepad.bButton.onTrue(IntakeCmds.IntakeCubeRetractCmd());
+        gamepad.bButton.onTrue(OperatorGamepadCmds.IntakeCubeCmd());
+        gamepad.yButton.onTrue(OperatorGamepadCmds.IntakeConeCmd());
         gamepad.xButton.onTrue(IntakeCmds.IntakeStopCmd());
-        gamepad.yButton.onTrue(new IntakeConeCmd());
+        gamepad.aButton.onTrue(IntakeCmds.IntakeEjectCmd());
 
-        gamepad.startButton .onTrue(ArmCmds.ResetArmEncoderCmd());
-        gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullBackPosCmd());
+        gamepad.Dpad.Right.onTrue  (OperatorGamepadCmds.SetArmElevToStorePosCmd());
+        gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullRetractPosCmd());
 
-        gamepad.Dpad.Down .onTrue(OperatorGamepadCmds.SetArmElevToLowPosCmd());
-        gamepad.Dpad.Right.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
-        gamepad.Dpad.Left .onTrue(OperatorGamepadCmds.SetArmElevToMidPosCmd());
-        gamepad.Dpad.Up   .onTrue(OperatorGamepadCmds.SetArmElevToHighPosCmd());
+        gamepad.Dpad.Down .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
+        gamepad.Dpad.Left .onTrue(OperatorGamepadCmds.SetArmElevToEjectMidPosCmd());
+        gamepad.Dpad.Up   .onTrue(OperatorGamepadCmds.SetArmElevToEjectHighPosCmd());
 
         gamepad.rightBumper.whileTrue(OperatorGamepadCmds.ControlElevByJoysticksCmd());
         gamepad.leftBumper .whileTrue(OperatorGamepadCmds.ControlArmByJoysticksCmd());
+
+        gamepad.startButton .onTrue(ArmCmds.ResetArmEncoderCmd());
     }
 
     public void setupDisabledButtons() {

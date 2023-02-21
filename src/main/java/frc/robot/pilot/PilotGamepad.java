@@ -45,11 +45,14 @@ public class PilotGamepad extends Gamepad {
         gamepad.aButton.whileTrue(PilotGamepadCmds.RpvPilotSwerveCmd());
         // gamepad.bButton.onTrue(IntakeCmds.IntakeEjectCmd());
         gamepad.bButton.onTrue(new PrintCommand("B Pressed"));
-        gamepad.xButton.onTrue(OperatorGamepadCmds.SetArmElevToLowPosCmd());
+        gamepad.xButton.onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
         gamepad.yButton.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
 
         gamepad.leftBumper.onTrue(IntakeCmds.IntakeStopCmd());
         gamepad.rightBumper.onTrue(PilotGamepadCmds.BasicSnapCmd());  // basic snap (turn-in-place)
+        
+        
+        gamepad.Dpad.Down .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
         
         // "Start" Button - Rest Gyro to 0
         gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());

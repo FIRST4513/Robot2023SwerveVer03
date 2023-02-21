@@ -4,7 +4,6 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.SPI;
-import frc.Rmath;
 
 /* NavX gyro returns angles 0 to +360 (CW) Continous and 0 to -360 (CCW)
  * This wraps over to > +360 or < -360 as it spins more than 1 rotation.

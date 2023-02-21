@@ -26,8 +26,8 @@ public class ZeroElevator extends CommandBase {
     @Override
     public void execute() {
         // Set elevator to slowly lower
-        Robot.elevator.elevSetSpeed(ElevatorConfig.zeroSpeed);
-        //Robot.elevator.zeroElevator();
+        Robot.elevator.elevSetSpeed(ElevatorConfig.zeroPwr);
+        //Robot.elevator.zeroElevator();        // reset encoder to 0
     }
 
     // Called once the command ends or is interrupted.

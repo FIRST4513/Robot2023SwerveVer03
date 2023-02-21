@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
+import frc.robot.Robot;
+
 public class ElevFXMotorConfig {
     // TalonSRX Config object
     public static TalonFXConfiguration config = new TalonFXConfiguration();
@@ -15,20 +17,18 @@ public class ElevFXMotorConfig {
     public static final SensorInitializationStrategy sensorStrat = SensorInitializationStrategy.BootToZero;
     public static final int         allowableError           = 122;
 
-    // Soft Limit Switches - TODO Update as need    
-    public static final boolean     elevForwardSoftLimitEnable          = false;
-    public static final boolean     elevReverseSoftLimitEnable          = false;
-    public static final int         elevForwardSoftLimitThreshold       = 45000;    
-    public static final int         elevReverseSoftLimitThreshold       = 100;
-
-    /* Motor Limits (Encoder Cnts) */
-    public final int min = 0;
-    public final int max = 75000;
-    public final int mid = 37000;
-    
-    public final int elevMaxFalcon = 60000;
 
     /* Control Loop Constants */
+    /*
+     * Cruise velocity Calculation: 30 inch in 3 seconds (elev 30" length = 99,480 cnts)
+     *                              10 inch in 1 second  (elev 10" lenght = 33,160 cnts)
+     *                              1  inch in 1/100 second ( 100 ms = 3,316 cnts)
+     *                              1 inch = 3,316 sensor units
+     */
+    public final double motionCruiseVelocity        = 3316; // 10 inches per second
+    public final double motionAcceleration          = 3316; // 1 second to get up to cruise velocity
+    public final int    motionCurveStrength         = 0;    // 0 no smoothing to 8 max smoothing
+
     /*
      * kP Calculation Example:
      *      if Error after ArbitraryFeedForwrd = 1 inch short we wish to add .02 pwr to get there
@@ -42,16 +42,6 @@ public class ElevFXMotorConfig {
     public final double kF = 0.0;     // 0 we will be using ArbitraryFeedForward for position control
     public final double kIz = 0.0;
     public final static double arbitraryFeedForward = 0.08; // Measured value to hold elev
-
-    /*
-     * Cruise velocity Calculation: 30 inch in 3 seconds (elev length)
-     *                              10 inch in 1 second
-     *                              1  inch in 1/100 second ( 100 ms)
-     *                              1 inch = 3,316 sensor units
-     */
-    public final double motionCruiseVelocity        = 3316; // 10 inches per second
-    public final double motionAcceleration          = 3316; // 1 second to get up to cruise velocity
-    public final int motionCurveStrength            = 0;    // 0 no smoothing to 8 max smoothing
 
     /* Current Limiting */
     public final int            currentLimit            = 30;
@@ -90,20 +80,19 @@ public class ElevFXMotorConfig {
         config.motionAcceleration             = motionAcceleration;
         config.motionCurveStrength            = motionCurveStrength;
 
-
         config.openloopRamp                   = openLoopRamp;
         config.closedloopRamp                 = closedLoopRamp;
         config.voltageCompSaturation          = voltageCompSaturation;
         config.supplyCurrLimit                = supplyLimit;
         config.slot0.allowableClosedloopError = allowableError;
 
-        config.forwardSoftLimitEnable           = elevForwardSoftLimitEnable;
-        config.reverseSoftLimitEnable           = elevReverseSoftLimitEnable;
+        config.forwardSoftLimitEnable = ElevatorConfig.LowerSoftLimitSwitchEnable;
+        config.forwardSoftLimitThreshold = 
+                (int) Robot.elevator.convertHeightToFalconCnt( ElevatorConfig.LowerSoftLimitSwitchHt );
 
-        config.forwardSoftLimitThreshold        = elevForwardSoftLimitThreshold;
-        config.reverseSoftLimitThreshold        = elevReverseSoftLimitThreshold;
-
-    
+        config.reverseSoftLimitEnable = ElevatorConfig.UpperSoftLimitSwitchEnable;
+        config.reverseSoftLimitThreshold =
+                (int) Robot.elevator.convertHeightToFalconCnt( ElevatorConfig.UpperSoftLimitSwitchHt );
     }
 
 }

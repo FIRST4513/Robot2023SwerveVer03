@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.pilot.commands.PilotGamepadCmds;
 
 public class SwerveCmds {
     private static Translation2d ctrOfRot = new Translation2d( 0, 0);

@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
+import frc.robot.Robot;
+
 public class ArmSRXMotorConfig {
     // TalonSRX Config object
     public static TalonSRXConfiguration config = new TalonSRXConfiguration();
@@ -15,47 +17,44 @@ public class ArmSRXMotorConfig {
     public static final boolean     armEnableCurrentLimit   = true;
     public static final SensorInitializationStrategy sensorStrat = SensorInitializationStrategy.BootToZero;
 
-    // 76815 encoder Cnts = 42.5 degrees (1807.41176 cnts per degree)
+    // 1797.41176 encoder Cnts = 1 degree (increase AllowableError to reduce jitter)
     public static final int         allowableError          = 2000;
-    // increase AllowableError to reduce jitter, (2048 * angleGearRatio) / 360.0) = 1 degree = 122 cnts
 
     /* Motor Limits (Encoder Cnts) */
-    public static final boolean     armExtendSoftLimitEnable           = false;
-    public static final boolean     armRetractSoftLimitEnable          = false;
-    public static final int         armExtendSoftLimitThreshold        = +80000;   // TEST !!! 
-    public static final int         armRetractSoftLimitThreshold       = -80000;   // TEST !!!
+
+    public static final int         armExtendSoftLimitThreshold        = ArmConfig.ExtendSoftLimitSwitchAngle; 
+    public static final int         armRetractSoftLimitThreshold       = ArmConfig.RetractSoftLimitSwitchAngle; 
 
     /* Motion Magic Control Loop Constants */
-
     /*
      * Arbitrary Feed Forward needs to be scaled based on angle
-     * Testing showed 45 degrees forward requires +0.22 pwr to hold
+     * Testing showed 45 degrees forward requires +0.22 pwr to hold (2/19/23)
      *               -45 degrees reverse requires -0.25 pwr to hold
-     * 
-     * Cosine of 45 degrees = 0.707 so to get 0.25 power out kP scaler must be 0.3536
-     */
-    public final double arbitraryFeedForwardScaler = 0.3536;
+    */
+     public final double arbitraryFeedForwardScaler = 0.3536;
 
     /*
-     * Cruise velocity Calculation: 45 degrees in 3 seconds required an encoder cnt of 81,333
-     *                              1 second of travel ( 15 degrees )= 27,111 counts
-     *                              1/100 second of travel ( 1.5 degrees )= 2,711 counts
+     * Cruise velocity Calculation: 1 degree = 1797 Counts     
+     *                              45 degrees in 3 seconds required an encoder cnts of 81,000 ( approx.)
+     *                              1 second of travel ( 15 degrees )       = 27,000 counts    ( approx. )
+     *                              1/100 second of travel ( 1.5 degrees )  = 2,700 counts
      */
+
+    public final double motionCruiseVelocity        = 15000;    // approx 15 degrres per second
+    public final double motionAcceleration          = 15000;    // approx 1 second to get up to cruise velocity
+    public final int    motionCurveStrength         = 0;        // 0 No smoothing to 8 Max smoothing
+
     public final double kP = 0.1;     // Needs to be Determined by testing
     public final double kI = 0.0;     // could be 0
     public final double kD = 0.0;     // could be 0
     public final double kF = 0.0;     // 0 we will be using ArbitraryFeedForward for position control
     public final double kIz = 0.0;
-    
-    public final double motionCruiseVelocity        = 1500; // 15 degrres per second
-    public final double motionAcceleration          = 1500; // 1 second to get up to cruise velocity
-    public final int    motionCurveStrength         = 0;    // 0 no smoothing to 8 max smoothing
    
     /* Current Limiting */
     public static final int     continuousCurrentLimit   = 25;       // Amps
     public static final int     peakCurrentLimit         = 40;       // Amps
-    public static final int     peakCurrentDuration      = 100;      // Time in milliseconds
-    public final boolean        EnableCurrentLimit       = false;
+    public static final int     peakCurrentDuration      = 200;      // Time in milliseconds
+    public final boolean        EnableCurrentLimit       = true;
 
     /* Voltage Compensation */
     public final double voltageCompSaturation = 12;
@@ -89,10 +88,11 @@ public class ArmSRXMotorConfig {
         config.peakCurrentDuration              = peakCurrentDuration;
         config.slot0.allowableClosedloopError   = allowableError;
 
-        config.forwardSoftLimitEnable           = armExtendSoftLimitEnable;
-        config.forwardSoftLimitThreshold        = armExtendSoftLimitThreshold;
-        config.reverseSoftLimitEnable           = armRetractSoftLimitEnable;
-        config.reverseSoftLimitThreshold        = armRetractSoftLimitThreshold;
+        config.forwardSoftLimitEnable           = ArmConfig.ExtendSoftLimitSwitchEnable;
+        config.forwardSoftLimitThreshold        = Robot.arm.convertAngleToCnt( armExtendSoftLimitThreshold );
+
+        config.reverseSoftLimitEnable           = ArmConfig.RetractSoftLimitSwitchEnable;
+        config.reverseSoftLimitThreshold        = Robot.arm.convertAngleToCnt( armRetractSoftLimitThreshold );
     }
 
 }

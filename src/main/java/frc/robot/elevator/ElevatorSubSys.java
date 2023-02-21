@@ -29,7 +29,6 @@ public class ElevatorSubSys extends SubsystemBase {
 
     // -----------  Constructor --------------------
     public ElevatorSubSys() {
-        config              = new ElevatorConfig();
         configFX            = new ElevFXMotorConfig();
         m_motor             = new WPI_TalonFX(Motors.elevatorMotorID);
         elevLowerLimitSw    = new DigitalInput(LimitSwitches.elevatorLowerLimitSw);
@@ -48,18 +47,18 @@ public class ElevatorSubSys extends SubsystemBase {
 
     // ------------ Lower Elevator ----------
     public void elevLower() {
-        elevSetSpeed( config.KLowerSpeedDefault ); 
+        elevSetSpeed( ElevatorConfig.KLowerSpeedDefault ); 
     }
 
     // ------------ Raise Elevator ----------
     public void elevRaise() {
-        elevSetSpeed( config.KRaiseSpeedDefault ); 
+        elevSetSpeed( ElevatorConfig.KRaiseSpeedDefault ); 
     }
 
     // ------------ Hold Elevator Position ----------
     public void elevHoldMtr(){
-        elevSetSpeed( config.KHoldSpeedDefault ); 
-        mCurrElevPwr = config.KHoldSpeedDefault;
+        elevSetSpeed( ElevatorConfig.KHoldSpeedDefault ); 
+        mCurrElevPwr = ElevatorConfig.KHoldSpeedDefault;
     }
 
     // ------------ Stop Elevator Motor  ----------
@@ -79,32 +78,32 @@ public class ElevatorSubSys extends SubsystemBase {
     // ------------ This Drives the Elevator Manually during TeleOp ----------
     public void elevSetSpeed(double speed){
         // Cap speed to max
-        if ( speed > config.raiseMaxSpeed )  { speed = config.raiseMaxSpeed; }
-        if ( speed < config.lowerMaxSpeed )  { speed = config.lowerMaxSpeed; }
+        if ( speed > ElevatorConfig.raiseMaxPwr )  { speed = ElevatorConfig.raiseMaxPwr; }
+        if ( speed < ElevatorConfig.lowerMaxPwr )  { speed = ElevatorConfig.lowerMaxPwr; }
 
         // Were Raising the elevator
-        if ( speed > config.KHoldSpeedDefault ) {
+        if ( speed > ElevatorConfig.KHoldSpeedDefault ) {
             // Test for hitting Upper Limits
             if ( isUpperLimitReached() ) {
                 elevHoldMtr();
                 return;
             }
             //  This is for slowing down as we approach the top
-            if ( mCurrElevHt >= config.KLimitElevTopSlowHt )  {
-                speed = config.KRaiseSlowSpeed;
+            if ( mCurrElevHt >= ElevatorConfig.KLimitElevTopSlowHt )  {
+                speed = ElevatorConfig.KRaiseSlowSpeed;
             }
         }
 
         // Were Lowering the elevator
-        if ( speed <= config.KHoldSpeedDefault) {
+        if ( speed <= ElevatorConfig.KHoldSpeedDefault) {
             // Test if hitting Bottom limit switch
             if ( isLowerLimitSwitchPressed() ) {
                 elevStop();
                 return;
             }
             //  This is for slowing down as we approach the bottom    		
-            if ( mCurrElevHt <= config.KLimitElevBottomSlowHt ) {
-                speed = config.KLowerSlowSpeed;
+            if ( mCurrElevHt <= ElevatorConfig.KLimitElevBottomSlowHt ) {
+                speed = ElevatorConfig.KLowerSlowSpeed;
             }
         }
 
@@ -129,11 +128,11 @@ public class ElevatorSubSys extends SubsystemBase {
     }
 
     public double convertHeightToFalconCnt( double height) {
-        return height / config.ELEV_ENCODER_CONV;
+        return ( height * ElevatorConfig.kCntsPerInch );
     }
 
     public double convertFalconCntToHeight( double cnt) {
-        return config.ELEV_ENCODER_CONV * cnt;
+        return ( cnt * ElevatorConfig.kInchesPerCnt );
     }
 
     public void resetEncoder(){
@@ -153,14 +152,14 @@ public class ElevatorSubSys extends SubsystemBase {
     public double getElevMotorPwr()         { return mCurrElevPwr; }
 
     public double limit_target_ht( double ht ){
-        if (ht > config.KElevMaxTopHt)     { ht = config.KElevMaxTopHt; }
+        if (ht > ElevatorConfig.KElevMaxTopHt)     { ht = ElevatorConfig.KElevMaxTopHt; }
         if (ht < 0)                        { ht = 0; }
         return ht;
     }
 
     public boolean isMMtargetReached(){
         // If we are within the deadband of our target we can stop
-        if (Math.abs(target_height-mCurrElevHt) <= config.KheightDeadBand) { return true; }
+        if (Math.abs(target_height-mCurrElevHt) <= ElevatorConfig.KheightDeadBand) { return true; }
         return false;
     }
 
@@ -175,17 +174,17 @@ public class ElevatorSubSys extends SubsystemBase {
 
     // -----------------  Lower/Upper Limits ----------------
     public boolean isLowerLimitSwitchPressed() {
-        if (elevLowerLimitSw.get() == config.lowerLimitTrue) { return true; }
+        if (elevLowerLimitSw.get() == ElevatorConfig.LowerLimitSwitchTrue) { return true; }
         return false;
     }
 
     public boolean isUpperLimitSwitchPressed() {
-        if (elevUpperLimitSw.get() == config.lowerLimitTrue) { return true; }
+        if (elevUpperLimitSw.get() == ElevatorConfig.UpperLimitSwitchTrue) { return true; }
         return false;
     }
 
     public boolean isUpperLimitReached() {
-        if ( mCurrElevHt >= config.KElevMaxTopHt )           { return true; }
+        if ( mCurrElevHt >= ElevatorConfig.KElevMaxTopHt )           { return true; }
         return false;
     }
 
