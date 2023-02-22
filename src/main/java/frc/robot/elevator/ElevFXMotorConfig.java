@@ -5,8 +5,6 @@ import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
-import frc.robot.Robot;
-
 public class ElevFXMotorConfig {
     // TalonSRX Config object
     public static TalonFXConfiguration config = new TalonFXConfiguration();

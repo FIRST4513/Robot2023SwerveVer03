@@ -14,7 +14,7 @@ import frc.lib.gamepads.XboxGamepad.XboxAxis;
     private double targetVal;
     private ThresholdType thresholdType;
 
-    private Trigger triggerButton;
+    public Trigger triggerButton;
     
     public static enum ThresholdType {
         LESS_THAN,

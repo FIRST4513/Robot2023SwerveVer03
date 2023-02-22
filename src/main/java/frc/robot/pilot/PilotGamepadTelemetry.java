@@ -11,7 +11,7 @@ import frc.lib.telemetry.CustomLayout;
 import frc.robot.Robot;
 
 public class PilotGamepadTelemetry {
-    private final PilotGamepad gamepad; 
+    public final PilotGamepad gamepad; 
 
     // Tab & Layouts  //
     private static ShuffleboardTab m_tab;
@@ -30,7 +30,8 @@ public class PilotGamepadTelemetry {
     public void initialize() {
         driver = new gamepadLayout("Driver 0", m_tab, Robot.pilotGamepad);
         driver.initialize();
-        m_EnableWidget = m_tab.add("Update Enable", false).withWidget(BuiltInWidgets.kToggleButton).withPosition(5, 0);
+        m_EnableWidget = m_tab.add("Update Enable", false)
+                            .withWidget(BuiltInWidgets.kToggleButton).withPosition(5, 0);
     }
 
     public void update() {

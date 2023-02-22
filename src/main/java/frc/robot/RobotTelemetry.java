@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.telemetry.Alert;
 import frc.lib.telemetry.Alert.AlertType;
@@ -23,12 +22,12 @@ public class RobotTelemetry extends TelemetrySubsystem {
     private static boolean disablePrints = false;
 
     // Additional Shuffleboard Tabs
-    private static ArmTelemetry             m_ArmTelemetry;
-    private static ElevatorTelemetry        m_ElevTelemetry;
-    private static IntakeTelemetry          m_IntakeTelemetry;
-    private static SwerveTelemetry          m_SwerveTelemetry;
-    private static PilotGamepadTelemetry    m_PilotTelemetry;
-    private static OperatorGamepadTelemetry m_OperatorTelemetry;
+    public static ArmTelemetry             m_ArmTelemetry;
+    public static ElevatorTelemetry        m_ElevTelemetry;
+    public static IntakeTelemetry          m_IntakeTelemetry;
+    public static SwerveTelemetry          m_SwerveTelemetry;
+    public static PilotGamepadTelemetry    m_PilotTelemetry;
+    public static OperatorGamepadTelemetry m_OperatorTelemetry;
 
     // Alerts
     private static Alert batteryAlert = new Alert("Low Battery < 12v", AlertType.WARNING);
