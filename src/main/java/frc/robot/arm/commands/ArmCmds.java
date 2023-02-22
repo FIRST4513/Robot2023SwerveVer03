@@ -105,12 +105,8 @@ public class ArmCmds {
                 .until(() -> Robot.arm.isMMtargetReached());
     }
 
-    // --------- Arm Free Fall Command ---------
-    public static Command ArmFreeFallCmd() {
-        return new SequentialCommandGroup(
-            new InstantCommand(() -> Robot.arm.setBrakeMode(false), Robot.arm),
-            new DelayCmd(3, Robot.arm),
-            new InstantCommand(() -> Robot.arm.setBrakeMode(true), Robot.arm)
-        );
+    // --------- ArmRelease (Free Fall) Command ---------
+    public static Command ArmReleaseCmd() {
+        return new ArmReleaseCmd();
     }
 }

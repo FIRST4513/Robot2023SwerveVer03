@@ -119,8 +119,8 @@ public class ElevatorCmds {
     // --------- Initial Arm Release Command -------
     public static Command InitialArmReleaseCmd() {
         return new ParallelCommandGroup(
-            ArmCmds.ArmFreeFallCmd(),
-            new ElevReleaseArmCmd()
+            ArmCmds.ArmReleaseCmd().withTimeout(3.0),
+            new ElevReleaseArmCmd().withTimeout(3.0)
         );
     }
 }
