@@ -4,8 +4,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
-import frc.robot.Robot;
-
 public class ArmSRXMotorConfig {
     // TalonSRX Config object
     public static TalonSRXConfiguration config = new TalonSRXConfiguration();
