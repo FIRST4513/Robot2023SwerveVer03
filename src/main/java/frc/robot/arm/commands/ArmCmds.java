@@ -17,6 +17,7 @@ public class ArmCmds {
         Robot.arm.setDefaultCommand(HoldArmCmd());
     }
 
+    // ---------------- Arm Motion Stop Commands --------------
     public static Command HoldArmCmd() {
         return new RunCommand(() -> Robot.arm.holdArm(), Robot.arm )
             .withName("HoldArmCmd");
@@ -27,15 +28,14 @@ public class ArmCmds {
             .withName("StopArmCmd");
     }
 
-    public static Command ResetArmEncoderCmd() {
-        return new InstantCommand( () -> Robot.arm.resetEncoder(), Robot.arm);
+    // ------------- Arm Motion Commands -------------
+    public static Command ArmByJoystickCmd() {
+        return new RunCommand(
+        () -> Robot.arm.setArmMotor(() -> Robot.operatorGamepad.getArmInput()), Robot.arm);
     }
 
-    public static Command SetArmBrakeCmd() {
-        return new InstantCommand( () -> Robot.arm.setBrakeMode(true), Robot.arm);
-    }
-    public static Command SetArmCoastCmd() {
-        return new InstantCommand( () -> Robot.arm.setBrakeMode(false), Robot.arm);
+    public static Command ArmSetMMangleCmd(double angle) {
+        return new RunCommand(() -> Robot.arm.setMMangle(angle), Robot.arm);
     }
 
     public static Command RaiseArmCmd() {
@@ -57,24 +57,21 @@ public class ArmCmds {
                 () -> Robot.arm.setArmMotor(speed.getAsDouble()), Robot.arm);
     }
 
-    public static Command ArmToFullRetractCmd() {
-        return new RunCommand( () -> Robot.arm.lowerArm(), Robot.arm)
-            .until(() ->Robot.arm.isRetractLimitSwitchPressed())
-            .withName("armToBottomCmd");
+    // ---------- Set Arm Brake Commands -----------
+    public static Command SetArmBrakeCmd() {
+        return new InstantCommand( () -> Robot.arm.setBrakeMode(true), Robot.arm);
     }
 
-
-    public static Command ArmByJoystickCmd() {
-        return new RunCommand(
-        () -> Robot.arm.setArmMotor(() -> Robot.operatorGamepad.getArmInput()), Robot.arm);
+    public static Command SetArmCoastCmd() {
+        return new InstantCommand( () -> Robot.arm.setBrakeMode(false), Robot.arm);
     }
 
-    // ----------------- Motion Magic Commands ----------------------
-    public static Command ArmSetMMangleCmd(double angle) {
-        return new RunCommand(() -> Robot.arm.setMMangle(angle), Robot.arm);
+    // ------------- Reset Arm Encoder Command -------------
+    public static Command ResetArmEncoderCmd() {
+        return new InstantCommand( () -> Robot.arm.resetEncoder(), Robot.arm);
     }
 
-    // -------- Eject Position Commands -------
+    // -------- Arm to Eject Positions Commands -------
     public static Command ArmToEjectLowPosCmd() {
         return ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleEjectLowPos)
                 .until(() -> Robot.arm.isMMtargetReached());
@@ -90,7 +87,7 @@ public class ArmCmds {
                 .until(() -> Robot.arm.isMMtargetReached());
     }
 
-    // -------- Intake Position Commands -------
+    // -------- Arm to Intake Positions Commands -------
     public static Command ArmToIntakeCubePosCmd() {
         return ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleIntakeCubePos)
                 .until(() -> Robot.arm.isMMtargetReached());
@@ -100,9 +97,16 @@ public class ArmCmds {
                 .until(() -> Robot.arm.isMMtargetReached());
     }
 
+    // -------- Arm Retracted Positions Commands -------
     public static Command ArmToStorePosCmd() {
         return ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleStorePos)
                 .until(() -> Robot.arm.isMMtargetReached());
+    }
+
+    public static Command ArmToFullRetractCmd() {
+        return new RunCommand( () -> Robot.arm.lowerArm(), Robot.arm)
+            .until(() ->Robot.arm.isRetractLimitSwitchPressed())
+            .withName("armToBottomCmd");
     }
 
     // --------- ArmRelease (Free Fall) Command ---------
