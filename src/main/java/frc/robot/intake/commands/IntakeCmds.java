@@ -26,9 +26,9 @@ public class IntakeCmds {
     public static Command IntakeEjectCmd() {
         return new ConditionalCommand(
             // cube
-            new RunCommand(() -> Robot.intake.setMotorsCubeEject(), Robot.intake).withTimeout(1.0),
+            new RunCommand(() -> Robot.intake.setMotorsCubeEject(), Robot.intake).withTimeout(2.0),
             // cone
-            new RunCommand(() -> Robot.intake.setMotorsConeEject(), Robot.intake).withTimeout(1.0),
+            new RunCommand(() -> Robot.intake.setMotorsConeEject(), Robot.intake).withTimeout(2.0),
             // condition
             () -> Robot.intake.isCubeEjectDetected()
         );

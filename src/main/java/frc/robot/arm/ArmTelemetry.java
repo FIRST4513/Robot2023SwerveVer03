@@ -26,7 +26,7 @@ public class ArmTelemetry {
         tab.addNumber("Input from Operator Joystick",
                         () -> Robot.operatorGamepad.getArmInput())           .withPosition(6, 2).withSize(3, 2);
 
-        tab.addNumber("Arb FF Val", () -> arm.getArbFeedFwd())                .withPosition(6, 4).withSize(3, 2);
+        tab.addNumber("Arb FF Val", () -> arm.getHoldPwr())                .withPosition(6, 4).withSize(3, 2);
         
         SmartDashboard.putData("Release Arm", new ElevReleaseArmCmd());
 

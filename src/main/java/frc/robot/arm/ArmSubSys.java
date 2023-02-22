@@ -59,7 +59,7 @@ public class ArmSubSys extends SubsystemBase {
             stopArm();
             return;
         }
-        mCurrArmPwr = getArbFeedFwd();
+        mCurrArmPwr = getHoldPwr();
         mArmMotor.set(mCurrArmPwr);       
     }
 
@@ -73,7 +73,7 @@ public class ArmSubSys extends SubsystemBase {
         angle = limitArmAngle( angle );     // Limit range to max allowed
         mTargetArmAngle = angle;
         mArmMotor.set(  ControlMode.MotionMagic,            convertAngleToCnt(angle),
-                        DemandType.ArbitraryFeedForward,    getArbFeedFwd());
+                        DemandType.ArbitraryFeedForward,    getHoldPwr());
         }
 
     // ------------  Set Arm Manually during TeleOP  ----------
@@ -195,8 +195,8 @@ public class ArmSubSys extends SubsystemBase {
 
     public boolean isArmOutside() { return !isArmInside(); }
 
-    public double getArbFeedFwd(){
-        double pwr = -Math.sin(Math.toRadians(-mCurrArmAngle)) * motorConfig.arbitraryFeedForwardScaler;
+    public double getHoldPwr(){
+        double pwr = Math.sin(Math.toRadians(mCurrArmAngle)) * motorConfig.arbitraryFeedForwardScaler;
         if (mCurrArmAngle > 0) {
             pwr *= 0.75;
         }
