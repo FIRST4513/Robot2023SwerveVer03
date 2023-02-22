@@ -21,6 +21,7 @@ public class ElevatorCmds {
         Robot.elevator.setDefaultCommand(new ElevatorHoldPosCmd());
     }
 
+    // ---------------- Elev Motion Stop Commands --------------
     public static Command ElevHoldCmd() {
         return new RunCommand(() -> Robot.elevator.elevHoldMtr(), Robot.elevator )
             .withName("ElevHoldCmd");
@@ -29,6 +30,16 @@ public class ElevatorCmds {
     public static Command ElevStopCmd() {
         return new InstantCommand( () -> Robot.elevator.elevStop(), Robot.elevator)
             .withName("ElevStopCmd");
+    }
+
+    // ------------- Elev Motion Commands -------------
+    public static Command ElevByJoystickCmd() {
+        return new RunCommand(
+        () -> Robot.elevator.elevSetSpeed(() -> Robot.operatorGamepad.getElevInput()), Robot.elevator);
+    }
+
+    public static Command setMMPosition(double position) {
+        return new RunCommand(() -> Robot.elevator.setMMheight(position), Robot.elevator);
     }
 
     public static Command ElevLowerCmd() {
@@ -41,37 +52,18 @@ public class ElevatorCmds {
             .withName("ElevRaiseCmd");
     }
 
-
     public static Command ElevGoToBottomCmd() {
         return new SequentialCommandGroup(
             // turn off soft limits here (InstantCommand) ??
             new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
-                .until(() ->Robot.elevator.isLowerLimitSwitchPressed()),
+                .until(() ->Robot.elevator.isLowerLimitSwitchPressed()).withTimeout(3.0),
             new DelayCmd(0.25),
             new InstantCommand( () -> Robot.elevator.resetEncoder())
             // turn on soft limits here ??
         ).withName("ElevGoToBottomCmd");
     }
     
-    public static Command ElevByJoystickCmd() {
-        return new RunCommand(
-        () -> Robot.elevator.elevSetSpeed(() -> Robot.operatorGamepad.getElevInput()), Robot.elevator);
-    }
-
-
-    public static Command setMMPosition(double position) {
-        return new RunCommand(() -> Robot.elevator.setMMheight(position), Robot.elevator);
-    }
-
-    public static Command resetSensorPosition() {
-        return new InstantCommand( () -> Robot.elevator.resetEncoder());
-    }
-
-
-    public static Command setEncoder(double position) {
-        return new InstantCommand( () -> Robot.elevator.resetEncoder( position ));
-    }
-
+    // ---------- Set Elev Brake Commands -----------
     public static Command ElevSetBrakeOnCmd() {
         return new InstantCommand( () -> Robot.elevator.setBrakeMode( true ));
     }
@@ -80,14 +72,22 @@ public class ElevatorCmds {
         return new InstantCommand( () -> Robot.elevator.setBrakeMode( false ));
     }
 
+    // ------------- Reset Elev Encoder Command -------------
+    public static Command resetSensorPosition() {
+        return new InstantCommand( () -> Robot.elevator.resetEncoder());
+    }
+
+    public static Command setEncoder(double position) {
+        return new InstantCommand( () -> Robot.elevator.resetEncoder( position ));
+    }
     
-    // -------- Intake Position Commands -------
+    // -------- Elev to Intake Positions Commands -------
     public static Command ElevToIntakeConePosCmd()  { return ElevatorCmds.ElevGoToBottomCmd(); }
 
     public static Command ElevToIntakeCubePosCmd()  { return ElevatorCmds.ElevGoToBottomCmd(); }
 
 
-    // -------- Eject Position Commands -------
+    // -------- Elev to Eject Positions Commands -------
     public static Command ElevToEjectLowPosCmd()    { return ElevatorCmds.ElevGoToBottomCmd(); }
 
     public static Command ElevToEjectMidPosCmd() {
@@ -100,28 +100,23 @@ public class ElevatorCmds {
                 .until(() -> Robot.elevator.isMMtargetReached());
     }
 
-    
-    // -------- Misc Position Commands -------
+    // -------- Elev to Retracted Positions Commands -------
+    public static Command ElevToStorePosCmd()  { return ElevatorCmds.ElevGoToBottomCmd(); }
+
+    public static Command ElevToRetractPosCmd()     { return ElevatorCmds.ElevGoToBottomCmd(); }
+
     public static Command ElevToBumperClearPosCmd() {
         return ElevatorCmds.setMMPosition(ElevatorConfig.ElevBumperClearHt)
                 .until(() -> Robot.elevator.isMMtargetReached());
     }
 
-    public static Command ElevToStorePosCmd()  { return ElevatorCmds.ElevGoToBottomCmd(); }
-
-    public static Command ElevToRetractPosCmd()     { return ElevatorCmds.ElevGoToBottomCmd(); }
-
-    public static Command ElevToArmReleasePosCmd() {
-        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevArmReleaseHt)
-                .until(() -> Robot.elevator.isMMtargetReached());
-    }
-
-    // --------- Initial Arm Release Command -------
+    // --------- Elev to ArmRelease (Free Fall) Position Command ---------
     public static Command InitialArmReleaseCmd() {
         return new ParallelCommandGroup(
             ArmCmds.ArmReleaseCmd().withTimeout(3.0),
             new ElevReleaseArmCmd().withTimeout(3.0)
         );
     }
+    
 }
 
