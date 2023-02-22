@@ -4,8 +4,10 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.arm.ArmConfig;
+import frc.robot.auto.commands.DelayCmd;
 
 public class ArmCmds {
     
@@ -98,4 +100,16 @@ public class ArmCmds {
                 .until(() -> Robot.arm.isMMtargetReached());
     }
 
+    public static Command ArmToStorePosCmd() {
+        return ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleStorePos)
+                .until(() -> Robot.arm.isMMtargetReached());
+    }
+
+    public static Command ArmFreeFallCmd() {
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> Robot.arm.setBrakeMode(false), Robot.arm),
+            new DelayCmd(3, Robot.arm),
+            new InstantCommand(() -> Robot.arm.setBrakeMode(true), Robot.arm)
+        );
+    }
 }

@@ -50,8 +50,8 @@ public final class RobotConfig {
     public final class LimitSwitches {
         public final static int elevatorLowerLimitSw    = 0;   // DIO Port
         public final static int elevatorUpperLimitSw    = 1;   // DIO Port
-        public final static int armExtendLimitSw        = 2;   // DIO Port
-        public final static int armRetractLimitSw       = 3;   // DIO Port
+        public final static int armRetractLimitSw       = 2;   // DIO Port
+        public final static int armExtendLimitSw        = 3;   // DIO Port
     } 
 
     public final class AnalogPorts {

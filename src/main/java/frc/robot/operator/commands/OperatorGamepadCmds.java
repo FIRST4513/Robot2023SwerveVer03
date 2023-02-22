@@ -56,21 +56,21 @@ public class OperatorGamepadCmds {
             // True condition: arm inside robot, no worry of bumper collision
             new ParallelCommandGroup(
                 ElevatorCmds.ElevToStorePosCmd(),
-                ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleStorePos)
+                ArmCmds.ArmToStorePosCmd()
             ),
             // False condition: arm outside robot, check for cube
             new ConditionalCommand(
                 // True condition: no cube, good to go, parallel motion used
                 new ParallelCommandGroup(
                     ElevatorCmds.ElevToStorePosCmd(),
-                    ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleStorePos)
+                    ArmCmds.ArmToStorePosCmd()
                 ),
                 // False condition: cube, must avoid bumper collision;
                 // raise elevator for clearance, set arm, then move elev back to correct pos
                 new SequentialCommandGroup(
                     ElevatorCmds.ElevToBumperClearPosCmd(),
-                    ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleStorePos),
-                    new DelayCmd(1.0),
+                    ArmCmds.ArmToStorePosCmd(),
+                    // new DelayCmd(1.0),
                     ElevatorCmds.ElevToStorePosCmd()
                 ),
                 () -> Robot.intake.isCubeEjectDetected()),
@@ -109,9 +109,10 @@ public class OperatorGamepadCmds {
     }
 
     public static Command SetArmElevToEjectMidPosCmd() {
+        System.out.println("Command Activated");
         return new ConditionalCommand(
             // True condition: arm outside robot, no worry of bumper collision (out-to-out movement)
-            new ParallelCommandGroup(
+            new SequentialCommandGroup(
                 ElevatorCmds.ElevToEjectMidPosCmd(),
                 ArmCmds.ArmToEjectMidPosCmd()
             ),

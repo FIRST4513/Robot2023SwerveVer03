@@ -42,7 +42,7 @@ public class ElevatorConfig {
     public final static double  LowerSoftLimitSwitchHt      = 0;        // Min Height Lowered
 
     public final static boolean UpperLimitSwitchTrue        = false;
-    public final static boolean UpperSoftLimitSwitchEnable  = true;
+    public final static boolean UpperSoftLimitSwitchEnable  = false;
     public final static double  UpperSoftLimitSwitchHt      = 30;        // Min Height Lowered
     
 }

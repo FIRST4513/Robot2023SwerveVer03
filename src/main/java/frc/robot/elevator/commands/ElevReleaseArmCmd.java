@@ -7,7 +7,7 @@ import frc.robot.elevator.ElevatorConfig;
 
 public class ElevReleaseArmCmd extends CommandBase {
     
-    static enum CmdState {ELEVRAISING, ARMONSWITCH, DONE};
+    static enum CmdState {ELEVRAISING, ARMONSWITCH, ELEVLOWERING, DONE};
     CmdState cmdState = CmdState.ELEVRAISING;
 
     // Command Constructor
@@ -37,7 +37,14 @@ public class ElevReleaseArmCmd extends CommandBase {
                 Robot.arm.resetEncoderAngle(ArmConfig.RetractLimitSwitchAngle);
             } else {
                 // We have passed through switch, were done
+                cmdState = CmdState.ELEVLOWERING;
+            }
+        }
+        if (cmdState == CmdState.ELEVLOWERING) {
+            if (Robot.elevator.isLowerLimitSwitchPressed()) {
                 cmdState = CmdState.DONE;
+            } else {
+                Robot.elevator.elevLower();
             }
         }
     }

@@ -40,9 +40,9 @@ public class ArmSRXMotorConfig {
      *                              1/100 second of travel ( 1.5 degrees )  = 2,700 counts
      */
 
-    public final double motionCruiseVelocity        = 15000;    // approx 15 degrres per second
-    public final double motionAcceleration          = 15000;    // approx 1 second to get up to cruise velocity
-    public final int    motionCurveStrength         = 0;        // 0 No smoothing to 8 Max smoothing
+    public final double motionCruiseVelocity        = 30000;    // approx 15 degrres per second
+    public final double motionAcceleration          = 20000;    // approx 1 second to get up to cruise velocity
+    public final int    motionCurveStrength         = 2;        // 0 No smoothing to 8 Max smoothing
 
     public final double kP = 0.1;     // Needs to be Determined by testing
     public final double kI = 0.0;     // could be 0
@@ -89,10 +89,10 @@ public class ArmSRXMotorConfig {
         config.slot0.allowableClosedloopError   = allowableError;
 
         config.forwardSoftLimitEnable           = ArmConfig.ExtendSoftLimitSwitchEnable;
-        config.forwardSoftLimitThreshold        = Robot.arm.convertAngleToCnt( armExtendSoftLimitThreshold );
+        // config.forwardSoftLimitThreshold        = Robot.arm.convertAngleToCnt( armExtendSoftLimitThreshold );
 
         config.reverseSoftLimitEnable           = ArmConfig.RetractSoftLimitSwitchEnable;
-        config.reverseSoftLimitThreshold        = Robot.arm.convertAngleToCnt( armRetractSoftLimitThreshold );
+        // config.reverseSoftLimitThreshold        = Robot.arm.convertAngleToCnt( armRetractSoftLimitThreshold );
     }
 
 }

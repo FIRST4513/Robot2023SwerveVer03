@@ -93,6 +93,8 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         resetCommandsAndButtons();
+        arm.stopArm();
+        elevator.elevStop();
         //logger.saveLogFile();           // look for a way to verify we have a valid file
     }
 
@@ -128,6 +130,8 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         resetCommandsAndButtons();
+        arm.stopArm();
+        elevator.elevStop();
         logger.startTimer();
         // Set Pilot Teleop Speeds to those selected on smartdashboard
         pilotGamepad.setMaxSpeeds(pilotGamepad.getSelectedSpeed());

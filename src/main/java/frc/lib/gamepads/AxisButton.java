@@ -4,10 +4,10 @@ package frc.lib.gamepads;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.button.Button;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.gamepads.XboxGamepad.XboxAxis;
 
-public class AxisButton extends Button {
+public class AxisButton extends Trigger {
     private final GenericHID joy;
     private final int axis;
     private double targetVal;
@@ -20,7 +20,7 @@ public class AxisButton extends Button {
         POV,
         DEADBAND;
     }
-
+    
     public AxisButton(Joystick joystick, int axis, double threshold, ThresholdType thresholdType) {
         this.joy = joystick;
         this.axis = axis;

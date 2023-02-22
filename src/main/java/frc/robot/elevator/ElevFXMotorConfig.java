@@ -87,12 +87,12 @@ public class ElevFXMotorConfig {
         config.slot0.allowableClosedloopError = allowableError;
 
         config.forwardSoftLimitEnable = ElevatorConfig.LowerSoftLimitSwitchEnable;
-        config.forwardSoftLimitThreshold = 
-                (int) Robot.elevator.convertHeightToFalconCnt( ElevatorConfig.LowerSoftLimitSwitchHt );
+        // config.forwardSoftLimitThreshold = 
+        //         (int) Robot.elevator.convertHeightToFalconCnt( ElevatorConfig.LowerSoftLimitSwitchHt );
 
         config.reverseSoftLimitEnable = ElevatorConfig.UpperSoftLimitSwitchEnable;
-        config.reverseSoftLimitThreshold =
-                (int) Robot.elevator.convertHeightToFalconCnt( ElevatorConfig.UpperSoftLimitSwitchHt );
+        // config.reverseSoftLimitThreshold =
+        //         (int) Robot.elevator.convertHeightToFalconCnt( ElevatorConfig.UpperSoftLimitSwitchHt );
     }
 
 }

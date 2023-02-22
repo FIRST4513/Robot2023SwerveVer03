@@ -2,6 +2,8 @@
 package frc.robot.swerve.commands;
 
 import frc.robot.Robot;
+import frc.robot.pilot.commands.PilotGamepadCmds;
+
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,7 +18,7 @@ public class SwerveCmds {
     
     public static void setupDefaultCommand() {
         // Drive by joystick Field Point Of View
-        // Robot.swerve.setDefaultCommand(PilotGamepadCmds.FpvPilotSwerveCmd());
+        Robot.swerve.setDefaultCommand(PilotGamepadCmds.FpvPilotSwerveCmd());
     }
 
     // ----------------------- Drive Commands  ------------------------
