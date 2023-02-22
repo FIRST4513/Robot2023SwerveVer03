@@ -1,14 +1,17 @@
 package frc.robot.elevator.commands;
 
 import frc.robot.Robot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.arm.ArmConfig;
 import frc.robot.elevator.ElevatorConfig;
 
 public class ElevReleaseArmCmd extends CommandBase {
     
-    static enum CmdState {ELEVRAISING, ARMONSWITCH, ELEVLOWERING, DONE};
+    static enum CmdState {ELEVRAISING, ARMONSWITCH, ELEVLOWERING, SETTLING, DONE};
     CmdState cmdState = CmdState.ELEVRAISING;
+    Timer settleTimer;
+    double settleTime = 0.25;       // Time to allow elevator to settle onto bottom
 
     // Command Constructor
     public ElevReleaseArmCmd() {
@@ -42,16 +45,30 @@ public class ElevReleaseArmCmd extends CommandBase {
         }
         if (cmdState == CmdState.ELEVLOWERING) {
             if (Robot.elevator.isLowerLimitSwitchPressed()) {
-                cmdState = CmdState.DONE;
+                cmdState = CmdState.SETTLING;
+                settleTimer.reset();
+                settleTimer.start();
+                return;
             } else {
                 Robot.elevator.elevLower();
+                return;
+            }
+        }
+        if (cmdState == CmdState.SETTLING) {
+            if (settleTimer.get() <= settleTime) {
+                // Continue Lowering Elev
+                Robot.elevator.elevLower();
+            } else {
+                cmdState = CmdState.DONE;
+                Robot.elevator.resetEncoder();      // Zero out Encoder we are now at bottom
+                Robot.elevator.setBrakeMode(true);  // Turn on brake mode
             }
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        Robot.elevator.elevHoldMtr();
+        Robot.elevator.elevStop();
     }
 
     // Returns true when the command should end.
