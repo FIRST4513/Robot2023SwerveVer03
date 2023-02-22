@@ -89,7 +89,7 @@ public class PilotGamepad extends Gamepad {
     // Return the angle created by the left stick in radians, 0 is up, pi/2 is left
     public Double getDriveAngle() {
         return Math.atan2(
-            getDriveFwdPositive(),
+            +getDriveFwdPositive(),
             -getDriveLeftPositive());
     }
 

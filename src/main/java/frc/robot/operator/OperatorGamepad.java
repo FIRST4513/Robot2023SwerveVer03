@@ -13,23 +13,23 @@ public class OperatorGamepad extends Gamepad {
     }
     
     public void setupTeleopButtons() {
-        //gamepad.bButton.onTrue(OperatorGamepadCmds.IntakeCubeCmd());
-        //gamepad.yButton.onTrue(OperatorGamepadCmds.IntakeConeCmd());
-        gamepad.bButton.onTrue(IntakeCmds.IntakeCubeCmd());
-        // gamepad.bButton.onTrue(ElevatorCmds.InitialArmReleaseCmd());
-        gamepad.yButton.onTrue(IntakeCmds.IntakeConeCmd());
-        gamepad.xButton.onTrue(IntakeCmds.IntakeStopCmd());
-        gamepad.aButton.onTrue(IntakeCmds.IntakeEjectCmd());
 
-        gamepad.Dpad.Right.onTrue  (OperatorGamepadCmds.SetArmElevToStorePosCmd());
+        // gamepad.bButton.onTrue(ElevatorCmds.InitialArmReleaseCmd()); // Test Button
+
+        gamepad.bButton     .onTrue(IntakeCmds.IntakeCubeCmd());
+        gamepad.yButton     .onTrue(IntakeCmds.IntakeConeCmd());
+        gamepad.xButton     .onTrue(IntakeCmds.IntakeStopCmd());
+        gamepad.aButton     .onTrue(IntakeCmds.IntakeEjectCmd());
+
+        gamepad.Dpad.Right  .onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
         gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullRetractPosCmd());
 
-        gamepad.Dpad.Down .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
-        gamepad.Dpad.Left .onTrue(OperatorGamepadCmds.SetArmElevToEjectMidPosCmd());
-        gamepad.Dpad.Up   .onTrue(OperatorGamepadCmds.SetArmElevToEjectHighPosCmd());
+        gamepad.Dpad.Down   .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
+        gamepad.Dpad.Left   .onTrue(OperatorGamepadCmds.SetArmElevToEjectMidPosCmd());
+        gamepad.Dpad.Up     .onTrue(OperatorGamepadCmds.SetArmElevToEjectHighPosCmd());
 
-        gamepad.rightBumper.whileTrue(OperatorGamepadCmds.ControlElevByJoysticksCmd());
-        gamepad.leftBumper .whileTrue(OperatorGamepadCmds.ControlArmByJoysticksCmd());
+        gamepad.rightBumper .whileTrue(OperatorGamepadCmds.ControlElevByJoysticksCmd());
+        gamepad.leftBumper  .whileTrue(OperatorGamepadCmds.ControlArmByJoysticksCmd());
 
         gamepad.startButton .onTrue(ArmCmds.ResetArmEncoderCmd());
     }
