@@ -3,7 +3,6 @@ package frc.robot.operator;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.lib.gamepads.Gamepad;
 import frc.robot.arm.commands.ArmCmds;
-import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 

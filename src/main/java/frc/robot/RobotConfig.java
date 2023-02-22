@@ -14,8 +14,8 @@ public final class RobotConfig {
     private static final boolean FAKE_FMS = true;
     public static final boolean ENABLE_DASHBOARD = true;
 
-    public final Motors motors = new Motors();
-    public final Encoders encoders = new Encoders();
+    public final Motors motors               = new Motors();
+    public final Encoders encoders           = new Encoders();
     public final LimitSwitches limitSwitches = new LimitSwitches();
 
     public final String praticeBotMAC = "18:66:DA:19:D4:41";

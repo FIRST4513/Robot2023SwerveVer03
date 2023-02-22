@@ -105,6 +105,7 @@ public class ArmCmds {
                 .until(() -> Robot.arm.isMMtargetReached());
     }
 
+    // --------- Arm Free Fall Command ---------
     public static Command ArmFreeFallCmd() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> Robot.arm.setBrakeMode(false), Robot.arm),

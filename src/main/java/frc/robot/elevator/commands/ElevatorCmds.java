@@ -116,6 +116,7 @@ public class ElevatorCmds {
                 .until(() -> Robot.elevator.isMMtargetReached());
     }
 
+    // --------- Initial Arm Release Command -------
     public static Command InitialArmReleaseCmd() {
         return new ParallelCommandGroup(
             ArmCmds.ArmFreeFallCmd(),
