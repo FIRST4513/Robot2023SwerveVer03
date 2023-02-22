@@ -7,12 +7,15 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.gamepads.XboxGamepad.XboxAxis;
 
-public class AxisButton extends Trigger {
+//public class AxisButton extends Trigger {
+  public class AxisButton {
     private final GenericHID joy;
     private final int axis;
     private double targetVal;
     private ThresholdType thresholdType;
 
+    private Trigger triggerButton;
+    
     public static enum ThresholdType {
         LESS_THAN,
         GREATER_THAN,
@@ -26,6 +29,8 @@ public class AxisButton extends Trigger {
         this.axis = axis;
         this.targetVal = threshold;
         this.thresholdType = thresholdType;
+
+        this.triggerButton = new Trigger(() ->(this.get()));
     }
 
     public AxisButton(

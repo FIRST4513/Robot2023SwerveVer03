@@ -38,10 +38,14 @@ public class XboxGamepad extends Joystick {
     public SpectrumButton leftStickButton = new SpectrumButton(this, XboxButton.LEFT_STICK);
     public SpectrumButton rightStickButton = new SpectrumButton(this, XboxButton.RIGHT_STICK);
 
+
     public AxisButton leftTriggerButton =
             new AxisButton(this, XboxAxis.LEFT_TRIGGER, .05, ThresholdType.GREATER_THAN);
+
     public AxisButton rightTriggerButton =
             new AxisButton(this, XboxAxis.RIGHT_TRIGGER, .05, ThresholdType.GREATER_THAN);
+
+
     public Dpad Dpad = new Dpad(this);
 
     public ThumbStick leftStick = new ThumbStick(this, XboxAxis.LEFT_X, XboxAxis.LEFT_Y);
