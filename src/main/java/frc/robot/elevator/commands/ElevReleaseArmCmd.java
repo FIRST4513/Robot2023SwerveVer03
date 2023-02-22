@@ -21,6 +21,7 @@ public class ElevReleaseArmCmd extends CommandBase {
     @Override
     public void initialize() {
         cmdState = CmdState.ELEVRAISING;
+        Robot.elevator.setBrakeMode(true);  // Turn on brake mode
     }
 
     @Override
@@ -61,7 +62,6 @@ public class ElevReleaseArmCmd extends CommandBase {
             } else {
                 cmdState = CmdState.DONE;
                 Robot.elevator.resetEncoder();      // Zero out Encoder we are now at bottom
-                Robot.elevator.setBrakeMode(true);  // Turn on brake mode
             }
         }
     }

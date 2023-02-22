@@ -130,12 +130,12 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         resetCommandsAndButtons();
-        arm.stopArm();
-        elevator.elevStop();
+        arm.stopArm();                  // to kill any running motionmagic 
+        elevator.elevStop();            // to kill any running motionmagic 
         logger.startTimer();
         // Set Pilot Teleop Speeds to those selected on smartdashboard
         pilotGamepad.setMaxSpeeds(pilotGamepad.getSelectedSpeed());
-        swerve.resetFalconAngles(); // Set falcon angle motors to absolute encoder
+        swerve.resetFalconAngles();     // Set falcon angle motors to absolute encoder
     }
 
     @Override
