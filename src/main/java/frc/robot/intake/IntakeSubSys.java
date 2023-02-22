@@ -28,24 +28,16 @@ public class IntakeSubSys extends SubsystemBase {
     // --------------------------------------------------------
     // ---------------- Intake Motor Methods ------------------
     // --------------------------------------------------------
-    public void setMotors(double speed) {
-        intakeUpperMotor.set(speed);
-        intakeLowerMotor.set(speed); 
-    }
 
-    public void setUpperMotor(double speed) {
-        intakeUpperMotor.set(speed);
-    }
-
-    public void setLowerMotor(double speed) {
-        intakeLowerMotor.set(speed);
-    }
+    public void setUpperMotor(double speed)     { intakeUpperMotor.set(speed); }
+    public void setLowerMotor(double speed)     { intakeLowerMotor.set(speed); }
 
     public void stopMotors() {
         intakeUpperMotor.stopMotor();
         intakeLowerMotor.stopMotor();
     }
 
+    // ------ Set Cone Retract Speeds ---------
     public void setMotorsConeRetract(){
         intakeUpperMotor.set(IntakeConfig.coneRetractUpperSpeed);
         intakeLowerMotor.set(IntakeConfig.coneRetractLowerSpeed);
@@ -56,21 +48,13 @@ public class IntakeSubSys extends SubsystemBase {
         intakeLowerMotor.set(IntakeConfig.coneRetractLowerSlowSpeed);
     }
 
+    // ------ Set Cube Retract Speeds ---------
     public void setMotorsCubeRetract(){
         intakeUpperMotor.set(IntakeConfig.cubeRetractUpperSpeed);
         intakeLowerMotor.set(IntakeConfig.cubeRetractLowerSpeed);
     }
 
-    // public void setMotorsEject(){
-    //     if (isCubeDetected()) {
-    //         intakeUpperMotor.set(IntakeConfig.cubeEjectSpeed);
-    //         intakeLowerMotor.set(IntakeConfig.cubeEjectSpeed);
-    //     } else {
-    //         intakeUpperMotor.set(IntakeConfig.coneEjectSpeed);  // top deals with cone
-    //         intakeLowerMotor.set(IntakeConfig.coneEjectSpeed);  // bottom deals with cube
-    //     }
-    // }
-
+    // ------ Set Eject Speeds ---------
     public void setMotorsCubeEject() {
         intakeUpperMotor.set(IntakeConfig.cubeEjectSpeed);
         intakeLowerMotor.set(IntakeConfig.cubeEjectSpeed);
@@ -81,6 +65,7 @@ public class IntakeSubSys extends SubsystemBase {
         intakeLowerMotor.set(IntakeConfig.coneEjectSpeed);
     }
 
+    // ------ Set Brake Modes ---------
     public void setBrakeMode(Boolean enabled) {
         if (enabled) {
             intakeUpperMotor.setNeutralMode(NeutralMode.Brake);
@@ -94,6 +79,8 @@ public class IntakeSubSys extends SubsystemBase {
     // ----------------------------------------------------------------
     // ---------------- Intake Detect Methods -------------------------
     // ----------------------------------------------------------------
+
+    // --------- Cone Detects ----------
     public boolean isConeDetected(){
         if(coneDetectSensor.getAverageVoltage() > IntakeConfig.coneDetectTrue) { return true; } 
         return false;
@@ -104,23 +91,21 @@ public class IntakeSubSys extends SubsystemBase {
         return "Not Detected";
     }
 
+    // --------- Cube Detects ----------
     public boolean isCubeEjectDetected() {
+        // This range is further out, to make sure cube is ejected (true = cube still here)
         if(cubeDetectSensor.getAverageVoltage() > IntakeConfig.cubeEjectDetectTrue) { return true; } 
         return false;
     }
 
     public boolean isCubeRetractDetected() {
+        // This range is closer to make sure we have it sucked up far enough to hold
         if(cubeDetectSensor.getAverageVoltage() > IntakeConfig.cubeRetractDetectTrue) { return true; } 
         return false;
     }
 
-    public boolean isCubeRetractNotDetected() {
-        return !isCubeRetractDetected();
-    }
-
-    public boolean isCubeEjectNotDetected() {
-        return !isCubeRetractDetected();
-    }
+    public boolean isCubeRetractNotDetected()   { return !isCubeRetractDetected(); }
+    public boolean isCubeEjectNotDetected()     { return !isCubeRetractDetected(); }
 
     public String cubeEjectDetectStatus() {
         if(isCubeEjectDetected()) { 

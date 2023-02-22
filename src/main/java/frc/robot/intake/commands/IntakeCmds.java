@@ -11,9 +11,9 @@ public class IntakeCmds {
         Robot.intake.setDefaultCommand(IntakeStopCmd());
     }
 
-    public static Command IntakeStopCmd() {
-        return new InstantCommand( () -> Robot.intake.stopMotors(), Robot.intake)
-            .withName("IntakeStopCmd");
+    // --------- Intake On Commands -------------
+    public static Command IntakeConeCmd() {
+        return new IntakeConeMainCmd();
     }
 
     public static Command IntakeCubeCmd() {
@@ -22,10 +22,7 @@ public class IntakeCmds {
             .until(() -> Robot.intake.isCubeRetractDetected());
     }
 
-    public static Command IntakeConeCmd() {
-        return new IntakeConeMainCmd();
-    }
-
+    // ---------- Intake Eject --------
     public static Command IntakeEjectCmd() {
         return new ConditionalCommand(
             // cube
@@ -36,5 +33,16 @@ public class IntakeCmds {
             () -> Robot.intake.isCubeEjectDetected()
         );
     }
+
+    // ------------ Intake Stop ------------------
+    public static Command IntakeStopCmd() {
+        return new InstantCommand( () -> Robot.intake.stopMotors(), Robot.intake)
+            .withName("IntakeStopCmd");
+    }
+
+
+
+
+
     
 }

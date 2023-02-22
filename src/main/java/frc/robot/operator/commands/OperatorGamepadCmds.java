@@ -11,9 +11,19 @@ import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
 
 public class OperatorGamepadCmds {
+    
     /** Set default command to turn off the rumble */
     public static void setupDefaultCommand() {
         Robot.pilotGamepad.setDefaultCommand(RumbleOperatorCmd(0));
+    }
+
+    // ------------- Arm/Elev by TeleOp Commands ---------------
+    public static Command ControlArmByJoysticksCmd() {
+        return ArmCmds.ArmByJoystickCmd();
+    }
+
+    public static Command ControlElevByJoysticksCmd() {
+        return ElevatorCmds.ElevByJoystickCmd();
     }
 
     public static Command ControlArmElevByJoysticksCmd() {
@@ -23,61 +33,43 @@ public class OperatorGamepadCmds {
         );
     }
 
-    public static Command ControlArmByJoysticksCmd() {
-        return ArmCmds.ArmByJoystickCmd();
+    // ------------- Intake Commands ----------------------------
+    public static Command IntakeCubeCmd(){
+        return new ParallelCommandGroup(
+            OperatorGamepadCmds.SetArmElevToIntakeCubePosCmd(),
+            IntakeCmds.IntakeCubeCmd()
+        );
     }
 
-    public static Command ControlElevByJoysticksCmd() {
-        return ElevatorCmds.ElevByJoystickCmd();
+    public static Command IntakeConeCmd(){
+        return new ParallelCommandGroup(
+            OperatorGamepadCmds.SetArmElevToIntakeConePosCmd(),
+            IntakeCmds.IntakeConeCmd()
+        );
     }
 
-    /** Command that can be used to rumble the pilot controller */
-    public static Command RumbleOperatorCmd(double intensity) {
-        return new RunCommand(() -> Robot.pilotGamepad.rumble(intensity), Robot.pilotGamepad);
-    }
-
-    // GENERAL STRUCTURE OF POS COMMANDS:
+    // GENERAL STRUCTURE OF MOVE TO POSITION COMMANDS:
     // If moving from out-out, then parallel motion used
     // If moving from in-to-out or out-to-in, then check for cube
     //    If cube there: avoid bumper collision
     //    If not, parallel motion used
 
-    public static Command SetArmElevToFullRetractPosCmd() {
-        return new ParallelCommandGroup(
-            ElevatorCmds.ElevToRetractPosCmd(),
-            ArmCmds.ArmToFullRetractCmd()
-        );
+    
+    // --------------------------- Arm/Elev To Intake Positions --------------------
+
+    public static Command SetArmElevToIntakeCubePosCmd() {
+        return new ParallelCommandGroup(        
+            ElevatorCmds.ElevToIntakeCubePosCmd(),
+            ArmCmds.ArmToIntakeCubePosCmd());
+    }
+    
+    public static Command SetArmElevToIntakeConePosCmd() {
+        return new ParallelCommandGroup(        
+            ElevatorCmds.ElevToIntakeConePosCmd(),
+            ArmCmds.ArmToIntakeConePosCmd());
     }
 
-    public static Command SetArmElevToStorePosCmd() {
-        return new ConditionalCommand(
-            // True condition: arm inside robot, no worry of bumper collision
-            new ParallelCommandGroup(
-                ElevatorCmds.ElevToStorePosCmd(),
-                ArmCmds.ArmToStorePosCmd()
-            ),
-            // False condition: arm outside robot, check for cube
-            new ConditionalCommand(
-                // True condition: no cube, good to go, parallel motion used
-                new ParallelCommandGroup(
-                    ElevatorCmds.ElevToStorePosCmd(),
-                    ArmCmds.ArmToStorePosCmd()
-                ),
-                // False condition: cube, must avoid bumper collision;
-                // raise elevator for clearance, set arm, then move elev back to correct pos
-                new SequentialCommandGroup(
-                    ElevatorCmds.ElevToBumperClearPosCmd(),
-                    ArmCmds.ArmToStorePosCmd(),
-                    // new DelayCmd(1.0),
-                    ElevatorCmds.ElevToStorePosCmd()
-                ),
-                () -> Robot.intake.isCubeEjectDetected()),
-            // Condition: is arm outside?
-            () -> Robot.arm.isArmInside()
-        );
-    }
-
-    // --------------------------- Position Arm Elevator Commands --------------------
+    // -------------------- Arm/Elev To Eject Positions -------------------
     
     public static Command SetArmElevToEjectLowPosCmd() {
         return new ConditionalCommand(
@@ -128,7 +120,7 @@ public class OperatorGamepadCmds {
                     ArmCmds.ArmToEjectMidPosCmd(),
                     ElevatorCmds.ElevToEjectMidPosCmd()
                 ),
-                () -> Robot.intake.isCubeEjectDetected()),
+                () -> Robot.intake.isCubeEjectNotDetected()),
             // Condition: is arm outside?
             () -> Robot.arm.isArmOutside()
         );
@@ -156,37 +148,55 @@ public class OperatorGamepadCmds {
                     ArmCmds.ArmToEjectHighPosCmd(),
                     ElevatorCmds.ElevToEjectHighPosCmd()
                 ),
-                () -> Robot.intake.isCubeEjectDetected()),
+                () -> Robot.intake.isCubeEjectNotDetected()),
             // Condition: is arm outside?
             () -> Robot.arm.isArmOutside()
         );
     }
-    
 
-    public static Command SetArmElevToIntakeCubePosCmd() {
-        return new ParallelCommandGroup(        
-            ElevatorCmds.ElevToIntakeCubePosCmd(),
-            ArmCmds.ArmToIntakeCubePosCmd());
-    }
-    
-    public static Command SetArmElevToIntakeConePosCmd() {
-        return new ParallelCommandGroup(        
-            ElevatorCmds.ElevToIntakeConePosCmd(),
-            ArmCmds.ArmToIntakeConePosCmd());
-    }
 
-    // ------------------------------ Intake Commands -----------------------------------
-    public static Command IntakeCubeCmd(){
-        return new ParallelCommandGroup(
-            OperatorGamepadCmds.SetArmElevToIntakeCubePosCmd(),
-            IntakeCmds.IntakeCubeCmd()
+    // -------------------- Arm/Elev to Retracted Positions ---------------
+
+    public static Command SetArmElevToStorePosCmd() {
+        return new ConditionalCommand(
+            // True condition: arm inside robot, no worry of bumper collision
+            new ParallelCommandGroup(
+                ElevatorCmds.ElevToStorePosCmd(),
+                ArmCmds.ArmToStorePosCmd()
+            ),
+            // False condition: arm outside robot, check for cube
+            new ConditionalCommand(
+                // True condition: no cube, good to go, parallel motion used
+                new ParallelCommandGroup(
+                    ElevatorCmds.ElevToStorePosCmd(),
+                    ArmCmds.ArmToStorePosCmd()
+                ),
+                // False condition: cube, must avoid bumper collision;
+                // raise elevator for clearance, set arm, then move elev back to correct pos
+                new SequentialCommandGroup(
+                    ElevatorCmds.ElevToBumperClearPosCmd(),
+                    ArmCmds.ArmToStorePosCmd(),
+                    // new DelayCmd(1.0),
+                    ElevatorCmds.ElevToStorePosCmd()
+                ),
+                () -> Robot.intake.isCubeEjectNotDetected()),
+            // Condition: is arm outside?
+            () -> Robot.arm.isArmInside()
         );
     }
 
-    public static Command IntakeConeCmd(){
+    public static Command SetArmElevToFullRetractPosCmd() {
         return new ParallelCommandGroup(
-            OperatorGamepadCmds.SetArmElevToIntakeConePosCmd(),
-            IntakeCmds.IntakeConeCmd()
+            ElevatorCmds.ElevToRetractPosCmd(),
+            ArmCmds.ArmToFullRetractCmd()
         );
     }
+
+
+    // -------------------- Rumble Controller  ---------------
+
+    public static Command RumbleOperatorCmd(double intensity) {
+        return new RunCommand(() -> Robot.operatorGamepad.rumble(intensity), Robot.operatorGamepad);
+    }
+
 }

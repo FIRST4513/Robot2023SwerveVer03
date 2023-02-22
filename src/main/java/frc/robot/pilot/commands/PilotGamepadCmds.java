@@ -16,17 +16,7 @@ public class PilotGamepadCmds {
         Robot.pilotGamepad.setDefaultCommand(RumblePilotCmd(0));
     }
 
-    public static Command BasicSnapCmd() {
-        return new TurnToAngleCmd(() -> Robot.swerve.getSnap90Angle())
-            .withName("BasicSnapCmd")
-            .withTimeout(5.0);
-    }
-
-    /** Set default command to turn off the rumble */
-    //public static void setupDefaultCommand() {
-    //    Robot.pilotGamepad.setDefaultCommand(
-    //            rumble(0, 9999).repeatedly().withName("DisablePilotRumble"));
-    //}
+    // ------------- Drive by TeleOp Commands ---------------
 
     /** Field Oriented Drive */
     public static Command FpvPilotSwerveCmd() {
@@ -36,16 +26,6 @@ public class PilotGamepadCmds {
                         () -> Robot.pilotGamepad.getDriveRotationCCWPositive(),
                         true )
                 .withName("FpvPilotSwerveCmd");
-    }
-
-    /** Field Oriented Drive */
-    public static Command FpvDriveAndAutoRotateCmd() {
-        return new TurnToAngleCmd(
-                        () -> Robot.pilotGamepad.getDriveFwdPositive(),
-                        () -> Robot.pilotGamepad.getDriveLeftPositive(),
-                        () -> Robot.swerve.getSnap90Angle())
-                .withName("FpvDriveAndAutoRotateCmd")
-                .withTimeout(5.0);
     }
 
     /** Robot Oriented Drive */
@@ -58,6 +38,24 @@ public class PilotGamepadCmds {
                 .withName("RpvPilotSwerveCmd");
     }
 
+    /** Field Oriented Drive With Auto Rotate to Snapped 90 oreintation */
+    public static Command FpvDriveAndAutoRotateCmd() {
+        return new TurnToAngleCmd(
+                        () -> Robot.pilotGamepad.getDriveFwdPositive(),
+                        () -> Robot.pilotGamepad.getDriveLeftPositive(),
+                        () -> Robot.swerve.getSnap90Angle())
+                .withName("FpvDriveAndAutoRotateCmd")
+                .withTimeout(5.0);
+    }
+
+    /** Static (Stationary) Snap to 90 oreintation */
+    public static Command BasicSnapCmd() {
+        return new TurnToAngleCmd(() -> Robot.swerve.getSnap90Angle())
+            .withName("BasicSnapCmd")
+            .withTimeout(5.0);
+    }
+
+    /** Snake Drive ???? from falcon code base */
     public static Command snakeDriveCmd() {
         return TrajectoriesCmds.ResetThetaControllerCmd()
                 .andThen(
@@ -72,36 +70,9 @@ public class PilotGamepadCmds {
                 .withName("SnakeDrive");
     }
     
-        /**
-         * Drive the robot and control orientation using the right stick
-         *
-         * @return
-         */
-        // public static Command stickSteerCmd() {
-        //     return aimPilotDriveCmd(() -> Robot.pilotGamepad.getRightStickAngle()).withName("StickSteer");
-        // }
     
-        // /** Drive while aiming to a specific angle, uses theta controller from Trajectories */
-        // public static Command aimPilotDriveCmd(double goalAngleRadians) {
-        //     return aimPilotDriveCmd(() -> goalAngleRadians);
-        // }
-    
-        // /** Reset the Theata Controller and then run the SwerveDrive command and pass a goal Supplier */
-        // public static Command aimPilotDriveCmd(DoubleSupplier goalAngleSupplierRadians) {
-        //     return TrajectoriesCmds.resetThetaControllerCmd()
-        //             .andThen(
-        //                     new SwerveDriveCmd(
-        //                             () -> Robot.pilotGamepad.getDriveFwdPositive(),
-        //                             () -> Robot.pilotGamepad.getDriveLeftPositive(),
-        //                             Robot.trajectories.calculateThetaSupplier(goalAngleSupplierRadians),
-        //                             true,
-        //                             false))
-        //             .withName("AimPilotDrive");
-        // }
+    // -------------------- Rumble Controller -------------
 
-
-
-    /** Command that can be used to rumble the pilot controller */
     public static Command RumblePilotCmd(double intensity) {
         return new RunCommand(() -> Robot.pilotGamepad.rumble(intensity), Robot.pilotGamepad);
     }
