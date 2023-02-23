@@ -92,7 +92,7 @@ public class OperatorGamepadCmds {
                     ArmCmds.ArmToEjectLowPosCmd(),
                     ElevatorCmds.ElevToEjectLowPosCmd()
                 ),
-                () -> Robot.intake.isCubeEjectDetected()),
+                () -> Robot.intake.isCubeEjectNotDetected()),
             // Condition: is arm outside?
             () -> Robot.arm.isArmOutside()
         );
@@ -186,10 +186,37 @@ public class OperatorGamepadCmds {
     }
 
     public static Command SetArmElevToFullRetractPosCmd() {
-        return new ParallelCommandGroup(
-            ElevatorCmds.ElevToRetractPosCmd(),
-            ArmCmds.ArmToFullRetractCmd()
+        // return new ParallelCommandGroup(
+        //     ElevatorCmds.ElevToRetractPosCmd(),
+        //     ArmCmds.ArmToFullRetractCmd()
+        // );
+        return new ConditionalCommand(
+            // True condition: arm inside robot, no worry of bumper collision
+            new ParallelCommandGroup(
+                ElevatorCmds.ElevToRetractPosCmd(),
+                ArmCmds.ArmToFullRetractCmd()
+            ),
+            // False condition: arm outside robot, check for cube
+            new ConditionalCommand(
+                // True condition: no cube, good to go, parallel motion used
+                new ParallelCommandGroup(
+                    ElevatorCmds.ElevToRetractPosCmd(),
+                    ArmCmds.ArmToFullRetractCmd()
+                ),
+                // False condition: cube, must avoid bumper collision;
+                // raise elevator for clearance, set arm, then move elev back to correct pos
+                new SequentialCommandGroup(
+                    ElevatorCmds.ElevToBumperClearPosCmd(),
+                    ArmCmds.ArmToFullRetractCmd(),
+                    // new DelayCmd(1.0),
+                    ElevatorCmds.ElevToRetractPosCmd()
+                ),
+                () -> Robot.intake.isCubeEjectNotDetected()),
+            // Condition: is arm outside?
+            () -> Robot.arm.isArmInside()
         );
+
+    
     }
 
 
