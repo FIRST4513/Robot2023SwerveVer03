@@ -45,11 +45,12 @@ public class ArmReleaseCmd extends CommandBase {
             }
         }
         if (cmdState == CmdState.SETTLING) {
-            if (Robot.arm.getArmAngle() < -15.0 ) {
-                // The arm is not fully down so keep on falling
+            if (Robot.arm.getArmAngle() < -20.0 ) {
+                // The arm is not down far enough so keep on falling
                 return;
             } else {
-                // The Arm has fallon almost to the bottom we can get out
+                // The Arm has fallen far enough so we can get out
+                // Hold will take over after this (default cmd)
                 cmdState = CmdState.DONE;
                 return;
             }

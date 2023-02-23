@@ -1,9 +1,12 @@
 package frc.robot.intake.commands;
 
+import javax.swing.GroupLayout.SequentialGroup;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 
 public class IntakeCmds {
@@ -24,13 +27,16 @@ public class IntakeCmds {
 
     // ---------- Intake Eject --------
     public static Command IntakeEjectCmd() {
-        return new ConditionalCommand(
-            // cube
-            new RunCommand(() -> Robot.intake.setMotorsCubeEject(), Robot.intake).withTimeout(1.0),
-            // cone
-            new RunCommand(() -> Robot.intake.setMotorsConeEject(), Robot.intake).withTimeout(1.0),
-            // condition
-            () -> Robot.intake.isCubeEjectDetected()
+        return new SequentialCommandGroup(
+            new ConditionalCommand(
+                // True - Cube Detected
+                new RunCommand(() -> Robot.intake.setMotorsCubeEject(), Robot.intake).withTimeout(2.0),
+                // False - Must be Cone
+                new RunCommand(() -> Robot.intake.setMotorsConeEject(), Robot.intake).withTimeout(2.0),
+                // condition
+                () -> Robot.intake.isCubeEjectDetected()
+                ),
+            new InstantCommand(() -> Robot.intake.setBrakeMode(false),Robot.intake)
         );
     }
 
