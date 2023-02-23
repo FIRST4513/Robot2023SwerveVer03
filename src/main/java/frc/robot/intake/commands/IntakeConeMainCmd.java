@@ -42,7 +42,7 @@ public class IntakeConeMainCmd extends CommandBase{
                 intakeStateStr = "INTAKE";
                 upperSpeed = -1.0;
                 lowerSpeed =  1.0;
-                stallTimer.reset();     // Lets start a timer in cse the cone get stuck and never makes forward
+                stallTimer.reset();     // Lets start a timer in case the cone gets stuck and never makes it forward
                 stallTimer.start();
             }
         }
@@ -64,22 +64,17 @@ public class IntakeConeMainCmd extends CommandBase{
                 intakeStateStr = "STAGED";
                 upperSpeed = -0.8;
                 lowerSpeed =  0.8;
-                Robot.intake.setBrakeMode(true);
             }
         }
         if (intakeState == IntakeState.STAGED) {
-            // Were looking for the cone to move past sensor 
-            if (Robot.intake.isConeDetected()) {
-                // We still see it on the top. keep going a little 
-                upperSpeed = -0.8;
-                lowerSpeed =  0.8;
-            } else {
+            // Keep on pulling until it moves past sensor 
+            if ( !Robot.intake.isConeDetected()) {
                 // The Cone is clear time to stop it hard
                 intakeState = IntakeState.INPLACE;
                 intakeStateStr = "INPLACE";
+                Robot.intake.setBrakeMode(true);    // Will be turned back off on Eject
                 upperSpeed = 0.0;
                 lowerSpeed = 0.0;
-                return;
             }
         }
 
@@ -95,11 +90,8 @@ public class IntakeConeMainCmd extends CommandBase{
 
     @Override
     public boolean isFinished() {
-        if (intakeState == IntakeState.INPLACE){
-            System.out.println("Cone Intake Finished");
-            return true;
-        }
-        if (stallTimer.get() > 5.0) return true;        // We should have staged by now
+        if (intakeState == IntakeState.INPLACE) { return true; }
+        if (stallTimer.get() > 5.0)             { return true; } // We should have staged by now
         return false;
     }
 
