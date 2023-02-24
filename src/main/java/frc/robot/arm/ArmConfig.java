@@ -4,8 +4,8 @@ public class ArmConfig {
 
     // ------- Encoder Conversion Factor --------------
     // 1797.41176 cnts per degree tested 2/20/23
-    public final static double kCntsPerDeg              = 2690.3;       // Convert cnt to degrees of angle (2/21/23)
-    public final static double kDegsPerCnt              = 0.00037171;   // Convert cnt to degrees of angle (2/21/23)
+    public final static double kCntsPerDeg              = 2532;       // Convert cnt to degrees of angle (2/21/23)
+    public final static double kDegsPerCnt              = 0.00039488;   // Convert cnt to degrees of angle (2/21/23)
     public final static double KAngleDeadBand           = +1.0;         // Degrees close enough to Tgt
 
     // ------ Speed Constants ------
@@ -34,12 +34,12 @@ public class ArmConfig {
 
     // ------ Limit Switches ------
     public final static boolean RetractLimitSwitchTrue      = false;
-    public final static double  RetractLimitSwitchAngle     = -47.0;    // Max angle retract
+    public final static double  RetractLimitSwitchAngle     = -51.8;    // Max angle retract
     public final static boolean RetractSoftLimitSwitchEnable = false;
     public final static int     RetractSoftLimitSwitchAngle = -42;      // Max angle retract
 
     public final static boolean ExtendLimitSwitchTrue       = false;
-    public final static double  ExtendLimitSwitchAngle      = +46.0;    // Max angle extended
+    public final static double  ExtendLimitSwitchAngle      = +47.0;    // Max angle extended
     public final static boolean ExtendSoftLimitSwitchEnable = false;
     public final static int     ExtendSoftLimitSwitchAngle  = +44;      // Max angle extended
 }

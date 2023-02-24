@@ -198,7 +198,7 @@ public class ArmSubSys extends SubsystemBase {
     public double getHoldPwr(){
         double pwr = Math.sin(Math.toRadians(mCurrArmAngle)) * motorConfig.arbitraryFeedForwardScaler;
         if (mCurrArmAngle > 0) {
-            pwr *= 0.75;
+            pwr *= 0.92;
         }
         return pwr;
     }

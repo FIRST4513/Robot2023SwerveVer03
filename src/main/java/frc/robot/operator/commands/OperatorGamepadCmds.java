@@ -14,7 +14,7 @@ public class OperatorGamepadCmds {
     
     /** Set default command to turn off the rumble */
     public static void setupDefaultCommand() {
-        Robot.pilotGamepad.setDefaultCommand(RumbleOperatorCmd(0));
+       // Robot.pilotGamepad.setDefaultCommand(RumbleOperatorCmd(0));
     }
 
     // ------------- Arm/Elev by TeleOp Commands ---------------
@@ -89,7 +89,10 @@ public class OperatorGamepadCmds {
                 // raise elevator for clearance, set arm, then move elev back to correct pos
                 new SequentialCommandGroup(
                     ElevatorCmds.ElevToBumperClearPosCmd(),
-                    ArmCmds.ArmToEjectLowPosCmd(),
+                    new ParallelCommandGroup(
+                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached()),
+                        ArmCmds.ArmToEjectLowPosCmd()
+                    ),
                     ElevatorCmds.ElevToEjectLowPosCmd()
                 ),
                 () -> Robot.intake.isCubeEjectNotDetected()),
@@ -117,7 +120,10 @@ public class OperatorGamepadCmds {
                 // raise elevator for clearance, set arm, then move elev back to correct pos
                 new SequentialCommandGroup(
                     ElevatorCmds.ElevToBumperClearPosCmd(),
-                    ArmCmds.ArmToEjectMidPosCmd(),
+                    new ParallelCommandGroup(
+                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached()),
+                        ArmCmds.ArmToEjectMidPosCmd()
+                    ),
                     ElevatorCmds.ElevToEjectMidPosCmd()
                 ),
                 () -> Robot.intake.isCubeEjectNotDetected()),
@@ -145,7 +151,10 @@ public class OperatorGamepadCmds {
                 // raise elevator for clearance, set arm, then move elev back to correct pos
                 new SequentialCommandGroup(
                     ElevatorCmds.ElevToBumperClearPosCmd(),
-                    ArmCmds.ArmToEjectHighPosCmd(),
+                    new ParallelCommandGroup(
+                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached()),
+                        ArmCmds.ArmToEjectHighPosCmd()
+                    ),
                     ElevatorCmds.ElevToEjectHighPosCmd()
                 ),
                 () -> Robot.intake.isCubeEjectNotDetected()),
@@ -175,7 +184,10 @@ public class OperatorGamepadCmds {
                 // raise elevator for clearance, set arm, then move elev back to correct pos
                 new SequentialCommandGroup(
                     ElevatorCmds.ElevToBumperClearPosCmd(),
-                    ArmCmds.ArmToStorePosCmd(),
+                    new ParallelCommandGroup(
+                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached()),
+                        ArmCmds.ArmToStorePosCmd()
+                    ),
                     // new DelayCmd(1.0),
                     ElevatorCmds.ElevToStorePosCmd()
                 ),
@@ -207,7 +219,10 @@ public class OperatorGamepadCmds {
                 // raise elevator for clearance, set arm, then move elev back to correct pos
                 new SequentialCommandGroup(
                     ElevatorCmds.ElevToBumperClearPosCmd(),
-                    ArmCmds.ArmToFullRetractCmd(),
+                    new ParallelCommandGroup(
+                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached()),
+                        ArmCmds.ArmToFullRetractCmd()
+                    ),
                     // new DelayCmd(1.0),
                     ElevatorCmds.ElevToRetractPosCmd()
                 ),
