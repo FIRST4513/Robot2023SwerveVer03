@@ -90,8 +90,8 @@ public class OperatorGamepadCmds {
                 new SequentialCommandGroup(
                     ElevatorCmds.ElevToBumperClearPosCmd(),
                     new ParallelCommandGroup(
-                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached()),
-                        ArmCmds.ArmToEjectLowPosCmd()
+                        ArmCmds.ArmToEjectLowPosCmd(),
+                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached())
                     ),
                     ElevatorCmds.ElevToEjectLowPosCmd()
                 ),
@@ -121,8 +121,8 @@ public class OperatorGamepadCmds {
                 new SequentialCommandGroup(
                     ElevatorCmds.ElevToBumperClearPosCmd(),
                     new ParallelCommandGroup(
-                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached()),
-                        ArmCmds.ArmToEjectMidPosCmd()
+                        ArmCmds.ArmToEjectMidPosCmd(),
+                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached())
                     ),
                     ElevatorCmds.ElevToEjectMidPosCmd()
                 ),
@@ -152,8 +152,8 @@ public class OperatorGamepadCmds {
                 new SequentialCommandGroup(
                     ElevatorCmds.ElevToBumperClearPosCmd(),
                     new ParallelCommandGroup(
-                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached()),
-                        ArmCmds.ArmToEjectHighPosCmd()
+                        ArmCmds.ArmToEjectHighPosCmd(),
+                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached())
                     ),
                     ElevatorCmds.ElevToEjectHighPosCmd()
                 ),
@@ -185,8 +185,8 @@ public class OperatorGamepadCmds {
                 new SequentialCommandGroup(
                     ElevatorCmds.ElevToBumperClearPosCmd(),
                     new ParallelCommandGroup(
-                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached()),
-                        ArmCmds.ArmToStorePosCmd()
+                        ArmCmds.ArmToStorePosCmd(),
+                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached())
                     ),
                     // new DelayCmd(1.0),
                     ElevatorCmds.ElevToStorePosCmd()
@@ -220,8 +220,8 @@ public class OperatorGamepadCmds {
                 new SequentialCommandGroup(
                     ElevatorCmds.ElevToBumperClearPosCmd(),
                     new ParallelCommandGroup(
-                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached()),
-                        ArmCmds.ArmToFullRetractCmd()
+                        ArmCmds.ArmToFullRetractCmd(),
+                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached())
                     ),
                     // new DelayCmd(1.0),
                     ElevatorCmds.ElevToRetractPosCmd()
