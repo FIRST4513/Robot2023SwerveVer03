@@ -29,7 +29,7 @@ public class ArmCmds {
     // ------------- Arm Motion Commands -------------
     public static Command ArmByJoystickCmd() {
         return new RunCommand(
-        () -> Robot.arm.setArmMotor(() -> Robot.operatorGamepad.getArmInput()), Robot.arm);
+        () -> Robot.arm.setArmMotor(() -> Robot.operatorGamepad.getArmInputWFF()), Robot.arm);
     }
 
     public static Command ArmSetMMangleCmd(double angle) {

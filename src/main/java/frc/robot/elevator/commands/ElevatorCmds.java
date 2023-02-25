@@ -35,7 +35,7 @@ public class ElevatorCmds {
     // ------------- Elev Motion Commands -------------
     public static Command ElevByJoystickCmd() {
         return new RunCommand(
-        () -> Robot.elevator.elevSetSpeed(() -> Robot.operatorGamepad.getElevInput()), Robot.elevator);
+        () -> Robot.elevator.elevSetSpeed(() -> Robot.operatorGamepad.getElevInputWFF()), Robot.elevator);
     }
 
     public static Command setMMPosition(double position) {

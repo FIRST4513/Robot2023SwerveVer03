@@ -4,9 +4,9 @@ public class ArmConfig {
 
     // ------- Encoder Conversion Factor --------------
     // 1797.41176 cnts per degree tested 2/20/23
-    public final static double kCntsPerDeg              = 2532;       // Convert cnt to degrees of angle (2/21/23)
-    public final static double kDegsPerCnt              = 0.00039488;   // Convert cnt to degrees of angle (2/21/23)
-    public final static double KAngleDeadBand           = +1.0;         // Degrees close enough to Tgt
+    public final static double kCntsPerDeg              = 1986;        // Convert cnt to degrees of angle (2/21/23)
+    public final static double kDegsPerCnt              = 0.0005034;   // Convert cnt to degrees of angle (2/21/23)
+    public final static double KAngleDeadBand           = +1.0;        // Degrees close enough to Tgt
 
     // ------ Speed Constants ------
     public final static double kDefaultExtendPwr        = +0.25;
@@ -17,7 +17,7 @@ public class ArmConfig {
 
     // Arm Position Constants for single value for Cone or Cube
     public final static double ArmAngleIntakeCubePos    = +0.0;         // Pickup position
-    public final static double ArmAngleIntakeConePos    = +0.0;         // Pickup position
+    public final static double ArmAngleIntakeConePos    = +-10.0;       // Pickup position
     public final static double ArmAngleEjectLowPos      = +25.0;        // Eject position
     public final static double ArmAngleEjectMidPos      = +40.0;        // Eject position
     public final static double ArmAngleEjectHighPos     = +40.0;        // Eject position

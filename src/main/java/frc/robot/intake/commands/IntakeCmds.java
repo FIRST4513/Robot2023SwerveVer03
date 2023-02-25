@@ -16,7 +16,8 @@ public class IntakeCmds {
 
     // --------- Intake On Commands -------------
     public static Command IntakeConeCmd() {
-        return new IntakeConeMainCmd();
+        return new IntakeConeSecondaryCmd();
+        // return new IntakeConeMainCmd();
     }
 
     public static Command IntakeCubeCmd() {
@@ -46,9 +47,8 @@ public class IntakeCmds {
             .withName("IntakeStopCmd");
     }
 
-
-
-
-
-    
+    // ------------ Intake Manual control ------------
+    public static Command IntakeByJoystickCmd() {
+        return new RunCommand( () -> Robot.intake.setUpperMotor(() -> Robot.operatorGamepad.getTriggerTwist()), Robot.intake );
+    }
 }

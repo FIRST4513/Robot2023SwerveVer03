@@ -10,7 +10,7 @@ public class ElevReleaseArmCmd extends CommandBase {
     
     static enum CmdState {ELEVRAISING, ARMONSWITCH, ELEVLOWERING, SETTLING, DONE};
     CmdState cmdState = CmdState.ELEVRAISING;
-    Timer settleTimer;
+    Timer settleTimer = new Timer();
     double settleTime = 0.25;       // Time to allow elevator to settle onto bottom
 
     // Command Constructor
@@ -22,6 +22,7 @@ public class ElevReleaseArmCmd extends CommandBase {
     public void initialize() {
         cmdState = CmdState.ELEVRAISING;
         Robot.elevator.setBrakeMode(true);  // Turn on brake mode
+        Robot.arm.resetEncoderAngle(-90);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class ElevReleaseArmCmd extends CommandBase {
         if (cmdState == CmdState.ARMONSWITCH) {
             if (Robot.arm.isRetractLimitSwitchPressed()) {
                 // Were still on the switch keep resetting the encoder
-                Robot.arm.resetEncoderAngle(ArmConfig.RetractLimitSwitchAngle);
+                // Robot.arm.resetEncoderAngle(ArmConfig.RetractLimitSwitchAngle);
             } else {
                 // We have passed through switch, were done
                 cmdState = CmdState.ELEVLOWERING;
@@ -78,3 +79,6 @@ public class ElevReleaseArmCmd extends CommandBase {
         return false;
     }
 }
+
+// 37
+// 28.8

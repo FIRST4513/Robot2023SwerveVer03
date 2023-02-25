@@ -27,8 +27,8 @@ public class ElevatorConfig {
     // ------ Elevator Speed Constants -----
     public final static double zeroPwr              = -0.10;
     public final static double kMaxPwr              = +0.25;
-    public final static double lowerMaxPwr          = -0.15;
-    public final static double raiseMaxPwr          = +0.30;
+    public final static double lowerMaxPwr          = -0.25;
+    public final static double raiseMaxPwr          = +0.4;
 
     public final static double KRaiseSpeedDefault   = +0.25;
     public final static double KRaiseSlowSpeed      = +0.15;

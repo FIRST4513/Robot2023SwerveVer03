@@ -1,5 +1,7 @@
 package frc.robot.intake;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -31,6 +33,8 @@ public class IntakeSubSys extends SubsystemBase {
 
     public void setUpperMotor(double speed)     { intakeUpperMotor.set(speed); }
     public void setLowerMotor(double speed)     { intakeLowerMotor.set(speed); }
+
+    public void setUpperMotor(DoubleSupplier speed) { intakeUpperMotor.set(speed.getAsDouble()); }
 
     public void stopMotors() {
         intakeUpperMotor.stopMotor();

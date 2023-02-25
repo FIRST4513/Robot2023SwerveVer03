@@ -40,7 +40,7 @@ public class ArmSubSys extends SubsystemBase {
     // ------------- Periodic -------------
     public void periodic() {
         if (isRetractLimitSwitchPressed() == true) {
-            resetEncoderAngle(ArmConfig.RetractLimitSwitchAngle);  // recalibrate encoder at retracted position
+            // resetEncoderAngle(ArmConfig.RetractLimitSwitchAngle);  // recalibrate encoder at retracted position
         }
         if (isExtendLimitSwitchPressed() == true) {
             resetEncoderAngle(ArmConfig.ExtendLimitSwitchAngle);   // recalibrate encoder at extended position
