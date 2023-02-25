@@ -115,8 +115,8 @@ public class ElevatorCmds {
         return new ParallelCommandGroup(
             // Elev raises until falling arm clears retracted limit switch
             // Then elev lowers to bottom, while arm settles at -20 degrees
-            new ElevReleaseArmCmd().withTimeout(3.0),
-            ArmCmds.ArmReleaseCmd().withTimeout(3.0)
+            new ElevReleaseArmCmd().withTimeout(5.0),
+            ArmCmds.ArmReleaseCmd().withTimeout(5.0)
 
         );
     }
