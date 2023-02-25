@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
+import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 import frc.robot.pilot.PilotGamepadConfig.MaxSpeeds;
@@ -60,7 +61,7 @@ public class PilotGamepad extends Gamepad {
         gamepad.aButton.whileTrue(SwerveCmds.TestWheelFwdCmd());
         gamepad.bButton.whileTrue(SwerveCmds.TestWheelFwdLeftCmd());
         gamepad.xButton.whileTrue(SwerveCmds.TestWheelFwdRightCmd());
-        gamepad.yButton.whileTrue(SwerveCmds.LockSwerveCmd());
+        gamepad.bButton.onTrue(ElevatorCmds.InitialArmReleaseCmd());
         gamepad.startButton.whileTrue(SwerveCmds.ResetFalconAnglesCmd());
     }
 

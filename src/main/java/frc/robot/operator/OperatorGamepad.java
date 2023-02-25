@@ -16,7 +16,8 @@ public class OperatorGamepad extends Gamepad {
 
         // gamepad.bButton.onTrue(ElevatorCmds.InitialArmReleaseCmd()); // Test Button
 
-        gamepad.bButton     .onTrue(IntakeCmds.IntakeCubeCmd());
+        gamepad.bButton     .onTrue(ElevatorCmds.InitialArmReleaseCmd());
+        // gamepad.bButton     .onTrue(IntakeCmds.IntakeCubeCmd());
         gamepad.yButton     .onTrue(IntakeCmds.IntakeConeCmd());
         gamepad.xButton     .onTrue(IntakeCmds.IntakeStopCmd());
         gamepad.aButton     .onTrue(IntakeCmds.IntakeEjectCmd());
