@@ -16,21 +16,21 @@ public class ArmConfig {
     public final static double kRetractMaxPwr           = -0.5;
 
     // Arm Position Constants for single value for Cone or Cube
-    public final static double ArmAngleIntakeCubePos    = +0.0;         // Pickup position
-    public final static double ArmAngleIntakeConePos    = +-10.0;       // Pickup position
-    public final static double ArmAngleEjectLowPos      = +25.0;        // Eject position
-    public final static double ArmAngleEjectMidPos      = +40.0;        // Eject position
-    public final static double ArmAngleEjectHighPos     = +40.0;        // Eject position
-    public final static double ArmAngleStorePos         = -20.0;        // Store for Travel
-    public final static double ArmAngleFullRetractPos   = -30.0;        // Full retract
+    public final static double ArmAngleIntakeCubePos    = -10.0;         // Pickup position
+    public final static double ArmAngleIntakeConePos    = -10.0;       // Pickup position
+    public final static double ArmAngleEjectLowPos      = -15.0;        // Eject position
+    public final static double ArmAngleEjectMidPos      = +14.0;        // Eject position
+    public final static double ArmAngleEjectHighPos     = +46.0;        // Eject position
+    public final static double ArmAngleStorePos         = -35.0;        // Store for Travel
+    public final static double ArmAngleFullRetractPos   = -85.0;        // Full retract
 
     // These would be for separate values for Cone or Cube (May not be needed)
-    public final static double ArmAngleConeLowPos       = +15.0;        // Angle to Eject Cone for Low Score 
-    public final static double ArmAngleConeMidPos       = +20.0;
-    public final static double ArmAngleConeHighPos      = +30.0;
-    public final static double ArmAngleCubeLowPos       = +15.0;        // Angle to Eject Cube for Low Score
-    public final static double ArmAngleCubeMidPos       = +20.0;
-    public final static double ArmAngleCubeHighPos      = +25.0;
+    // public final static double ArmAngleConeLowPos       = -15.0;        // Angle to Eject Cone for Low Score 
+    // public final static double ArmAngleConeMidPos       = +20.0;
+    // public final static double ArmAngleConeHighPos      = +30.0;
+    // public final static double ArmAngleCubeLowPos       = +15.0;        // Angle to Eject Cube for Low Score
+    // public final static double ArmAngleCubeMidPos       = +20.0;
+    // public final static double ArmAngleCubeHighPos      = +25.0;
 
     // ------ Limit Switches ------
     public final static boolean RetractLimitSwitchTrue      = false;

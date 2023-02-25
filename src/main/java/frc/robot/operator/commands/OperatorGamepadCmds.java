@@ -1,5 +1,7 @@
 package frc.robot.operator.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -7,7 +9,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
+import frc.robot.arm.ArmConfig;
 import frc.robot.arm.commands.ArmCmds;
+import frc.robot.elevator.ElevatorConfig;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
 
@@ -31,6 +35,13 @@ public class OperatorGamepadCmds {
         return new ParallelCommandGroup(
             ArmCmds.ArmByJoystickCmd(),
             ElevatorCmds.ElevByJoystickCmd()
+        );
+    }
+
+    public static Command StopArmElevCmd() {
+        return new ParallelCommandGroup(
+            ArmCmds.StopArmCmd(),
+            ElevatorCmds.ElevStopCmd()
         );
     }
 
@@ -70,127 +81,22 @@ public class OperatorGamepadCmds {
             ArmCmds.ArmToIntakeConePosCmd());
     }
 
-    // -------------------- Arm/Elev To Eject Positions -------------------
-    
-    public static Command SetArmElevToEjectLowPosCmd() {
-        return new ConditionalCommand(
-            // True condition: arm outside robot, no worry of bumper collision (out-to-out movement)
-            new ParallelCommandGroup(
-                ElevatorCmds.ElevToEjectLowPosCmd(),
-                ArmCmds.ArmToEjectLowPosCmd()
-            ),
-            // False condition: arm inside robot, check for cube
-            new ConditionalCommand(
-                // True condition: no cube, good to go, parallel motion used
-                new ParallelCommandGroup(
-                    ElevatorCmds.ElevToEjectLowPosCmd(),
-                    ArmCmds.ArmToEjectLowPosCmd()
-                ),
-                // False condition: cube, must avoid bumper collision;
-                // raise elevator for clearance, set arm, then move elev back to correct pos
-                new SequentialCommandGroup(
-                    ElevatorCmds.ElevToBumperClearPosCmd(),
-                    new ParallelCommandGroup(
-                        ArmCmds.ArmToEjectLowPosCmd(),
-                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached())
-                    ),
-                    ElevatorCmds.ElevToEjectLowPosCmd()
-                ),
-                () -> Robot.intake.isCubeEjectNotDetected()),
-            // Condition: is arm outside?
-            () -> Robot.arm.isArmOutside()
-        );
-    }
-
-    public static Command SetArmElevToEjectMidPosCmd() {
-        System.out.println("Command Activated");
-        return new ConditionalCommand(
-            // True condition: arm outside robot, no worry of bumper collision (out-to-out movement)
-            new SequentialCommandGroup(
-                ElevatorCmds.ElevToEjectMidPosCmd(),
-                ArmCmds.ArmToEjectMidPosCmd()
-            ),
-            // False condition: arm inside robot, check for cube
-            new ConditionalCommand (
-                // True condition: no cube, good to go, parallel motion used
-                new ParallelCommandGroup(
-                    ElevatorCmds.ElevToEjectMidPosCmd(),
-                    ArmCmds.ArmToEjectMidPosCmd()
-                ),
-                // False condition: cube, must avoid bumper collision;
-                // raise elevator for clearance, set arm, then move elev back to correct pos
-                new SequentialCommandGroup(
-                    ElevatorCmds.ElevToBumperClearPosCmd(),
-                    new ParallelCommandGroup(
-                        ArmCmds.ArmToEjectMidPosCmd(),
-                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached())
-                    ),
-                    ElevatorCmds.ElevToEjectMidPosCmd()
-                ),
-                () -> Robot.intake.isCubeEjectNotDetected()),
-            // Condition: is arm outside?
-            () -> Robot.arm.isArmOutside()
-        );
-
-    }
-
-    public static Command SetArmElevToEjectHighPosCmd() {
-        return new ConditionalCommand(
-            // True condition: arm outside robot, no worry of bumper collision (out-to-out movement)
-            new ParallelCommandGroup(
-                ElevatorCmds.ElevToEjectHighPosCmd(),
-                ArmCmds.ArmToEjectHighPosCmd()
-            ),
-            // False condition: arm inside robot, check for cube
-            new ConditionalCommand(
-                // True condition: no cube, good to go, parallel motion used
-                new ParallelCommandGroup(
-                    ElevatorCmds.ElevToEjectHighPosCmd(),
-                    ArmCmds.ArmToEjectHighPosCmd()
-                ),
-                // False condition: cube, must avoid bumper collision;
-                // raise elevator for clearance, set arm, then move elev back to correct pos
-                new SequentialCommandGroup(
-                    ElevatorCmds.ElevToBumperClearPosCmd(),
-                    new ParallelCommandGroup(
-                        ArmCmds.ArmToEjectHighPosCmd(),
-                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached())
-                    ),
-                    ElevatorCmds.ElevToEjectHighPosCmd()
-                ),
-                () -> Robot.intake.isCubeEjectNotDetected()),
-            // Condition: is arm outside?
-            () -> Robot.arm.isArmOutside()
-        );
-    }
-
-
     // -------------------- Arm/Elev to Retracted Positions ---------------
 
     public static Command SetArmElevToStorePosCmd() {
         return new ConditionalCommand(
             // True condition: arm inside robot, no worry of bumper collision
-            new ParallelCommandGroup(
-                ElevatorCmds.ElevToStorePosCmd(),
-                ArmCmds.ArmToStorePosCmd()
-            ),
+            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleStorePos, ElevatorConfig.ElevStoreHt, 4.0),
             // False condition: arm outside robot, check for cube
             new ConditionalCommand(
                 // True condition: no cube, good to go, parallel motion used
-                new ParallelCommandGroup(
-                    ElevatorCmds.ElevToStorePosCmd(),
-                    ArmCmds.ArmToStorePosCmd()
-                ),
+                ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleStorePos, ElevatorConfig.ElevStoreHt, 4.0),
                 // False condition: cube, must avoid bumper collision;
                 // raise elevator for clearance, set arm, then move elev back to correct pos
                 new SequentialCommandGroup(
-                    ElevatorCmds.ElevToBumperClearPosCmd(),
-                    new ParallelCommandGroup(
-                        ArmCmds.ArmToStorePosCmd(),
-                        ElevatorCmds.ElevHoldCmd().until(() -> Robot.arm.isMMtargetReached())
-                    ),
-                    // new DelayCmd(1.0),
-                    ElevatorCmds.ElevToStorePosCmd()
+                    ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevBumperClearHt, 4.0),
+                    ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleStorePos, () -> Robot.elevator.getElevHeightInches(), 4.0),
+                    ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevStoreHt, 4.0)
                 ),
                 () -> Robot.intake.isCubeEjectNotDetected()),
             // Condition: is arm outside?
@@ -231,15 +137,83 @@ public class OperatorGamepadCmds {
             // Condition: is arm outside?
             () -> Robot.arm.isArmInside()
         );
-
-    
     }
 
+    // -------------------- Arm/Elev To Eject Positions -------------------
+
+    public static Command SetArmElevToEjectLowPosCmd() {
+        return new ConditionalCommand(
+            // True condition: arm outside robot, no worry of bumper collision (out-to-out movement)
+            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectLowPos, ElevatorConfig.ElevEjectLowHt, 4.0),
+            // False condition: arm inside robot, check for cube
+            new ConditionalCommand(
+                // True condition: no cube, good to go, parallel motion used
+                ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectLowPos, ElevatorConfig.ElevEjectLowHt, 4.0),
+                // False condition: cube, must avoid bumper collision;
+                // raise elevator for clearance, set arm, then move elev back to correct pos
+                new SequentialCommandGroup(
+                    ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevBumperClearHt, 4.0),
+                    ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectLowPos, () -> Robot.elevator.getElevHeightInches(), 4.0),
+                    ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevEjectLowHt, 4.0)
+                ).until(() -> Robot.operatorGamepad.isArmAndElevAtPos()),
+                () -> Robot.intake.isCubeEjectNotDetected()),
+            // Condition: is arm outside?
+            () -> Robot.arm.isArmOutside()
+        );
+    }
+
+    public static Command SetArmElevToEjectMidPosCmd() {
+        return new SequentialCommandGroup(
+            ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevEjectMidHt, 3.0),
+            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectMidPos, ElevatorConfig.ElevEjectMidHt, 4.0)
+        );
+        // elev to height timeout 0.5
+        // set both
+    }
+
+    public static Command SetArmElevToEjectHighPosCmd() {
+        // return new SequentialCommandGroup(
+        //     ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevEjectMidHt, 2.0),
+        //     ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectMidPos, ElevatorConfig.ElevEjectMidHt, 4.0)
+        // );
+        return new SequentialCommandGroup(
+            ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevEjectHighHt, 2.0),
+            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectHighPos, ElevatorConfig.ElevEjectHighHt, 4.0)
+        );
+    }
+
+    // ----------- Generic Parallel command for go to position ----------
+    public static Command ArmElevGoToPosParallelCmd(double armPos, double elevPos, double timeout) {
+        return new ParallelCommandGroup(
+            new RunCommand(() -> Robot.arm.setMMangle(armPos), Robot.arm),
+            new RunCommand(() -> Robot.elevator.setMMheight(elevPos), Robot.elevator)
+        ).until(() -> Robot.operatorGamepad.isArmAndElevAtPos()).withTimeout(timeout);
+    }
+
+    public static Command ArmElevGoToPosParallelCmd(DoubleSupplier armPos, double elevPos, double timeout) {
+        return new ParallelCommandGroup(
+            new RunCommand(() -> Robot.arm.setMMangle(armPos), Robot.arm),
+            new RunCommand(() -> Robot.elevator.setMMheight(elevPos), Robot.elevator)
+        ).until(() -> Robot.operatorGamepad.isArmAndElevAtPos()).withTimeout(timeout);
+    }
+
+    public static Command ArmElevGoToPosParallelCmd(double armPos, DoubleSupplier elevPos, double timeout) {
+        return new ParallelCommandGroup(
+            new RunCommand(() -> Robot.arm.setMMangle(armPos), Robot.arm),
+            new RunCommand(() -> Robot.elevator.setMMheight(elevPos), Robot.elevator)
+        ).until(() -> Robot.operatorGamepad.isArmAndElevAtPos()).withTimeout(timeout);
+    }
+
+    public static Command ArmElevGoToPosParallelCmd(DoubleSupplier armPos, DoubleSupplier elevPos, double timeout) {
+        return new ParallelCommandGroup(
+            new RunCommand(() -> Robot.arm.setMMangle(armPos), Robot.arm),
+            new RunCommand(() -> Robot.elevator.setMMheight(elevPos), Robot.elevator)
+        ).until(() -> Robot.operatorGamepad.isArmAndElevAtPos()).withTimeout(timeout);
+    }
 
     // -------------------- Rumble Controller  ---------------
 
     public static Command RumbleOperatorCmd(double intensity) {
         return new RunCommand(() -> Robot.operatorGamepad.rumble(intensity), Robot.operatorGamepad);
     }
-
 }

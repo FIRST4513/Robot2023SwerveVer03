@@ -18,7 +18,7 @@ public class ElevatorCmds {
 
     // Default Command
     public static void setupDefaultCommand() {
-        Robot.elevator.setDefaultCommand(new ElevatorHoldPosCmd());
+        Robot.elevator.setDefaultCommand(ElevByJoystickCmd());
     }
 
     // ---------------- Elev Motion Stop Commands --------------
@@ -91,13 +91,13 @@ public class ElevatorCmds {
     public static Command ElevToEjectLowPosCmd()    { return ElevatorCmds.ElevGoToBottomCmd().withTimeout(4.0); }
 
     public static Command ElevToEjectMidPosCmd() {
-        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevEjectMidHt).withTimeout(4.0)
-                .until(() -> Robot.elevator.isMMtargetReached());
+        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevEjectMidHt);
+                // .withTimeout(4.0).until(() -> Robot.elevator.isMMtargetReached());
     }
 
     public static Command ElevToEjectHighPosCmd() {
-        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevEjectMidHt).withTimeout(4.0)
-                .until(() -> Robot.elevator.isMMtargetReached());
+        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevEjectMidHt);
+        // .withTimeout(4.0).until(() -> Robot.elevator.isMMtargetReached());
     }
 
     // -------- Elev to Retracted Positions Commands -------
@@ -106,8 +106,8 @@ public class ElevatorCmds {
     public static Command ElevToRetractPosCmd()     { return ElevatorCmds.ElevGoToBottomCmd().withTimeout(4.0); }
 
     public static Command ElevToBumperClearPosCmd() {
-        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevBumperClearHt).withTimeout(4.0)
-                .until(() -> Robot.elevator.isMMtargetReached());
+        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevBumperClearHt);
+        // .withTimeout(4.0).until(() -> Robot.elevator.isMMtargetReached());
     }
 
     // --------- Elev to ArmRelease (Free Fall) Position Command ---------

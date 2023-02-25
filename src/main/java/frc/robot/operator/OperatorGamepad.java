@@ -31,14 +31,14 @@ public class OperatorGamepad extends Gamepad {
         gamepad.xButton     .onTrue(IntakeCmds.IntakeStopCmd());
         gamepad.aButton     .onTrue(IntakeCmds.IntakeEjectCmd());
 
-        gamepad.Dpad.Right  .onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
         gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullRetractPosCmd());
-
+        
+        gamepad.Dpad.Up     .onTrue(OperatorGamepadCmds.SetArmElevToEjectHighPosCmd());
         gamepad.Dpad.Down   .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
         gamepad.Dpad.Left   .onTrue(OperatorGamepadCmds.SetArmElevToEjectMidPosCmd());
-        gamepad.Dpad.Up     .onTrue(OperatorGamepadCmds.SetArmElevToEjectHighPosCmd());
+        gamepad.Dpad.Right  .onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
 
-        gamepad.rightBumper .whileTrue(OperatorGamepadCmds.ControlArmElevByJoysticksCmd());
+        // gamepad.rightBumper .whileTrue(OperatorGamepadCmds.StopArmElevCmd());
         gamepad.leftBumper  .whileTrue(IntakeCmds.IntakeByJoystickCmd());
 
         gamepad.startButton .onTrue(ArmCmds.ResetArmEncoderCmd());
@@ -47,7 +47,6 @@ public class OperatorGamepad extends Gamepad {
     public void setupTestButtons() {
         gamepad.bButton     .onTrue(ElevatorCmds.InitialArmReleaseCmd());
         gamepad.aButton     .onTrue(new PrintCommand("Test Button A"));
-
     }
 
     public void setupDisabledButtons() {
@@ -95,5 +94,11 @@ public class OperatorGamepad extends Gamepad {
 
     public void rumble(double intensity) {
         this.gamepad.setRumble(intensity, intensity);
+    }
+    public boolean isArmAndElevAtPos() {
+        if ((Robot.arm.isMMtargetReached()) && (Robot.elevator.isMMtargetReached())) {
+            return true;
+        }
+        return false;
     }
 }
