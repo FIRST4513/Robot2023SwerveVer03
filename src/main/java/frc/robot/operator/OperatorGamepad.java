@@ -6,7 +6,6 @@ import frc.lib.gamepads.mapping.ExpCurve;
 import frc.robot.Robot;
 import frc.robot.arm.commands.ArmCmds;
 import frc.robot.elevator.ElevFXMotorConfig;
-import frc.robot.elevator.ElevatorConfig;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.operator.commands.OperatorGamepadCmds;
@@ -38,7 +37,6 @@ public class OperatorGamepad extends Gamepad {
         gamepad.Dpad.Left   .onTrue(OperatorGamepadCmds.SetArmElevToEjectMidPosCmd());
         gamepad.Dpad.Right  .onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
 
-        // gamepad.rightBumper .whileTrue(OperatorGamepadCmds.StopArmElevCmd());
         gamepad.rightBumper .onTrue(OperatorGamepadCmds.ControlArmElevByJoysticksCmd());
         gamepad.leftBumper  .whileTrue(IntakeCmds.IntakeByJoystickCmd());
 

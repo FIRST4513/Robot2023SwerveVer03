@@ -24,7 +24,11 @@ public class Auto {
     public static final SendableChooser<String> positionChooser = new SendableChooser<>();
     public static final SendableChooser<String> crossChooser = new SendableChooser<>();
     public static final SendableChooser<String> dockChooser = new SendableChooser<>();
+    public static final SendableChooser<String> testChooser = new SendableChooser<>();
+
+
     public static HashMap<String, Command> eventMap = new HashMap<>();
+    public static String testSelect;
     public static String scoreSelect;
     public static String positionSelect;
     public static String crossSelect;
@@ -51,6 +55,10 @@ public class Auto {
                             "LeftLongDockPath", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
     static PathPlannerTrajectory rightLongDockPath  = PathPlanner.loadPath(
                             "RightLongDockPath", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    static PathPlannerTrajectory test1MeterPath  = PathPlanner.loadPath(
+                            "1Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel); 
+    static PathPlannerTrajectory testTurnPath  = PathPlanner.loadPath(
+                            "TetsTurn", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);   
 
 
     // -----------------------------  Constructor ----------------------------
@@ -84,8 +92,17 @@ public class Auto {
 
         // Selector for Crossing the Line to score
         crossChooser.setDefaultOption("Do Nothing", AutoConfig.kNoSelect);
-        crossChooser.setDefaultOption("Cross Line", AutoConfig.kYesSelect);
+        crossChooser.addOption("Cross Line", AutoConfig.kYesSelect);
+
+        
+        // Selector for Test Auto Routines
+        testChooser.setDefaultOption("Do Nothing", "doNothing");
+        testChooser.addOption("1 Meter", "1Meter");
+        testChooser.addOption("Test Turn", "Test Turn");
+
     }
+
+
 
     // ------ Get operator selected responses from shuffleboard -----
 
@@ -94,6 +111,7 @@ public class Auto {
         positionSelect = positionChooser.getSelected();
         crossSelect = crossChooser.getSelected();
         dockSelect = dockChooser.getSelected();
+        testSelect = testChooser.getSelected();
     }
     
 
@@ -105,6 +123,24 @@ public class Auto {
         getAutoSelections();
         setPlacePositions();
         setStartPose();
+
+        // ----------------------- Test Routines ----------------
+        if (testSelect == "1Meter") {
+            // Set position and Gyro Heading based on starting position in path
+            return new SequentialCommandGroup(            
+                new PrintCommand("Test Auto - 1Meter Path"),
+                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(test1MeterPath, 10.0)
+            );            
+        }
+
+        if (testSelect == "Test Turn") {
+            // Set position and Gyro Heading based on starting position in path
+            return new SequentialCommandGroup(            
+                new PrintCommand("Test Auto - Test Turn Path"),
+                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testTurnPath, 10.0)
+            );            
+        }
+
 
         // ----------------------- Do Nothing -------------------
         if (doNothing()) {

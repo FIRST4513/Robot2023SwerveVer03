@@ -1,10 +1,8 @@
 package frc.robot.operator.commands;
 
 import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -85,20 +83,13 @@ public class OperatorGamepadCmds {
 
     public static Command SetArmElevToStorePosCmd() {
         return new SequentialCommandGroup(
-            ArmElevGoToPosParallelCmd(  () -> Robot.arm.getArmAngle(),          // Hold Arm
-                                        ElevatorConfig.ElevBumperClearHt,       // Move Elev
-                                        4.0),                                   // Timeout Cmd
-
-            ArmElevGoToPosParallelCmd(       ArmConfig.ArmAngleStorePos, () -> Robot.elevator.getElevHeightInches(),4.0),
-            ArmElevGoToPosParallelCmd( () -> Robot.arm.getArmAngle(),     ElevatorConfig.ElevStoreHt,               4.0)
+            ArmElevGoToPosParallelCmd( () -> Robot.arm.getArmAngle(), ElevatorConfig.ElevBumperClearHt, 4.0),
+            ArmElevGoToPosParallelCmd( ArmConfig.ArmAngleStorePos, () -> Robot.elevator.getElevHeightInches(),4.0),
+            ArmElevGoToPosParallelCmd( () -> Robot.arm.getArmAngle(),     ElevatorConfig.ElevStoreHt, 4.0)
         );
     }
 
     public static Command SetArmElevToFullRetractPosCmd() {
-        // return new ParallelCommandGroup(
-        //     ElevatorCmds.ElevToRetractPosCmd(),
-        //     ArmCmds.ArmToFullRetractCmd()
-        // );
         return new ConditionalCommand(
             // True condition: arm inside robot, no worry of bumper collision
             new ParallelCommandGroup(
@@ -157,15 +148,10 @@ public class OperatorGamepadCmds {
             ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevEjectMidHt, 3.0),
             ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectMidPos, ElevatorConfig.ElevEjectMidHt, 4.0)
         );
-        // elev to height timeout 0.5
-        // set both
     }
 
+
     public static Command SetArmElevToEjectHighPosCmd() {
-        // return new SequentialCommandGroup(
-        //     ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevEjectMidHt, 2.0),
-        //     ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectMidPos, ElevatorConfig.ElevEjectMidHt, 4.0)
-        // );
         return new SequentialCommandGroup(
             ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevEjectHighHt, 2.0),
             ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectHighPos, ElevatorConfig.ElevEjectHighHt, 4.0)
