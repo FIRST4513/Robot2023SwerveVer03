@@ -39,6 +39,7 @@ public class OperatorGamepad extends Gamepad {
         gamepad.Dpad.Right  .onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
 
         // gamepad.rightBumper .whileTrue(OperatorGamepadCmds.StopArmElevCmd());
+        gamepad.rightBumper .onTrue(OperatorGamepadCmds.ControlArmElevByJoysticksCmd());
         gamepad.leftBumper  .whileTrue(IntakeCmds.IntakeByJoystickCmd());
 
         gamepad.startButton .onTrue(ArmCmds.ResetArmEncoderCmd());

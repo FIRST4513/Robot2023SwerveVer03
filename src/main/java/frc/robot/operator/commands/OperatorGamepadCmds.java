@@ -84,23 +84,13 @@ public class OperatorGamepadCmds {
     // -------------------- Arm/Elev to Retracted Positions ---------------
 
     public static Command SetArmElevToStorePosCmd() {
-        return new ConditionalCommand(
-            // True condition: arm inside robot, no worry of bumper collision
-            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleStorePos, ElevatorConfig.ElevStoreHt, 4.0),
-            // False condition: arm outside robot, check for cube
-            new ConditionalCommand(
-                // True condition: no cube, good to go, parallel motion used
-                ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleStorePos, ElevatorConfig.ElevStoreHt, 4.0),
-                // False condition: cube, must avoid bumper collision;
-                // raise elevator for clearance, set arm, then move elev back to correct pos
-                new SequentialCommandGroup(
-                    ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevBumperClearHt, 4.0),
-                    ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleStorePos, () -> Robot.elevator.getElevHeightInches(), 4.0),
-                    ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevStoreHt, 4.0)
-                ),
-                () -> Robot.intake.isCubeEjectNotDetected()),
-            // Condition: is arm outside?
-            () -> Robot.arm.isArmInside()
+        return new SequentialCommandGroup(
+            ArmElevGoToPosParallelCmd(  () -> Robot.arm.getArmAngle(),          // Hold Arm
+                                        ElevatorConfig.ElevBumperClearHt,       // Move Elev
+                                        4.0),                                   // Timeout Cmd
+
+            ArmElevGoToPosParallelCmd(       ArmConfig.ArmAngleStorePos, () -> Robot.elevator.getElevHeightInches(),4.0),
+            ArmElevGoToPosParallelCmd( () -> Robot.arm.getArmAngle(),     ElevatorConfig.ElevStoreHt,               4.0)
         );
     }
 

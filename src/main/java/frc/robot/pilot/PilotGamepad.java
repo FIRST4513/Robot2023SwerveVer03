@@ -42,7 +42,7 @@ public class PilotGamepad extends Gamepad {
     public void setupTeleopButtons() {
         // "A" Button - Teleop Drive with Robot Perspective
         gamepad.aButton.onTrue(IntakeCmds.IntakeEjectCmd());
-        gamepad.bButton.onTrue(IntakeCmds.IntakeCubeCmd());
+        gamepad.bButton.onTrue(OperatorGamepadCmds.IntakeCubeCmd());
         gamepad.yButton.onTrue(OperatorGamepadCmds.IntakeConeCmd());
         gamepad.xButton.whileTrue(PilotGamepadCmds.RpvPilotSwerveCmd());
 

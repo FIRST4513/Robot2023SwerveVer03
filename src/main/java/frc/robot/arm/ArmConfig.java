@@ -21,7 +21,7 @@ public class ArmConfig {
     public final static double ArmAngleEjectLowPos      = -15.0;        // Eject position
     public final static double ArmAngleEjectMidPos      = +14.0;        // Eject position
     public final static double ArmAngleEjectHighPos     = +46.0;        // Eject position
-    public final static double ArmAngleStorePos         = -35.0;        // Store for Travel
+    public final static double ArmAngleStorePos         = -45.0;        // Store for Travel
     public final static double ArmAngleFullRetractPos   = -85.0;        // Full retract
 
     // These would be for separate values for Cone or Cube (May not be needed)
@@ -34,9 +34,9 @@ public class ArmConfig {
 
     // ------ Limit Switches ------
     public final static boolean RetractLimitSwitchTrue      = false;
-    public final static double  RetractLimitSwitchAngle     = -51.8;    // Max angle retract
+    public final static double  RetractLimitSwitchAngle     = -48;    // Max angle retract
     public final static boolean RetractSoftLimitSwitchEnable = false;
-    public final static int     RetractSoftLimitSwitchAngle = -42;      // Max angle retract
+    public final static int     RetractSoftLimitSwitchAngle = -45;      // Max angle retract
 
     public final static boolean ExtendLimitSwitchTrue       = false;
     public final static double  ExtendLimitSwitchAngle      = +47.0;    // Max angle extended
