@@ -19,16 +19,16 @@ public class ElevatorConfig {
     public final static double ElevBumperClearHt    = 10.0;         // Position to raise to clear bumper with cube
     public final static double ElevStoreHt          = 0.0;          // Position to Store Cube/Cone retracted for motion
     public final static double ElevRetractHt        = 0.0;          // Position to fully retract
-    public final static double ElevEjectLowHt       = 0.0;          // Position to Score a Cube/Cone in LOW Position    
-    public final static double ElevEjectMidHt       = 20.0;         // Position to Score a Cube/Cone in MID Position
+    public final static double ElevEjectLowHt       = 6.0;          // Position to Score a Cube/Cone in LOW Position    
+    public final static double ElevEjectMidHt       = 25.5;         // Position to Score a Cube/Cone in MID Position
     public final static double ElevEjectHighHt      = 30.0;         // Position to Score a Cube/Cone in Hi Position
     public final static double ElevArmReleaseHt     = 24.0;         // Position needed to release arm on startup
 
     // ------ Elevator Speed Constants -----
     public final static double zeroPwr              = -0.10;
     public final static double kMaxPwr              = +0.25;
-    public final static double lowerMaxPwr          = -0.15;
-    public final static double raiseMaxPwr          = +0.30;
+    public final static double lowerMaxPwr          = -0.25;
+    public final static double raiseMaxPwr          = +0.4;
 
     public final static double KRaiseSpeedDefault   = +0.25;
     public final static double KRaiseSlowSpeed      = +0.15;

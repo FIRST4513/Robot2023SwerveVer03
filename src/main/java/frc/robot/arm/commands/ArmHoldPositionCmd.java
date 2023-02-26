@@ -3,10 +3,10 @@ package frc.robot.arm.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
-public class ArmHoldPosition extends CommandBase {
+public class ArmHoldPositionCmd extends CommandBase {
     double angle = 0;
 
-    public ArmHoldPosition() {
+    public ArmHoldPositionCmd() {
         addRequirements(Robot.arm);
     }
 

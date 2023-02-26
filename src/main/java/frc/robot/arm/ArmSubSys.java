@@ -40,7 +40,7 @@ public class ArmSubSys extends SubsystemBase {
     // ------------- Periodic -------------
     public void periodic() {
         if (isRetractLimitSwitchPressed() == true) {
-            resetEncoderAngle(ArmConfig.RetractLimitSwitchAngle);  // recalibrate encoder at retracted position
+            // resetEncoderAngle(ArmConfig.RetractLimitSwitchAngle);  // recalibrate encoder at retracted position
         }
         if (isExtendLimitSwitchPressed() == true) {
             resetEncoderAngle(ArmConfig.ExtendLimitSwitchAngle);   // recalibrate encoder at extended position
@@ -60,7 +60,7 @@ public class ArmSubSys extends SubsystemBase {
             return;
         }
         mCurrArmPwr = getHoldPwr();
-        mArmMotor.set(mCurrArmPwr);       
+        mArmMotor.set(mCurrArmPwr);
     }
 
     public void stopArm()   { 
@@ -74,7 +74,11 @@ public class ArmSubSys extends SubsystemBase {
         mTargetArmAngle = angle;
         mArmMotor.set(  ControlMode.MotionMagic,            convertAngleToCnt(angle),
                         DemandType.ArbitraryFeedForward,    getHoldPwr());
-        }
+    }
+
+    public void setMMangle(DoubleSupplier angle) {
+        setMMangle(angle.getAsDouble());
+    }
 
     // ------------  Set Arm Manually during TeleOP  ----------
     public void setArmMotor( double pwr ) {

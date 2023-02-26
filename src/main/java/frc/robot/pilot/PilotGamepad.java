@@ -41,9 +41,9 @@ public class PilotGamepad extends Gamepad {
 
     public void setupTeleopButtons() {
         // "A" Button - Teleop Drive with Robot Perspective
-        gamepad.aButton.onTrue(OperatorGamepadCmds.SetArmElevToIntakeCubePosCmd());
-        gamepad.bButton.onTrue(IntakeCmds.IntakeEjectCmd());
-        gamepad.yButton.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
+        gamepad.aButton.onTrue(IntakeCmds.IntakeEjectCmd());
+        gamepad.bButton.onTrue(OperatorGamepadCmds.IntakeCubeCmd());
+        gamepad.yButton.onTrue(OperatorGamepadCmds.IntakeConeCmd());
         gamepad.xButton.whileTrue(PilotGamepadCmds.RpvPilotSwerveCmd());
 
         gamepad.leftBumper.onTrue(IntakeCmds.IntakeStopCmd());
@@ -52,6 +52,8 @@ public class PilotGamepad extends Gamepad {
         // "Start" Button - Rest Gyro to 0
         gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());
         gamepad.selectButton.onTrue(PilotGamepadCmds.FpvDriveAndAutoRotateCmd());  // snap to angle while driving
+
+        gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
     }
 
     public void setupDisabledButtons() {
@@ -104,9 +106,9 @@ public class PilotGamepad extends Gamepad {
 
     public void setupSpeedMenu(){
             // Setup Speed Selector
-            speedChooser.setDefaultOption   ("1. SLOW",         "Slow");
+            speedChooser.addOption          ("1. SLOW",         "Slow");
             speedChooser.addOption          ("2. MED. Slow",	"MedSlow");
-            speedChooser.addOption          ("3. MED. Fast", 	"MedFast");
+            speedChooser.setDefaultOption   ("3. MED. Fast", 	"MedFast");
             speedChooser.addOption          ("4. Fast", 	    "Fast");
             SmartDashboard.putData(speedChooser);
     }

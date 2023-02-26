@@ -5,12 +5,12 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 public class IntakeConfig {
 
-    public static double coneDetectTrue = 2.25; // IR Prox Volt greater than 2.25 means we see it.
-    public static double cubeEjectDetectTrue = 1.25; // IR Prox Volt greater than 2.25 means we see it.
+    public static double coneDetectTrue = 2.25;         // 2.5; // IR Prox Volt greater than 2.25 means we see it.
+    public static double cubeEjectDetectTrue = 1.25;   // IR Prox Volt greater than 2.25 means we see it.
     public static double cubeRetractDetectTrue = 2.25; // IR Prox Volt greater than 2.25 means we see it.
 
-    public static double cubeRetractUpperSpeed = -0.35;
-    public static double cubeRetractLowerSpeed = -0.35;
+    public static double cubeRetractUpperSpeed = -0.45;
+    public static double cubeRetractLowerSpeed = -0.45;
     public static double coneRetractUpperSpeed = -1.0;
     public static double coneRetractLowerSpeed = 1.0;
     public static double coneRetractUpperSlowSpeed = -0.35;

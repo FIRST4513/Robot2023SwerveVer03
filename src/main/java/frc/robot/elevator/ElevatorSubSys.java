@@ -75,6 +75,10 @@ public class ElevatorSubSys extends SubsystemBase {
                      DemandType.ArbitraryFeedForward, ElevFXMotorConfig.arbitraryFeedForward);
     }
 
+    public void setMMheight(DoubleSupplier height) {
+        setMMheight(height.getAsDouble());
+    }
+
     // ------------ This Drives the Elevator Manually during TeleOp ----------
     public void elevSetSpeed(double speed){
         // Cap speed to max
