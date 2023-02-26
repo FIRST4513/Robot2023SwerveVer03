@@ -5,9 +5,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.AnalogInput;
+
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
+import frc.robot.RobotConfig.AnalogPorts;
 import frc.robot.RobotConfig.LimitSwitches;
 import frc.robot.RobotConfig.Motors;
 
@@ -16,6 +20,7 @@ public class ArmSubSys extends SubsystemBase {
     public  WPI_TalonSRX                mArmMotor;
     private DigitalInput                extendLimitSwitch;
     private DigitalInput                retractLimitSwitch;
+    public  AnalogInput                 armAbsoluteAngleSensor;
 
     // Arm Variables
     public double mCurrArmPwr       = 0;
@@ -23,15 +28,17 @@ public class ArmSubSys extends SubsystemBase {
 
     public double mCurrEncoderCnt   = 0; 
     public double mCurrArmAngle     = 0;
+    public double mCurrAbsoluteArmAngle = 0;
 
     public double hold_pwr = 0;
 
     // ------------- Constructor ----------
     public ArmSubSys() {
-        motorConfig         = new ArmSRXMotorConfig();
-        mArmMotor           = new WPI_TalonSRX(Motors.armMotorID);
-        extendLimitSwitch  = new DigitalInput(LimitSwitches.armExtendLimitSw);
-        retractLimitSwitch  = new DigitalInput(LimitSwitches.armRetractLimitSw);
+        motorConfig                 = new ArmSRXMotorConfig();
+        mArmMotor                   = new WPI_TalonSRX(Motors.armMotorID);
+        extendLimitSwitch           = new DigitalInput(LimitSwitches.armExtendLimitSw);
+        retractLimitSwitch          = new DigitalInput(LimitSwitches.armRetractLimitSw);
+        armAbsoluteAngleSensor      = new AnalogInput(AnalogPorts.armAngleSensor);
         armMotorConfig();
         stopArm();
         mArmMotor.configForwardSoftLimitThreshold(mCurrArmAngle);
@@ -39,13 +46,9 @@ public class ArmSubSys extends SubsystemBase {
 
     // ------------- Periodic -------------
     public void periodic() {
-        if (isRetractLimitSwitchPressed() == true) {
-            // resetEncoderAngle(ArmConfig.RetractLimitSwitchAngle);  // recalibrate encoder at retracted position
-        }
-        if (isExtendLimitSwitchPressed() == true) {
-            resetEncoderAngle(ArmConfig.ExtendLimitSwitchAngle);   // recalibrate encoder at extended position
-        }
         updateCurrentArmPosition();
+        if (isRetractLimitSwitchPressed() == true) { resetEncoderToAbsolute(); }
+        if (isExtendLimitSwitchPressed() == true)  { resetEncoderToAbsolute(); }
     }
 
     // -----------------------------------------------------
@@ -160,6 +163,7 @@ public class ArmSubSys extends SubsystemBase {
         // Called from Periodic so only 1 CAN call is needed per command loop 20ms
         mCurrEncoderCnt = mArmMotor.getSelectedSensorPosition();
         mCurrArmAngle = Rmath.mRound((convertCntToAngle(mCurrEncoderCnt)) , 2);
+        mCurrAbsoluteArmAngle = getAbsoluteArmAngle() ;
      }
 
     public double getEncoderCnt()   { return mCurrEncoderCnt; }
@@ -171,9 +175,23 @@ public class ArmSubSys extends SubsystemBase {
 
     public void resetEncoder()                    { mArmMotor.setSelectedSensorPosition(0); }
     public void resetEncoder( double position )   { mArmMotor.setSelectedSensorPosition(position); }
-    public void resetEncoderAngle( double angle ) { mArmMotor.setSelectedSensorPosition(convertAngleToCnt(angle)); }    
+    public void resetEncoderAngle( double angle ) { mArmMotor.setSelectedSensorPosition(convertAngleToCnt(angle)); }
+
+    public void resetEncoderToAbsolute() {
+        // recalibrate encoder to absolut Encoder value
+        resetEncoderAngle(getAbsoluteArmAngle());
+      }  
+
 
     // ---- Misc Methods ----
+    public double getAbsoluteArmAngle(){
+        double currVolt = armAbsoluteAngleSensor.getAverageVoltage();
+        double currAngle = currVolt * ArmConfig.kAnalogVoltsToDegree;
+        currAngle = currAngle + ArmConfig.kabsoluteAngleOffset;
+        if (currAngle > 306) { currAngle -= currAngle; }
+        return currAngle;
+    }
+
     public double getTargetAngle()         { return mTargetArmAngle; }
     public double getArmMotorPwr()         { return mCurrArmPwr; }
 

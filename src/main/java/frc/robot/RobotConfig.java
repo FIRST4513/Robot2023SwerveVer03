@@ -57,6 +57,7 @@ public final class RobotConfig {
     public final class AnalogPorts {
         public final static int intakeConeDetectPort =   0;   //ANALOG Port
         public final static int intakeCubeDetectPort =   1;   //ANALOG Port
+        public final static int armAngleSensor       =   2;   //ANALOG Port
     }
 
     //Check if we are FMSattached or Faking it

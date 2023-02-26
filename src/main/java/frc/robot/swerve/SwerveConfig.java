@@ -70,35 +70,34 @@ public final class SwerveConfig {
     public static final double driveKF = 0.0;
 
     /* Drive Motor Characterization Values */
-    public static final double driveKS = ( 0.32 / 12.0 );  // (0.605 / 12); // /12 to convert from volts to %output
-    public static final double driveKV = ( 3.0 / 12.0 );  // (1.72 / 12);
-    public static final double driveKA = ( 0.27 / 12.0 );  // (0.193 / 12);
+    public static final double driveKS = ( 0.605 / 12.0 );  // (0.605 / 12); // /12 to convert from volts to %output
+    public static final double driveKV = ( 1.72 / 12.0 );  // (1.72 / 12);
+    public static final double driveKA = ( 0.193 / 12.0 );  // (0.193 / 12);
     
+    // Swerve Profiling Values
+    // ((6380 / 60) / angleGearRatio) * wheelDiameter * Math.PI * 0.95; // meters per second
+    public final static double maxVelocity = 2.8176;
+    public final static double maxAccel = maxVelocity * 1.5;    //Get max in 0.5 seconds
+    public static final double maxAngularVelocity = 0.16182;    // RPS 3.14 * 2 = 360 Degrees per second
+    public static final double maxAngularAcceleration = Math.pow(maxAngularVelocity, 2);
+
+    //     public static final double maxAngularVelocity =
+    //             maxVelocity / Math.hypot(trackWidth / 2.0, wheelBase / 2.0);
+
     // KS - Volts Stiction -     How many volts are needed to simply start moving/overcoming friction
     // KV - Volts Velocity -     How many volts it takes to achieve a constant, specified velocity
     // KA - Volts Acceleration - How many volts for a given acceleration (mps^2)
     
     // Some on-line sample examples
-    public static final double kP = 2.2956;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kS = 0.55493;
-    public static final double kV = 2.3014;
-    public static final double kA = 0.12872;
+//     public static final double kP = 2.2956;
+//     public static final double kI = 0;
+//     public static final double kD = 0;
+//     public static final double kS = 0.55493;
+//     public static final double kV = 2.3014;
+//     public static final double kA = 0.12872;
 
     // increase to reduce jitter, (2048 * angleGearRatio) / 360.0) = 1 degree = 122 cnts
     public static final int angleAllowableError = 122;  // 1 degree is close enough ????
-
-    /* Swerve Profiling Values */
-    public static final double maxVelocity = 4.8; // MPS
-    //     ((6380 / 60) / angleGearRatio) * wheelDiameter * Math.PI * 0.95; // meters per second
-
-    //     public static final double maxAngularVelocity =
-    //             maxVelocity / Math.hypot(trackWidth / 2.0, wheelBase / 2.0);
-    public static final double maxAngularVelocity = 10.0;  // RPS 3.14 * 2 = 360 Degrees per second
-
-    public static final double maxAccel = maxVelocity * 1.5; // take 1/2 sec to get to max speed.
-    public static final double maxAngularAcceleration = Math.pow(maxAngularVelocity, 2);
 
     /* Neutral Modes */
     public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
