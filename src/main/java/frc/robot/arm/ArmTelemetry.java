@@ -21,6 +21,9 @@ public class ArmTelemetry {
         tab.addDouble("Encoder Cnt", ()->arm.getEncoderCnt())                .withPosition(3, 0).withSize(3, 2);
         tab.addDouble("Arm Angle",   ()->arm.getArmAngle())                  .withPosition(3, 2).withSize(3, 2);
 
+        tab.addDouble("Arm Abs Volt", ()->arm.getAbsoluteArmAngle())         .withPosition(3, 4).withSize(3, 2);        
+        tab.addDouble("Arm Abs Angle",()->arm.getAbsoluteArmVolt())          .withPosition(3, 6).withSize(3, 2);
+
         tab.addNumber("Motor Pwr",   () -> arm.mArmMotor.get())              .withPosition(6, 0).withSize(3, 2);
 
         tab.addNumber("Input from Operator Joystick",

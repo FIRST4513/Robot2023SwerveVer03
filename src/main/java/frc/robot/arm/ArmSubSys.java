@@ -177,10 +177,6 @@ public class ArmSubSys extends SubsystemBase {
     public void resetEncoder( double position )   { mArmMotor.setSelectedSensorPosition(position); }
     public void resetEncoderAngle( double angle ) { mArmMotor.setSelectedSensorPosition(convertAngleToCnt(angle)); }
 
-    public void resetEncoderToAbsolute() {
-        // recalibrate encoder to absolut Encoder value
-        resetEncoderAngle(getAbsoluteArmAngle());
-      }  
 
 
     // ---- Misc Methods ----
@@ -191,6 +187,14 @@ public class ArmSubSys extends SubsystemBase {
         if (currAngle > 306) { currAngle -= currAngle; }
         return currAngle;
     }
+    public double getAbsoluteArmVolt(){
+        return armAbsoluteAngleSensor.getAverageVoltage();
+    }
+    
+    public void resetEncoderToAbsolute() {
+        // recalibrate encoder to absolut Encoder value
+        resetEncoderAngle(getAbsoluteArmAngle());
+      }  
 
     public double getTargetAngle()         { return mTargetArmAngle; }
     public double getArmMotorPwr()         { return mCurrArmPwr; }
