@@ -191,6 +191,10 @@ public class SwerveModule extends SubsystemBase {
         lastAngle = Rotation2d.fromDegrees( canCoderAngle );
     }
 
+    public void setLastAngleToCurrentAngle(){
+        lastAngle = getFalconAngle();
+    }
+
     private void configAngleEncoder() {
         angleEncoder.configFactoryDefault();
         angleEncoder.configAllSettings(swerveConfig.swerveCanCoderConfig);

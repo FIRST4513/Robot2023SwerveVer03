@@ -109,6 +109,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         resetCommandsAndButtons();
+        swerve.setLastAngleToCurrentAngle();
         sysTimer.reset();			// System timer for Competition run
     	sysTimer.start();
         //logger.startTimer();

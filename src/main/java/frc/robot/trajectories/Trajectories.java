@@ -12,27 +12,27 @@ import java.util.function.DoubleSupplier;
 
 public class Trajectories extends SubsystemBase {
     public PIDController thetaController;
-    public PIDController xController;
-    public PIDController yController;
+    public PIDController xController =
+        new PIDController(  TrajectoriesConfig.kPTranslationController,
+                            0,
+                            TrajectoriesConfig.kDTranslationController);
+
+    public PIDController yController =
+        new PIDController(  TrajectoriesConfig.kPTranslationController,
+                            0,
+                            TrajectoriesConfig.kDTranslationController);
     public Rotation2d startAngle;
 
     /** Creates a new Trajectory. */
     public Trajectories() {
         thetaController =
                 new PIDController(
-                        TrajectoriesConfig.kPThetaController,
+                        TrajectoriesConfig.kPRotationController,
                         0,
-                        TrajectoriesConfig.kDThetaController);
+                        TrajectoriesConfig.kPRotationController);
+
         // Setup thetaController used for auton and automatic turns
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        xController =
-                new PIDController(
-                        TrajectoriesConfig.kPXController, 0, TrajectoriesConfig.kDXController);
-
-        yController =
-                new PIDController(
-                        TrajectoriesConfig.kPYController, 0, TrajectoriesConfig.kDYController);
     }
 
     public void resetTheta() {

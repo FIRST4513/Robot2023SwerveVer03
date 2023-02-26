@@ -1,8 +1,11 @@
 package frc.robot.auto;
 
 import java.util.HashMap;
+
+import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import frc.robot.trajectories.commands.PathBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -58,7 +61,7 @@ public class Auto {
     static PathPlannerTrajectory test1MeterPath  = PathPlanner.loadPath(
                             "1Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel); 
     static PathPlannerTrajectory testTurnPath  = PathPlanner.loadPath(
-                            "TetsTurn", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);   
+                            "TestTurn", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);   
 
 
     // -----------------------------  Constructor ----------------------------
@@ -97,9 +100,9 @@ public class Auto {
         
         // Selector for Test Auto Routines
         testChooser.setDefaultOption("Do Nothing", "doNothing");
-        testChooser.addOption("1 Meter", "1Meter");
-        testChooser.addOption("Test Turn", "Test Turn");
-
+        testChooser.addOption(  "1 Meter", "1Meter");
+        testChooser.addOption(  " Test Turn", "Test Turn");
+        testChooser.addOption(  "1 Meter New Method", "TestNewMethod") ;
     }
 
 
@@ -125,12 +128,16 @@ public class Auto {
         setStartPose();
 
         // ----------------------- Test Routines ----------------
-        if (testSelect == "1Meter") {
-            // Set position and Gyro Heading based on starting position in path
+        if (testSelect == "1Meter") {      
+            //Set position and Gyro Heading based on starting position in path
             return new SequentialCommandGroup(            
-                new PrintCommand("Test Auto - 1Meter Path"),
-                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(test1MeterPath, 10.0)
+              new PrintCommand("Test Auto - 1Meter Path"),
+              TrajectoriesCmds.IntializeRobotAndFollowPathCmd(test1MeterPath, 10.0)
             );            
+        }
+
+        if (testSelect == "TestNewMethod") {
+            return PathBuilder.pathBuilder.fullAuto( testTurnPath ) ;                        
         }
 
         if (testSelect == "Test Turn") {

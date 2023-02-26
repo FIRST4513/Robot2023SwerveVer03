@@ -154,6 +154,12 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    public void setLastAngleToCurrentAngle() {
+        for (SwerveModule mod : mSwerveMods) {
+            mod.setLastAngleToCurrentAngle();
+        }
+    }
+
     // -------------------------------------------------------------
     // -------------------  Heading / Gyro Calls  ------------------
     // -------------------------------------------------------------
