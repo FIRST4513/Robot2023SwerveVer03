@@ -70,15 +70,15 @@ public final class SwerveConfig {
     public static final double driveKF = 0.0;
 
     /* Drive Motor Characterization Values */
-    public static final double driveKS = ( 0.605 / 12.0 );  // (0.605 / 12); // /12 to convert from volts to %output
+    public static final double driveKS = ( 0.305 / 12.0 );  // (0.605 / 12); // /12 to convert from volts to %output
     public static final double driveKV = ( 1.72 / 12.0 );  // (1.72 / 12);
     public static final double driveKA = ( 0.193 / 12.0 );  // (0.193 / 12);
     
     // Swerve Profiling Values
     // ((6380 / 60) / angleGearRatio) * wheelDiameter * Math.PI * 0.95; // meters per second
-    public final static double maxVelocity = 2.8176;
+    public final static double maxVelocity = 1.5; // 2.8176;
     public final static double maxAccel = maxVelocity * 1.5;    //Get max in 0.5 seconds
-    public static final double maxAngularVelocity = 0.16182;    // RPS 3.14 * 2 = 360 Degrees per second
+    public static final double maxAngularVelocity = 0.08; //0.16182;    // RPS 3.14 * 2 = 360 Degrees per second
     public static final double maxAngularAcceleration = Math.pow(maxAngularVelocity, 2);
 
     //     public static final double maxAngularVelocity =

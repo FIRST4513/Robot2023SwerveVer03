@@ -183,8 +183,9 @@ public class ArmSubSys extends SubsystemBase {
     public double getAbsoluteArmAngle(){
         double currVolt = armAbsoluteAngleSensor.getAverageVoltage();
         double currAngle = currVolt * ArmConfig.kAnalogVoltsToDegree;
-        currAngle = currAngle + ArmConfig.kabsoluteAngleOffset;
-        if (currAngle > 306) { currAngle -= currAngle; }
+        currAngle = currAngle - ArmConfig.kabsoluteAngleOffset;
+        if (currAngle > +180)   { currAngle -= 180.0; }
+        if (currAngle < -180 )  { currAngle += 180.0; }
         return currAngle;
     }
     public double getAbsoluteArmVolt(){

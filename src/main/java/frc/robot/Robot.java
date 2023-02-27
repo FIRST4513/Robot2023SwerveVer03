@@ -67,6 +67,7 @@ public class Robot extends TimedRobot {
     private void intializeSubsystems() {
         logger = new Logger(); 
         logger.startTimer();
+        auto = new Auto();
         swerve = new Swerve();
         pose = new Pose();
         trajectories = new Trajectories();
@@ -76,7 +77,7 @@ public class Robot extends TimedRobot {
         arm = new ArmSubSys();
         intake = new IntakeSubSys();
         telemetry = new RobotTelemetry();
-        auto = new Auto();
+
 
         // Set Default Commands, this method should exist for each subsystem that has commands
         SwerveCmds.setupDefaultCommand();

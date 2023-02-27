@@ -64,10 +64,11 @@ public class RobotTelemetry extends TelemetrySubsystem {
     public void layoutRobotTelemtryTab(){
         // Column 0 - Setup the autonomous selector to display on shuffleboard
         Auto.setupSelectors();
-        tab.add("Score Position Selection", Auto.scoreChooser).withPosition(0, 0).withSize(2, 1);
-        tab.add("Position Selection", Auto.positionChooser).withPosition(0, 1).withSize(2, 1);
-        tab.add("Cross Selection", Auto.crossChooser).withPosition(0, 2).withSize(2, 1);
-        tab.add("Dock Selection", Auto.dockChooser).withPosition(0, 3).withSize(2, 1);
+        tab.add("Score Position Selection", Auto.scoreChooser)  .withPosition(0, 8).withSize(3, 2);
+        tab.add("Position Selection", Auto.positionChooser)     .withPosition(4, 8).withSize(3, 2);
+        tab.add("Cross Selection", Auto.crossChooser)           .withPosition(8, 8).withSize(3, 2);
+        tab.add("Dock Selection", Auto.dockChooser)             .withPosition(12, 8).withSize(3, 2);
+        tab.add("Test Selection", Auto.testChooser)             .withPosition(16, 8).withSize(3, 2);
 
         // Column 2
         tab.addBoolean("Connected?", () -> flash())

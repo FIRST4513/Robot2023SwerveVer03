@@ -10,12 +10,12 @@ public class ArmConfig {
 
     // -------- Absolute Analog Angle Sensor ----------
     // 360 / 1024 = 0.35156 
-    // 5 volts / 1024  = 0.0048828 Volts per bese resolution
-    // 5 volts / 360 = 0.013888     volots per degrees 
+    // 5.0 volts / 1024  = 0.0048828 Volts per bese resolution
+    // 3.3 volts / 360 = 0.0091666     volots per degrees 
 
     //public final static double kAnalogVoltsToAngle       = 0.0048828;
-    public final static double kAnalogVoltsToDegree      = 0.013888;
-    public final static double kabsoluteAngleOffset      = 121.2;       // Degrees encoder is offset
+    public final static double kAnalogVoltsToDegree      = -0.0091666;
+    public final static double kabsoluteAngleOffset      = +20.0;       // Degrees encoder is offset
 
     // ------ Speed Constants ------
     public final static double kDefaultExtendPwr        = +0.25;
