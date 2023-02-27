@@ -44,25 +44,38 @@ public class Auto {
     private static double autoStart = 0;
 
     // Setup Needed PathPlaner Paths
-    static PathPlannerTrajectory crossShortPath     = PathPlanner.loadPath(
-                            "CrossShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
-    static PathPlannerTrajectory crossLongPath      = PathPlanner.loadPath(
-                            "CrossLong", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
-    static PathPlannerTrajectory crossLongDockPath  = PathPlanner.loadPath(
-                            "CrossLongDock", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
-    static PathPlannerTrajectory shortDockPath      = PathPlanner.loadPath(
-                            "ShortDockPath", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
-    static PathPlannerTrajectory longDockPath       = PathPlanner.loadPath(
-                            "LongDockPath", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
-    static PathPlannerTrajectory leftLongDockPath   = PathPlanner.loadPath(
-                            "LeftLongDockPath", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
-    static PathPlannerTrajectory rightLongDockPath  = PathPlanner.loadPath(
-                            "RightLongDockPath", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
-    static PathPlannerTrajectory test1MeterPath  = PathPlanner.loadPath(
-                            "1Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel); 
-    static PathPlannerTrajectory testTurnPath  = PathPlanner.loadPath(
-                            "TestTurn", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);   
+    // static PathPlannerTrajectory crossShortPath     = PathPlanner.loadPath(
+    //                         "CrossShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    // static PathPlannerTrajectory crossLongPath      = PathPlanner.loadPath(
+    //                         "CrossLong", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    // static PathPlannerTrajectory crossLongDockPath  = PathPlanner.loadPath(
+    //                         "CrossLongDock", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    // static PathPlannerTrajectory shortDockPath      = PathPlanner.loadPath(
+    //                         "ShortDockPath", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    // static PathPlannerTrajectory longDockPath       = PathPlanner.loadPath(
+    //                         "LongDockPath", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    // static PathPlannerTrajectory leftLongDockPath   = PathPlanner.loadPath(
+    //                         "LeftLongDockPath", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    // static PathPlannerTrajectory rightLongDockPath  = PathPlanner.loadPath(
+    //                         "RightLongDockPath", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
 
+
+    static PathPlannerTrajectory    test1MeterPath  = PathPlanner.loadPath(
+                                    "1Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    static PathPlannerTrajectory    testTurnPath  = PathPlanner.loadPath(
+                                    "TestTurn", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    static PathPlannerTrajectory    testTurn2Path  = PathPlanner.loadPath(
+                                    "TestTurn2", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    static PathPlannerTrajectory    m215MeterPath  = PathPlanner.loadPath(
+                                    "215Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    static PathPlannerTrajectory    blueRightConeCrossPath  = PathPlanner.loadPath(
+                                    "BlueRightConeCross", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);        
+    static PathPlannerTrajectory    blueRightCubeCrossPath  = PathPlanner.loadPath(
+                                    "BlueRightCubeCross", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);     
+    static PathPlannerTrajectory    blueLeftCubeCrossPath  = PathPlanner.loadPath(
+                                    "BlueLeftCubeCross", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);     
+    static PathPlannerTrajectory    blueCtrTablePath  = PathPlanner.loadPath(
+                                    "BlueCtrTable", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);     
 
     // -----------------------------  Constructor ----------------------------
     public Auto(){
@@ -102,7 +115,13 @@ public class Auto {
         testChooser.setDefaultOption("Do Nothing", "doNothing");
         testChooser.addOption(  "1 Meter", "1Meter");
         testChooser.addOption(  " Test Turn", "Test Turn");
-        testChooser.addOption(  "1 Meter New Method", "TestNewMethod") ;
+        //testChooser.addOption(  "1 Meter New Method", "TestNewMethod") ;
+        testChooser.addOption(  " 215 Meter", "215Meter");
+        testChooser.addOption(  " Test Turn2", "Test Turn2");
+        testChooser.addOption(  " Blue Right Cone Cross", "BlueRightConeCross");
+        testChooser.addOption(  " Blue Right Cube Cross", "BlueRightCubeCross");
+        testChooser.addOption(  " Blue Ctr Table", "BlueCtrTable");
+        testChooser.addOption(  " Blue Left Cube Cross", "BlueLeftCubeCross");
     }
 
 
@@ -129,25 +148,40 @@ public class Auto {
 
         // ----------------------- Test Routines ----------------
         if (testSelect == "1Meter") {      
-            //Set position and Gyro Heading based on starting position in path
-            return new SequentialCommandGroup(            
-              new PrintCommand("Test Auto - 1Meter Path"),
-              TrajectoriesCmds.IntializeRobotAndFollowPathCmd(test1MeterPath, 10.0)
-            );            
+           return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(test1MeterPath, 10.0);        
         }
 
-        if (testSelect == "TestNewMethod") {
-            return PathBuilder.pathBuilder.fullAuto( testTurnPath ) ;                        
+        if (testSelect == "215Meter") {      
+            return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(m215MeterPath, 10.0);        
         }
+
+        // if (testSelect == "TestNewMethod") {
+        //     return PathBuilder.pathBuilder.fullAuto( testTurnPath ) ;                        
+        // }
 
         if (testSelect == "Test Turn") {
-            // Set position and Gyro Heading based on starting position in path
-            return new SequentialCommandGroup(            
-                new PrintCommand("Test Auto - Test Turn Path"),
-                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testTurnPath, 10.0)
-            );            
+            return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testTurnPath, 10.0);    
         }
 
+        if (testSelect == "Test Turn2") {
+            return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testTurn2Path, 10.0);            
+        }
+
+        if (testSelect == "BlueRightConeCross") {      
+            return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueRightConeCrossPath, 10.0);            
+        }
+
+        if (testSelect == "BlueRightCubeCross") {      
+            return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueRightCubeCrossPath, 10.0);            
+        }
+
+        if (testSelect == "BlueCtrTable") {      
+              return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueCtrTablePath, 10.0);            
+        }
+
+        if (testSelect == "BlueLeftCubeCross") {      
+            return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueLeftCubeCrossPath, 10.0);            
+        }
 
         // ----------------------- Do Nothing -------------------
         if (doNothing()) {
@@ -168,93 +202,94 @@ public class Auto {
             );
         }
 
-        // ----------------------- Cross Line Only -------------------
-        if (crossOnly()) {
-            if (redRight() || blueLeft()) {                     // Short Cross
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossShortPath, 5.0);
-            }
-            if (centerLeft() || centerRight()) {                // Long Dock Cross
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossLongDockPath, 5.0);
-            }
-            if (redLeft() && blueRight()) {                     // Long Cross
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossLongPath, 5.0);
-            }
-            return new PrintCommand("ERROR: Invalid cross only auto command");
-        }
+    //     // ----------------------- Cross Line Only -------------------
+    //     if (crossOnly()) {
+    //         if (redRight() || blueLeft()) {                     // Short Cross
+    //             return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossShortPath, 5.0);
+    //         }
+    //         if (centerLeft() || centerRight()) {                // Long Dock Cross
+    //             return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossLongDockPath, 5.0);
+    //         }
+    //         if (redLeft() && blueRight()) {                     // Long Cross
+    //             return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossLongPath, 5.0);
+    //         }
+    //         return new PrintCommand("ERROR: Invalid cross only auto command");
+    //     }
+    //
+    //     // ----------------------- Get on Charging Station Only -------------------
+    //     if (dockOnly()) {
+    //         if (centerLeft() || centerRight()) {
+    //             return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(shortDockPath, 5.0);
+    //         }
+    //         if (redRight() || blueLeft()) {
+    //             return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(leftLongDockPath, 5.0);
+    //         }
+    //         if (redLeft() || blueRight()) {
+    //             return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(rightLongDockPath, 5.0);
+    //         }
+    //         return new PrintCommand("ERROR: Invalid dock only auto command");
+    //     }
+    //
+    //     // ----------------------- Score and Cross Line -------------------
+    //     if (place() && cross() && !dock()) {
+    //         if (redRight() || blueLeft()) {                     // Short Cross
+    //             return AutoCmds.PlaceObjectRunPathCmd(crossShortPath, 5.0);
+    //         }
+    //         if (centerLeft() || centerRight()) {                // Long Dock Cross
+    //             return AutoCmds.PlaceObjectRunPathCmd(crossLongDockPath, 5.0);
+    //         }
+    //         if (redLeft() && blueRight()) {                     // Long Cross
+    //             return AutoCmds.PlaceObjectRunPathCmd(crossLongPath, 5.0);
+    //         }
+    //         return new PrintCommand("ERROR: Invalid cross and place auto command");
+    //     }
+    //
+    //     // ----------------------- Score and Get on Charging Platform  -------------------
+    //     if (place() && !cross() && dock()) {
+    //         if (redRight() || blueLeft()) {                     // Short Cross
+    //             return AutoCmds.PlaceObjectRunPathCmd(leftLongDockPath, 5.0);
+    //         }
+    //         if (centerLeft() || centerRight()) {                // Long Dock Cross
+    //             return AutoCmds.PlaceObjectRunPathCmd(shortDockPath, 5.0);
+    //         }
+    //         if (redLeft() && blueRight()) {                     // Long Cross
+    //             return AutoCmds.PlaceObjectRunPathCmd(rightLongDockPath, 5.0);
+    //         }
+    //         return new PrintCommand("ERROR: Invalid place and dock auto command");
+    //     }
+    //
+    //     // ----------------------- Cross Line and Get on Platform -------------------
+    //     if (!place() && cross() && dock()) {
+    //         if (redRight() || blueLeft()) {                     // Short Cross
+    //             return new SequentialCommandGroup(
+    //                 TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossShortPath, 5.0) );
+    //         }
+    //         if (centerLeft() || centerRight()) {                // Long Dock Cross
+    //             return new SequentialCommandGroup(
+    //                 TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossLongDockPath, 5.0) );
+    //         }
+    //         if (redLeft() && blueRight()) {                     // Long Cross
+    //             return new SequentialCommandGroup(
+    //                 TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossLongPath, 5.0) );
+    //         }
+    //         return new PrintCommand("ERROR: Invalid cross and dock auto command");
+    //     }
+    //    
+    //     // ----------------------- Score and Cross Line and Get on Platform -------------------    
+    //     if (place() && cross() && dock()) {
+    //         if (redRight() || blueLeft()) {                     // Short Cross
+    //             return AutoCmds.PlaceObjectRunPathCmd(crossShortPath, 5.0);
+    //         }
+    //         if (centerLeft() || centerRight()) {                // Long Dock Cross
+    //             return AutoCmds.PlaceObjectRunPathCmd(crossLongDockPath, 5.0);
+    //         }
+    //         if (redLeft() && blueRight()) {                     // Long Cross
+    //             return AutoCmds.PlaceObjectRunPathCmd(crossLongPath, 5.0);
+    //         }
+    //         return new PrintCommand("ERROR: Invalid place and cross and dock auto command");
+    //     }
 
-        // ----------------------- Get on Charging Station Only -------------------
-        if (dockOnly()) {
-            if (centerLeft() || centerRight()) {
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(shortDockPath, 5.0);
-            }
-            if (redRight() || blueLeft()) {
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(leftLongDockPath, 5.0);
-            }
-            if (redLeft() || blueRight()) {
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(rightLongDockPath, 5.0);
-            }
-            return new PrintCommand("ERROR: Invalid dock only auto command");
-        }
-
-        // ----------------------- Score and Cross Line -------------------
-        if (place() && cross() && !dock()) {
-            if (redRight() || blueLeft()) {                     // Short Cross
-                return AutoCmds.PlaceObjectRunPathCmd(crossShortPath, 5.0);
-            }
-            if (centerLeft() || centerRight()) {                // Long Dock Cross
-                return AutoCmds.PlaceObjectRunPathCmd(crossLongDockPath, 5.0);
-            }
-            if (redLeft() && blueRight()) {                     // Long Cross
-                return AutoCmds.PlaceObjectRunPathCmd(crossLongPath, 5.0);
-            }
-            return new PrintCommand("ERROR: Invalid cross and place auto command");
-        }
-
-        // ----------------------- Score and Get on Charging Platform  -------------------
-        if (place() && !cross() && dock()) {
-            if (redRight() || blueLeft()) {                     // Short Cross
-                return AutoCmds.PlaceObjectRunPathCmd(leftLongDockPath, 5.0);
-            }
-            if (centerLeft() || centerRight()) {                // Long Dock Cross
-                return AutoCmds.PlaceObjectRunPathCmd(shortDockPath, 5.0);
-            }
-            if (redLeft() && blueRight()) {                     // Long Cross
-                return AutoCmds.PlaceObjectRunPathCmd(rightLongDockPath, 5.0);
-            }
-            return new PrintCommand("ERROR: Invalid place and dock auto command");
-        }
-
-        // ----------------------- Cross Line and Get on Platform -------------------
-        if (!place() && cross() && dock()) {
-            if (redRight() || blueLeft()) {                     // Short Cross
-                return new SequentialCommandGroup(
-                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossShortPath, 5.0) );
-            }
-            if (centerLeft() || centerRight()) {                // Long Dock Cross
-                return new SequentialCommandGroup(
-                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossLongDockPath, 5.0) );
-            }
-            if (redLeft() && blueRight()) {                     // Long Cross
-                return new SequentialCommandGroup(
-                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(crossLongPath, 5.0) );
-            }
-            return new PrintCommand("ERROR: Invalid cross and dock auto command");
-        }
-        
-        // ----------------------- Score and Cross Line and Get on Platform -------------------    
-        if (place() && cross() && dock()) {
-            if (redRight() || blueLeft()) {                     // Short Cross
-                return AutoCmds.PlaceObjectRunPathCmd(crossShortPath, 5.0);
-            }
-            if (centerLeft() || centerRight()) {                // Long Dock Cross
-                return AutoCmds.PlaceObjectRunPathCmd(crossLongDockPath, 5.0);
-            }
-            if (redLeft() && blueRight()) {                     // Long Cross
-                return AutoCmds.PlaceObjectRunPathCmd(crossLongPath, 5.0);
-            }
-            return new PrintCommand("ERROR: Invalid place and cross and dock auto command");
-        }
-        return new PrintCommand("ERROR: Invalid auto command");
+         return new PrintCommand("ERROR: Invalid auto command");
     }
 
 
