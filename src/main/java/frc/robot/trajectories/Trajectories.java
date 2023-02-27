@@ -11,7 +11,12 @@ import frc.robot.Robot;
 import java.util.function.DoubleSupplier;
 
 public class Trajectories extends SubsystemBase {
-    public PIDController thetaController;
+    public PIDController thetaController=
+        new PIDController(  TrajectoriesConfig.kPRotationController,
+                            0,
+                            TrajectoriesConfig.kDRotationController);
+
+
     public PIDController xController =
         new PIDController(  TrajectoriesConfig.kPTranslationController,
                             0,
@@ -25,13 +30,8 @@ public class Trajectories extends SubsystemBase {
 
     /** Creates a new Trajectory. */
     public Trajectories() {
-        thetaController =
-                new PIDController(
-                        TrajectoriesConfig.kPRotationController,
-                        0,
-                        TrajectoriesConfig.kPRotationController);
 
-        // Setup thetaController used for auton and automatic turns
+        // Setup thetaController used for auto and automatic turns
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
