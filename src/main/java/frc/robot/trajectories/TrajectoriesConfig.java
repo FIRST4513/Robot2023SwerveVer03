@@ -1,7 +1,5 @@
 package frc.robot.trajectories;
 
-import frc.robot.swerve.SwerveConfig;
-
 public class TrajectoriesConfig {
     /* Swerve Conroller Constants */
     public static final double kMaxSpeed = 2.7;
@@ -22,21 +20,7 @@ public class TrajectoriesConfig {
     public static final double constantRotation = 180.0;    // On-The_Fly Path
     public static final double constantHeading = 180.0;
 
-    //public static final double kMaxAngularSpeedRadiansPerSecond = SwerveConfig.maxAngularVelocity;
-    //public static final double kMaxAngularSpeedRadiansPerSecondSquared =
-    //        SwerveConfig.maxAngularVelocity;
-
-
-
-    //public static final double kPXController = 0.6;
-    //public static final double kDXController = 0;
-    //public static final double kPYController = kPXController;
-    //public static final double kDYController = kDXController;
-    //public static final double kPThetaController = 4;
-    //public static final double kDThetaController = 0.01;
-
-    public static final double finalXPosition =
-            1.80; // This stays constant for all On-The-Fly Paths
+    public static final double finalXPosition = 1.80; // This stays constant for all On-The-Fly Paths
     // Scoring Positions (these stay constant throughout all On-The-Fly Paths)
     public static final double lineupXPositionModifier = 0.2;
     public static final double coneTTYPosition = 4.97;
