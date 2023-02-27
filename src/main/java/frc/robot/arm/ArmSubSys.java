@@ -7,7 +7,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.AnalogInput;
 
-import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
@@ -181,15 +180,26 @@ public class ArmSubSys extends SubsystemBase {
 
     // ---- Misc Methods ----
     public double getAbsoluteArmAngle(){
-        double currVolt = armAbsoluteAngleSensor.getAverageVoltage();
-        double currAngle = currVolt * ArmConfig.kAnalogVoltsToDegree;
-        currAngle = currAngle - ArmConfig.kabsoluteAngleOffset;
-        if (currAngle > +180)   { currAngle -= 180.0; }
-        if (currAngle < -180 )  { currAngle += 180.0; }
-        return currAngle;
+        // Convert from 0 to -360
+        // Output :  Arm Down = 0 degree
+        //          Arm Fully retracted to -90 degree
+        //          Arm Fully Extended  to +90 degree
+        // 
+        double angle = getAbsoluteArmAngleRaw(); 
+        angle += ArmConfig.kabsoluteAngleOffset;
+        if (angle < -180)   { angle += 360.0; }     
+        if (angle > +180 )  { angle -= 360.0; }     // Convert 
+        return angle;
     }
     public double getAbsoluteArmVolt(){
         return armAbsoluteAngleSensor.getAverageVoltage();
+    }
+
+    public double getAbsoluteArmAngleRaw(){
+        // Convert absolute encoder Volts 0 to +3.3 volts to 0 to -360 degrees (CW)
+        double volts = armAbsoluteAngleSensor.getAverageVoltage();
+        double angle = volts * ArmConfig.kAnalogVoltsToDegree;
+        return angle;
     }
     
     public void resetEncoderToAbsolute() {

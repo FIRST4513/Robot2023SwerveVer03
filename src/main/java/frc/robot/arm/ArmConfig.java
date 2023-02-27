@@ -8,14 +8,11 @@ public class ArmConfig {
     public final static double kDegsPerCnt              = 0.0005034;   // Convert cnt to degrees of angle (2/21/23)
     public final static double KAngleDeadBand           = +1.0;        // Degrees close enough to Tgt
 
-    // -------- Absolute Analog Angle Sensor ----------
-    // 360 / 1024 = 0.35156 
-    // 5.0 volts / 1024  = 0.0048828 Volts per bese resolution
-    // 3.3 volts / 360 = 0.0091666     volots per degrees 
+    // -------- Absolute Analog Angle Sensor ------------
+    // 3.3 volts / 360 = 0.0091666     volts per degree
 
-    //public final static double kAnalogVoltsToAngle       = 0.0048828;
-    public final static double kAnalogVoltsToDegree      = -0.0091666;
-    public final static double kabsoluteAngleOffset      = +20.0;       // Degrees encoder is offset
+    public final static double kAnalogVoltsToDegree      = -0.0091666;  //Invert Direction 
+    public final static double kabsoluteAngleOffset      = -20.0;       // Degrees encoder is offset
 
     // ------ Speed Constants ------
     public final static double kDefaultExtendPwr        = +0.25;

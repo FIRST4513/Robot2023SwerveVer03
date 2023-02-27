@@ -111,6 +111,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         resetCommandsAndButtons();
         swerve.setLastAngleToCurrentAngle();
+        arm.resetEncoderToAbsolute();       // Set arm motor encoder to absolute value
         sysTimer.reset();			// System timer for Competition run
     	sysTimer.start();
         //logger.startTimer();
@@ -133,7 +134,8 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         resetCommandsAndButtons();
         arm.stopArm();                  // to kill any running motionmagic 
-        elevator.elevStop();            // to kill any running motionmagic 
+        elevator.elevStop();            // to kill any running motionmagic
+        arm.resetEncoderToAbsolute();       // Set arm motor encoder to absolute value 
         logger.startTimer();
         // Set Pilot Teleop Speeds to those selected on smartdashboard
         pilotGamepad.setMaxSpeeds(pilotGamepad.getSelectedSpeed());
@@ -150,6 +152,7 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         resetCommandsAndButtons();
+        arm.resetEncoderToAbsolute();       // Set arm motor encoder to absolute value
     }
 
     @Override
