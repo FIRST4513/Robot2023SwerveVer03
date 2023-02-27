@@ -8,17 +8,17 @@ public class TrajectoriesConfig {
     public static final double kGenPathMaxAceel = 3.0;
 
     // PID Vaues for 2023 Spectrum
-    public static final double kPTranslationController = 1.5;
+    public static final double kPTranslationController = 1.5;    // ???????????????
     public static final double kITranslationController = 0.0;
     public static final double kDTranslationController = 0.0;
 
-    public static final double kPRotationController = 0.75;      // 5.0;
+    public static final double kPRotationController = 0.75;      // 5.0; // ????????????????
     public static final double kIRotationController = 0.0;
     public static final double kDRotationController = 0.01;
 
     // Constant Values
     public static final double constantRotation = 180.0;    // On-The_Fly Path
-    public static final double constantHeading = 180.0;
+    public static final double constantHeading  = 180.0;
 
     public static final double finalXPosition = 1.80; // This stays constant for all On-The-Fly Paths
     // Scoring Positions (these stay constant throughout all On-The-Fly Paths)

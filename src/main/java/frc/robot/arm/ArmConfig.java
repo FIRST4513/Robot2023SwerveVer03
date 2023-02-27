@@ -22,11 +22,12 @@ public class ArmConfig {
     public final static double kRetractMaxPwr           = -0.5;
 
     // Arm Position Constants for single value for Cone or Cube
-    public final static double ArmAngleIntakeCubePos    = -10.0;         // Pickup position
-    public final static double ArmAngleIntakeConePos    = -10.0;       // Pickup position
-    public final static double ArmAngleEjectLowPos      = -15.0;        // Eject position
-    public final static double ArmAngleEjectMidPos      = +14.0;        // Eject position
-    public final static double ArmAngleEjectHighPos     = +46.0;        // Eject position
+    public final static double ArmAngleIntakeCubePos    = -10.0;        // Pickup Cube position
+    public final static double ArmAngleIntakeConePos    = -10.0;        // Pickup Cone position
+    public final static double ArmAngleEjectLowPos      = -15.0;        // Eject Low position
+    public final static double ArmAngleEjectMidPos      = +14.0;        // Eject Mid position
+    public final static double ArmAngleEjectHighPos     = +46.0;        // Eject High position
+
     public final static double ArmAngleStorePos         = -45.0;        // Store for Travel
     public final static double ArmAngleFullRetractPos   = -85.0;        // Full retract
 

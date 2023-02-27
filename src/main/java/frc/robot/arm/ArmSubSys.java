@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
+import frc.robot.Robot;
 import frc.robot.RobotConfig.AnalogPorts;
 import frc.robot.RobotConfig.LimitSwitches;
 import frc.robot.RobotConfig.Motors;
@@ -46,7 +47,7 @@ public class ArmSubSys extends SubsystemBase {
     // ------------- Periodic -------------
     public void periodic() {
         updateCurrentArmPosition();
-        if (isRetractLimitSwitchPressed() == true) { resetEncoderToAbsolute(); }
+        //if (isRetractLimitSwitchPressed() == true) { resetEncoderToAbsolute(); }
         if (isExtendLimitSwitchPressed() == true)  { resetEncoderToAbsolute(); }
     }
 
@@ -84,6 +85,7 @@ public class ArmSubSys extends SubsystemBase {
 
     // ------------  Set Arm Manually during TeleOP  ----------
     public void setArmMotor( double pwr ) {
+
         // Limit power if needed
         if ( pwr > ArmConfig.kExtendMaxPwr)  { pwr = ArmConfig.kExtendMaxPwr; }
         if ( pwr < ArmConfig.kRetractMaxPwr) { pwr = ArmConfig.kRetractMaxPwr; }
@@ -91,16 +93,42 @@ public class ArmSubSys extends SubsystemBase {
         if ( pwr > 0) {
             // Were extending so check if Extend Limit Switch has been hit
             if (isExtendLimitSwitchPressed()) {
+                resetEncoderToAbsolute();     // Reset Arm motor encoder to absolute
                 holdArm();
                 return;
-            }
-        } else {
-            // Were retracting check if Retract Lower Limit Switch has been hit
-            if (isRetractLimitSwitchPressed()) {
-                holdArm();
+            } else {
+                // OK to move arm
+                mArmMotor.set(pwr);
+                mCurrArmPwr = pwr;
                 return;
             }
         }
+        
+        // Were retracting check if Retract Lower Limit Switch has been hit
+        if (isRetractLimitSwitchPressed()) {
+            resetEncoderToAbsolute();     // Initialize Arm motor encoder to absolute
+            //holdArm();            // We can back drive to -90 degrees
+            //return;
+        }
+        
+        if (getArmAngle() >= ArmConfig.ArmAngleStorePos) {
+            // We are retracting and have Not gone past -45 degrees All OK
+            mArmMotor.set(pwr);
+            mCurrArmPwr = pwr;
+            return;
+        }
+
+        if (Robot.elevator.getElevHeightInches() < 25.0) {
+            // Were trying to go past -45 degrres and elevator is down
+            holdArm();            // We can back drive to -90 degrees when elev is down
+            return;
+        }
+        
+        if ((getArmAngle() <= -85.0) && (Robot.elevator.getElevHeightInches() < 2.0)) {
+            // We have parked Arm
+            stopArm();
+            return;
+        }      
         mArmMotor.set(pwr);
         mCurrArmPwr = pwr;
     }
@@ -161,7 +189,7 @@ public class ArmSubSys extends SubsystemBase {
     public void updateCurrentArmPosition() {
         // Called from Periodic so only 1 CAN call is needed per command loop 20ms
         mCurrEncoderCnt = mArmMotor.getSelectedSensorPosition();
-        mCurrArmAngle = Rmath.mRound((convertCntToAngle(mCurrEncoderCnt)) , 2);
+        mCurrArmAngle = Rmath.mRound((convertCntToAngle(mCurrEncoderCnt)) , 1);
         mCurrAbsoluteArmAngle = getAbsoluteArmAngle() ;
      }
 
@@ -178,7 +206,7 @@ public class ArmSubSys extends SubsystemBase {
 
 
 
-    // ---- Misc Methods ----
+    // ------------ Absolute Arm Angle Encoder Methods -----------
     public double getAbsoluteArmAngle(){
         // Convert from 0 to -360
         // Output :  Arm Down = 0 degree
@@ -189,6 +217,7 @@ public class ArmSubSys extends SubsystemBase {
         angle += ArmConfig.kabsoluteAngleOffset;
         if (angle < -180)   { angle += 360.0; }     
         if (angle > +180 )  { angle -= 360.0; }     // Convert 
+        angle = Rmath.mRound( angle , 2);
         return angle;
     }
     public double getAbsoluteArmVolt(){
@@ -205,12 +234,13 @@ public class ArmSubSys extends SubsystemBase {
     public void resetEncoderToAbsolute() {
         // recalibrate encoder to absolut Encoder value
         resetEncoderAngle(getAbsoluteArmAngle());
-      }  
+    }  
 
+    // --------------- Misc Methods ------------------
     public double getTargetAngle()         { return mTargetArmAngle; }
     public double getArmMotorPwr()         { return mCurrArmPwr; }
 
-     public double limitArmAngle( double angle ){
+    public double limitArmAngle( double angle ){
         if (angle > ArmConfig.ExtendLimitSwitchAngle)       { angle = ArmConfig.ExtendLimitSwitchAngle; }
         if (angle < ArmConfig.RetractLimitSwitchAngle)      { angle = ArmConfig.RetractLimitSwitchAngle; }
         return angle;

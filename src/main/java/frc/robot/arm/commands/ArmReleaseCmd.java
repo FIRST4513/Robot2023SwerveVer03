@@ -2,7 +2,6 @@ package frc.robot.arm.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.arm.ArmConfig;
 
 public class ArmReleaseCmd extends CommandBase {
     
@@ -17,7 +16,12 @@ public class ArmReleaseCmd extends CommandBase {
     @Override
     public void initialize() {
         cmdState = CmdState.WAITING;
-        Robot.arm.setBrakeMode(false);  // Turn off Arm Brake mode
+        Robot.arm.setBrakeMode(false);          // Turn off Arm Brake mode
+        Robot.arm.resetEncoderToAbsolute();     // Initialize motor encoder
+        System.out.println("Arm Release Init - AbsEnc=" + Robot.arm.getAbsoluteArmAngle() +
+                                         "     MtrAng=" + Robot.arm.getArmAngle());
+        System.out.println("Arm Release Init - AbsVolt=" + Robot.arm.getAbsoluteArmVolt() +
+                                          "    MtrEnc=" + Robot.arm.getEncoderCnt());                                         
     }
 
     @Override
@@ -27,6 +31,10 @@ public class ArmReleaseCmd extends CommandBase {
             if (Robot.arm.isRetractLimitSwitchPressed() ) {
                 // The Arm has now reached the retracted switch
                 cmdState = CmdState.ARMONSWITCH;
+                System.out.println("Arm Release OnSwitch - AbsEnc=" + Robot.arm.getAbsoluteArmAngle() +
+                                                    "     MtrEnc=" + Robot.arm.getArmAngle());
+                System.out.println("Arm Release OnSwitch - AbsVolt=" + Robot.arm.getAbsoluteArmVolt() +
+                                                    "    MtrEnc=" + Robot.arm.getEncoderCnt());  
                 return;
             } else {
                 // Were still waiting for Arm to fall to the switch (keep waiting)
@@ -36,8 +44,13 @@ public class ArmReleaseCmd extends CommandBase {
         if (cmdState == CmdState.ARMONSWITCH) {
             if (Robot.arm.isRetractLimitSwitchPressed() == false) {
                 // We have now dropped farther and cleared the switch
-                Robot.arm.resetEncoder(ArmConfig.RetractLimitSwitchAngle);      // Zero out Encoder we are now at bottom
+                //Robot.arm.resetEncoder(ArmConfig.RetractLimitSwitchAngle);      // Zero out Encoder we are now at bottom
                 cmdState = CmdState.SETTLING;
+                System.out.println("Arm Release Settling - AbsEnc=" + Robot.arm.getAbsoluteArmAngle() +
+                                                    "     MtrEnc=" + Robot.arm.getArmAngle());
+                System.out.println("Arm Release Settling - AbsVolt=" + Robot.arm.getAbsoluteArmVolt() +
+                                                    "    MtrEnc=" + Robot.arm.getEncoderCnt());  
+
                 return;
             } else {
                 // Were still On switch so keep on falling
@@ -66,7 +79,13 @@ public class ArmReleaseCmd extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        if (cmdState == CmdState.DONE) { return true; }
+        if (cmdState == CmdState.DONE) {
+            System.out.println("Arm Release Done - AbsEnc=" + Robot.arm.getAbsoluteArmAngle() +
+                                             "     MtrAng=" + Robot.arm.getArmAngle());
+            System.out.println("Arm Release Done - AbsVolt=" + Robot.arm.getAbsoluteArmVolt() +
+                                              "    MtrEnc=" + Robot.arm.getEncoderCnt());  
+            return true; 
+        }
         return false;
     }
 }
