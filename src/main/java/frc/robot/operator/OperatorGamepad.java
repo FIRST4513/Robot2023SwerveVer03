@@ -32,9 +32,9 @@ public class OperatorGamepad extends Gamepad {
 
         gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullRetractPosCmd());
         
-        gamepad.Dpad.Up     .onTrue(OperatorGamepadCmds.SetArmElevToEjectHighPosCmd());
-        gamepad.Dpad.Down   .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
-        gamepad.Dpad.Left   .onTrue(OperatorGamepadCmds.SetArmElevToEjectMidPosCmd());
+        gamepad.Dpad.Up     .onTrue(OperatorGamepadCmds.SetArmElevToEjectHighPosSafeCmd());
+        gamepad.Dpad.Down   .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosSafeCmd());
+        gamepad.Dpad.Left   .onTrue(OperatorGamepadCmds.SetArmElevToEjectMidPosSafeCmd());
         gamepad.Dpad.Right  .onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
 
         gamepad.rightBumper .onTrue(OperatorGamepadCmds.ControlArmElevByJoysticksCmd());

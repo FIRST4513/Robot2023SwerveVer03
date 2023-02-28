@@ -42,7 +42,7 @@ public class AutoCmds {
             // Set position and Gyro Heading based on position
             return new SequentialCommandGroup(           
                 ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
-                OperatorGamepadCmds.SetArmElevToEjectLowPosCmd(),
+                OperatorGamepadCmds.SetArmElevToEjectLowPosSafeCmd(),
                 IntakeCmds.IntakeEjectCmd(),
                 OperatorGamepadCmds.SetArmElevToStorePosCmd()                
             );
@@ -51,7 +51,7 @@ public class AutoCmds {
             // Set position and Gyro Heading based on position
             return new SequentialCommandGroup(           
                 ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
-                OperatorGamepadCmds.SetArmElevToEjectMidPosCmd(),
+                OperatorGamepadCmds.SetArmElevToEjectMidPosSafeCmd(),
                 IntakeCmds.IntakeEjectCmd(),
                 OperatorGamepadCmds.SetArmElevToStorePosCmd()  
             );

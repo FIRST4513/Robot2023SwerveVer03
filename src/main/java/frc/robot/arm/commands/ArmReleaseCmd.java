@@ -41,12 +41,13 @@ public class ArmReleaseCmd extends CommandBase {
             }
         }
         if (cmdState == CmdState.HOLDING) {
-            if (Robot.elevator.getElevHeightInches() < 1.0 ) {
+            if (Robot.elevator.getElevHeightInches() < 0.5 ) {
                 // The Elev has now lowered back down to almost bottom
                 cmdState = CmdState.DONE;
                 return;
             } else {
                 // Were still waiting for Elev to get to the bottom
+                Robot.arm.setMMangle( ArmConfig.ArmAngleStorePos );     // Keep holding at store pos
                 return;
             }
         }

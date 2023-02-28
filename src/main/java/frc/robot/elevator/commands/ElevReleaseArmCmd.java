@@ -61,7 +61,7 @@ public class ElevReleaseArmCmd extends CommandBase {
 
         if (cmdState == CmdState.SETTLING) {
             if (settleTimer.get() <= settleTime) {
-                // Continue Lowering Elev
+                // Continue Letting Elev fall the last inch
                 Robot.elevator.elevStop();
             } else {
                 cmdState = CmdState.DONE;
@@ -73,6 +73,7 @@ public class ElevReleaseArmCmd extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         Robot.elevator.elevStop();
+        Robot.elevator.setBrakeMode(true);
     }
 
     // Returns true when the command should end.

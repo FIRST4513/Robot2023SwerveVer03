@@ -123,15 +123,53 @@ public class OperatorGamepadCmds {
 
     // -------------------- Arm/Elev To Eject Positions -------------------
 
-    public static Command SetArmElevToEjectLowPosCmd() {
+    public static Command SetArmElevToEjectLowPosSafeCmd() {
         // sequential
         //      move elev to safe height for low while holding arm at retract pos
         //      move arm to eject low pos
         //      move elev to eject low pos
+        return new SequentialCommandGroup(
+            // Raise Elevator to safe height while holding arm at store position
+            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleStorePos, ElevatorConfig.ElevEjectCubeLowSafeHt, 4.0),
+            // Move Arm Out While Holding Elevator at safe height
+            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectLowPos, ElevatorConfig.ElevEjectCubeLowSafeHt, 4.0),
+            // Move Elevator Down to correct height while holding arm at low eject position
+            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectLowPos, ElevatorConfig.ElevEjectLowHt, 4.0)
+        );
+    }
+     
+    
+    public static Command SetArmElevToEjectMidPosSafeCmd() {
+        // sequential
+        //      move elev to safe height for low while holding arm at retract pos
+        //      move arm to eject low pos
+        //      move elev to eject low pos
+        return new SequentialCommandGroup(
+            // Raise Elevator to safe height while holding arm at store position
+            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleStorePos, ElevatorConfig.ElevEjectCubeMidSafeHt, 4.0),
+            // Move Arm Out While Holding Elevator at safe height
+            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectMidPos, ElevatorConfig.ElevEjectCubeMidSafeHt, 4.0),
+            // Move Elevator Down to correct height while holding arm at low eject position
+            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectMidPos, ElevatorConfig.ElevEjectMidHt, 4.0)
+        );
+    }
 
+    public static Command SetArmElevToEjectHighPosSafeCmd() {
+        // sequential
+        //      move elev to safe height for low while holding arm at retract pos
+        //      move arm to eject low pos
+        //      move elev to eject low pos
+        return new SequentialCommandGroup(
+            // Raise Elevator to safe height while holding arm at store position
+            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleStorePos, ElevatorConfig.ElevEjectCubeHighSafeHt, 4.0),
+            // Move Arm Out While Holding Elevator at safe height
+            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectMidPos, ElevatorConfig.ElevEjectCubeHighSafeHt, 4.0),
+            // Move Elevator Down to correct height while holding arm at low eject position
+            ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectHighPos, ElevatorConfig.ElevEjectHighHt, 4.0)
+        );
+    }
 
-        
-        // return new ConditionalCommand(
+    // return new ConditionalCommand(
         //     // True condition: arm outside robot, no worry of bumper collision (out-to-out movement)
         //     ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectLowPos, ElevatorConfig.ElevEjectLowHt, 4.0),
         //     // False condition: arm inside robot, check for cube
@@ -151,25 +189,24 @@ public class OperatorGamepadCmds {
         // );
 
         
-        return ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectLowPos, ElevatorConfig.ElevEjectLowHt, 4.0);
-    }
-
-    public static Command SetArmElevToEjectMidPosCmd() {
-        // return new SequentialCommandGroup(
-        //     ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevEjectMidHt, 3.0),
-        //     ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectMidPos, ElevatorConfig.ElevEjectMidHt, 4.0)
-        // );
-        return ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectMidPos, ElevatorConfig.ElevEjectMidHt, 4.0);
-    }
 
 
-    public static Command SetArmElevToEjectHighPosCmd() {
-        // return new SequentialCommandGroup(
-        //     ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevEjectHighHt, 2.0),
-        //     ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectHighPos, ElevatorConfig.ElevEjectHighHt, 4.0)
-        // );
-        return ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectHighPos, ElevatorConfig.ElevEjectHighHt, 4.0);
-    }
+    // public static Command SetArmElevToEjectMidPosCmd() {
+    //     // return new SequentialCommandGroup(
+    //     //     ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevEjectMidHt, 3.0),
+    //     //     ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectMidPos, ElevatorConfig.ElevEjectMidHt, 4.0)
+    //     // );
+    //     return ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectMidPos, ElevatorConfig.ElevEjectMidHt, 4.0);
+    // }
+
+
+    // public static Command SetArmElevToEjectHighPosCmd() {
+    //     // return new SequentialCommandGroup(
+    //     //     ArmElevGoToPosParallelCmd(() -> Robot.arm.getArmAngle(), ElevatorConfig.ElevEjectHighHt, 2.0),
+    //     //     ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectHighPos, ElevatorConfig.ElevEjectHighHt, 4.0)
+    //     // );
+    //     return ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectHighPos, ElevatorConfig.ElevEjectHighHt, 4.0);
+    // }
 
     // ----------- Generic Parallel command for go to position ----------
     public static Command ArmElevGoToPosParallelCmd(double armPos, double elevPos, double timeout) {

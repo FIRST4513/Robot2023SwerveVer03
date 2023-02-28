@@ -20,9 +20,9 @@ public class ElevatorConfig {
     public final static double ElevStoreHt          = 0.0;          // Position to Store Cube/Cone retracted for motion
     public final static double ElevRetractHt        = 0.0;          // Position to fully retract
     public final static double ElevEjectLowHt       = 6.0;          // Position to Score a Cube/Cone in LOW Position  
-    public final static double ElevEjectCubeLowSafeHt = 15.0;          // Position to Score a Cube/Cone in LOW Position 
-    public final static double ElevEjectCubeMidSafeHt = 15.0;          // Position to Score a Cube/Cone in LOW Position 
-
+    public final static double ElevEjectCubeLowSafeHt = 20.0;          // Position to Score a Cube/Cone in LOW Position 
+    public final static double ElevEjectCubeMidSafeHt = 25.0;          // Position to Score a Cube/Cone in LOW Position 
+    public final static double ElevEjectCubeHighSafeHt = KElevMaxTopHt;          // Position to Score a Cube/Cone in LOW Position 
     
     public final static double ElevEjectMidHt       = 25.5;         // Position to Score a Cube/Cone in MID Position
     public final static double ElevEjectHighHt      = 30.0;         // Position to Score a Cube/Cone in Hi Position
