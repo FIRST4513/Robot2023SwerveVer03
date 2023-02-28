@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Swerve extends SubsystemBase {
     public      SwerveConfig config;
-    protected   Gyro gyro;
+    public      Gyro gyro;
     public      Odometry odometry;
     public      SwerveModule[] mSwerveMods;
     private     SwerveModuleState[] mSwerveModStates;
@@ -49,6 +49,7 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("Gyro Yaw", gyro.getGyroYawAngle());
         //telemetry.logModuleAbsolutePositions();
     }
+
 
     // -------------------------------------------------------------------
     // ----------------------  Swerve Drive Methods  ---------------------

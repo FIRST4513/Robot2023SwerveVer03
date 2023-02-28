@@ -24,6 +24,9 @@ public class SwerveTelemetry {
         tab.addNumber("Odometry Y", () -> swerve.getPoseMeters().getY()).withPosition(12, 2).withSize(2, 1);
         tab.addNumber("Gyro Yaw", () -> swerve.getGyroYawDegrees()).withPosition(12, 3).withSize(2, 1);
 
+        tab.addNumber("Gyro Incline Raw",   () -> swerve.gyro.getGyroInclineRaw()).withPosition(12, 4).withSize(2, 1);
+        tab.addNumber("Gyro Incline Angle", () -> swerve.gyro.getGyroInclineAngle()).withPosition(12, 5).withSize(2, 1);
+
         Mod0Name = swerve.mSwerveMods[0].getName();
         Mod1Name = swerve.mSwerveMods[1].getName();
         Mod2Name = swerve.mSwerveMods[2].getName();

@@ -57,8 +57,13 @@ public class Gyro {
     }
 
     // ------------------------- Get Gyro Inclination ----------------------------
-    public double getGyroIncline() {
+    public double getGyroInclineRaw() {
         double incline = gyro.getRawAccelX();
         return incline;
     }
+
+    public double getGyroInclineAngle() {
+        return gyro.getPitch();      // Adjust Constant SIn value
+    }
+    
 }
