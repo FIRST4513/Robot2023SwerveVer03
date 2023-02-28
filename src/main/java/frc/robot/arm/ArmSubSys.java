@@ -1,9 +1,6 @@
 package frc.robot.arm;
 
 import java.util.function.DoubleSupplier;
-
-import javax.naming.spi.DirStateFactory.Result;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -122,7 +119,7 @@ public class ArmSubSys extends SubsystemBase {
             return;
         }
 
-        if (Robot.elevator.getElevHeightInches() < 25.0) {
+        if (Robot.elevator.getElevHeightInches() < 13.0) {
             // Were trying to go past -45 degrres and elevator is down
             holdArm();            // We can back drive to -90 degrees when elev is down
             return;
@@ -296,3 +293,7 @@ public class ArmSubSys extends SubsystemBase {
     }
     
 }
+
+// 88.7 -162666
+// 36 80166
+// 

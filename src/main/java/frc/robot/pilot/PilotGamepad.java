@@ -54,6 +54,7 @@ public class PilotGamepad extends Gamepad {
         gamepad.selectButton.onTrue(PilotGamepadCmds.FpvDriveAndAutoRotateCmd());  // snap to angle while driving
 
         gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
+        gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.SetArmElevToIntakeConePosCmd());
     }
 
     public void setupDisabledButtons() {
