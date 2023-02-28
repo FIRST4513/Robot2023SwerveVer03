@@ -182,8 +182,7 @@ public class Auto {
         if (testSelect == "BlueCtrTable") {   
             return new SequentialCommandGroup(
                 TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueCtrTablePath, 10.0), 
-                SwerveCmds.SetBrakeModeOnCmd()
-                // Balance command
+                SwerveCmds.LockSwerveCmd()
             );    
         }
 
