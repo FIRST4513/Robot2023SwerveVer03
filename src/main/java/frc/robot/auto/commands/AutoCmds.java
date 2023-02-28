@@ -5,13 +5,13 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import frc.robot.arm.ArmConfig;
 import frc.robot.arm.commands.ArmCmds;
 import frc.robot.arm.commands.ArmHoldPositionCmd;
 import frc.robot.arm.commands.ArmReleaseCmd;
-import frc.robot.autoBalance.commands.AutoBalanceCommand;
+import frc.robot.auto.Auto;
 import frc.robot.elevator.commands.ElevReleaseArmCmd;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.elevator.commands.ElevatorHoldPosCmd;
@@ -22,44 +22,74 @@ import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class AutoCmds {
 
-    public static Command PlaceCubeLowCmd() {
-        return new SequentialCommandGroup(
-            // 1. Release Parked Arm
-            ArmParkedToStorePosCmd().withTimeout(6.0),
-            // 2. Set arm/elev to low score position
-            OperatorGamepadCmds.SetArmElevToEjectLowPosCmd(),
-            // 3. eject
-            IntakeCmds.IntakeEjectCmd(),
-            // 4. Store Arm Elev
-            OperatorGamepadCmds.SetArmElevToStorePosCmd()
-        );
+    // --------------- Do Nothing ---------------------------
+    public static Command DoNothingCmd() {
+        // Set position and Gyro Heading based on position
+        return IntializeRobotFromPoseCmd(Auto.startPose);
     }
+    
+    // --------------- Place Cube Only Command ------------------
 
-    public static Command PlaceCubeMidCmd() {
-        return new SequentialCommandGroup(
-            // 1. Release Parked Arm
-            ArmParkedToStorePosCmd().withTimeout(6.0),
-            // 2. Set arm/elev to mid score position
-            OperatorGamepadCmds.SetArmElevToEjectMidPosCmd(),
-            // 3. eject
-            IntakeCmds.IntakeEjectCmd(),
-            // 4. Store Arm Elev
-            OperatorGamepadCmds.SetArmElevToStorePosCmd()
+
+    public static Command PlaceCubeOnlyCmd( String level) {
+        return new SequentialCommandGroup(           
+            IntializeRobotFromPoseCmd(Auto.startPose),
+            PlaceCubeCmd( level )
         );
     }
 
 
-    public static Command PlaceCubeLowRunPathCmd( PathPlannerTrajectory path, double timeOut){
+    // ----------------- Place Cube Commands ---------------------
+    public static Command PlaceCubeCmd( String level ) {
+        if (level == "Low") {
+            // Set position and Gyro Heading based on position
+            return new SequentialCommandGroup(           
+                ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
+                OperatorGamepadCmds.SetArmElevToEjectLowPosCmd(),
+                IntakeCmds.IntakeEjectCmd(),
+                OperatorGamepadCmds.SetArmElevToStorePosCmd()                
+            );
+        }
+        if (level == "Mid") {
+            // Set position and Gyro Heading based on position
+            return new SequentialCommandGroup(           
+                ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
+                OperatorGamepadCmds.SetArmElevToEjectMidPosCmd(),
+                IntakeCmds.IntakeEjectCmd(),
+                OperatorGamepadCmds.SetArmElevToStorePosCmd()  
+            );
+        }
+        return new PrintCommand("Error on auto place only paramter");
+    }
+
+    // -------------- Cross Line Only Comands ---------------------
+    public static Command CrossLineOnlyCmd( PathPlannerTrajectory path) {
         return new SequentialCommandGroup(
-            PlaceCubeLowCmd(),
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path , timeOut)
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path, 5.0)
         );
     }
 
-    public static Command PlaceCubeMidRunPathCmd( PathPlannerTrajectory path, double timeOut){
-        return new SequentialCommandGroup(
-            PlaceCubeLowCmd(),
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path , timeOut)
+    // -------------- Place and Cross Line Comands ---------------------
+    public static Command PlaceAndCrossCmd( String level, PathPlannerTrajectory path ) {
+        return new SequentialCommandGroup(  
+            PlaceCubeCmd(level),
+            CrossLineOnlyCmd(path)
+        );
+    }
+
+    // ----------------------- Get on Charging Platform  -------------------
+    public static Command GetOnChargingTableCmd( PathPlannerTrajectory path ) {
+        return new SequentialCommandGroup(  
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path, 5.0),
+            AutoCmds.AutoBalanceCmd()            
+        );
+    }
+
+    // ----------------------- Score and Get on Charging Platform  -------------------
+    public static Command PlaceAndChargingTableCmd( String level, PathPlannerTrajectory path ) {
+        return new SequentialCommandGroup(  
+            PlaceCubeCmd(level),
+            GetOnChargingTableCmd( path )
         );
     }
 

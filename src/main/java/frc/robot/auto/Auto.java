@@ -15,8 +15,6 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotTelemetry;
 import frc.robot.auto.commands.AutoCmds;
-import frc.robot.autoBalance.commands.AutoBalanceCommand;
-import frc.robot.swerve.commands.LockSwerve;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class Auto {
@@ -50,12 +48,6 @@ public class Auto {
                                     "RedRightCubeShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);        
     static PathPlannerTrajectory    redLeftCubeLongPath  = PathPlanner.loadPath(
                                     "RedLeftCubeLong", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);     
-
-
-    // static PathPlannerTrajectory    blue1MeterPath  = PathPlanner.loadPath(
-    //                                 "blue1Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
-    // static PathPlannerTrajectory    red1MeterPath  = PathPlanner.loadPath(
-    //                                 "red1Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
 
     // static PathPlannerTrajectory    testTurnPath  = PathPlanner.loadPath(
     //                                 "TestTurn", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
@@ -129,117 +121,46 @@ public class Auto {
         // ----------------------- Do Nothing -------------------
         if (doNothing()) {
             // Set position and Gyro Heading based on position
-            return new SequentialCommandGroup(            
-                AutoCmds.IntializeRobotFromPoseCmd(startPose)
-            );
+            return AutoCmds.DoNothingCmd();
         }
 
         // ----------------------- Score Only -------------------
         if (placeOnly()) {
             if ( low() ) {
-                // Set position and Gyro Heading based on position
-                return new SequentialCommandGroup(           
-                    AutoCmds.IntializeRobotFromPoseCmd(startPose),
-                    AutoCmds.PlaceCubeLowCmd()
-                );
-            }
+                return AutoCmds.PlaceCubeOnlyCmd("Low");
+            } 
             if ( mid() ) {
-                // Set position and Gyro Heading based on position
-                return new SequentialCommandGroup(           
-                    AutoCmds.IntializeRobotFromPoseCmd(startPose),
-                    AutoCmds.PlaceCubeMidCmd()
-                );
-            }
+                return AutoCmds.PlaceCubeOnlyCmd("Mid");
+            } 
             return new PrintCommand("ERROR: Invalid place only auto command");
         }
 
         // ----------------------- Cross Line Only -------------------
         if (crossOnly()) {
-            if (redRight()) {
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redRightCubeShortPath, 5.0);
-            }
-            if (redLeft()) {
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redLeftCubeLongPath, 5.0);
-            }
-            if (blueRight()) {
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueRightCubeLongPath, 5.0);
-            }
-            if (blueLeft()) {
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueLeftCubeShortPath, 5.0);
-            }
+            if (redRight())     { return AutoCmds.CrossLineOnlyCmd(redRightCubeShortPath); }
+            if (redLeft())      { return AutoCmds.CrossLineOnlyCmd(redRightCubeShortPath); }
+            if (blueRight())    { return AutoCmds.CrossLineOnlyCmd(blueRightCubeLongPath); }
+            if (blueLeft())     {return AutoCmds.CrossLineOnlyCmd(blueLeftCubeShortPath);  }
             return new PrintCommand("ERROR: Invalid cross only auto command");
         }
     
         // ----------------------- Place and Cross Line  -------------------
         if ( place() && cross() ) {
             if ( low() ){
-                if ( redRight()) {
-                    // Set position and Gyro Heading based on position
-                    return new SequentialCommandGroup(           
-                        AutoCmds.IntializeRobotFromPoseCmd(startPose),
-                        AutoCmds.PlaceCubeLowCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redRightCubeShortPath, 5.0)
-                    );
-                }
-                if ( redLeft()) {
-                    // Set position and Gyro Heading based on position
-                    return new SequentialCommandGroup(           
-                        AutoCmds.IntializeRobotFromPoseCmd(startPose),
-                        AutoCmds.PlaceCubeLowCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redLeftCubeLongPath, 5.0)
-                    );
-                }
-                if ( blueRight()) {
-                    // Set position and Gyro Heading based on position
-                    return new SequentialCommandGroup(           
-                        AutoCmds.IntializeRobotFromPoseCmd(startPose),
-                        AutoCmds.PlaceCubeLowCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueRightCubeLongPath, 5.0)
-                    );
-                }
-                if ( blueLeft()) {
-                    // Set position and Gyro Heading based on position
-                    return new SequentialCommandGroup(           
-                        AutoCmds.IntializeRobotFromPoseCmd(startPose),
-                        AutoCmds.PlaceCubeLowCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueLeftCubeShortPath, 5.0)
-                    );
-                }
+                if ( redRight() )    { return AutoCmds.PlaceAndCrossCmd( "Low", redRightCubeShortPath); }
+                if ( redLeft() )     { return AutoCmds.PlaceAndCrossCmd( "Low", redLeftCubeLongPath);   }
+                if ( blueRight() )   { return AutoCmds.PlaceAndCrossCmd( "Low", blueRightCubeLongPath); }
+                if ( blueLeft() )    { return AutoCmds.PlaceAndCrossCmd( "Low", blueLeftCubeShortPath); }
+                return new PrintCommand("ERROR: Invalid place and cross auto command");
             }
             if ( mid() ){
-                if ( redRight()) {
-                    // Set position and Gyro Heading based on position
-                    return new SequentialCommandGroup(           
-                        AutoCmds.IntializeRobotFromPoseCmd(startPose),
-                        AutoCmds.PlaceCubeMidCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redRightCubeShortPath, 5.0)
-                    );
-                }
-                if ( redLeft()) {
-                    // Set position and Gyro Heading based on position
-                    return new SequentialCommandGroup(           
-                        AutoCmds.IntializeRobotFromPoseCmd(startPose),
-                        AutoCmds.PlaceCubeMidCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redLeftCubeLongPath, 5.0)
-                    );
-                }
-                if ( blueRight()) {
-                    // Set position and Gyro Heading based on position
-                    return new SequentialCommandGroup(           
-                        AutoCmds.IntializeRobotFromPoseCmd(startPose),
-                        AutoCmds.PlaceCubeMidCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueRightCubeLongPath, 5.0)
-                    );
-                }
-                if ( blueLeft()) {
-                    // Set position and Gyro Heading based on position
-                    return new SequentialCommandGroup(           
-                        AutoCmds.IntializeRobotFromPoseCmd(startPose),
-                        AutoCmds.PlaceCubeMidCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueLeftCubeShortPath, 5.0)
-                    );
-                }
+                if ( redRight() )    { return AutoCmds.PlaceAndCrossCmd( "Mid", redRightCubeShortPath); }
+                if ( redLeft() )     { return AutoCmds.PlaceAndCrossCmd( "Mid", redLeftCubeLongPath);   }
+                if ( blueRight() )   { return AutoCmds.PlaceAndCrossCmd( "Mid", blueRightCubeLongPath); }
+                if ( blueLeft() )    { return AutoCmds.PlaceAndCrossCmd( "Mid", blueLeftCubeShortPath); }
+                return new PrintCommand("ERROR: Invalid palce and cross auto command");
             }
+            return new PrintCommand("Error on auto place only paramter");
         }
 
         // ----------------------- Get on Charging Station Only -------------------
@@ -247,30 +168,18 @@ public class Auto {
             return new SequentialCommandGroup(
                 TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0),
                 AutoCmds.AutoBalanceCmd()
-            ); 
+            );
         }
-        
 
         // ----------------------- Score and Get on Charging Platform  -------------------
         if (place() && !cross() && dock()) {
-            if ( low() ) {
-                return new SequentialCommandGroup(  
-                    AutoCmds.PlaceCubeLowCmd(), // Returns to store position at completion
-                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0),
-                    AutoCmds.AutoBalanceCmd()
-                );
-            }
-            if ( mid() ) {
-                return new SequentialCommandGroup(  
-                    AutoCmds.PlaceCubeMidCmd(), // Returns to store position at completion
-                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0),
-                    AutoCmds.AutoBalanceCmd()
-                );
-            }
+            if ( low() )    { return AutoCmds.PlaceAndChargingTableCmd( "Low", CenterScalePath); }
+            if ( mid() )    { return AutoCmds.PlaceAndChargingTableCmd( "Mid", CenterScalePath); }
+            return new PrintCommand("Error on auto place only paramter");
         }
-    
-        return new PrintCommand("Error in auto selection");
+       return new PrintCommand("Error on auto Commands Selection");
     }
+
 
         // ----------------------- Test Routines ----------------
         // if (testSelect == "1Meter") {      
@@ -290,6 +199,8 @@ public class Auto {
         //         SwerveCmds.LockSwerveCmd()
         //     );    
         // }
+
+
     // ------------------------------------------------------------------------
     //     Setup proper Arm/Elevator position to Place Cone/Cube
     // ------------------------------------------------------------------------
