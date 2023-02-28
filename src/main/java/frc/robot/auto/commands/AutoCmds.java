@@ -29,15 +29,12 @@ public class AutoCmds {
     }
     
     // --------------- Place Cube Only Command ------------------
-
-
     public static Command PlaceCubeOnlyCmd( String level) {
         return new SequentialCommandGroup(           
             IntializeRobotFromPoseCmd(Auto.startPose),
             PlaceCubeCmd( level )
         );
     }
-
 
     // ----------------- Place Cube Commands ---------------------
     public static Command PlaceCubeCmd( String level ) {
