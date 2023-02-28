@@ -1,12 +1,8 @@
 package frc.robot.auto;
 
 import java.util.HashMap;
-
-import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import frc.robot.trajectories.commands.PathBuilder;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -17,10 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Robot;
 import frc.robot.RobotTelemetry;
 import frc.robot.auto.commands.AutoCmds;
-import frc.robot.swerve.commands.SwerveCmds;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class Auto {
@@ -44,24 +38,22 @@ public class Auto {
     private static double autoStart = 0;
 
     // Setup Needed PathPlaner Paths
-    static PathPlannerTrajectory    blueRightCubeCrossPath  = PathPlanner.loadPath(
-                                    "BlueRightCubeCross", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);        
-    static PathPlannerTrajectory    blueLeftCubeCrossPath  = PathPlanner.loadPath(
-                                    "BlueLeftCubeCross", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);     
-    static PathPlannerTrajectory    blueCenterScalePath  = PathPlanner.loadPath(
-                                    "BlueCenterScale", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
-    static PathPlannerTrajectory    redRightCubeCrossPath  = PathPlanner.loadPath(
-                                    "RedRightCubeCross", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);        
-    static PathPlannerTrajectory    redLeftCubeCrossPath  = PathPlanner.loadPath(
-                                    "RedLeftCubeCross", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);     
-    static PathPlannerTrajectory    redCenterScalePath  = PathPlanner.loadPath(
-                                    "RedCenterScale", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    static PathPlannerTrajectory    blueRightCubeLongPath  = PathPlanner.loadPath(
+                                    "BlueRightCubeLong", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);        
+    static PathPlannerTrajectory    blueLeftCubeShortPath  = PathPlanner.loadPath(
+                                    "BlueLeftCubeShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);     
+    static PathPlannerTrajectory    CenterScalePath  = PathPlanner.loadPath(
+                                    "CenterScale", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    static PathPlannerTrajectory    redRightCubeShortPath  = PathPlanner.loadPath(
+                                    "RedRightCubeShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);        
+    static PathPlannerTrajectory    redLeftCubeLongPath  = PathPlanner.loadPath(
+                                    "RedLeftCubeLong", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);     
 
 
-    static PathPlannerTrajectory    blue1MeterPath  = PathPlanner.loadPath(
-                                    "blue1Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
-    static PathPlannerTrajectory    red1MeterPath  = PathPlanner.loadPath(
-                                    "red1Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    // static PathPlannerTrajectory    blue1MeterPath  = PathPlanner.loadPath(
+    //                                 "blue1Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    // static PathPlannerTrajectory    red1MeterPath  = PathPlanner.loadPath(
+    //                                 "red1Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
 
     // static PathPlannerTrajectory    testTurnPath  = PathPlanner.loadPath(
     //                                 "TestTurn", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
@@ -124,12 +116,12 @@ public class Auto {
         setStartPose();
 
         // ---------------------- Test ------------------
-        if ( testSelect == "Red1Meter") {
-            return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(red1MeterPath, 5.0);
-        }
-        if ( testSelect == "Blue1Meter") {
-            return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blue1MeterPath, 5.0);
-        }
+        // if ( testSelect == "Red1Meter") {
+        //     return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(red1MeterPath, 5.0);
+        // }
+        // if ( testSelect == "Blue1Meter") {
+        //     return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blue1MeterPath, 5.0);
+        // }
 
 
         // ----------------------- Do Nothing -------------------
@@ -162,16 +154,16 @@ public class Auto {
         // ----------------------- Cross Line Only -------------------
         if (crossOnly()) {
             if (redRight()) {
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redRightCubeCrossPath, 5.0);
+                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redRightCubeShortPath, 5.0);
             }
             if (redLeft()) {
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redLeftCubeCrossPath, 5.0);
+                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redLeftCubeLongPath, 5.0);
             }
             if (blueRight()) {
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueRightCubeCrossPath, 5.0);
+                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueRightCubeLongPath, 5.0);
             }
             if (blueLeft()) {
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueLeftCubeCrossPath, 5.0);
+                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueLeftCubeShortPath, 5.0);
             }
             return new PrintCommand("ERROR: Invalid cross only auto command");
         }
@@ -184,7 +176,7 @@ public class Auto {
                     return new SequentialCommandGroup(           
                         AutoCmds.IntializeRobotFromPoseCmd(startPose),
                         AutoCmds.PlaceCubeLowCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redRightCubeCrossPath, 5.0)
+                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redRightCubeShortPath, 5.0)
                     );
                 }
                 if ( redLeft()) {
@@ -192,7 +184,7 @@ public class Auto {
                     return new SequentialCommandGroup(           
                         AutoCmds.IntializeRobotFromPoseCmd(startPose),
                         AutoCmds.PlaceCubeLowCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redLeftCubeCrossPath, 5.0)
+                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redLeftCubeLongPath, 5.0)
                     );
                 }
                 if ( blueRight()) {
@@ -200,7 +192,7 @@ public class Auto {
                     return new SequentialCommandGroup(           
                         AutoCmds.IntializeRobotFromPoseCmd(startPose),
                         AutoCmds.PlaceCubeLowCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueRightCubeCrossPath, 5.0)
+                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueRightCubeLongPath, 5.0)
                     );
                 }
                 if ( blueLeft()) {
@@ -208,7 +200,7 @@ public class Auto {
                     return new SequentialCommandGroup(           
                         AutoCmds.IntializeRobotFromPoseCmd(startPose),
                         AutoCmds.PlaceCubeLowCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueLeftCubeCrossPath, 5.0)
+                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueLeftCubeShortPath, 5.0)
                     );
                 }
             }
@@ -218,7 +210,7 @@ public class Auto {
                     return new SequentialCommandGroup(           
                         AutoCmds.IntializeRobotFromPoseCmd(startPose),
                         AutoCmds.PlaceCubeMidCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redRightCubeCrossPath, 5.0)
+                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redRightCubeShortPath, 5.0)
                     );
                 }
                 if ( redLeft()) {
@@ -226,7 +218,7 @@ public class Auto {
                     return new SequentialCommandGroup(           
                         AutoCmds.IntializeRobotFromPoseCmd(startPose),
                         AutoCmds.PlaceCubeMidCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redLeftCubeCrossPath, 5.0)
+                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redLeftCubeLongPath, 5.0)
                     );
                 }
                 if ( blueRight()) {
@@ -234,7 +226,7 @@ public class Auto {
                     return new SequentialCommandGroup(           
                         AutoCmds.IntializeRobotFromPoseCmd(startPose),
                         AutoCmds.PlaceCubeMidCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueRightCubeCrossPath, 5.0)
+                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueRightCubeLongPath, 5.0)
                     );
                 }
                 if ( blueLeft()) {
@@ -242,7 +234,7 @@ public class Auto {
                     return new SequentialCommandGroup(           
                         AutoCmds.IntializeRobotFromPoseCmd(startPose),
                         AutoCmds.PlaceCubeMidCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueLeftCubeCrossPath, 5.0)
+                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueLeftCubeShortPath, 5.0)
                     );
                 }
             }
@@ -250,48 +242,27 @@ public class Auto {
 
         // ----------------------- Get on Charging Station Only -------------------
         if (dockOnly()) {
-            if ( red() ) {
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redCenterScalePath, 5.0);
-            }
-            if ( blue() ) {
-                return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueCenterScalePath, 5.0);
-            }
-            return new PrintCommand("ERROR: Invalid dock only auto command");
+            return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0);
         }
+        
 
         // ----------------------- Score and Get on Charging Platform  -------------------
         if (place() && !cross() && dock()) {
             if ( low() ) {
-                if ( red() ) {
-                    return new SequentialCommandGroup(  
-                        AutoCmds.PlaceCubeLowCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redCenterScalePath, 5.0)
-                    );
-                }
-                if ( blue() ) {
-                    return new SequentialCommandGroup(  
-                        AutoCmds.PlaceCubeLowCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueCenterScalePath, 5.0)
-                    );
-                }
+                return new SequentialCommandGroup(  
+                    AutoCmds.PlaceCubeLowCmd(), // Returns to store position at completion
+                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0)
+                );
             }
             if ( mid() ) {
-                if ( red() ) {
-                    return new SequentialCommandGroup(  
-                        AutoCmds.PlaceCubeMidCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(redCenterScalePath, 5.0)
-                    );
-                }
-                if ( blue() ) {
-                    return new SequentialCommandGroup(  
-                        AutoCmds.PlaceCubeMidCmd(), // Returns to store position at completion
-                        TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueCenterScalePath, 5.0)
-                    );
-                }
+                return new SequentialCommandGroup(  
+                    AutoCmds.PlaceCubeMidCmd(), // Returns to store position at completion
+                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0)
+                );
             }
-
-        }         
-        return new PrintCommand("Invalid AutoChoose");
+        }
+    
+        return new PrintCommand("Error in auto selection");
     }
 
         // ----------------------- Test Routines ----------------
