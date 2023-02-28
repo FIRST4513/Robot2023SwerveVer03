@@ -67,8 +67,8 @@ public class ArmCmds {
 
     // ------------- Reset Arm Encoder Command -------------
     public static Command ResetArmEncoderCmd() {
-        return new InstantCommand( () -> Robot.arm.resetEncoderToAbsolute(), Robot.arm);
-        //return new InstantCommand( () -> Robot.arm.resetEncoder(), Robot.arm);
+        // return new InstantCommand( () -> Robot.arm.resetEncoderToAbsolute(), Robot.arm);
+        return new InstantCommand( () -> Robot.arm.resetEncoder(), Robot.arm);
     }
 
     // -------- Arm to Eject Positions Commands -------
