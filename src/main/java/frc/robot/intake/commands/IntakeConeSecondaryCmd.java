@@ -19,6 +19,7 @@ public class IntakeConeSecondaryCmd extends CommandBase {
     public void initialize() {
         intakeState = IntakeState.EMPTY;
         System.out.println("Intake Cone Secondary Command Called");
+        Robot.intake.setBrakeMode(true);    // Will be turned back off on Eject
         upperSpeed = -1.0;      // Pull it in strongly
         lowerSpeed =  1.0;      // Pull it in strongly
     }

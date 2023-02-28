@@ -9,40 +9,54 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.arm.ArmConfig;
 import frc.robot.arm.commands.ArmCmds;
-import frc.robot.auto.AutoConfig;
-import frc.robot.auto.Auto;
+import frc.robot.arm.commands.ArmHoldPositionCmd;
+import frc.robot.arm.commands.ArmReleaseCmd;
+import frc.robot.elevator.commands.ElevReleaseArmCmd;
 import frc.robot.elevator.commands.ElevatorCmds;
+import frc.robot.elevator.commands.ElevatorHoldPosCmd;
 import frc.robot.intake.commands.IntakeCmds;
+import frc.robot.operator.commands.OperatorGamepadCmds;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class AutoCmds {
 
-    public static Command PlaceObjectCmd() {
-        return new ParallelCommandGroup(
-            // 1. Set arm to coast down
-            ArmCmds.SetArmCoastCmd(),
-            // 2. raise elev to start pos
-            ElevatorCmds.setMMPosition(Auto.elevStartPos).withTimeout(2),
-            // 3. reset arm encoder to zero acivate brake mode, now that it has fallen
-            ArmCmds.ResetArmEncoderCmd(),
-            // 4. Turn on arm brake mode
-            ArmCmds.SetArmBrakeCmd(),
-            // 5. raise arm to target pos
-            ArmCmds.ArmSetMMangleCmd(Auto.armPosition).withTimeout(2),
-            // 6. elev lower to final target pos
-            ElevatorCmds.setMMPosition(Auto.elevEndPos).withTimeout(2),
-            // 7. eject
+    public static Command PlaceCubeLowCmd() {
+        return new SequentialCommandGroup(
+            // 1. Release Parked Arm
+            ArmParkedToStorePosCmd().withTimeout(6.0),
+            // 2. Set arm/elev to low score position
+            OperatorGamepadCmds.SetArmElevToEjectLowPosCmd(),
+            // 3. eject
             IntakeCmds.IntakeEjectCmd(),
-            // 8. Intake Arm to get ready for following path
-            ElevatorCmds.setMMPosition(AutoConfig.kElevTop).withTimeout(2),
-            ArmCmds.ArmSetMMangleCmd(ArmConfig.ArmAngleStorePos),
-            ElevatorCmds.ElevGoToBottomCmd().withTimeout(2)
+            // 4. Store Arm Elev
+            OperatorGamepadCmds.SetArmElevToStorePosCmd()
         );
     }
 
-    public static Command PlaceObjectRunPathCmd( PathPlannerTrajectory path, double timeOut){
+    public static Command PlaceCubeMidCmd() {
         return new SequentialCommandGroup(
-            PlaceObjectCmd(),
+            // 1. Release Parked Arm
+            ArmParkedToStorePosCmd().withTimeout(6.0),
+            // 2. Set arm/elev to mid score position
+            OperatorGamepadCmds.SetArmElevToEjectMidPosCmd(),
+            // 3. eject
+            IntakeCmds.IntakeEjectCmd(),
+            // 4. Store Arm Elev
+            OperatorGamepadCmds.SetArmElevToStorePosCmd()
+        );
+    }
+
+
+    public static Command PlaceCubeLowRunPathCmd( PathPlannerTrajectory path, double timeOut){
+        return new SequentialCommandGroup(
+            PlaceCubeLowCmd(),
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path , timeOut)
+        );
+    }
+
+    public static Command PlaceCubeMidRunPathCmd( PathPlannerTrajectory path, double timeOut){
+        return new SequentialCommandGroup(
+            PlaceCubeLowCmd(),
             TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path , timeOut)
         );
     }
@@ -55,7 +69,63 @@ public class AutoCmds {
         );
     }
 
-  
+    public static Command ArmParkedToStorePosCmd(){
+        return new ParallelCommandGroup(
+            new ElevReleaseArmCmd(),
+            new ArmReleaseCmd()
+        );
+    }
+
+    
+    // -------------------- Arm/Elev To Eject Positions -------------------
+
+    public static Command SetArmElevToEjectLowPosCmd() {
+        // sequential
+        //      move elev to safe height for low while holding arm at retract pos
+        //      move arm to eject low pos
+        //      move elev to eject low pos
+        return new SequentialCommandGroup(
+            // 1. Move Elev up to safe height while holding Arm
+            new ParallelCommandGroup(
+                ElevatorCmds.ElevToEjectCubeLowSafePosCmd(),
+                new ArmHoldPositionCmd().until(() -> Robot.elevator.isMMtargetReached())
+                ),
+            // 2. Move ArnOut to Low Cube release point, while elevator continues to hold
+            new ParallelCommandGroup(
+                ArmCmds.ArmToEjectLowPosCmd(),
+                new ElevatorHoldPosCmd().until(() -> Robot.arm.isMMtargetReached())
+                ),
+            // 3. Move Elev down to eject position while hold arm at 
+            new ParallelCommandGroup(
+                ElevatorCmds.ElevToEjectLowPosCmd(),
+                new ArmHoldPositionCmd().until(() -> Robot.elevator.isMMtargetReached())
+            )
+        ); 
+    }
+
+    public static Command SetArmElevToEjectMidPosCmd() {
+        // sequential
+        //      move elev to safe height for low while holding arm at retract pos
+        //      move arm to eject low pos
+        //      move elev to eject low pos
+        return new SequentialCommandGroup(
+            // 1. Move Elev up to safe height while holding Arm
+            new ParallelCommandGroup(
+                ElevatorCmds.ElevToEjectCubeMidSafePosCmd(),
+                new ArmHoldPositionCmd().until(() -> Robot.elevator.isMMtargetReached())
+                ),
+            // 2. Move ArnOut to Low Cube release point, while elevator continues to hold
+            new ParallelCommandGroup(
+                ArmCmds.ArmToEjectMidPosCmd(),
+                new ElevatorHoldPosCmd().until(() -> Robot.arm.isMMtargetReached())
+                ),
+            // 3. Move Elev down to eject position while hold arm at 
+            new ParallelCommandGroup(
+                ElevatorCmds.ElevToEjectMidPosCmd(),
+                new ArmHoldPositionCmd().until(() -> Robot.elevator.isMMtargetReached())
+            )
+        ); 
+    }
 
 
 }

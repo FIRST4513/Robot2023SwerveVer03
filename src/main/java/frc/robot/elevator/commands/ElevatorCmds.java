@@ -100,6 +100,16 @@ public class ElevatorCmds {
         // .withTimeout(4.0).until(() -> Robot.elevator.isMMtargetReached());
     }
 
+    public static Command ElevToEjectCubeMidSafePosCmd() {
+        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevEjectCubeMidSafeHt);
+        // .withTimeout(4.0).until(() -> Robot.elevator.isMMtargetReached());
+    }
+
+    public static Command ElevToEjectCubeLowSafePosCmd() {
+        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevEjectCubeLowSafeHt);
+        // .withTimeout(4.0).until(() -> Robot.elevator.isMMtargetReached());
+    }
+
     // -------- Elev to Retracted Positions Commands -------
     public static Command ElevToStorePosCmd()  { return ElevatorCmds.ElevGoToBottomCmd().withTimeout(4.0); }
 

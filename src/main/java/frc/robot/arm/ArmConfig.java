@@ -4,8 +4,8 @@ public class ArmConfig {
 
     // ------- Encoder Conversion Factor --------------
     // 1797.41176 cnts per degree tested 2/20/23
-    public final static double kCntsPerDeg              = 1986;        // Convert cnt to degrees of angle (2/21/23)
-    public final static double kDegsPerCnt              = 0.0005034;   // Convert cnt to degrees of angle (2/21/23)
+    public final static double kCntsPerDeg              = 1843;        // Convert cnt to degrees of angle (2/21/23)
+    public final static double kDegsPerCnt              = 1 / kCntsPerDeg;   // Convert cnt to degrees of angle (2/21/23)
     public final static double KAngleDeadBand           = +1.0;        // Degrees close enough to Tgt
 
     // -------- Absolute Analog Angle Sensor ------------

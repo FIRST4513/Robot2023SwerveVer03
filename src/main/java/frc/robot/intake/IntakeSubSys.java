@@ -33,6 +33,7 @@ public class IntakeSubSys extends SubsystemBase {
     public void setLowerMotor(double speed)     { intakeLowerMotor.set(speed); }
 
     public void setUpperMotor(DoubleSupplier speed) { intakeUpperMotor.set(speed.getAsDouble()); }
+    public void setLowerMotor(DoubleSupplier speed) { intakeUpperMotor.set(speed.getAsDouble()); }
 
     public void stopMotors() {
         intakeUpperMotor.stopMotor();

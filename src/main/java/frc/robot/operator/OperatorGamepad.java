@@ -90,6 +90,10 @@ public class OperatorGamepad extends Gamepad {
         // return -gamepad.triggers.getTwist()/3;
         return intakeThrottleCurve.calculateMappedVal(gamepad.triggers.getTwist());
     }
+    
+    public double getTriggerTwistInvert() {
+        return -getTriggerTwist();
+    }
 
     public void rumble(double intensity) {
         this.gamepad.setRumble(intensity, intensity);
@@ -100,4 +104,6 @@ public class OperatorGamepad extends Gamepad {
         }
         return false;
     }
+
+    
 }

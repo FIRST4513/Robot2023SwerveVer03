@@ -124,6 +124,13 @@ public class OperatorGamepadCmds {
     // -------------------- Arm/Elev To Eject Positions -------------------
 
     public static Command SetArmElevToEjectLowPosCmd() {
+        // sequential
+        //      move elev to safe height for low while holding arm at retract pos
+        //      move arm to eject low pos
+        //      move elev to eject low pos
+
+
+        
         // return new ConditionalCommand(
         //     // True condition: arm outside robot, no worry of bumper collision (out-to-out movement)
         //     ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectLowPos, ElevatorConfig.ElevEjectLowHt, 4.0),
@@ -142,6 +149,8 @@ public class OperatorGamepadCmds {
         //     // Condition: is arm outside?
         //     () -> Robot.arm.isArmOutside()
         // );
+
+        
         return ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectLowPos, ElevatorConfig.ElevEjectLowHt, 4.0);
     }
 

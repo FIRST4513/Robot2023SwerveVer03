@@ -37,7 +37,7 @@ public class IntakeCmds {
                 // condition
                 () -> Robot.intake.isCubeEjectDetected()
                 ),
-            new InstantCommand(() -> Robot.intake.setBrakeMode(false),Robot.intake)
+            new InstantCommand(() -> Robot.intake.setBrakeMode(true),Robot.intake)
         );
     }
 
