@@ -2,6 +2,7 @@ package frc.robot.arm.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
+import frc.robot.arm.ArmConfig;
 
 public class ArmReleaseCmd extends CommandBase {
     
@@ -17,7 +18,7 @@ public class ArmReleaseCmd extends CommandBase {
     public void initialize() {
         cmdState = CmdState.WAITING;
         Robot.arm.setBrakeMode(false);          // Turn off Arm Brake mode
-        Robot.arm.resetEncoderToAbsolute();     // Initialize motor encoder
+        Robot.arm.resetEncoderAngle(ArmConfig.ArmAngleFullRetractPos);     // Initialize motor encoder
         System.out.println("Arm Release Init - AbsEnc=" + Robot.arm.getAbsoluteArmAngle() +
                                          "     MtrAng=" + Robot.arm.getArmAngle());
         System.out.println("Arm Release Init - AbsVolt=" + Robot.arm.getAbsoluteArmVolt() +

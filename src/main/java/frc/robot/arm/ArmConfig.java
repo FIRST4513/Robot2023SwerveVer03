@@ -29,7 +29,7 @@ public class ArmConfig {
     public final static double ArmAngleEjectHighPos     = +46.0;        // Eject High position
 
     public final static double ArmAngleStorePos         = -45.0;        // Store for Travel
-    public final static double ArmAngleFullRetractPos   = -85.0;        // Full retract
+    public final static double ArmAngleFullRetractPos   = -89.0;        // Full retract
 
     // These would be for separate values for Cone or Cube (May not be needed)
     // public final static double ArmAngleConeLowPos       = -15.0;        // Angle to Eject Cone for Low Score 

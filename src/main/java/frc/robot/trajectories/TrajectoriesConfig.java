@@ -8,11 +8,11 @@ public class TrajectoriesConfig {
     public static final double kGenPathMaxAceel = 3.0;
 
     // PID Vaues for 2023 Spectrum
-    public static final double kPTranslationController = 1.5;    // ???????????????
+    public static final double kPTranslationController = 2.1;    // ???????????????
     public static final double kITranslationController = 0.0;
     public static final double kDTranslationController = 0.0;
 
-    public static final double kPRotationController = 0.75;      // 5.0; // ????????????????
+    public static final double kPRotationController = 4.5;      // 5.0; // ????????????????
     public static final double kIRotationController = 0.0;
     public static final double kDRotationController = 0.01;
 

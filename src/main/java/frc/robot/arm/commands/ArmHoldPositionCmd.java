@@ -12,7 +12,7 @@ public class ArmHoldPositionCmd extends CommandBase {
 
     @Override
     public void initialize() {
-        Robot.arm.resetEncoderToAbsolute();     // Initialize Arm motor encoder to absolute
+        // Robot.arm.resetEncoderToAbsolute();     // Initialize Arm motor encoder to absolute
         angle = Robot.arm.getArmAngle();
 
     }

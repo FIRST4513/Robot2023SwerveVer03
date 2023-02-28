@@ -48,7 +48,7 @@ public class ArmSubSys extends SubsystemBase {
     public void periodic() {
         updateCurrentArmPosition();
         //if (isRetractLimitSwitchPressed() == true) { resetEncoderToAbsolute(); }
-        if (isExtendLimitSwitchPressed() == true)  { resetEncoderToAbsolute(); }
+        if (isExtendLimitSwitchPressed() == true)  { resetEncoderAngle(ArmConfig.ExtendLimitSwitchAngle); }
     }
 
     // -----------------------------------------------------
@@ -58,6 +58,7 @@ public class ArmSubSys extends SubsystemBase {
     public void lowerArm() { setArmMotor(ArmConfig.kDefaultRetractPwr); }
 
     public void holdArm() {
+        // setMMangle(mCurrArmAngle);  // TEST
         if ( Math.abs(mCurrArmAngle) < 8.0) {
             stopArm();
             return;
@@ -93,7 +94,7 @@ public class ArmSubSys extends SubsystemBase {
         if ( pwr > 0) {
             // Were extending so check if Extend Limit Switch has been hit
             if (isExtendLimitSwitchPressed()) {
-                resetEncoderToAbsolute();     // Reset Arm motor encoder to absolute
+                // resetEncoderToAbsolute();     // Reset Arm motor encoder to absolute
                 holdArm();
                 return;
             } else {
@@ -106,7 +107,7 @@ public class ArmSubSys extends SubsystemBase {
         
         // Were retracting check if Retract Lower Limit Switch has been hit
         if (isRetractLimitSwitchPressed()) {
-            resetEncoderToAbsolute();     // Initialize Arm motor encoder to absolute
+            // resetEncoderToAbsolute();     // Initialize Arm motor encoder to absolute
             //holdArm();            // We can back drive to -90 degrees
             //return;
         }
@@ -118,7 +119,7 @@ public class ArmSubSys extends SubsystemBase {
             return;
         }
 
-        if (Robot.elevator.getElevHeightInches() < 25.0) {
+        if (Robot.elevator.getElevHeightInches() < 13.0) {
             // Were trying to go past -45 degrres and elevator is down
             holdArm();            // We can back drive to -90 degrees when elev is down
             return;
@@ -128,7 +129,14 @@ public class ArmSubSys extends SubsystemBase {
             // We have parked Arm
             stopArm();
             return;
-        }      
+        }
+
+        if (getArmAngle() <= -90) {
+            holdArm();
+            return;
+        }
+
+        // we're driving to parked position (no other conditions are met)
         mArmMotor.set(pwr);
         mCurrArmPwr = pwr;
     }
@@ -226,7 +234,7 @@ public class ArmSubSys extends SubsystemBase {
 
     public double getAbsoluteArmAngleRaw(){
         // Convert absolute encoder Volts 0 to +3.3 volts to 0 to -360 degrees (CW)
-        double volts = armAbsoluteAngleSensor.getAverageValue();
+        double volts = armAbsoluteAngleSensor.getAverageVoltage();
         double angle = volts / ArmConfig.kAnalogVoltsToDegree;
         return angle;
     }
@@ -285,3 +293,7 @@ public class ArmSubSys extends SubsystemBase {
     }
     
 }
+
+// 88.7 -162666
+// 36 80166
+// 
