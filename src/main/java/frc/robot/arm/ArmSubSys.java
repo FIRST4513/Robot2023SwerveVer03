@@ -226,8 +226,8 @@ public class ArmSubSys extends SubsystemBase {
 
     public double getAbsoluteArmAngleRaw(){
         // Convert absolute encoder Volts 0 to +3.3 volts to 0 to -360 degrees (CW)
-        double volts = armAbsoluteAngleSensor.getAverageVoltage();
-        double angle = volts * ArmConfig.kAnalogVoltsToDegree;
+        double volts = armAbsoluteAngleSensor.getAverageValue();
+        double angle = volts / ArmConfig.kAnalogVoltsToDegree;
         return angle;
     }
     
@@ -265,7 +265,7 @@ public class ArmSubSys extends SubsystemBase {
     public double getHoldPwr(){
         double pwr = Math.sin(Math.toRadians(mCurrArmAngle)) * motorConfig.arbitraryFeedForwardScaler;
         if (mCurrArmAngle > 0) {
-            pwr *= 0.92;
+            pwr *= 0.95;
         }
         return pwr;
     }

@@ -30,7 +30,7 @@ public class ArmSRXMotorConfig {
      *               -45 degrees reverse requires -0.25 pwr to hold
     */
     //  public final double arbitraryFeedForwardScaler = 0.3536;
-     public final double arbitraryFeedForwardScaler = 0.2;
+     public final double arbitraryFeedForwardScaler = 0.15;
 
     /*
      * Cruise velocity Calculation: 1 degree = 1797 Counts     
