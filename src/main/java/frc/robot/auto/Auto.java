@@ -28,12 +28,14 @@ public class Auto {
     public static final SendableChooser<String> positionChooser = new SendableChooser<>();
     public static final SendableChooser<String> crossChooser = new SendableChooser<>();
     public static final SendableChooser<String> dockChooser = new SendableChooser<>();
+    public static final SendableChooser<String> testChooser = new SendableChooser<>();
 
     public static HashMap<String, Command> eventMap = new HashMap<>();
     public static String scoreSelect;
     public static String positionSelect;
     public static String crossSelect;
     public static String dockSelect;
+    public static String testSelect;
     public static double armPosition;
     public static double elevStartPos;
     public static double elevEndPos;
@@ -56,8 +58,11 @@ public class Auto {
                                     "RedCenterScale", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
 
 
-    // static PathPlannerTrajectory    test1MeterPath  = PathPlanner.loadPath(
-    //                                 "1Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    static PathPlannerTrajectory    blue1MeterPath  = PathPlanner.loadPath(
+                                    "blue1Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    static PathPlannerTrajectory    red1MeterPath  = PathPlanner.loadPath(
+                                    "red1Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+
     // static PathPlannerTrajectory    testTurnPath  = PathPlanner.loadPath(
     //                                 "TestTurn", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
     // static PathPlannerTrajectory    testTurn2Path  = PathPlanner.loadPath(
@@ -92,6 +97,11 @@ public class Auto {
         // Selector for Crossing the Line to score
         crossChooser.setDefaultOption(  "Do Nothing",   AutoConfig.kNoSelect);
         crossChooser.addOption(         "Cross Line",   AutoConfig.kYesSelect);
+
+        // Selector for Test
+        testChooser.setDefaultOption(  "Do Nothing",   AutoConfig.kNoSelect);
+        testChooser.addOption(         "Red 1 Meter",  "Red1Meter");
+        testChooser.addOption(         "Blue 1 Meter", "Blue1Meter");
     }
 
 
@@ -101,6 +111,7 @@ public class Auto {
         positionSelect =    positionChooser.getSelected();
         crossSelect =       crossChooser.getSelected();
         dockSelect =        dockChooser.getSelected();
+        testSelect =        testChooser.getSelected();
     }
     
 
@@ -111,6 +122,15 @@ public class Auto {
     public static Command getAutonomousCommand() {
         getAutoSelections();
         setStartPose();
+
+        // ---------------------- Test ------------------
+        if ( testSelect == "Red1Meter") {
+            return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(red1MeterPath, 5.0);
+        }
+        if ( testSelect == "Blue1Meter") {
+            return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blue1MeterPath, 5.0);
+        }
+
 
         // ----------------------- Do Nothing -------------------
         if (doNothing()) {
