@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobotTelemetry;
 import frc.robot.auto.commands.AutoCmds;
+import frc.robot.autoBalance.commands.AutoBalanceCommand;
+import frc.robot.swerve.commands.LockSwerve;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class Auto {
@@ -242,7 +244,10 @@ public class Auto {
 
         // ----------------------- Get on Charging Station Only -------------------
         if (dockOnly()) {
-            return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0);
+            return new SequentialCommandGroup(
+                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0),
+                AutoCmds.AutoBalanceCmd()
+            ); 
         }
         
 
@@ -251,13 +256,15 @@ public class Auto {
             if ( low() ) {
                 return new SequentialCommandGroup(  
                     AutoCmds.PlaceCubeLowCmd(), // Returns to store position at completion
-                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0)
+                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0),
+                    AutoCmds.AutoBalanceCmd()
                 );
             }
             if ( mid() ) {
                 return new SequentialCommandGroup(  
                     AutoCmds.PlaceCubeMidCmd(), // Returns to store position at completion
-                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0)
+                    TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0),
+                    AutoCmds.AutoBalanceCmd()
                 );
             }
         }

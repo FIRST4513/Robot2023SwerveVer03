@@ -11,11 +11,13 @@ import frc.robot.arm.ArmConfig;
 import frc.robot.arm.commands.ArmCmds;
 import frc.robot.arm.commands.ArmHoldPositionCmd;
 import frc.robot.arm.commands.ArmReleaseCmd;
+import frc.robot.autoBalance.commands.AutoBalanceCommand;
 import frc.robot.elevator.commands.ElevReleaseArmCmd;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.elevator.commands.ElevatorHoldPosCmd;
 import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.operator.commands.OperatorGamepadCmds;
+import frc.robot.swerve.commands.LockSwerve;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class AutoCmds {
@@ -74,6 +76,13 @@ public class AutoCmds {
             new ElevReleaseArmCmd(),
             new ArmReleaseCmd()
         );
+    }
+
+    public static Command AutoBalanceCmd(){
+        return new SequentialCommandGroup(
+            //new AutoBalanceCommand(),
+            new LockSwerve()
+        ); 
     }
 
     
