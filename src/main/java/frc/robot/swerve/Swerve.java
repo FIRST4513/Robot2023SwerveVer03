@@ -134,6 +134,11 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    public void setWheelsLockAngle(){
+//        Rotation2D wheelAngle = new Rotation2d().fromDegrees(45);
+//        SwerveModuleState flMod = new SwerveModuleState(getGyroYawDegrees(), Rotation2d(getGyroYaw()) 
+    }
+
     // Set brakes On/Off for swerve module motors
     public void setBrakeMode(boolean enabled) {
         for (SwerveModule mod : mSwerveMods) {

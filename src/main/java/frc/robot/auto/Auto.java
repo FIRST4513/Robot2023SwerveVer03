@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.RobotTelemetry;
 import frc.robot.auto.commands.AutoCmds;
+import frc.robot.swerve.commands.SwerveCmds;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class Auto {
@@ -164,7 +165,10 @@ public class Auto {
         }
 
         if (testSelect == "Test Turn2") {
-            return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testTurn2Path, 10.0);            
+            return new SequentialCommandGroup(
+                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testTurn2Path, 10.0),
+                SwerveCmds.SetBrakeModeOnCmd()
+            );
         }
 
         if (testSelect == "BlueRightConeCross") {      
@@ -175,8 +179,12 @@ public class Auto {
             return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueRightCubeCrossPath, 10.0);            
         }
 
-        if (testSelect == "BlueCtrTable") {      
-              return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueCtrTablePath, 10.0);            
+        if (testSelect == "BlueCtrTable") {   
+            return new SequentialCommandGroup(
+                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blueCtrTablePath, 10.0), 
+                SwerveCmds.SetBrakeModeOnCmd()
+                // Balance command
+            );    
         }
 
         if (testSelect == "BlueLeftCubeCross") {      
