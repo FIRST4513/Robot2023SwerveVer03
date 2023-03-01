@@ -41,6 +41,14 @@ public class IntakeCmds {
         );
     }
 
+    public static Command IntakeEjectCubeCmd() {
+        return new RunCommand(() -> Robot.intake.setMotorsCubeEject(), Robot.intake).withTimeout(1.0);
+    }
+
+    public static Command IntakeEjectConeCmd() {
+        return new RunCommand(() -> Robot.intake.setMotorsConeEject(), Robot.intake).withTimeout(1.0);
+    }
+
     // ------------ Intake Stop ------------------
     public static Command IntakeStopCmd() {
         return new InstantCommand( () -> Robot.intake.stopMotors(), Robot.intake)

@@ -6,7 +6,7 @@ public class ElevatorConfig {
     // Measured 2/18/23 25.375 inches = 84,139 sensor units
     public final static double kCntsPerInch         = 3315.822;     // Convert cnt to inches of height
     public final static double kInchesPerCnt        = 0.000301584;  // Convert inches of height to cnt
-    public final static double KheightDeadBand      = +0.10;        // How close to target is close enough (inches)      
+    public final static double KheightDeadBand      = +0.50;        // How close to target is close enough (inches)      
 
     // ------ Position Constatnts ------
     public final static double KElevMaxTopHt        = 31.0;         // This is the top GO NO FURTHER!
@@ -20,11 +20,11 @@ public class ElevatorConfig {
     public final static double ElevStoreHt          = 0.0;          // Position to Store Cube/Cone retracted for motion
     public final static double ElevRetractHt        = 0.0;          // Position to fully retract
     public final static double ElevEjectLowHt       = 6.0;          // Position to Score a Cube/Cone in LOW Position  
-    public final static double ElevEjectCubeLowSafeHt = 20.0;          // Position to Score a Cube/Cone in LOW Position 
-    public final static double ElevEjectCubeMidSafeHt = 25.0;          // Position to Score a Cube/Cone in LOW Position 
+    public final static double ElevEjectCubeLowSafeHt = 26.5;          // Position to Score a Cube/Cone in LOW Position 
+    public final static double ElevEjectCubeMidSafeHt = KElevMaxTopHt;          // Position to Score a Cube/Cone in LOW Position 
     public final static double ElevEjectCubeHighSafeHt = KElevMaxTopHt;          // Position to Score a Cube/Cone in LOW Position 
     
-    public final static double ElevEjectMidHt       = 25.5;         // Position to Score a Cube/Cone in MID Position
+    public final static double ElevEjectMidHt       = KElevMaxTopHt;     // Position to Score a Cube/Cone in MID Position
     public final static double ElevEjectHighHt      = 30.0;         // Position to Score a Cube/Cone in Hi Position
     public final static double ElevArmReleaseHt     = 24.0;         // Position needed to release arm on startup
 

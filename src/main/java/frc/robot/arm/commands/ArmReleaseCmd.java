@@ -1,5 +1,6 @@
 package frc.robot.arm.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.arm.ArmConfig;
@@ -10,8 +11,11 @@ import frc.robot.arm.ArmConfig;
 
 public class ArmReleaseCmd extends CommandBase {
     
-    static enum CmdState {FALLING, HOLDING, DONE};
+    static enum CmdState {FALLING, ONLIMITSW, DONE};
     CmdState cmdState = CmdState.FALLING;
+
+    Timer cmdTimer = new Timer();
+    double time, angle;
 
     // Command Constructor
     public ArmReleaseCmd() {
@@ -20,37 +24,34 @@ public class ArmReleaseCmd extends CommandBase {
 
     @Override
     public void initialize() {
+        cmdTimer.reset();
+        cmdTimer.start();
         cmdState = CmdState.FALLING;
-        Robot.arm.setBrakeMode(false);          // Turn off Arm Brake mode to let it fall when elev high enough
-        Robot.arm.resetEncoderAngle(ArmConfig.ArmAngleFullRetractPos);     // Initialize motor encoder                                
+        Robot.arm.setBrakeMode(false);                                     // Turn off Arm Brake mode to let it fall
+        Robot.arm.resetEncoderAngle(ArmConfig.ArmAngleFullRetractPos);     // Initialize motor encoder to back angle                               
     }
 
     @Override
     public void execute() {
+        time = cmdTimer.get();
+        angle = Robot.arm.getArmAngle();
 
-        if (cmdState == CmdState.FALLING) {
-            if (Robot.arm.isRetractLimitSwitchPressed() ) {
-                // The Arm has now reached the retracted switch
-                cmdState = CmdState.HOLDING;
-                Robot.arm.setBrakeMode(true);
-                Robot.arm.setMMangle( ArmConfig.ArmAngleStorePos );     // Move and hold at store pos
-                return;
-            } else {
-                // Were still waiting for Arm to fall to the switch (keep waiting)
-                return;
-            }
+        if ( (cmdState == CmdState.FALLING) && Robot.arm.isRetractLimitSwitchPressed() ) {
+            // The Arm has now reached the retract switch we can end now.
+            // The Elevator lower will end also at this condition
+            cmdState = CmdState.ONLIMITSW;
+            Robot.arm.setBrakeMode(true);
+            System.out.println("----- Arm Release Command Now On Limit Sw  Angle = " + time + " Angle = " + angle);
+            return;
         }
-        if (cmdState == CmdState.HOLDING) {
-            if (Robot.elevator.getElevHeightInches() < 0.5 ) {
-                // The Elev has now lowered back down to almost bottom
-                cmdState = CmdState.DONE;
-                return;
-            } else {
-                // Were still waiting for Elev to get to the bottom
-                Robot.arm.setMMangle( ArmConfig.ArmAngleStorePos );     // Keep holding at store pos
-                return;
-            }
+        if ( (cmdState == CmdState.ONLIMITSW) && !Robot.arm.isRetractLimitSwitchPressed() ) {
+            // The Arm has now reached the retract switch we can end now.
+            // The Elevator lower will end also at this condition
+            cmdState = CmdState.DONE;
+            System.out.println("----- Arm Release Command Now Off Limit Sw  Angle = " + time + " Angle = " + angle);
+            return;
         }
+
     }
 
     @Override

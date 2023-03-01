@@ -13,12 +13,11 @@ public class ArmHoldPositionCmd extends CommandBase {
     @Override
     public void initialize() {
         angle = Robot.arm.getArmAngle();
-
     }
 
     @Override
     public void execute() {
-        Robot.arm.setMMangle(angle);
+        Robot.arm.holdArm();
     }
 
     @Override

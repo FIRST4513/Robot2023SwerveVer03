@@ -63,7 +63,8 @@ public class Gyro {
     }
 
     public double getGyroInclineAngle() {
-        return gyro.getPitch();      // Adjust Constant SIn value
+        double angle = getGyroInclineRaw() / -0.01738;
+        return angle;
     }
     
 }

@@ -20,6 +20,11 @@ public class AutoConfig {
     public static final String kLowSelect           = "Low";
     public static final String kMidSelect           = "Mid";
     public static final String kHighSelect          = "High";
+    public static final String kAlianceAutoSelect   = "Auto";
+    public static final String kAlianceRedSelect   = "Red";
+    public static final String kAlianceBlueSelect   = "Blue";
+
+
 
     // Auto Start Position Poses
     public static final Rotation2d kLeftYaw         = Rotation2d.fromDegrees(-180.0);

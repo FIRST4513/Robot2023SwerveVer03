@@ -23,6 +23,7 @@ public class Auto {
     public static final SendableChooser<String> crossChooser = new SendableChooser<>();
     public static final SendableChooser<String> dockChooser = new SendableChooser<>();
     public static final SendableChooser<String> testChooser = new SendableChooser<>();
+    public static final SendableChooser<String> allianceChooser = new SendableChooser<>();
 
     public static HashMap<String, Command> eventMap = new HashMap<>();
     public static String scoreSelect;
@@ -30,6 +31,8 @@ public class Auto {
     public static String crossSelect;
     public static String dockSelect;
     public static String testSelect;
+    public static String allianceSelect;
+
     public static double armPosition;
     public static double elevStartPos;
     public static double elevEndPos;
@@ -43,7 +46,7 @@ public class Auto {
     static PathPlannerTrajectory    blueLeftCubeShortPath  = PathPlanner.loadPath(
                                     "BlueLeftCubeShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);     
     static PathPlannerTrajectory    CenterScalePath  = PathPlanner.loadPath(
-                                    "CenterScale", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+                                    "CtrScale", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
     static PathPlannerTrajectory    redRightCubeShortPath  = PathPlanner.loadPath(
                                     "RedRightCubeShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);        
     static PathPlannerTrajectory    redLeftCubeLongPath  = PathPlanner.loadPath(
@@ -88,6 +91,11 @@ public class Auto {
         testChooser.setDefaultOption(  "Do Nothing",   AutoConfig.kNoSelect);
         testChooser.addOption(         "Red 1 Meter",  "Red1Meter");
         testChooser.addOption(         "Blue 1 Meter", "Blue1Meter");
+
+        // Selector for Aliance Color
+        testChooser.setDefaultOption(  "Automatic",     AutoConfig.kAlianceAutoSelect);
+        testChooser.addOption(          "Red",          AutoConfig.kAlianceRedSelect);
+        testChooser.addOption(          "Blue",         AutoConfig.kAlianceBlueSelect);
     }
 
 
@@ -98,8 +106,15 @@ public class Auto {
         crossSelect =       crossChooser.getSelected();
         dockSelect =        dockChooser.getSelected();
         testSelect =        testChooser.getSelected();
+        allianceSelect =    allianceChooser.getSelected();
+
+        System.out.println("Score Select = " +      scoreSelect);
+        System.out.println("Position Select = " +   positionSelect);
+        System.out.println("Cross Select = " +      crossSelect);
+        System.out.println("Dock Select = " +       dockSelect);
+        System.out.println("Alliance Select = " +   allianceSelect);
+        System.out.println("Test Select = " +       testSelect);
     }
-    
 
     // ------------------------------------------------------------------------
     //            Get selected Autonomous Command Routine
@@ -117,15 +132,15 @@ public class Auto {
         //     return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(blue1MeterPath, 5.0);
         // }
 
-
         // ----------------------- Do Nothing -------------------
         if (doNothing()) {
-            // Set position and Gyro Heading based on position
+            System.out.println("********* DO Nothing Selection *********");
             return AutoCmds.DoNothingCmd();
         }
 
-        // ----------------------- Score Only -------------------
+        // ----------------------- Place Only -------------------
         if (placeOnly()) {
+            System.out.println("********* Place Only Selection *********");
             if ( low() ) {
                 return AutoCmds.PlaceCubeOnlyCmd("Low");
             } 
@@ -137,8 +152,9 @@ public class Auto {
 
         // ----------------------- Cross Line Only -------------------
         if (crossOnly()) {
+            System.out.println("********* Cross Line Only Selection *********");
             if (redRight())     { return AutoCmds.CrossLineOnlyCmd(redRightCubeShortPath); }
-            if (redLeft())      { return AutoCmds.CrossLineOnlyCmd(redRightCubeShortPath); }
+            if (redLeft())      { return AutoCmds.CrossLineOnlyCmd(redLeftCubeLongPath); }
             if (blueRight())    { return AutoCmds.CrossLineOnlyCmd(blueRightCubeLongPath); }
             if (blueLeft())     {return AutoCmds.CrossLineOnlyCmd(blueLeftCubeShortPath);  }
             return new PrintCommand("ERROR: Invalid cross only auto command");
@@ -146,6 +162,7 @@ public class Auto {
     
         // ----------------------- Place and Cross Line  -------------------
         if ( place() && cross() ) {
+            System.out.println("********* Place and Cross Selection *********");
             if ( low() ){
                 if ( redRight() )    { return AutoCmds.PlaceAndCrossCmd( "Low", redRightCubeShortPath); }
                 if ( redLeft() )     { return AutoCmds.PlaceAndCrossCmd( "Low", redLeftCubeLongPath);   }
@@ -165,6 +182,7 @@ public class Auto {
 
         // ----------------------- Get on Charging Station Only -------------------
         if (dockOnly()) {
+            System.out.println("********* Dock only Selection *********");
             return new SequentialCommandGroup(
                 TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0),
                 AutoCmds.AutoBalanceCmd()
@@ -173,10 +191,12 @@ public class Auto {
 
         // ----------------------- Score and Get on Charging Platform  -------------------
         if (place() && !cross() && dock()) {
+            System.out.println("********* Score and get on Platform Selection *********");
             if ( low() )    { return AutoCmds.PlaceAndChargingTableCmd( "Low", CenterScalePath); }
             if ( mid() )    { return AutoCmds.PlaceAndChargingTableCmd( "Mid", CenterScalePath); }
             return new PrintCommand("Error on auto place only paramter");
         }
+
        return new PrintCommand("Error on auto Commands Selection");
     }
 
@@ -263,12 +283,18 @@ public class Auto {
     }
 
     private static boolean red() {
-        if (DriverStation.getAlliance() == Alliance.Red) { return true; }
+        if (allianceSelect == AutoConfig.kAlianceAutoSelect) {
+            if (DriverStation.getAlliance() == Alliance.Red) { return true; }
+        }
+        if (allianceSelect == AutoConfig.kAlianceRedSelect)  { return true; }
         return false;
     }
 
     private static boolean blue() {
-        if (DriverStation.getAlliance() == Alliance.Blue) { return true; }
+        if (allianceSelect == AutoConfig.kAlianceAutoSelect) {
+            if (DriverStation.getAlliance() == Alliance.Blue) { return true; }
+        }
+        if (allianceSelect == AutoConfig.kAlianceBlueSelect)  { return true; }
         return false;
     }
 
@@ -288,12 +314,12 @@ public class Auto {
     }
 
     private static boolean low() {
-        if (positionSelect.equals(AutoConfig.kLowSelect)) { return true; }
+        if (scoreSelect.equals(AutoConfig.kLowSelect)) { return true; }
         return false;
     }
 
     private static boolean mid() {
-        if (positionSelect.equals(AutoConfig.kMidSelect)) { return true; }
+        if (scoreSelect.equals(AutoConfig.kMidSelect)) { return true; }
         return false;
     }
 
@@ -321,23 +347,22 @@ public class Auto {
     // ------------------------------ Print Auto Duration ---------------------------
     /** Called in RobotPeriodic and displays the duration of the auto command Based on 6328 code */
     public static void printAutoDuration() {
-        Command autoCommand = Auto.getAutonomousCommand();
-        if (autoCommand != null) {
-            if (!autoCommand.isScheduled() && !autoMessagePrinted) {
-                if (DriverStation.isAutonomousEnabled()) {
-                    RobotTelemetry.print(
-                            String.format(
-                                    "*** Auton finished in %.2f secs ***",
-                                    Timer.getFPGATimestamp() - autoStart));
-                } else {
-                    RobotTelemetry.print(
-                            String.format(
-                                    "*** Auton CANCELLED in %.2f secs ***",
-                                    Timer.getFPGATimestamp() - autoStart));
-                }
-                autoMessagePrinted = true;
-            }
-        }
+        //Command autoCommand = Auto.getAutonomousCommand();
+    //     if (autoCommand != null) {
+    //         if (!autoCommand.isScheduled() && !autoMessagePrinted) {
+    //             if (DriverStation.isAutonomousEnabled()) {
+    //                 RobotTelemetry.print(
+    //                         String.format(
+    //                                 "*** Auton finished in %.2f secs ***",
+    //                                 Timer.getFPGATimestamp() - autoStart));
+    //             } else {
+    //                 RobotTelemetry.print(
+    //                         String.format(
+    //                                 "*** Auton CANCELLED in %.2f secs ***",
+    //                                 Timer.getFPGATimestamp() - autoStart));
+    //             }
+    //             autoMessagePrinted = true;
+    //         }
+    //     }
     }
-
 }

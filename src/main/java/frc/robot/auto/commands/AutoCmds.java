@@ -40,11 +40,11 @@ public class AutoCmds {
     public static Command PlaceCubeCmd( String level ) {
         if (level == "Low") {
             // Set position and Gyro Heading based on position
-            return new SequentialCommandGroup(           
+            return new SequentialCommandGroup(
                 ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
                 OperatorGamepadCmds.SetArmElevToEjectLowPosSafeCmd(),
-                IntakeCmds.IntakeEjectCmd(),
-                OperatorGamepadCmds.SetArmElevToStorePosCmd()                
+                IntakeCmds.IntakeEjectCubeCmd(),
+                OperatorGamepadCmds.SetArmElevToStorePosFromLowSafeCmd()
             );
         }
         if (level == "Mid") {
@@ -52,8 +52,8 @@ public class AutoCmds {
             return new SequentialCommandGroup(           
                 ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
                 OperatorGamepadCmds.SetArmElevToEjectMidPosSafeCmd(),
-                IntakeCmds.IntakeEjectCmd(),
-                OperatorGamepadCmds.SetArmElevToStorePosCmd()  
+                IntakeCmds.IntakeEjectCubeCmd(),
+                OperatorGamepadCmds.SetArmElevToStorePosFromMidSafeCmd()
             );
         }
         return new PrintCommand("Error on auto place only paramter");

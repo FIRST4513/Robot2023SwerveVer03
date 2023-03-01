@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
     public static ArmSubSys arm;
     public static IntakeSubSys intake;
     public static RobotTelemetry telemetry;
-    public static Auto auto;
+    //public static Auto auto;
 
     public static String MAC = "";
     public static Timer sysTimer = new Timer();
@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
         // Ensures that the main thread is the highest priority thread
         Threads.setCurrentThreadPriority(true, 99);
         CommandScheduler.getInstance().run();       // Make sure scheduled commands get run
-        Auto.printAutoDuration();                   // displays the duration of the auto command
+        //Auto.printAutoDuration();                   // displays the duration of the auto command
         Threads.setCurrentThreadPriority(true, 10); // Set the main thread back to normal priority
     }
 
@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
     private void intializeSubsystems() {
         logger = new Logger(); 
         logger.startTimer();
-        auto = new Auto();
+        //auto = new Auto();
         swerve = new Swerve();
         pose = new Pose();
         trajectories = new Trajectories();
@@ -109,16 +109,19 @@ public class Robot extends TimedRobot {
     // -----------------  Autonomous Mode Methods ------------------
     @Override
     public void autonomousInit() {
+        System.out.println("Starting Auto Init");
         resetCommandsAndButtons();
         swerve.setLastAngleToCurrentAngle();
-        // arm.resetEncoderToAbsolute();       // Set arm motor encoder to absolute value
         sysTimer.reset();			// System timer for Competition run
     	sysTimer.start();
         //logger.startTimer();
-
+        
         Command autoCommand = Auto.getAutonomousCommand();
         if (autoCommand != null) {
+            System.out.println("Auto Command Not null");
             autoCommand.schedule();
+        } else {
+            System.out.println("********** Auto Command NULL ************");
         }
     }
 

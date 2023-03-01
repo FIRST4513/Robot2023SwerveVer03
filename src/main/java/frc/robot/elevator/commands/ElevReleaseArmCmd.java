@@ -13,10 +13,13 @@ import frc.robot.elevator.ElevatorConfig;
 
 public class ElevReleaseArmCmd extends CommandBase {
     
-    static enum CmdState {ELEVRAISING, ELEVLOWERING, SETTLING, DONE};
+    static enum CmdState {ELEVRAISING, ONLIMITSW, DONE};
     CmdState cmdState = CmdState.ELEVRAISING;
     Timer settleTimer = new Timer();
     double settleTime = 0.25;       // Time to allow elevator to settle onto bottom
+
+    Timer cmdTimer = new Timer();
+    double time, ht;
 
     // Command Constructor
     public ElevReleaseArmCmd() {
@@ -25,6 +28,8 @@ public class ElevReleaseArmCmd extends CommandBase {
 
     @Override
     public void initialize() {
+        cmdTimer.reset();
+        cmdTimer.start();
         cmdState = CmdState.ELEVRAISING;
         Robot.elevator.setBrakeMode(true);                              // Turn on brake mode
         Robot.elevator.setMMheight(ElevatorConfig.ElevArmReleaseHt);    // Get Elev Moving up
@@ -32,42 +37,26 @@ public class ElevReleaseArmCmd extends CommandBase {
 
     @Override
     public void execute() {
-        // Raise Elevator to clear arm and let fall
+        time = cmdTimer.get();
+        ht = Robot.elevator.getElevHeightInches();
 
-        if (cmdState == CmdState.ELEVRAISING) {
-            // Lets look to see when it hits the switch on way down
-            if (Robot.arm.isRetractLimitSwitchPressed()) {
-                // Arm has fallen enough to be seen by retract limit switch
-                cmdState = CmdState.ELEVLOWERING;
-            } else {
-                Robot.elevator.setMMheight(ElevatorConfig.ElevArmReleaseHt);    // Keep on Moving elev up
-                return;
-            }
+        // Raise Elevator to let arm fall
+        Robot.elevator.setMMheight(ElevatorConfig.ElevArmReleaseHt);    // Move Elev up
+
+        // Lets look to see when arm reaches the retract switch on way down
+        if ((cmdState == CmdState.ELEVRAISING) && (Robot.arm.isRetractLimitSwitchPressed())) {
+            cmdState = CmdState.ONLIMITSW;
+            System.out.println("----- Elev Release, arm now On Limit Sw  Ht = " + time + " Ht = " + ht);
+            return;
         }
 
-        if (cmdState == CmdState.ELEVLOWERING) {
-            if (Robot.elevator.isLowerLimitSwitchPressed()) {
-                // the elevator has reached the bottom
-                cmdState = CmdState.SETTLING;
-                settleTimer.reset();
-                settleTimer.start();
-                return;
-            } else {
-                // Continue to lower elev
-                Robot.elevator.elevLower();
-                return;
-            }
+        // Lets look to see when arm clears the retract switch on way down so we can be done
+        if ((cmdState == CmdState.ONLIMITSW) && (!Robot.arm.isRetractLimitSwitchPressed())) {
+            cmdState = CmdState.DONE;
+            System.out.println("----- Elev Release, arm now Off Limit Sw  Ht = " + time + " Ht = " + ht);
+            return;
         }
-
-        if (cmdState == CmdState.SETTLING) {
-            if (settleTimer.get() <= settleTime) {
-                // Continue Letting Elev fall the last inch
-                Robot.elevator.elevStop();
-            } else {
-                cmdState = CmdState.DONE;
-                Robot.elevator.resetEncoder();      // Zero out Encoder we are now at bottom
-            }
-        }
+        return;
     }
 
     @Override

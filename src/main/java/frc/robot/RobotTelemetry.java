@@ -68,7 +68,8 @@ public class RobotTelemetry extends TelemetrySubsystem {
         tab.add("Position Selection", Auto.positionChooser)     .withPosition(4, 8).withSize(3, 2);
         tab.add("Cross Selection", Auto.crossChooser)           .withPosition(8, 8).withSize(3, 2);
         tab.add("Dock Selection", Auto.dockChooser)             .withPosition(12, 8).withSize(3, 2);
-        tab.add("Test Selection", Auto.testChooser)             .withPosition(16, 8).withSize(3, 2);
+        tab.add("Aliance Selection", Auto.testChooser)          .withPosition(16, 8).withSize(3, 2);
+        tab.add("Test Selection", Auto.testChooser)             .withPosition(20, 8).withSize(3, 2);
 
         // Column 2
         tab.addBoolean("Connected?", () -> flash())

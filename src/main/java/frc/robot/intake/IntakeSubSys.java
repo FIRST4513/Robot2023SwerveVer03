@@ -23,6 +23,7 @@ public class IntakeSubSys extends SubsystemBase {
         config = new IntakeConfig();
         configureTalonSRXControllers();
         stopMotors();
+        setBrakeMode(true);
     } 
 
     // --------------------------------------------------------
@@ -36,6 +37,7 @@ public class IntakeSubSys extends SubsystemBase {
     public void setLowerMotor(DoubleSupplier speed) { intakeUpperMotor.set(speed.getAsDouble()); }
 
     public void stopMotors() {
+        setBrakeMode(true);
         intakeUpperMotor.stopMotor();
         intakeLowerMotor.stopMotor();
     }

@@ -58,8 +58,9 @@ public class ElevatorSubSys extends SubsystemBase {
 
     // ------------ Hold Elevator Position ----------
     public void elevHoldMtr(){
-        elevSetSpeed( ElevatorConfig.KHoldSpeedDefault ); 
-        mCurrElevPwr = ElevatorConfig.KHoldSpeedDefault;
+        //elevSetSpeed( ElevatorConfig.KHoldSpeedDefault ); 
+        //mCurrElevPwr = ElevatorConfig.KHoldSpeedDefault;
+        setMMheight(mCurrElevHt);
     }
 
     // ------------ Stop Elevator Motor  ----------
