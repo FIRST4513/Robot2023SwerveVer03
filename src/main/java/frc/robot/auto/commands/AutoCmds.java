@@ -43,7 +43,8 @@ public class AutoCmds {
             return new SequentialCommandGroup(
                 ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
                 OperatorGamepadCmds.SetArmElevToEjectLowPosSafeCmd(),
-                IntakeCmds.IntakeEjectCubeCmd(),
+                IntakeCmds.IntakeEjectCubeCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
+                IntakeCmds.IntakeStopCmd(),
                 OperatorGamepadCmds.SetArmElevToStorePosFromLowSafeCmd()
             );
         }
@@ -52,7 +53,8 @@ public class AutoCmds {
             return new SequentialCommandGroup(           
                 ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
                 OperatorGamepadCmds.SetArmElevToEjectMidPosSafeCmd(),
-                IntakeCmds.IntakeEjectCubeCmd(),
+                IntakeCmds.IntakeEjectCubeCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
+                IntakeCmds.IntakeStopCmd(),
                 OperatorGamepadCmds.SetArmElevToStorePosFromMidSafeCmd()
             );
         }
@@ -63,6 +65,7 @@ public class AutoCmds {
     public static Command CrossLineOnlyCmd( PathPlannerTrajectory path) {
         return new SequentialCommandGroup(
             TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path, 5.0)
+
         );
     }
 
@@ -78,7 +81,7 @@ public class AutoCmds {
     public static Command GetOnChargingTableCmd( PathPlannerTrajectory path ) {
         return new SequentialCommandGroup(  
             TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path, 5.0),
-            AutoCmds.AutoBalanceCmd()            
+            AutoBalanceCmd()            
         );
     }
 

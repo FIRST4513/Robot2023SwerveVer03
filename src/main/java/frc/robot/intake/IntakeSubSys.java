@@ -10,6 +10,7 @@ import frc.robot.RobotConfig.Motors;
 
 public class IntakeSubSys extends SubsystemBase {
     public static IntakeConfig config;
+    public static String intakeBrakeStatus = "";
     
     //Devices
     public WPI_TalonSRX intakeUpperMotor  = new WPI_TalonSRX(Motors.intakeUpperMotorID);
@@ -75,10 +76,16 @@ public class IntakeSubSys extends SubsystemBase {
         if (enabled) {
             intakeUpperMotor.setNeutralMode(NeutralMode.Brake);
             intakeLowerMotor.setNeutralMode(NeutralMode.Brake);
+            intakeBrakeStatus = "Intake Brake On";
         } else {
             intakeUpperMotor.setNeutralMode(NeutralMode.Coast);
             intakeLowerMotor.setNeutralMode(NeutralMode.Coast);
+            intakeBrakeStatus = "Intake Brake Off";
         }
+    }
+
+    public String getBrakeStatus(){
+        return intakeBrakeStatus;
     }
 
     // ----------------------------------------------------------------
@@ -87,9 +94,17 @@ public class IntakeSubSys extends SubsystemBase {
 
     // --------- Cone Detects ----------
     public boolean isConeDetected(){
-        if(coneDetectSensor.getAverageVoltage() > IntakeConfig.coneDetectTrue) { return true; } 
+        if(getConeDetectValue() > IntakeConfig.coneDetectTrue) { return true; } 
         return false;
     }
+
+    public double getConeDetectValue(){
+        return coneDetectSensor.getAverageVoltage();
+    }
+    public double getCubeDetectValue(){
+        return cubeDetectSensor.getAverageVoltage();
+    }
+
 
     public String coneDetectStatus(){
         if(isConeDetected())    { return "Detected"; } 

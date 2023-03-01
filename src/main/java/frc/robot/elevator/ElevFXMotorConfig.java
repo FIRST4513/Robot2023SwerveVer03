@@ -23,8 +23,8 @@ public class ElevFXMotorConfig {
      *                              1  inch in 1/100 second ( 100 ms = 3,316 cnts)
      *                              1 inch = 3,316 sensor units
      */
-    public final double motionCruiseVelocity        = 4250; // 10 inches per second
-    public final double motionAcceleration          = 4250; // 1 second to get up to cruise velocity
+    public final double motionCruiseVelocity        = 20000; // 10 inches per second
+    public final double motionAcceleration          = 30000; // 1 second to get up to cruise velocity
     public final int    motionCurveStrength         = 0;    // 0 no smoothing to 8 max smoothing
 
     /*
@@ -34,7 +34,7 @@ public class ElevFXMotorConfig {
      *      ( 1023 = full Pwr, 3316 = sensor units of error)
      *      controller will add 0.02 pwr for each inch we are off (up to the max velocity specified)
      */
-    public final double kP = 0.07;    // Determined by testing on 2/19/23
+    public final double kP = 0.08;    // Determined by testing on 2/19/23
     public final double kI = 0.0;     // could be 0
     public final double kD = 0.0;     // could be 0
     public final double kF = 0.0;     // 0 we will be using ArbitraryFeedForward for position control
@@ -42,7 +42,7 @@ public class ElevFXMotorConfig {
     public final static double arbitraryFeedForward = 0.08; // Measured value to hold elev
 
     /* Current Limiting */
-    public final int            currentLimit            = 30;
+    public final int            currentLimit            = 40;
     public final int            triggerThresholdLimit   = 0;
     public static final int     peakCurrentDuration     = 100;      // Time in milliseconds
     public final boolean        enableCurrentLimit      = true;

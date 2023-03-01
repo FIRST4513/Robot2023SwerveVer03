@@ -67,7 +67,7 @@ public class SwerveModule extends SubsystemBase {
     // ------------ Periodic Update of Wheel State Info. -----------
     @Override
     public void periodic() {
-        logSwerveModuleData();
+        //logSwerveModuleData();
     }
 
     // -----------------------------------------------------
@@ -236,7 +236,7 @@ public class SwerveModule extends SubsystemBase {
         line += "Optimized Angle,Optimized Speed,";
         line += "Delta Angle,Output Angle,";
         line += "Actual Vel, FeedForward";
-        Robot.logger.appendLog(line);
+        //Robot.logger.appendLog(line);
     }
 
     // ----------- Log Drivetrain data --------------------

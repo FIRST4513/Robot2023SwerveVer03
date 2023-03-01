@@ -93,9 +93,9 @@ public class Auto {
         testChooser.addOption(         "Blue 1 Meter", "Blue1Meter");
 
         // Selector for Aliance Color
-        testChooser.setDefaultOption(  "Automatic",     AutoConfig.kAlianceAutoSelect);
-        testChooser.addOption(          "Red",          AutoConfig.kAlianceRedSelect);
-        testChooser.addOption(          "Blue",         AutoConfig.kAlianceBlueSelect);
+        allianceChooser.setDefaultOption( "Automatic",    AutoConfig.kAlianceAutoSelect);
+        allianceChooser.addOption(        "Red",          AutoConfig.kAlianceRedSelect);
+        allianceChooser.addOption(        "Blue",         AutoConfig.kAlianceBlueSelect);
     }
 
 
@@ -105,7 +105,7 @@ public class Auto {
         positionSelect =    positionChooser.getSelected();
         crossSelect =       crossChooser.getSelected();
         dockSelect =        dockChooser.getSelected();
-        testSelect =        testChooser.getSelected();
+        //testSelect =        testChooser.getSelected();
         allianceSelect =    allianceChooser.getSelected();
 
         System.out.println("Score Select = " +      scoreSelect);
@@ -113,7 +113,7 @@ public class Auto {
         System.out.println("Cross Select = " +      crossSelect);
         System.out.println("Dock Select = " +       dockSelect);
         System.out.println("Alliance Select = " +   allianceSelect);
-        System.out.println("Test Select = " +       testSelect);
+        //System.out.println("Test Select = " +       testSelect);
     }
 
     // ------------------------------------------------------------------------
@@ -175,9 +175,9 @@ public class Auto {
                 if ( redLeft() )     { return AutoCmds.PlaceAndCrossCmd( "Mid", redLeftCubeLongPath);   }
                 if ( blueRight() )   { return AutoCmds.PlaceAndCrossCmd( "Mid", blueRightCubeLongPath); }
                 if ( blueLeft() )    { return AutoCmds.PlaceAndCrossCmd( "Mid", blueLeftCubeShortPath); }
-                return new PrintCommand("ERROR: Invalid palce and cross auto command");
+                return new PrintCommand("ERROR: Invalid place and cross auto command");
             }
-            return new PrintCommand("Error on auto place only paramter");
+            return new PrintCommand("Error on auto place and cross only paramter");
         }
 
         // ----------------------- Get on Charging Station Only -------------------

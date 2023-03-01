@@ -67,37 +67,37 @@ public class ElevatorTelemetry {
         tab.add("Elev Commands",elevator).withPosition(0, 5).withSize(5, 2);
         tab.addNumber("Input from Operator Joystick", () -> Robot.operatorGamepad.getElevInput());
 
-        tab.add("MM To 5.0", 
-            new RunCommand( () -> Robot.elevator.setMMheight( 5.0 ), Robot.elevator))
-            .withSize(3, 2)    .withPosition(14, 1);
-
-        tab.add("MM To 10.0", 
-            new RunCommand( () -> Robot.elevator.setMMheight( 10.0 ), Robot.elevator))
-            .withSize(3, 2)    .withPosition(14, 2);
-
-        tab.add("MM To 15.0", 
-            new RunCommand( () -> Robot.elevator.setMMheight( 15.0 ), Robot.elevator))
-            .withSize(3, 2)    .withPosition(14, 3);
-            
-        tab.add("MM To 20.0", 
-            new RunCommand( () -> Robot.elevator.setMMheight( 20.0 ), Robot.elevator))
-            .withSize(3, 2)    .withPosition(14, 4);
-
         tab.add("Goto Bottom", 
             new RunCommand( () -> Robot.elevator.elevLower(), Robot.elevator)
                                 .until(() ->Robot.elevator.isLowerLimitSwitchPressed()))
-            .withSize(3, 2)    .withPosition(14, 5);
+            .withSize(3, 2)    .withPosition(11, 0);
+        tab.add("MM To 5.0", 
+            new RunCommand( () -> Robot.elevator.setMMheight( 5.0 ), Robot.elevator))
+            .withSize(3, 2)    .withPosition(11, 2);
+
+        tab.add("MM To 10.0", 
+            new RunCommand( () -> Robot.elevator.setMMheight( 10.0 ), Robot.elevator))
+            .withSize(3, 2)    .withPosition(11, 4);
+
+        tab.add("MM To 15.0", 
+            new RunCommand( () -> Robot.elevator.setMMheight( 15.0 ), Robot.elevator))
+            .withSize(3, 2)    .withPosition(11, 6);
+            
+        tab.add("MM To 20.0", 
+            new RunCommand( () -> Robot.elevator.setMMheight( 20.0 ), Robot.elevator))
+            .withSize(3, 2)    .withPosition(11, 8);
 
         tab.addBoolean("MM Tgt Reached", () ->Robot.elevator.isMMtargetReached())
-            .withSize(2, 2)    .withPosition(14, 7);
-
-        tab.add("Brake On",
-            new InstantCommand(() -> Robot.elevator.setBrakeMode(true)))
-            .withSize(3, 2).withPosition(16, 0);
+            .withSize(2, 2)    .withPosition(15, 0);
 
         tab.add("Brake Off",
             new InstantCommand(() -> Robot.elevator.setBrakeMode(false)))
-            .withSize(3, 2).withPosition(16, 0);
+            .withSize(3, 2).withPosition(6, 0);
+        tab.add("Brake On",
+            new InstantCommand(() -> Robot.elevator.setBrakeMode(true)))
+            .withSize(3, 2).withPosition(6, 2);
+
+
 
     }
 

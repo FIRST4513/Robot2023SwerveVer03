@@ -32,7 +32,7 @@ public class PilotGamepad extends Gamepad {
                     PilotGamepadConfig.rotationSpeedOffset,
                     PilotGamepadConfig.rotationSpeedScaler,
                     PilotGamepadConfig.rotationSpeedDeadband);
-    SendableChooser<String> speedChooser = new SendableChooser<String>();
+    public SendableChooser<String> speedChooser = new SendableChooser<String>();
 
     public PilotGamepad() {
         super("Pilot", PilotGamepadConfig.port);
@@ -117,28 +117,40 @@ public class PilotGamepad extends Gamepad {
     public void setMaxSpeeds(MaxSpeeds speed){
         switch (speed) { 
             case FAST:
+                System.out.println("Driver Speeds set to FAST !!!");
                 forwardSpeedCurve.setScalar(PilotGamepadConfig.FastfowardVelocity);
                 sidewaysSpeedCurve.setScalar(PilotGamepadConfig.FastsidewaysVelocity);
                 rotationCurve.setScalar(PilotGamepadConfig.FastsidewaysVelocity);
-                System.out.println("Driver Speeds set to FAST !!!");
+                // forwardSpeedCurve.setExpVal(PilotGamepadConfig.FastForwardExp);
+                // sidewaysSpeedCurve.setExpVal(PilotGamepadConfig.FastSidewaysExp);
+                // rotationCurve.setExpVal(PilotGamepadConfig.FastRotationExp);
                 break;
             case MEDFAST:
-                forwardSpeedCurve.setScalar(PilotGamepadConfig.MedFastfowardVelocity);
+                System.out.println("Driver Speeds set to MEDFAST !!!");
+                forwardSpeedCurve.setScalar(PilotGamepadConfig.MedFastforwardVelocity);
                 sidewaysSpeedCurve.setScalar(PilotGamepadConfig.MedFastsidewaysVelocity);
                 rotationCurve.setScalar(PilotGamepadConfig.MedFastsidewaysVelocity);
-                System.out.println("Driver Speeds set to MEDFAST !!!");
+                // forwardSpeedCurve.setExpVal(PilotGamepadConfig.MedFastForwardExp);
+                // sidewaysSpeedCurve.setExpVal(PilotGamepadConfig.MedFastSidewaysExp);
+                // rotationCurve.setExpVal(PilotGamepadConfig.MedFastRotationExp);
                 break;
             case MEDSLOW:
-                forwardSpeedCurve.setScalar(PilotGamepadConfig.MedSlowfowardVelocity);
+                System.out.println("Driver Speeds set to MEDSLOW !!!");
+                forwardSpeedCurve.setScalar(PilotGamepadConfig.MedSlowforwardVelocity);
                 sidewaysSpeedCurve.setScalar(PilotGamepadConfig.MedSlowsidewaysVelocity);
                 rotationCurve.setScalar(PilotGamepadConfig.MedSlowsidewaysVelocity);
-                System.out.println("Driver Speeds set to MEDSLOW !!!");
+                // forwardSpeedCurve.setExpVal(PilotGamepadConfig.MedSlowForwardExp);
+                // sidewaysSpeedCurve.setExpVal(PilotGamepadConfig.MedSlowSidewaysExp);
+                // rotationCurve.setExpVal(PilotGamepadConfig.FastRotationExp);
                 break;
             default:
-                forwardSpeedCurve.setScalar(PilotGamepadConfig.SlowfowardVelocity);
+                System.out.println("Driver Speeds set to Slow !!!");
+                forwardSpeedCurve.setScalar(PilotGamepadConfig.SlowforwardVelocity);
                 sidewaysSpeedCurve.setScalar(PilotGamepadConfig.SlowsidewaysVelocity);
                 rotationCurve.setScalar(PilotGamepadConfig.SlowsidewaysVelocity);
-                System.out.println("Driver Speeds set to Slow !!!");
+                // forwardSpeedCurve.setExpVal(PilotGamepadConfig.SlowForwardExp);
+                // sidewaysSpeedCurve.setExpVal(PilotGamepadConfig.SlowSidewaysExp);
+                // rotationCurve.setExpVal(PilotGamepadConfig.SlowRotationExp);
                 break;
         }
     }

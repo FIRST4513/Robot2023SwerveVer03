@@ -24,7 +24,7 @@ public class ArmConfig {
     // Arm Position Constants for single value for Cone or Cube
     public final static double ArmAngleIntakeCubePos    = -10.0;        // Pickup Cube position
     public final static double ArmAngleIntakeConePos    = -10.0;        // Pickup Cone position
-    public final static double ArmAngleEjectLowPos      = +0.0;        // Eject Low position
+    public final static double ArmAngleEjectLowPos      =   0.0;        // Eject Low position
     public final static double ArmAngleEjectMidPos      = +40.0;        // Eject Mid position
     public final static double ArmAngleEjectHighPos     = +46.0;        // Eject High position
 

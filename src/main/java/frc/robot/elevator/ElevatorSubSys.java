@@ -28,6 +28,8 @@ public class ElevatorSubSys extends SubsystemBase {
     public double mCurrEncoderCnt = 0;
     public double mCurrElevHt;      // Elevator Height Zero at bottom (Inches)
 
+    public static String elevBrakeStatus = "";
+
     // -----------  Constructor --------------------
     public ElevatorSubSys() {
         configFX            = new ElevFXMotorConfig();
@@ -35,6 +37,7 @@ public class ElevatorSubSys extends SubsystemBase {
         elevLowerLimitSw    = new DigitalInput(LimitSwitches.elevatorLowerLimitSw);
         elevUpperLimitSw    = new DigitalInput(LimitSwitches.elevatorUpperLimitSw);
         elevatorMotorConfig();
+        setBrakeMode(true);
     }
 
    @Override
@@ -172,11 +175,16 @@ public class ElevatorSubSys extends SubsystemBase {
     public void setBrakeMode( boolean value){
         if (value) {
             m_motor.setNeutralMode(NeutralMode.Brake);
+            elevBrakeStatus = "Elev Brake On";
         } else {
             m_motor.setNeutralMode(NeutralMode.Coast);
+            elevBrakeStatus = "Intake Brake Off";
         }
     }
 
+    public String getBrakeStatus(){
+       return elevBrakeStatus;
+    }
 
     // -----------------  Lower/Upper Limits ----------------
     public boolean isLowerLimitSwitchPressed() {

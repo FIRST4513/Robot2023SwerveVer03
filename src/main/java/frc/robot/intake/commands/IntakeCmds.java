@@ -5,9 +5,12 @@ import javax.swing.GroupLayout.SequentialGroup;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
+import frc.robot.arm.commands.ArmCmds;
+import frc.robot.elevator.commands.ElevatorCmds;
 
 public class IntakeCmds {
     public static void setupDefaultCommand() {
@@ -42,7 +45,14 @@ public class IntakeCmds {
     }
 
     public static Command IntakeEjectCubeCmd() {
-        return new RunCommand(() -> Robot.intake.setMotorsCubeEject(), Robot.intake).withTimeout(1.0);
+        return new RunCommand(() -> Robot.intake.setMotorsCubeEject(), Robot.intake).withTimeout(0.5);        
+    }
+
+    public static Command holdArmAndElevCmd() { 
+        return new ParallelCommandGroup(
+            ElevatorCmds.ElevHoldCmd(),
+            ArmCmds.HoldArmCmd()
+        );
     }
 
     public static Command IntakeEjectConeCmd() {

@@ -27,7 +27,7 @@ import com.pathplanner.lib.server.PathPlannerServer;
 // ------------------- Constructor -----------------
 public class Robot extends TimedRobot {
     public static RobotConfig config;
-    public static Logger logger;
+    //public static Logger logger;
     public static Swerve swerve;
     public static Pose pose;
     public static Trajectories trajectories;
@@ -65,9 +65,10 @@ public class Robot extends TimedRobot {
 
     // Intialize subsystems and run their setupDefaultCommand methods here
     private void intializeSubsystems() {
-        logger = new Logger(); 
-        logger.startTimer();
+        //logger = new Logger(); 
+        //logger.startTimer();
         //auto = new Auto();
+        Auto.setupSelectors();
         swerve = new Swerve();
         pose = new Pose();
         trajectories = new Trajectories();
@@ -78,7 +79,6 @@ public class Robot extends TimedRobot {
         intake = new IntakeSubSys();
         telemetry = new RobotTelemetry();
 
-
         // Set Default Commands, this method should exist for each subsystem that has commands
         SwerveCmds.setupDefaultCommand();
         ElevatorCmds.setupDefaultCommand();
@@ -86,7 +86,7 @@ public class Robot extends TimedRobot {
         OperatorGamepadCmds.setupDefaultCommand();
         ArmCmds.setupDefaultCommand();
         IntakeCmds.setupDefaultCommand();
-        logger.startTimer();
+        //logger.startTimer();
     }
 
     
@@ -139,7 +139,7 @@ public class Robot extends TimedRobot {
         arm.stopArm();                  // to kill any running motionmagic 
         elevator.elevStop();            // to kill any running motionmagic
         // arm.resetEncoderToAbsolute();       // Set arm motor encoder to absolute value 
-        logger.startTimer();
+        //logger.startTimer();
         // Set Pilot Teleop Speeds to those selected on smartdashboard
         pilotGamepad.setMaxSpeeds(pilotGamepad.getSelectedSpeed());
         swerve.resetFalconAngles();     // Set falcon angle motors to absolute encoder

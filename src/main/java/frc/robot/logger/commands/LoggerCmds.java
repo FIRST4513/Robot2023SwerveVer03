@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class LoggerCmds {
 
-    public static Command WriteOutLogFileCmd(){
-        return new InstantCommand(() -> Robot.logger.saveLogFile());
-    }
+    // public static Command WriteOutLogFileCmd(){
+    //     //return new InstantCommand(() -> Robot.logger.saveLogFile());
+    // }
     
 }

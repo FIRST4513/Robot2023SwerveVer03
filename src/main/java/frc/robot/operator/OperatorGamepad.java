@@ -18,6 +18,18 @@ public class OperatorGamepad extends Gamepad {
         OperatorGamepadConfig.intakeSpeedScaler,
         OperatorGamepadConfig.intakeSpeedDeadband);
 
+public static ExpCurve elevThrottleCurve = new ExpCurve(
+    OperatorGamepadConfig.elevSpeedExp,
+    OperatorGamepadConfig.elevSpeedOffset,
+    OperatorGamepadConfig.elevSpeedScaler,
+    OperatorGamepadConfig.elevSpeedDeadband);
+
+public static ExpCurve armThrottleCurve = new ExpCurve(
+    OperatorGamepadConfig.armSpeedExp,
+    OperatorGamepadConfig.armSpeedOffset,
+    OperatorGamepadConfig.armSpeedScaler,
+    OperatorGamepadConfig.armSpeedDeadband);
+
     public OperatorGamepad() {
         super("Operator", OperatorGamepadConfig.port);
     }
@@ -55,15 +67,17 @@ public class OperatorGamepad extends Gamepad {
 
 
     public double getElevInput() {
-        double yValue = gamepad.rightStick.getY();
-        if (Math.abs(yValue) < 0.05) {
-            yValue = 0.0;
-        }
-        if (OperatorGamepadConfig.elevYInvert) {
-            return yValue * -0.5;
-        } else {
-            return yValue * 0.5;
-        }
+        return elevThrottleCurve.calculateMappedVal(gamepad.rightStick.getY()) ;
+
+        // double yValue = gamepad.rightStick.getY();
+        // if (Math.abs(yValue) < 0.05) {
+        //     yValue = 0.0;
+        // }
+        // if (OperatorGamepadConfig.elevYInvert) {
+        //     return yValue * -0.5;
+        // } else {
+        //     return yValue * 0.5;
+        // }
     }
 
     public double getElevInputWFF() {
@@ -72,15 +86,17 @@ public class OperatorGamepad extends Gamepad {
     }
 
     public double getArmInput() {
-        double yValue = gamepad.leftStick.getY();
-        if (Math.abs(yValue) < 0.175) {
-            yValue = 0.0;
-        }
-        if (OperatorGamepadConfig.armYInvert) {
-            return yValue * -0.5;
-        } else {
-            return yValue * 0.5;
-        }
+        return armThrottleCurve.calculateMappedVal(gamepad.leftStick.getY());
+
+        // double yValue = gamepad.leftStick.getY();
+        // if (Math.abs(yValue) < 0.175) {
+        //     yValue = 0.0;
+        // }
+        // if (OperatorGamepadConfig.armYInvert) {
+        //     return yValue * -0.5;
+        // } else {
+        //     return yValue * 0.5;
+        // }
     }
 
     public double getArmInputWFF() {

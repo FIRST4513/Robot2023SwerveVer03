@@ -40,7 +40,7 @@ public class RobotTelemetry extends TelemetrySubsystem {
         // Call Super constuctor first - 
         super("Robot");     // Set tab name to Robot
 
-        layoutRobotTelemtryTab();
+        layoutRobotTelemtryTab();   // Fill This Tab with data
 
         // Setup the rest of the Shuffleboard Tabs
         m_ArmTelemetry =            new ArmTelemetry(Robot.arm);
@@ -62,33 +62,48 @@ public class RobotTelemetry extends TelemetrySubsystem {
     // }
 
     public void layoutRobotTelemtryTab(){
-        // Column 0 - Setup the autonomous selector to display on shuffleboard
         Auto.setupSelectors();
-        tab.add("Score Position Selection", Auto.scoreChooser)  .withPosition(0, 8).withSize(3, 2);
-        tab.add("Position Selection", Auto.positionChooser)     .withPosition(4, 8).withSize(3, 2);
-        tab.add("Cross Selection", Auto.crossChooser)           .withPosition(8, 8).withSize(3, 2);
-        tab.add("Dock Selection", Auto.dockChooser)             .withPosition(12, 8).withSize(3, 2);
-        tab.add("Aliance Selection", Auto.testChooser)          .withPosition(16, 8).withSize(3, 2);
-        tab.add("Test Selection", Auto.testChooser)             .withPosition(20, 8).withSize(3, 2);
+        tab.add("Score Selection",      Auto.scoreChooser)      .withPosition(0, 0).withSize(3, 1);
+        tab.add("Cross Selection",      Auto.crossChooser)      .withPosition(0, 2).withSize(3, 1);
+        tab.add("Dock Selection",       Auto.dockChooser)       .withPosition(0, 4).withSize(3, 1);
 
-        // Column 2
-        tab.addBoolean("Connected?", () -> flash())
-                .withPosition(2, 0)
-                .withSize(1, 1)
-                .withProperties(
-                        Map.of("Color when true", "#300068", "Color when false", "#FFFFFF"));
+        tab.add("Position Selection",   Auto.positionChooser)   .withPosition(0, 6).withSize(3, 1);
+
+        tab.add("Speed Selection",Robot.pilotGamepad.speedChooser).withPosition(10, 3).withSize(3, 1);
+        tab.add("Aliance Selection",        Auto.allianceChooser) .withPosition(10, 5).withSize(3, 1);
+
+        //tab.add("Test Selection", Auto.testChooser)             .withPosition(20, 8).withSize(3, 2);
 
         tab.addNumber("Match Time", () -> Timer.getMatchTime())
-                .withPosition(2, 1)
+                .withPosition(10, 0)
                 .withSize(2, 2)
                 .withWidget("Simple Dial")
                 .withProperties(Map.of("Min", 0, "Max", 135));
 
-        // Column 4
-        tab.add("Alerts", SmartDashboard.getData("Alerts")).withPosition(4, 0).withSize(2, 2);
-        tab.add("MAC Address", Robot.MAC).withPosition(4, 2).withSize(2, 1);
-        tab.addString("IP Address", () -> getIP()).withPosition(4, 3).withSize(2, 1);
-        tab.addNumber("ElevPos", () -> Robot.elevator.getElevHeightInches()).withPosition(6, 0).withSize(2, 1);
+
+        tab.addNumber("Elev Ht",          () -> Robot.elevator.getElevHeightInches())   .withPosition(3, 0).withSize(2, 1);
+        tab.addString("Elev Bottom Sw",   () -> Robot.elevator.getLowerLimitSwStatus()) .withPosition(3, 2).withSize(2, 1);
+        tab.addString("Elev Top Limit",   () -> Robot.elevator.getUpperLimitSwStatus()) .withPosition(3, 4).withSize(2, 1);
+        tab.addString("Elev Brake",       () -> Robot.elevator.getBrakeStatus())        .withPosition(3, 6).withSize(2, 1);
+
+        tab.addNumber("Arm Angle",       () -> Robot.arm.getArmAngle())             .withPosition(5, 0).withSize(2, 1);
+        tab.addString("Arm Extend Sw",   () -> Robot.arm.extendLimitSwitchStatus()) .withPosition(5, 2).withSize(2, 1);
+        tab.addString("Arm Retract Sw",  () -> Robot.arm.retractLimitSwitchStatus()).withPosition(5, 4).withSize(2, 1);
+        tab.addString("Arm Brake",       () -> Robot.arm.getBrakeStatus())          .withPosition(5, 6).withSize(2, 1);        
+
+        tab.addNumber("Intake Cube",     () -> Robot.intake.getCubeDetectValue())   .withPosition(7, 0).withSize(2, 1);
+        tab.addNumber("Intake Cone",     () -> Robot.intake.getConeDetectValue())   .withPosition(7, 2).withSize(2, 1);
+        tab.addString("Intake Brake",    () -> Robot.intake.getBrakeStatus())       .withPosition(7, 4).withSize(2, 1);
+
+        // tab.addBoolean("Connected?", () -> flash())
+        //         .withPosition(2, 0)
+        //         .withSize(1, 1)
+        //         .withProperties(
+        //                 Map.of("Color when true", "#300068", "Color when false", "#FFFFFF"));
+
+        // tab.add("Alerts", SmartDashboard.getData("Alerts")).withPosition(4, 0).withSize(2, 2);
+        // tab.add("MAC Address", Robot.MAC).withPosition(4, 2).withSize(2, 1);
+        // tab.addString("IP Address", () -> getIP()).withPosition(4, 3).withSize(2, 1);
     }
 
     public String getIP() {

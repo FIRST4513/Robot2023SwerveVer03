@@ -30,6 +30,7 @@ public class ArmSubSys extends SubsystemBase {
     public double mCurrArmAngle     = 0;
     public double mCurrAbsoluteArmAngle = 0;
 
+    public static String armBrakeStatus = "";
     public double hold_pwr = 0;
 
     // ------------- Constructor ----------
@@ -41,6 +42,7 @@ public class ArmSubSys extends SubsystemBase {
         armAbsoluteAngleSensor      = new AnalogInput(AnalogPorts.armAngleSensor);
         armMotorConfig();
         stopArm();
+        setBrakeMode(true);
         mArmMotor.configForwardSoftLimitThreshold(mCurrArmAngle);
     }
 
@@ -149,11 +151,16 @@ public class ArmSubSys extends SubsystemBase {
     public void setBrakeMode(Boolean enabled) {
         if (enabled) {
             mArmMotor.setNeutralMode(NeutralMode.Brake);
+            armBrakeStatus = "Arm Brake On";
         } else {
             mArmMotor.setNeutralMode(NeutralMode.Coast);
+            armBrakeStatus = "Arm Brake Off";
         }
     }
 
+    public String getBrakeStatus() {
+        return armBrakeStatus;
+    }
 
     // ------------------------------------------------------------
     // ---------------- Arm Limit Switch Methods ------------------

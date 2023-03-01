@@ -11,7 +11,7 @@ public class ElevatorConfig {
     // ------ Position Constatnts ------
     public final static double KElevMaxTopHt        = 31.0;         // This is the top GO NO FURTHER!
     public final static double KLimitElevTopSlowHt  = 28.0;		    // Start slowing the raise at this position   
-    public final static double KLimitElevBottomSlowHt = 3.0;        // Start slowing the lower at this position
+    public final static double KLimitElevBottomSlowHt = 2.0;        // Start slowing the lower at this position
 
     public final static double ElevIntakeConeHt     = 0.0;          // Position to intake Cone
     public final static double ElevIntakeCubeHt     = 0.0;          // Position to intake Cube
@@ -19,7 +19,7 @@ public class ElevatorConfig {
     public final static double ElevBumperClearHt    = 10.0;         // Position to raise to clear bumper with cube
     public final static double ElevStoreHt          = 0.0;          // Position to Store Cube/Cone retracted for motion
     public final static double ElevRetractHt        = 0.0;          // Position to fully retract
-    public final static double ElevEjectLowHt       = 6.0;          // Position to Score a Cube/Cone in LOW Position  
+    public final static double ElevEjectLowHt       = 27.0;          // Position to Score a Cube/Cone in LOW Position  
     public final static double ElevEjectCubeLowSafeHt = 26.5;          // Position to Score a Cube/Cone in LOW Position 
     public final static double ElevEjectCubeMidSafeHt = KElevMaxTopHt;          // Position to Score a Cube/Cone in LOW Position 
     public final static double ElevEjectCubeHighSafeHt = KElevMaxTopHt;          // Position to Score a Cube/Cone in LOW Position 
@@ -30,15 +30,17 @@ public class ElevatorConfig {
 
     // ------ Elevator Speed Constants -----
     public final static double zeroPwr              = -0.10;
-    public final static double kMaxPwr              = +0.25;
-    public final static double lowerMaxPwr          = -0.25;
-    public final static double raiseMaxPwr          = +0.4;
+    public final static double kMaxPwr              = +1.0;
+    public final static double lowerMaxPwr          = -0.20;
+    public final static double raiseMaxPwr          = +0.60;
 
-    public final static double KRaiseSpeedDefault   = +0.25;
+    // These are outside of Motion Magic control
+    public final static double KRaiseSpeedDefault   = +0.45;    
     public final static double KRaiseSlowSpeed      = +0.15;
     public final static double KHoldSpeedDefault    = +0.08;
-    public final static double KLowerSlowSpeed      = -0.05;
-    public final static double KLowerSpeedDefault   = -0.15;
+    
+    public final static double KLowerSlowSpeed      = -0.03;
+    public final static double KLowerSpeedDefault   = -0.20;
     
     // ------ Limit Switches ------------
     public final static boolean LowerLimitSwitchTrue        = false;
