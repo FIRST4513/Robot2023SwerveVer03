@@ -31,7 +31,7 @@ public class ArmElevDriveCmd extends CommandBase {
         armTripped = false;
         time = Rmath.mRound(cmdTmr.get(), 2);
         System.out.println("ArmElevDriveCmd Started  (ArmTgtAngle=" +
-            tgtArmAngle + "   ElevTgtHt=" + tgtElevHt + "  time=" + cmdTmr.get() + " )" );
+            tgtArmAngle + "   ElevTgtHt=" + tgtElevHt + "  time=" + time + " )" );
     }
 
     @Override
