@@ -88,7 +88,7 @@ public class ArmElevDriveCmd extends CommandBase {
 
     boolean isArmAtPosition(){
         // Is Arm within 2 degrees of target
-        if ( Math.abs(tgtArmAngle - currArmAngle)   <= 2.0) {
+        if ( Math.abs(tgtArmAngle - currArmAngle)   <= 4.0) {
             return true;
         }
         return false;

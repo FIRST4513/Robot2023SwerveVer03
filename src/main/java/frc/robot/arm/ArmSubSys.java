@@ -49,7 +49,7 @@ public class ArmSubSys extends SubsystemBase {
     // ------------- Periodic -------------
     public void periodic() {
         updateCurrentArmPosition();
-        //if (isRetractLimitSwitchPressed() == true) { resetEncoderToAbsolute(); }
+        //if (isRetractLimitSwitchPressed() == true) { resetEncoderAngle(ArmConfig.RetractLimitSwitchAngle);; }
         if (isExtendLimitSwitchPressed() == true)  { resetEncoderAngle(ArmConfig.ExtendLimitSwitchAngle); }
     }
 
@@ -100,6 +100,10 @@ public class ArmSubSys extends SubsystemBase {
                 holdArm();
                 return;
             } else {
+                if (mCurrArmAngle < -75) {
+                    stopArm();
+                    return;
+                }
                 // OK to move arm
                 mArmMotor.set(pwr);
                 mCurrArmPwr = pwr;
@@ -120,6 +124,8 @@ public class ArmSubSys extends SubsystemBase {
             mCurrArmPwr = pwr;
             return;
         }
+
+        // at this point, we're coming past (less than) the store point
 
         if (Robot.elevator.getElevHeightInches() < 13.0) {
             // Were trying to go past -45 degrres and elevator is down

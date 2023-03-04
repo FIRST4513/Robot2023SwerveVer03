@@ -40,8 +40,20 @@ public class OperatorGamepadCmds {
         );
     }
 
+    // --------------------------- Arm/Elev Auto Position (NORMAL MODE) --------------------
+    public static Command SetArmElevToEjectLowPosCmd() {
+        return ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectLowPos, ElevatorConfig.ElevEjectLowHt, 4.0);
+    }
+    
+    public static Command SetArmElevToEjectMidPosCmd() {
+        return ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectMidPos, ElevatorConfig.ElevEjectMidHt, 4.0);
+    }
+    
+    public static Command SetArmElevToEjectHighPosCmd() {
+        return ArmElevGoToPosParallelCmd(ArmConfig.ArmAngleEjectHighPos, ElevatorConfig.ElevEjectHighHt, 4.0);
+    }
 
-    // --------------------------- Arm/Elev Auto Position --------------------    
+    // --------------------------- Arm/Elev Auto Position (SAFE MODE) --------------------    
     public static Command SetArmElevToEjectLowPosSafeCmd() {
         return new SequentialCommandGroup(
             // Raise Elevator to Low safe height while holding arm at store position

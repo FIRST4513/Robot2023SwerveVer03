@@ -11,6 +11,8 @@ public class IntakeConfig {
 
     public static double cubeRetractUpperSpeed = -0.625;
     public static double cubeRetractLowerSpeed = -0.625;
+    public static double cubeHoldUpperSpeed = -0.1;
+    public static double cubeHoldLowerSpeed = 0.1;
     public static double coneRetractUpperSpeed = -1.0;
     public static double coneRetractLowerSpeed = 1.0;
     public static double coneRetractUpperSlowSpeed = -0.35;

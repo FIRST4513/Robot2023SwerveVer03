@@ -47,14 +47,15 @@ public class PilotGamepad extends Gamepad {
         gamepad.xButton.whileTrue(PilotGamepadCmds.RpvPilotSwerveCmd());
 
         gamepad.leftBumper.onTrue(IntakeCmds.IntakeStopCmd());
-        gamepad.rightBumper.onTrue(PilotGamepadCmds.BasicSnapCmd());  // basic snap (turn-in-place)
+        // gamepad.rightBumper.onTrue(PilotGamepadCmds.BasicSnapCmd());  // basic snap (turn-in-place)
          
         // "Start" Button - Rest Gyro to 0
         gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());
-        gamepad.selectButton.onTrue(PilotGamepadCmds.FpvDriveAndAutoRotateCmd());  // snap to angle while driving
+        // gamepad.selectButton.onTrue(PilotGamepadCmds.FpvDriveAndAutoRotateCmd());  // snap to angle while driving
 
         gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
         gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.SetArmElevToIntakeConePosCmd());
+        gamepad.Dpad.Left.onTrue(IntakeCmds.IntakeCubeHoldCmd());
     }
 
     public void setupDisabledButtons() {

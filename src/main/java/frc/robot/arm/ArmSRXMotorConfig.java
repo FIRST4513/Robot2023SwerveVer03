@@ -15,8 +15,7 @@ public class ArmSRXMotorConfig {
     public static final boolean     armEnableCurrentLimit   = true;
     public static final SensorInitializationStrategy sensorStrat = SensorInitializationStrategy.BootToZero;
 
-    // 1797.41176 encoder Cnts = 1 degree (increase AllowableError to reduce jitter)
-    public static final int         allowableError          = 2000;
+
 
     /* Motor Limits (Encoder Cnts) */
 
@@ -30,7 +29,7 @@ public class ArmSRXMotorConfig {
      *               -45 degrees reverse requires -0.25 pwr to hold
     */
     //  public final double arbitraryFeedForwardScaler = 0.3536;
-     public final double arbitraryFeedForwardScaler = 0.15;
+     public final double arbitraryFeedForwardScaler = 0.27; //  0.486;  // 0.15;
 
     /*
      * Cruise velocity Calculation: 1 degree = 1797 Counts     
@@ -39,8 +38,9 @@ public class ArmSRXMotorConfig {
      *                              1/100 second of travel ( 1.5 degrees )  = 2,700 counts
      */
 
-    public final double motionCruiseVelocity        = 30000;    // approx 15 degrres per second
-    public final double motionAcceleration          = 20000;    // approx 1 second to get up to cruise velocity
+    public final double motionCruiseVelocity        = 10000;  // 6173;     // 30000;    // approx 15 degrres per second
+    public final double motionAcceleration          =  8000;  // 3704;     // 20000;    // approx 1 second to get up to cruise velocity
+    public static final int allowableError          = 610;
     public final int    motionCurveStrength         = 2;        // 0 No smoothing to 8 Max smoothing
 
     public final double kP = 0.1;     // Needs to be Determined by testing
@@ -50,7 +50,7 @@ public class ArmSRXMotorConfig {
     public final double kIz = 0.0;
    
     /* Current Limiting */
-    public static final int     continuousCurrentLimit   = 25;       // Amps
+    public static final int     continuousCurrentLimit   = 30;       // Amps
     public static final int     peakCurrentLimit         = 40;       // Amps
     public static final int     peakCurrentDuration      = 200;      // Time in milliseconds
     public final boolean        EnableCurrentLimit       = true;

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.arm.commands.ArmCmds;
 import frc.robot.elevator.commands.ElevatorCmds;
+import frc.robot.intake.IntakeConfig;
 
 public class IntakeCmds {
     public static void setupDefaultCommand() {
@@ -42,6 +43,10 @@ public class IntakeCmds {
                 ),
             new InstantCommand(() -> Robot.intake.setBrakeMode(true),Robot.intake)
         );
+    }
+
+    public static Command IntakeCubeHoldCmd() {
+        return new RunCommand(() -> Robot.intake.setMotorsCubeHold(), Robot.intake);
     }
 
     public static Command IntakeEjectCubeCmd() {

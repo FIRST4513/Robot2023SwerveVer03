@@ -64,8 +64,7 @@ public class AutoCmds {
     // -------------- Cross Line Only Comands ---------------------
     public static Command CrossLineOnlyCmd( PathPlannerTrajectory path) {
         return new SequentialCommandGroup(
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path, 5.0)
-
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path, 10.0)
         );
     }
 
@@ -80,7 +79,7 @@ public class AutoCmds {
     // ----------------------- Get on Charging Platform  -------------------
     public static Command GetOnChargingTableCmd( PathPlannerTrajectory path ) {
         return new SequentialCommandGroup(  
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path, 5.0),
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path, 10.0),
             AutoBalanceCmd()            
         );
     }

@@ -60,6 +60,11 @@ public class IntakeSubSys extends SubsystemBase {
         intakeLowerMotor.set(IntakeConfig.cubeRetractLowerSpeed);
     }
 
+    public void setMotorsCubeHold() {
+        intakeUpperMotor.set(IntakeConfig.cubeHoldUpperSpeed);
+        intakeLowerMotor.set(IntakeConfig.cubeHoldLowerSpeed);
+    }
+
     // ------ Set Eject Speeds ---------
     public void setMotorsCubeEject() {
         intakeUpperMotor.set(IntakeConfig.cubeEjectSpeed);
