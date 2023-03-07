@@ -74,6 +74,10 @@ public class PilotGamepad extends Gamepad {
         return forwardSpeedCurve.calculateMappedVal(this.gamepad.leftStick.getY());
     }
 
+    public double getDriveFwdPositiveSlow() {
+        return getDriveFwdPositive()/2;
+    }
+
     // side-to-side across the field
     public double getDriveLeftPositive() {
         // right will be priority in code, but not primarily used in driving practice
@@ -84,11 +88,19 @@ public class PilotGamepad extends Gamepad {
         }
     }
 
+    public double getDriveLeftPositiveSlow() {
+        return getDriveLeftPositive()/2;
+    }
+
     //Positive is counter-clockwise, left Trigger is positive
     public double getDriveRotationCCWPositive() {
 		double value = this.gamepad.triggers.getTwist();
 		value = rotationCurve.calculateMappedVal(value);
 		return value;        
+    }
+
+    public double getDriveRotationCCWPositiveSlow() {
+        return getDriveRotationCCWPositive()/2;
     }
 
     // Return the angle created by the left stick in radians, 0 is up, pi/2 is left

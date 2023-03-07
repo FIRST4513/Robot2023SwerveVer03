@@ -31,9 +31,9 @@ public class PilotGamepadCmds {
     /** Robot Oriented Drive */
     public static Command RpvPilotSwerveCmd() {
         return new SwerveDriveCmd(
-                        () -> Robot.pilotGamepad.getDriveFwdPositive(),
-                        () -> Robot.pilotGamepad.getDriveLeftPositive(),
-                        () -> Robot.pilotGamepad.getDriveRotationCCWPositive(),
+                        () -> Robot.pilotGamepad.getDriveFwdPositiveSlow(),
+                        () -> Robot.pilotGamepad.getDriveLeftPositiveSlow(),
+                        () -> Robot.pilotGamepad.getDriveRotationCCWPositiveSlow(),
                         false)
                 .withName("RpvPilotSwerveCmd");
     }
