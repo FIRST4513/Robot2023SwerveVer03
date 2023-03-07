@@ -1,6 +1,5 @@
 package frc.robot.operator.commands;
 
-import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;

@@ -5,7 +5,6 @@ import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
 import frc.robot.Robot;
 import frc.robot.arm.commands.ArmCmds;
-import frc.robot.autoBalance.commands.AutoBalanceCommand;
 import frc.robot.elevator.ElevFXMotorConfig;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;

@@ -13,7 +13,6 @@ import frc.robot.elevator.ElevatorSubSys;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.IntakeSubSys;
 import frc.robot.intake.commands.IntakeCmds;
-import frc.robot.logger.Logger;
 import frc.robot.operator.OperatorGamepad;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 import frc.robot.pilot.PilotGamepad;

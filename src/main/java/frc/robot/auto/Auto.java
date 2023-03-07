@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.RobotTelemetry;
 import frc.robot.auto.commands.AutoCmds;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 

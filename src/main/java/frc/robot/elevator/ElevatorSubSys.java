@@ -1,6 +1,5 @@
 package frc.robot.elevator;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
