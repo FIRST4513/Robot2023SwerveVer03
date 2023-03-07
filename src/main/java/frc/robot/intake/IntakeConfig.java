@@ -9,8 +9,8 @@ public class IntakeConfig {
     public static double cubeEjectDetectTrue = 1.25;   // IR Prox Volt greater than 2.25 means we see it.
     public static double cubeRetractDetectTrue = 2.25; // IR Prox Volt greater than 2.25 means we see it.
 
-    public static double cubeRetractUpperSpeed = -0.625;
-    public static double cubeRetractLowerSpeed = -0.625;
+    public static double cubeRetractUpperSpeed = -0.7;
+    public static double cubeRetractLowerSpeed = -0.7;
     public static double cubeHoldUpperSpeed = -0.1;
     public static double cubeHoldLowerSpeed = 0.1;
     public static double coneRetractUpperSpeed = -1.0;
