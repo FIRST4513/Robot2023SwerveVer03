@@ -39,12 +39,14 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
     OperatorGamepadConfig.armSpeedDeadband);
 
     // Test for auto balance
-    static PathPlannerTrajectory testPath1 = PathPlanner.loadPath(
+    static PathPlannerTrajectory ctrTestPath1 = PathPlanner.loadPath(
         "CtrScale1", 2.0 , 2.0);     // Max Vel , Max Accel
-
-    static PathPlannerTrajectory testPath2 = PathPlanner.loadPath(
+    static PathPlannerTrajectory ctrTestPath2 = PathPlanner.loadPath(
         "CtrScale2", 0.5 , 0.5);     // Max Vel , Max Accel
-
+    static PathPlannerTrajectory rightLongScaleTest1 = PathPlanner.loadPath(
+        "BlueRightLongScale1", 4.0 , 4.0);     // Max Vel , Max Accel
+    static PathPlannerTrajectory rightLongScaleTest2 = PathPlanner.loadPath(
+        "BlueRightLongScale1", 0.5 , 0.5);     // Max Vel , Max Accel
 
     public OperatorGamepad() {
         super("Operator", OperatorGamepadConfig.port);
@@ -59,6 +61,9 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
  
         //gamepad.aButton     .onTrue(OperatorGamepadCmds.runTestPathCmd());
         gamepad.aButton     .onTrue(runCtrTestPathCmd());
+
+        //gamepad.aButton     .onTrue(OperatorGamepadCmds.runTestPathCmd());
+        gamepad.bButton     .onTrue(runRightLongScalePathCmd());
 
         //gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullRetractPosCmd());
         gamepad.selectButton.onTrue(runBalanceTestCmd());
@@ -142,14 +147,25 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
 
     public static Command runCtrTestPathCmd() {
         return new SequentialCommandGroup(
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testPath1, 5.0),
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(ctrTestPath1, 5.0),
             new DelayCmd(0.5),
-            TrajectoriesCmds.FollowPathCmd(testPath2, 5.0),
+            TrajectoriesCmds.FollowPathCmd(ctrTestPath2, 5.0),
             //new AutoBalanceCommand(),            
             new LockSwerve()
         );
     }
     
+    
+    public static Command runRightLongScalePathCmd() {
+        return new SequentialCommandGroup(
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(rightLongScaleTest1, 5.0),
+            new DelayCmd(0.5),
+            TrajectoriesCmds.FollowPathCmd(rightLongScaleTest2, 5.0),
+            //new AutoBalanceCommand(),            
+            new LockSwerve()
+        );
+    }
+
     public static Command runBalanceTestCmd() {
         return new SequentialCommandGroup(
             new AutoBalanceCommand(),            
