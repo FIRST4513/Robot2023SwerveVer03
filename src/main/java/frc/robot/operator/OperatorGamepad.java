@@ -40,7 +40,8 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
         gamepad.bButton     .onTrue(IntakeCmds.IntakeCubeCmd());
         gamepad.yButton     .onTrue(IntakeCmds.IntakeConeCmd());
         gamepad.xButton     .onTrue(IntakeCmds.IntakeStopCmd());
-        gamepad.aButton     .onTrue(IntakeCmds.IntakeEjectCmd());
+        // gamepad.aButton     .onTrue(IntakeCmds.IntakeEjectCmd());
+        gamepad.aButton     .onTrue(OperatorGamepadCmds.runTestPathCmd());
 
         //gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullRetractPosCmd());
         //gamepad.selectButton.onTrue(new AutoBalanceCommand());
@@ -56,9 +57,9 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
         gamepad.startButton .onTrue(ArmCmds.ResetArmEncoderCmd());
     }
 
+    @Override
     public void setupTestButtons() {
-        gamepad.bButton     .onTrue(ElevatorCmds.InitialArmReleaseCmd());
-        gamepad.aButton     .onTrue(new PrintCommand("Test Button A"));
+        // gamepad.aButton     .onTrue(OperatorGamepadCmds.runTestPathCmd());
     }
 
     public void setupDisabledButtons() {

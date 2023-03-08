@@ -1,5 +1,8 @@
 package frc.robot.operator.commands;
 
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -8,13 +11,17 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.arm.ArmConfig;
 import frc.robot.arm.commands.ArmCmds;
+import frc.robot.auto.AutoConfig;
 import frc.robot.auto.commands.ArmElevDriveCmd;
 import frc.robot.elevator.ElevatorConfig;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
+import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class OperatorGamepadCmds {
-    
+    static PathPlannerTrajectory testPath = PathPlanner.loadPath(
+        "215Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+
     /** Set default command to turn off the rumble */
     public static void setupDefaultCommand() {
        // Robot.pilotGamepad.setDefaultCommand(RumbleOperatorCmd(0));
@@ -184,6 +191,11 @@ public class OperatorGamepadCmds {
             // Condition: is arm outside?
             () -> Robot.arm.isArmInside()
         );
+    }
+
+    // ------------------- Test Path Follow cmd ---------
+    public static Command runTestPathCmd() {
+        return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testPath, 5);
     }
 
     // -------------------- Arm/Elev To Eject Positions -------------------

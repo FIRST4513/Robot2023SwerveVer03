@@ -20,7 +20,7 @@ public final class SwerveConfig {
     /* Drivetrain Constants */
     public static final double trackWidth = Units.inchesToMeters(23.75); // Between Right/Left Wheel Ctrs
     public static final double wheelBase = Units.inchesToMeters(23.75); // Between Front/Back Wheel Ctrs
-    public static final double wheelDiameter = Units.inchesToMeters(3.987);  //(3.8195);
+    public static final double wheelDiameter = Units.inchesToMeters(3.82);  //(3.8195);
     public static final double wheelCircumference = wheelDiameter * Math.PI;
 
     public static final double openLoopRamp = 0.25;
