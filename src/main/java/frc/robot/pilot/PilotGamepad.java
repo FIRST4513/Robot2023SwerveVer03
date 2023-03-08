@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
-import frc.robot.auto.AutoConfig;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.operator.commands.OperatorGamepadCmds;
@@ -51,7 +50,7 @@ public class PilotGamepad extends Gamepad {
         // gamepad.rightBumper.onTrue(PilotGamepadCmds.BasicSnapCmd());  // basic snap (turn-in-place)
          
         // "Start" Button - Rest Gyro to 0
-        gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());
+        // gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());
         // gamepad.startButton.onTrue(SwerveCmds.ResetOdometryCmd());
         // gamepad.selectButton.onTrue(PilotGamepadCmds.FpvDriveAndAutoRotateCmd());  // snap to angle while driving
 
