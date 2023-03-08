@@ -10,6 +10,8 @@ public class AutoBalanceCommand extends CommandBase {
     private double balanaceEffort; // The effort the robot should use to balance
     private double turningEffort; // The effort the robot should use to turn
 
+
+
     /*Creates a new GeneratePath.
      * * @param firstPoints*/
     public AutoBalanceCommand() {
@@ -24,14 +26,19 @@ public class AutoBalanceCommand extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+
+        // Rotate based on heading error
         turningEffort =
                 Robot.trajectories
                         .calculateThetaSupplier(() -> AutoBalanceConfig.angleSetPoint)
                         .getAsDouble();
+
+        // Drive Forward based on Angle
         balanaceEffort =
                 (AutoBalanceConfig.balancedAngle - Robot.swerve.gyro.getGyroInclineAngle())
                         * AutoBalanceConfig.kP;
-        Robot.swerve.drive(balanaceEffort, 0, turningEffort, false, true);
+        //Robot.swerve.drive(balanaceEffort, 0, turningEffort, false, true);
+        Robot.swerve.drive(balanaceEffort, 0, 0 , false, true);
     }
 
     // Called once the command ends or is interrupted.
@@ -43,6 +50,9 @@ public class AutoBalanceCommand extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return Math.abs(Robot.swerve.gyro.getGyroInclineAngle()) < 2;
+        if ( Math.abs(Robot.swerve.gyro.getGyroInclineAngle()) < AutoBalanceConfig.balancedAngleTolerence ) {
+            return true;
+        };
+        return false;
     }
 }

@@ -1,14 +1,23 @@
 package frc.robot.operator;
 
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
 import frc.robot.Robot;
 import frc.robot.arm.commands.ArmCmds;
+import frc.robot.auto.commands.DelayCmd;
+import frc.robot.autoBalance.commands.AutoBalanceCommand;
 import frc.robot.elevator.ElevFXMotorConfig;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.operator.commands.OperatorGamepadCmds;
+import frc.robot.swerve.commands.LockSwerve;
+import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class OperatorGamepad extends Gamepad {
     public static ExpCurve intakeThrottleCurve = new ExpCurve(
@@ -29,22 +38,30 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
     OperatorGamepadConfig.armSpeedScaler,
     OperatorGamepadConfig.armSpeedDeadband);
 
+    // Test for auto balance
+    static PathPlannerTrajectory testPath1 = PathPlanner.loadPath(
+        "CtrScale1", 2.0 , 2.0);     // Max Vel , Max Accel
+
+    static PathPlannerTrajectory testPath2 = PathPlanner.loadPath(
+        "CtrScale2", 0.5 , 0.5);     // Max Vel , Max Accel
+
+
     public OperatorGamepad() {
         super("Operator", OperatorGamepadConfig.port);
     }
     
     public void setupTeleopButtons() {
 
-        // gamepad.bButton.onTrue(ElevatorCmds.InitialArmReleaseCmd()); // Test Button
-
+        //gamepad.aButton     .onTrue(IntakeCmds.IntakeEjectCmd());
         gamepad.bButton     .onTrue(IntakeCmds.IntakeCubeCmd());
         gamepad.yButton     .onTrue(IntakeCmds.IntakeConeCmd());
         gamepad.xButton     .onTrue(IntakeCmds.IntakeStopCmd());
-        // gamepad.aButton     .onTrue(IntakeCmds.IntakeEjectCmd());
-        gamepad.aButton     .onTrue(OperatorGamepadCmds.runTestPathCmd());
+ 
+        //gamepad.aButton     .onTrue(OperatorGamepadCmds.runTestPathCmd());
+        gamepad.aButton     .onTrue(runCtrTestPathCmd());
 
         //gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullRetractPosCmd());
-        //gamepad.selectButton.onTrue(new AutoBalanceCommand());
+        gamepad.selectButton.onTrue(runBalanceTestCmd());
         
         gamepad.Dpad.Up     .onTrue(OperatorGamepadCmds.SetArmElevToEjectHighPosCmd());
         gamepad.Dpad.Down   .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
@@ -123,5 +140,20 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
         return false;
     }
 
+    public static Command runCtrTestPathCmd() {
+        return new SequentialCommandGroup(
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testPath1, 5.0),
+            new DelayCmd(0.5),
+            TrajectoriesCmds.FollowPathCmd(testPath2, 5.0),
+            //new AutoBalanceCommand(),            
+            new LockSwerve()
+        );
+    }
     
+    public static Command runBalanceTestCmd() {
+        return new SequentialCommandGroup(
+            new AutoBalanceCommand(),            
+            new LockSwerve()
+        );
+    }
 }
