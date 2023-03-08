@@ -51,7 +51,7 @@ public class PilotGamepad extends Gamepad {
         // gamepad.rightBumper.onTrue(PilotGamepadCmds.BasicSnapCmd());  // basic snap (turn-in-place)
          
         // "Start" Button - Rest Gyro to 0
-        // gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());
+        gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());
         // gamepad.startButton.onTrue(SwerveCmds.ResetOdometryCmd());
         // gamepad.selectButton.onTrue(PilotGamepadCmds.FpvDriveAndAutoRotateCmd());  // snap to angle while driving
 
