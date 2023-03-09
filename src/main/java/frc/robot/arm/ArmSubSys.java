@@ -66,11 +66,11 @@ public class ArmSubSys extends SubsystemBase {
             return;
         }
         mCurrArmPwr = getHoldPwr();
-        mArmMotor.set(mCurrArmPwr);
+        // mArmMotor.set(mCurrArmPwr);
     }
 
     public void stopArm()   { 
-        mArmMotor.stopMotor();
+        // mArmMotor.stopMotor();
         mCurrArmPwr = 0.0;
     }
 
@@ -78,8 +78,8 @@ public class ArmSubSys extends SubsystemBase {
     public void setMMangle(double angle) {
         angle = limitArmAngle( angle );     // Limit range to max allowed
         mTargetArmAngle = angle;
-        mArmMotor.set(  ControlMode.MotionMagic,            convertAngleToCnt(angle),
-                        DemandType.ArbitraryFeedForward,    getHoldPwr());
+        // mArmMotor.set(  ControlMode.MotionMagic,            convertAngleToCnt(angle),
+        //                 DemandType.ArbitraryFeedForward,    getHoldPwr());
     }
 
     public void setMMangle(DoubleSupplier angle) {
@@ -105,7 +105,7 @@ public class ArmSubSys extends SubsystemBase {
                     return;
                 }
                 // OK to move arm
-                mArmMotor.set(pwr);
+                // mArmMotor.set(pwr);
                 mCurrArmPwr = pwr;
                 return;
             }
@@ -120,7 +120,7 @@ public class ArmSubSys extends SubsystemBase {
         
         if (getArmAngle() >= ArmConfig.ArmAngleStorePos) {
             // We are retracting and have Not gone past -45 degrees All OK
-            mArmMotor.set(pwr);
+            // mArmMotor.set(pwr);
             mCurrArmPwr = pwr;
             return;
         }
@@ -145,7 +145,7 @@ public class ArmSubSys extends SubsystemBase {
         }
 
         // we're driving to parked position (no other conditions are met)
-        mArmMotor.set(pwr);
+        // mArmMotor.set(pwr);
         mCurrArmPwr = pwr;
     }
 

@@ -1,5 +1,7 @@
 package frc.robot.autoBalance.commands;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
+
 // Based on code from Spectrum Team
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -7,7 +9,7 @@ import frc.robot.Robot;
 import frc.robot.autoBalance.AutoBalanceConfig;
 
 public class AutoBalanceCommand extends CommandBase {
-    private double balanaceEffort; // The effort the robot should use to balance
+    private double balanceEffort; // The effort the robot should use to balance
     private double turningEffort; // The effort the robot should use to turn
 
 
@@ -34,11 +36,14 @@ public class AutoBalanceCommand extends CommandBase {
                         .getAsDouble();
 
         // Drive Forward based on Angle
-        balanaceEffort =
-                (AutoBalanceConfig.balancedAngle - Robot.swerve.gyro.getGyroInclineAngle())
-                        * AutoBalanceConfig.kP;
+        double angleDifference = (AutoBalanceConfig.balancedAngle - Robot.swerve.gyro.getGyroInclineAngle());
+        double angleDiffAsRad = Math.toRadians(angleDifference);
+        double sinValMultiplier = Math.sin(angleDiffAsRad);
+
+        balanceEffort = sinValMultiplier * AutoBalanceConfig.kP;
+
         //Robot.swerve.drive(balanaceEffort, 0, turningEffort, false, true);
-        Robot.swerve.drive(balanaceEffort, 0, 0 , false, true);
+        Robot.swerve.drive(balanceEffort, 0, 0 , false, true);
     }
 
     // Called once the command ends or is interrupted.
@@ -50,9 +55,9 @@ public class AutoBalanceCommand extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        if ( Math.abs(Robot.swerve.gyro.getGyroInclineAngle()) < AutoBalanceConfig.balancedAngleTolerence ) {
-            return true;
-        };
+        // if ( Math.abs(Robot.swerve.gyro.getGyroInclineAngle()) < AutoBalanceConfig.balancedAngleTolerence ) {
+        //     return true;
+        // };
         return false;
     }
 }

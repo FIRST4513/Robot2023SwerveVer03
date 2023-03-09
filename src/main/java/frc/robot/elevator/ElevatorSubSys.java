@@ -68,15 +68,15 @@ public class ElevatorSubSys extends SubsystemBase {
     // ------------ Stop Elevator Motor  ----------
     public void elevStop() {
         mCurrElevPwr = 0;        
-        m_motor.stopMotor();
+        // m_motor.stopMotor();
     }
 
     // ------------  Set Elev to Height by Motion Magic  ----------
     public void setMMheight(double height) {
         height = limit_target_ht(height);
         target_height = height;
-        m_motor.set( ControlMode.MotionMagic, convertHeightToFalconCnt(height),
-                     DemandType.ArbitraryFeedForward, ElevFXMotorConfig.arbitraryFeedForward);
+        // m_motor.set( ControlMode.MotionMagic, convertHeightToFalconCnt(height),
+        //              DemandType.ArbitraryFeedForward, ElevFXMotorConfig.arbitraryFeedForward);
     }
 
     public void setMMheight(DoubleSupplier height) {
@@ -116,7 +116,7 @@ public class ElevatorSubSys extends SubsystemBase {
         }
 
         mCurrElevPwr = speed;
-        m_motor.set(mCurrElevPwr);              // Send Power to motor  
+        // m_motor.set(mCurrElevPwr);              // Send Power to motor  
     }
 
     public void elevSetSpeed(DoubleSupplier speed) {

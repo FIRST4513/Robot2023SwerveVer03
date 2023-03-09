@@ -46,7 +46,7 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
     static PathPlannerTrajectory rightLongScaleTest1 = PathPlanner.loadPath(
         "BlueRightLongScale1", 4.0 , 4.0);     // Max Vel , Max Accel
     static PathPlannerTrajectory rightLongScaleTest2 = PathPlanner.loadPath(
-        "BlueRightLongScale1", 0.5 , 0.5);     // Max Vel , Max Accel
+        "BlueRightLongScale2", 0.5 , 0.5);     // Max Vel , Max Accel
 
     public OperatorGamepad() {
         super("Operator", OperatorGamepadConfig.port);
@@ -55,7 +55,7 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
     public void setupTeleopButtons() {
 
         //gamepad.aButton     .onTrue(IntakeCmds.IntakeEjectCmd());
-        gamepad.bButton     .onTrue(IntakeCmds.IntakeCubeCmd());
+        // gamepad.bButton     .onTrue(IntakeCmds.IntakeCubeCmd());
         gamepad.yButton     .onTrue(IntakeCmds.IntakeConeCmd());
         gamepad.xButton     .onTrue(IntakeCmds.IntakeStopCmd());
  
@@ -135,6 +135,8 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
         return -getTriggerTwist();
     }
 
+    /* the sparkle */
+
     public void rumble(double intensity) {
         this.gamepad.setRumble(intensity, intensity);
     }
@@ -148,19 +150,18 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
     public static Command runCtrTestPathCmd() {
         return new SequentialCommandGroup(
             TrajectoriesCmds.IntializeRobotAndFollowPathCmd(ctrTestPath1, 5.0),
-            new DelayCmd(0.5),
-            TrajectoriesCmds.FollowPathCmd(ctrTestPath2, 5.0),
+            new DelayCmd(0.25),
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(ctrTestPath2, 5.0),
             //new AutoBalanceCommand(),            
             new LockSwerve()
         );
     }
     
-    
     public static Command runRightLongScalePathCmd() {
         return new SequentialCommandGroup(
             TrajectoriesCmds.IntializeRobotAndFollowPathCmd(rightLongScaleTest1, 5.0),
-            new DelayCmd(0.5),
-            TrajectoriesCmds.FollowPathCmd(rightLongScaleTest2, 5.0),
+            new DelayCmd(0.25),
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(rightLongScaleTest2, 5.0),
             //new AutoBalanceCommand(),            
             new LockSwerve()
         );

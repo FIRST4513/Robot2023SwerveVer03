@@ -66,5 +66,4 @@ public class Gyro {
         double angle = getGyroInclineRaw() / -0.01738;
         return angle;
     }
-    
 }

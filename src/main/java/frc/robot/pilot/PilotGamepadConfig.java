@@ -18,8 +18,8 @@ public class PilotGamepadConfig {
     public static final double FastRotationExp          = 20;
 
     //---Medium Fast---///
-    public static final double MedFastforwardVelocity    = -2.25;
-    public static final double MedFastsidewaysVelocity  = -2.25; // -4.8;  // max velocity? // ~4.9 robot max
+    public static final double MedFastforwardVelocity    = -3;
+    public static final double MedFastsidewaysVelocity  = -3; // -4.8;  // max velocity? // ~4.9 robot max
     public static final double MedFastrotationVelocity  = 0.25;
     public static final double MedFastForwardExp        = 30;
     public static final double MedFastSidewaysExp       = 30;

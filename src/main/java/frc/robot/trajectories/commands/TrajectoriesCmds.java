@@ -15,8 +15,8 @@ public class TrajectoriesCmds {
     public static Command IntializeRobotAndFollowPathCmd(PathPlannerTrajectory path, double time) {
         return new SequentialCommandGroup(
             InitializeRobotFromPathCmd( path),
-            FollowPathCmd(path, time),
-            new LockSwerve()
+            FollowPathCmd(path, time)
+            // new LockSwerve()
         );
     }
 
