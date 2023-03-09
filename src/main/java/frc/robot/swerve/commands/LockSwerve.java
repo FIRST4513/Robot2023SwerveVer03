@@ -19,7 +19,7 @@ public class LockSwerve extends CommandBase {
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(Robot.swerve);
 
-        double minSpeed = 0.01 * SwerveConfig.maxVelocity;
+        double minSpeed = 0.01 * SwerveConfig.maxVelocity;  //This is to overcome no turn limit
 
         // Set the angles and minimum speeds to use when locking the swerve base
         swerveModuleStates =

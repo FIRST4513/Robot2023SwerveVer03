@@ -44,7 +44,7 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
     static PathPlannerTrajectory ctrTestPath2 = PathPlanner.loadPath(
         "CtrScale2", 0.5 , 0.5);     // Max Vel , Max Accel
     static PathPlannerTrajectory rightLongScaleTest1 = PathPlanner.loadPath(
-        "BlueRightLongScale1", 4.0 , 4.0);     // Max Vel , Max Accel
+        "BlueRightLongScale1", 2.5 , 2.5);     // Max Vel , Max Accel
     static PathPlannerTrajectory rightLongScaleTest2 = PathPlanner.loadPath(
         "BlueRightLongScale2", 0.5 , 0.5);     // Max Vel , Max Accel
 
@@ -54,7 +54,7 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
     
     public void setupTeleopButtons() {
 
-        //gamepad.aButton     .onTrue(IntakeCmds.IntakeEjectCmd());
+        // gamepad.aButton     .onTrue(IntakeCmds.IntakeEjectCmd());
         // gamepad.bButton     .onTrue(IntakeCmds.IntakeCubeCmd());
         gamepad.yButton     .onTrue(IntakeCmds.IntakeConeCmd());
         gamepad.xButton     .onTrue(IntakeCmds.IntakeStopCmd());
@@ -90,16 +90,6 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
 
     public double getElevInput() {
         return elevThrottleCurve.calculateMappedVal(gamepad.rightStick.getY()) ;
-
-        // double yValue = gamepad.rightStick.getY();
-        // if (Math.abs(yValue) < 0.05) {
-        //     yValue = 0.0;
-        // }
-        // if (OperatorGamepadConfig.elevYInvert) {
-        //     return yValue * -0.5;
-        // } else {
-        //     return yValue * 0.5;
-        // }
     }
 
     public double getElevInputWFF() {
@@ -109,16 +99,6 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
 
     public double getArmInput() {
         return armThrottleCurve.calculateMappedVal(gamepad.leftStick.getY());
-
-        // double yValue = gamepad.leftStick.getY();
-        // if (Math.abs(yValue) < 0.175) {
-        //     yValue = 0.0;
-        // }
-        // if (OperatorGamepadConfig.armYInvert) {
-        //     return yValue * -0.5;
-        // } else {
-        //     return yValue * 0.5;
-        // }
     }
 
     public double getArmInputWFF() {

@@ -1,4 +1,4 @@
-// Created by Spectrum3847
+// Based on code from Spectrum3847
 package frc.robot.swerve;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -17,22 +17,13 @@ import frc.robot.RobotConfig.Motors;;
 
 public final class SwerveConfig {
 
-    /* Drivetrain Constants */
-    public static final double trackWidth = Units.inchesToMeters(23.75); // Between Right/Left Wheel Ctrs
-    public static final double wheelBase = Units.inchesToMeters(23.75); // Between Front/Back Wheel Ctrs
-    public static final double wheelDiameter = Units.inchesToMeters(3.82);  //(3.8195);
-    public static final double wheelCircumference = wheelDiameter * Math.PI;
-
-    public static final double openLoopRamp = 0.25;
-    public static final double closedLoopRamp = 0.0;
-
-    public static final double MK4_L2_driveGearRatio = (6.75 / 1.0);
-    public static final double driveGearRatio = MK4_L2_driveGearRatio;
-
-    public static final double MK4i_L2_angleGearRatio = (150.0 / 7.0);  //(50.0 / 14.0) * (60.0 / 10.0);
-    public static final double angleGearRatio = MK4i_L2_angleGearRatio;
-
     // -------- Kinematics --------
+
+    public static final double trackWidth         = Units.inchesToMeters(23.75); // Between Right/Left Wheel Ctrs
+    public static final double wheelBase          = Units.inchesToMeters(23.75); // Between Front/Back Wheel Ctrs
+    public static final double wheelDiameter      = Units.inchesToMeters(3.82);  // Prev 3.8195;
+    public static final double wheelCircumference = wheelDiameter * Math.PI;
+  
     public static final Translation2d frontLeftLocation =
             new Translation2d(wheelBase / 2.0, trackWidth / 2.0);
     public static final Translation2d frontRightLocation =
@@ -46,59 +37,49 @@ public final class SwerveConfig {
             new SwerveDriveKinematics(
                     frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
-    /* Swerve Current Limiting */
-    public static final int angleContinuousCurrentLimit = 25;
-    public static final int anglePeakCurrentLimit = 40;
-    public static final double anglePeakCurrentDuration = 0.1;
-    public static final boolean angleEnableCurrentLimit = true;
+    public static final double MK4_L2_driveGearRatio = (6.75 / 1.0);
+    public static final double driveGearRatio = MK4_L2_driveGearRatio;
 
-    public static final int driveContinuousCurrentLimit = 35;
-    public static final int drivePeakCurrentLimit = 60;
-    public static final double drivePeakCurrentDuration = 0.1;
-    public static final boolean driveEnableCurrentLimit = true;
+    public static final double MK4i_L2_angleGearRatio = (150.0 / 7.0);  //(50.0 / 14.0) * (60.0 / 10.0);
+    public static final double angleGearRatio = MK4i_L2_angleGearRatio;
+
 
     /* Angle Motor PID Values */
-    public static final double angleKP = 0.3;  // 0.2 prev 1-24-23 364 = 0.6; SDS = 0.2;
+    public static final double angleKP = 0.3;                   // 0.2 prev. Spectrum = 0.6
     public static final double angleKI = 0.0;
-    public static final double angleKD = 0.0;  // 0.1 prev 1-24-23 364 = 12.0; SDS = 0.1;
+    public static final double angleKD = 0.0;                   // 0.1 prev 1-24-23 Spectrum = 12
     public static final double angleKF = 0.0; 
+    // increase to reduce jitter, (2048 * angleGearRatio) / 360.0) = 1 degree = 122 cnts
+    public static final int angleAllowableError = 122;          // 1 degree is close enough ????
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 0.015; // 0.1;
+    public static final double driveKP = 0.015;                 // 0.1 prev. Spectrum = 0.1
     public static final double driveKI = 0.0;
     public static final double driveKD = 0.0;
     public static final double driveKF = 0.0;
 
     /* Drive Motor Characterization Values */
-    public static final double driveKS = ( 0.305 / 12.0 );  // (0.605 / 12); // /12 to convert from volts to %output
-    public static final double driveKV = ( 5.0 / 12.0 );  // (1.72 / 12);
-    public static final double driveKA = ( 0.193 / 12.0 );  // (0.193 / 12);
-    
-    // Swerve Profiling Values
-    // ((6380 / 60) / angleGearRatio) * wheelDiameter * Math.PI * 0.95; // meters per second
-    public final static double maxVelocity = 1.5; // 2.8176;
-    public final static double maxAccel = maxVelocity * 1.5;    //Get max in 0.5 seconds
-    public static final double maxAngularVelocity = 0.08; //0.16182;    // RPS 3.14 * 2 = 360 Degrees per second
-    public static final double maxAngularAcceleration = Math.pow(maxAngularVelocity, 2);
-
-    //     public static final double maxAngularVelocity =
-    //             maxVelocity / Math.hypot(trackWidth / 2.0, wheelBase / 2.0);
-
     // KS - Volts Stiction -     How many volts are needed to simply start moving/overcoming friction
     // KV - Volts Velocity -     How many volts it takes to achieve a constant, specified velocity
     // KA - Volts Acceleration - How many volts for a given acceleration (mps^2)
+
+    // Scaled to (0 to 1) from (0 to 12) Volts as required for Arbitrary Feedforward
+    public static final double driveKS = ( 0.305 / 12.0 );      // Spectrum = (0.605 / 12) = 0.050416
+    public static final double driveKV = ( 5.0   / 12.0 );      // Spectrum = (1.72 / 12) = 0.14333
+    public static final double driveKA = ( 0.193 / 12.0 );      // Spectrum = (0.193 / 12) = 0.0160833
     
-    // Some on-line sample examples
-//     public static final double kP = 2.2956;
-//     public static final double kI = 0;
-//     public static final double kD = 0;
-//     public static final double kS = 0.55493;
-//     public static final double kV = 2.3014;
-//     public static final double kA = 0.12872;
+    // Swerve Drive Profiling Values
+    public static final double maxVelocity = 
+        ((6380 / 60) / driveGearRatio) * wheelDiameter * Math.PI * 0.95; // MPS 4.56
+    public final static double maxAccel = maxVelocity * 1.5;    //Get max in 0.5 seconds
+    //public final static double maxVelocity = 1.5; // 2.8176;
 
-    // increase to reduce jitter, (2048 * angleGearRatio) / 360.0) = 1 degree = 122 cnts
-    public static final int angleAllowableError = 122;  // 1 degree is close enough ????
+    public static final double maxAngularVelocity = 
+                maxVelocity / Math.hypot(trackWidth / 2.0, wheelBase / 2.0); // 10.55 RPS = 1.6 rev per sec.
+    public static final double maxAngularAcceleration = Math.pow(maxAngularVelocity, 2);
+    //public static final double maxAngularVelocity = 0.08; //0.16182;    // RPS 3.14 * 2 = 360 Degrees per second
 
+    
     /* Neutral Modes */
     public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
     public static final NeutralMode driveNeutralMode = NeutralMode.Coast;
@@ -108,9 +89,20 @@ public final class SwerveConfig {
     public static final boolean angleMotorInvert = true; // True = MK4i
     public static final boolean canCoderInvert =   false;
 
-    /* When calibrating, angle bevel gear is to the right of the robot */
+    /* Swerve Current Limiting */
+    public static final int angleContinuousCurrentLimit = 20;
+    public static final int anglePeakCurrentLimit = 30;
+    public static final double anglePeakCurrentDuration = 0.1;
+    public static final boolean angleEnableCurrentLimit = true;
+
+    public static final int driveContinuousCurrentLimit = 40;
+    public static final int drivePeakCurrentLimit = 40;
+    public static final double drivePeakCurrentDuration = 0.0;
+    public static final boolean driveEnableCurrentLimit = true;
 
     /* Module Specific Constants */
+    /* When calibrating, angle bevel gear is to the right of the robot */
+
     /* Front Left Module - Module 0 */
     public static final class FLMod0 {
         public static final String moduleName = "FL Mod 0";
@@ -207,8 +199,6 @@ public final class SwerveConfig {
         swerveDriveFXConfig.slot0.kF = SwerveConfig.driveKF;
         swerveDriveFXConfig.supplyCurrLimit = driveSupplyLimit;
         swerveDriveFXConfig.initializationStrategy = SensorInitializationStrategy.BootToZero;
-        swerveDriveFXConfig.openloopRamp = SwerveConfig.openLoopRamp;
-        swerveDriveFXConfig.closedloopRamp = SwerveConfig.closedLoopRamp;
 
         /* Swerve CANCoder Configuration */
         swerveCanCoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;

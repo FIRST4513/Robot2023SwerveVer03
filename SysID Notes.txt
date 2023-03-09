@@ -1,0 +1,17 @@
+Units:				Meters
+Units Per Rotation:	0.3192
+Type:				Drivetrain (Angular)
+
+Feedforward Analysis
+
+Ks:		1.2809
+Kv:		0.81416		Velocity Thresholh: 0.004
+Ka:		2.4646		Test Duration: 1.03
+
+Track Width 2.3386 Meters
+
+
+
+Velocity
+Kp:		1.4173
+Kd:		0

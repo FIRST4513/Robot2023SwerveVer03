@@ -81,9 +81,9 @@ public class SwerveModule extends SubsystemBase {
 
     // ----- Set Angle Motor to needed angle --------
     public void setAngle(SwerveModuleState desiredState) {
-        // Prevent rotating module if speed is less than 1% of max speed. (Jitter prevention)
         Rotation2d angle = desiredState.angle;
         if (( Math.abs(desiredState.speedMetersPerSecond) < (SwerveConfig.maxVelocity * 0.01))) {
+            // Prevent rotating module if speed is less than 1% of max speed. (Jitter prevention)
             angle = lastAngle;
         }
         mAngleMotor.set(ControlMode.Position,
@@ -95,10 +95,11 @@ public class SwerveModule extends SubsystemBase {
     // ----- Set Drive Motor to needed speed --------
     public void setSpeedMPS(SwerveModuleState desiredState, boolean isOpenLoop) {
         if (isOpenLoop) {
-             // MPS to -1 to +1 value
+            // Open Loop Percent (Velocity MPS to -1 to +1 value)
             double percentOutput = desiredState.speedMetersPerSecond / SwerveConfig.maxVelocity;
             mDriveMotor.set(ControlMode.PercentOutput, percentOutput);
         } else {
+            // Closed Loop (Velocity MPS with Arbitrary FeedForward)
             // Send Optimized speed MPS along with feedforward value to Drive motor
             double velocity = Conversions.MPSToFalcon(desiredState.speedMetersPerSecond,
                                                       SwerveConfig.wheelCircumference,

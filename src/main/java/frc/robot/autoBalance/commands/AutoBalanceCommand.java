@@ -40,10 +40,15 @@ public class AutoBalanceCommand extends CommandBase {
         double angleDiffAsRad = Math.toRadians(angleDifference);
         double sinValMultiplier = Math.sin(angleDiffAsRad);
 
-        balanceEffort = sinValMultiplier * AutoBalanceConfig.kP;
+        balanceEffort = sinValMultiplier * AutoBalanceConfig.kPsin;         // Sin
+        //balanceEffort = sinValMultiplier * AutoBalanceConfig.kP;          // Linear
 
-        //Robot.swerve.drive(balanaceEffort, 0, turningEffort, false, true);
-        Robot.swerve.drive(balanceEffort, 0, 0 , false, true);
+        if ( Math.abs(Robot.swerve.gyro.getGyroInclineAngle()) < AutoBalanceConfig.balancedAngleTolerence ) {
+            balanceEffort = 0.0;
+        }
+
+        Robot.swerve.drive(    balanceEffort, 0, 0 , false, true);
+        //Robot.swerve.drive(  balanceEffort, 0, turningEffort, false, true);
     }
 
     // Called once the command ends or is interrupted.
