@@ -53,7 +53,7 @@ public final class SwerveConfig {
     public static final int angleAllowableError = 122;          // 1 degree is close enough ????
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 0.05;                 // 0.1 prev. Spectrum = 0.1
+    public static final double driveKP = 0.025;                 // 0.1 prev. Spectrum = 0.1
     public static final double driveKI = 0.0;
     public static final double driveKD = 0.01;
     public static final double driveKF = 0.0;
