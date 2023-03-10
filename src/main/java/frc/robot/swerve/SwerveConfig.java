@@ -53,19 +53,19 @@ public final class SwerveConfig {
     public static final int angleAllowableError = 122;          // 1 degree is close enough ????
 
     /* Drive Motor PID Values */
-    public static final double driveKP = 0.015;                 // 0.1 prev. Spectrum = 0.1
+    public static final double driveKP = 0.05;                 // 0.1 prev. Spectrum = 0.1
     public static final double driveKI = 0.0;
-    public static final double driveKD = 0.0;
+    public static final double driveKD = 0.01;
     public static final double driveKF = 0.0;
 
-    /* Drive Motor Characterization Values */
+    /* Drive Motor Characterization Values */   
     // KS - Volts Stiction -     How many volts are needed to simply start moving/overcoming friction
     // KV - Volts Velocity -     How many volts it takes to achieve a constant, specified velocity
     // KA - Volts Acceleration - How many volts for a given acceleration (mps^2)
 
     // Scaled to (0 to 1) from (0 to 12) Volts as required for Arbitrary Feedforward
-    public static final double driveKS = ( 0.305 / 12.0 );      // Spectrum = (0.605 / 12) = 0.050416
-    public static final double driveKV = ( 5.0   / 12.0 );      // Spectrum = (1.72 / 12) = 0.14333
+    public static final double driveKS =  (0.305 / 12.0) ;//( 0.305 / 12.0 );      // Spectrum = (0.605 / 12) = 0.050416
+    public static final double driveKV =  2.4 / 12.0 ;// ( 5.0   / 12.0 );      // Spectrum = (1.72 / 12) = 0.14333
     public static final double driveKA = ( 0.193 / 12.0 );      // Spectrum = (0.193 / 12) = 0.0160833
     
     // Swerve Drive Profiling Values
