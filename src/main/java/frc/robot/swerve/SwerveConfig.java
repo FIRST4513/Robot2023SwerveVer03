@@ -64,9 +64,9 @@ public final class SwerveConfig {
     // KA - Volts Acceleration - How many volts for a given acceleration (mps^2)
 
     // Scaled to (0 to 1) from (0 to 12) Volts as required for Arbitrary Feedforward
-    public static final double driveKS =  (0.305 / 12.0) ;//( 0.305 / 12.0 );      // Spectrum = (0.605 / 12) = 0.050416
-    public static final double driveKV =  2.4 / 12.0 ;// ( 5.0   / 12.0 );      // Spectrum = (1.72 / 12) = 0.14333
-    public static final double driveKA = ( 0.193 / 12.0 );      // Spectrum = (0.193 / 12) = 0.0160833
+    public static final double driveKS =  (0.305 / 12.0) ;      //( 0.305 / 12.0 );      // Spectrum = (0.605 / 12) = 0.050416
+    public static final double driveKV =  (2.4 / 12.0) ;        // ( 5.0   / 12.0 );      // Spectrum = (1.72 / 12) = 0.14333
+    public static final double driveKA =  (0.193 / 12.0);      // Spectrum = (0.193 / 12) = 0.0160833
     
     // Swerve Drive Profiling Values
     public static final double maxVelocity = 
