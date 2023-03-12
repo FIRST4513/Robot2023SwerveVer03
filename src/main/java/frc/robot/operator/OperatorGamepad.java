@@ -47,6 +47,10 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
         "BlueRightLongScale1", 2.5 , 2.5);     // Max Vel , Max Accel
     static PathPlannerTrajectory rightLongScaleTest2 = PathPlanner.loadPath(
         "BlueRightLongScale2", 0.5 , 0.5);     // Max Vel , Max Accel
+    static PathPlannerTrajectory testPath03112023A = PathPlanner.loadPath(
+        "TestPath03112023A", 2.0, 1.0);
+    static PathPlannerTrajectory testPath03112023B = PathPlanner.loadPath(
+        "TestPath03112023B", 2.0, 1.0);
 
     public OperatorGamepad() {
         super("Operator", OperatorGamepadConfig.port);
@@ -60,10 +64,11 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
         gamepad.xButton     .onTrue(IntakeCmds.IntakeStopCmd());
  
         //gamepad.aButton     .onTrue(OperatorGamepadCmds.runTestPathCmd());
-        gamepad.aButton     .onTrue(runCtrTestPathCmd());
+        // gamepad.aButton     .onTrue(runCtrTestPathCmd());
+        gamepad.aButton.onTrue(runTestPath03112023Cmd());
 
         //gamepad.aButton     .onTrue(OperatorGamepadCmds.runTestPathCmd());
-        gamepad.bButton     .onTrue(runRightLongScalePathCmd());
+        // gamepad.bButton     .onTrue(runRightLongScalePathCmd());
 
         //gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullRetractPosCmd());
         gamepad.selectButton.onTrue(runBalanceTestCmd());
@@ -144,6 +149,14 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
             TrajectoriesCmds.IntializeRobotAndFollowPathCmd(rightLongScaleTest2, 5.0),
             //new AutoBalanceCommand(),            
             new LockSwerve()
+        );
+    }
+
+    public static Command runTestPath03112023Cmd() {
+        return new SequentialCommandGroup(
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testPath03112023A, 5.0)
+            // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testPath03112023B, 5.0)
+            // new PrintCommand("RUNNING!")
         );
     }
 
