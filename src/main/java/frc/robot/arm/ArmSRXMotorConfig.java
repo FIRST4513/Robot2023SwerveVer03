@@ -15,8 +15,6 @@ public class ArmSRXMotorConfig {
     public static final boolean     armEnableCurrentLimit   = true;
     public static final SensorInitializationStrategy sensorStrat = SensorInitializationStrategy.BootToZero;
 
-
-
     /* Motor Limits (Encoder Cnts) */
 
     public static final int         armExtendSoftLimitThreshold        = ArmConfig.ExtendSoftLimitSwitchAngle; 
@@ -38,7 +36,7 @@ public class ArmSRXMotorConfig {
      *                              1/100 second of travel ( 1.5 degrees )  = 2,700 counts
      */
 
-    public final double motionCruiseVelocity        = 10000;  // 6173;     // 30000;    // approx 15 degrres per second
+    public final double motionCruiseVelocity        = 10000;  // 6173;     // 30000;    // approx 15 degrees per second
     public final double motionAcceleration          =  8000;  // 3704;     // 20000;    // approx 1 second to get up to cruise velocity
     public static final int allowableError          = 610;
     public final int    motionCurveStrength         = 2;        // 0 No smoothing to 8 Max smoothing

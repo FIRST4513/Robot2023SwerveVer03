@@ -19,9 +19,6 @@ import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class OperatorGamepadCmds {
-    static PathPlannerTrajectory testPath = PathPlanner.loadPath(
-        "215Meter", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
-
     /** Set default command to turn off the rumble */
     public static void setupDefaultCommand() {
        // Robot.pilotGamepad.setDefaultCommand(RumbleOperatorCmd(0));
@@ -121,23 +118,6 @@ public class OperatorGamepadCmds {
     }
 
 
-    
-    // ------------- Intake Commands ----------------------------
-    public static Command IntakeCubeCmd(){
-        return new ParallelCommandGroup(
-            OperatorGamepadCmds.SetArmElevToIntakeCubePosCmd(),
-            IntakeCmds.IntakeCubeCmd()
-        );
-    }
-
-    public static Command IntakeConeCmd(){
-        return new ParallelCommandGroup(
-            OperatorGamepadCmds.SetArmElevToIntakeConePosCmd(),
-            IntakeCmds.IntakeConeCmd()
-        );
-    }
-
-
     // --------------------------- Arm/Elev To Intake Positions --------------------
     public static Command SetArmElevToIntakeCubePosCmd() {
         return new ParallelCommandGroup(        
@@ -192,15 +172,6 @@ public class OperatorGamepadCmds {
             () -> Robot.arm.isArmInside()
         );
     }
-
-    // ------------------- Test Path Follow cmd ---------
-    public static Command runTestPathCmd() {
-        return TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testPath, 5);
-    }
-
-
-
-
 
     // -------------------- Arm/Elev To Eject Positions -------------------
 

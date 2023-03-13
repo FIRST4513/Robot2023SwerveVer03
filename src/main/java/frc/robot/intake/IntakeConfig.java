@@ -4,33 +4,24 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 public class IntakeConfig {
+    // IR Prox distance value for detection of a gamepiece
+    public static double gamepieceDetectDistance = 1.5;
 
-    public static double coneDetectTrue = 2.25;         // 2.5; // IR Prox Volt greater than 2.25 means we see it.
-    public static double cubeEjectDetectTrue = 1.25;   // IR Prox Volt greater than 2.25 means we see it.
-    public static double cubeRetractDetectTrue = 2.25; // IR Prox Volt greater than 2.25 means we see it.
-
-    public static double cubeRetractUpperSpeed = -0.7;
-    public static double cubeRetractLowerSpeed = -0.7;
-    public static double cubeHoldUpperSpeed = -0.1;
-    public static double cubeHoldLowerSpeed = 0.1;
-    public static double coneRetractUpperSpeed = -1.0;
-    public static double coneRetractLowerSpeed = 1.0;
-    public static double coneRetractUpperSlowSpeed = -0.35;
-    public static double coneRetractLowerSlowSpeed = 0.35;
-    public static double cubeEjectSpeed = 0.75;
-    public static double coneEjectSpeed = -0.75;
+    // retract/eject speeds
+    public static double retractSpeed = -0.5;
+    public static double holdSpeed    = -0.15;
+    public static double ejectSpeed   =  0.5;
 
     /* Neutral Modes */
     public static final NeutralMode intakeNeutralMode = NeutralMode.Coast;
 
     /* Inverts */
-    public static final boolean upperIntakeMotorInvert = false;
-    public static final boolean lowerIntakeMotorInvert = true;
+    public static final boolean intakeMotorInvert = false;
 
     // increase to reduce jitter
     public static final int intakeAllowableError = 0;
 
-    public static TalonSRXConfiguration intakeSRXConfig;     // TalonSRX Config objetct
+    public static TalonSRXConfiguration intakeSRXConfig;     // TalonSRX Config object
 
     /* Intake Motor Current Limiting */
     public static final int     intakeContinuousCurrentLimit = 25;
@@ -52,11 +43,10 @@ public class IntakeConfig {
         intakeSRXConfig.slot0.kD = 0;
         intakeSRXConfig.slot0.kF = 0;
         intakeSRXConfig.slot0.allowableClosedloopError = intakeAllowableError;
-        intakeSRXConfig.openloopRamp                            = openLoopRamp;
-        intakeSRXConfig.closedloopRamp                          = closedLoopRamp;
+        intakeSRXConfig.openloopRamp                   = openLoopRamp;
+        intakeSRXConfig.closedloopRamp                 = closedLoopRamp;
         intakeSRXConfig.continuousCurrentLimit         = intakeContinuousCurrentLimit;
         intakeSRXConfig.peakCurrentLimit               = intakePeakCurrentLimit;         
         intakeSRXConfig.peakCurrentDuration            = intakePeakCurrentDuration;
     }
-
 }

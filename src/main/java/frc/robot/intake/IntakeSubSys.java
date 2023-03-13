@@ -12,14 +12,12 @@ public class IntakeSubSys extends SubsystemBase {
     public static IntakeConfig config;
     public static String intakeBrakeStatus = "";
     
-    //Devices
-    public WPI_TalonSRX intakeUpperMotor  = new WPI_TalonSRX(Motors.intakeUpperMotorID);
-    public WPI_TalonSRX intakeLowerMotor  = new WPI_TalonSRX(Motors.intakeLowerMotorID);
+    // Devices
+    public WPI_TalonSRX intakeMotor  = new WPI_TalonSRX(Motors.intakeUpperMotorID);
 
-    public AnalogInput coneDetectSensor = new AnalogInput(AnalogPorts.intakeConeDetectPort);
-    public AnalogInput cubeDetectSensor = new AnalogInput(AnalogPorts.intakeCubeDetectPort);
+    public AnalogInput gamepieceDetectSensor = new AnalogInput(AnalogPorts.intakeGamepieceSensor);
 
-    //contructor
+    // Constructor
     public IntakeSubSys() { 
         config = new IntakeConfig();
         configureTalonSRXControllers();
@@ -31,60 +29,37 @@ public class IntakeSubSys extends SubsystemBase {
     // ---------------- Intake Motor Methods ------------------
     // --------------------------------------------------------
 
-    public void setUpperMotor(double speed)     { intakeUpperMotor.set(speed); }
-    public void setLowerMotor(double speed)     { intakeLowerMotor.set(speed); }
+    public void setMotor(double speed)     { intakeMotor.set(speed); }
 
-    public void setUpperMotor(DoubleSupplier speed) { intakeUpperMotor.set(speed.getAsDouble()); }
-    public void setLowerMotor(DoubleSupplier speed) { intakeUpperMotor.set(speed.getAsDouble()); }
+    public void setMotor(DoubleSupplier speed) { setMotor(speed.getAsDouble()); }
+
+    public double getMotorSpeed() { return intakeMotor.get(); }
 
     public void stopMotors() {
         setBrakeMode(true);
-        intakeUpperMotor.stopMotor();
-        intakeLowerMotor.stopMotor();
+        intakeMotor.stopMotor();
     }
 
-    // ------ Set Cone Retract Speeds ---------
-    public void setMotorsConeRetract(){
-        intakeUpperMotor.set(IntakeConfig.coneRetractUpperSpeed);
-        intakeLowerMotor.set(IntakeConfig.coneRetractLowerSpeed);
+    // ---------- Set Motor Methods ----------
+    public void setMotorRetract(){
+        intakeMotor.set(IntakeConfig.retractSpeed);
     }
 
-    public void setMotorsConeRetractSlow(){
-        intakeUpperMotor.set(IntakeConfig.coneRetractUpperSlowSpeed);
-        intakeLowerMotor.set(IntakeConfig.coneRetractLowerSlowSpeed);
+    public void setMotorEject() {
+        intakeMotor.set(IntakeConfig.ejectSpeed);
     }
 
-    // ------ Set Cube Retract Speeds ---------
-    public void setMotorsCubeRetract(){
-        intakeUpperMotor.set(IntakeConfig.cubeRetractUpperSpeed);
-        intakeLowerMotor.set(IntakeConfig.cubeRetractLowerSpeed);
-    }
-
-    public void setMotorsCubeHold() {
-        intakeUpperMotor.set(IntakeConfig.cubeHoldUpperSpeed);
-        intakeLowerMotor.set(IntakeConfig.cubeHoldLowerSpeed);
-    }
-
-    // ------ Set Eject Speeds ---------
-    public void setMotorsCubeEject() {
-        intakeUpperMotor.set(IntakeConfig.cubeEjectSpeed);
-        intakeLowerMotor.set(IntakeConfig.cubeEjectSpeed);
-    }
-
-    public void setMotorsConeEject() {
-        intakeUpperMotor.set(IntakeConfig.coneEjectSpeed);
-        intakeLowerMotor.set(IntakeConfig.coneEjectSpeed);
+    public void setMotorHold() {
+        intakeMotor.set(IntakeConfig.holdSpeed);
     }
 
     // ------ Set Brake Modes ---------
     public void setBrakeMode(Boolean enabled) {
         if (enabled) {
-            intakeUpperMotor.setNeutralMode(NeutralMode.Brake);
-            intakeLowerMotor.setNeutralMode(NeutralMode.Brake);
+            intakeMotor.setNeutralMode(NeutralMode.Brake);
             intakeBrakeStatus = "Intake Brake On";
         } else {
-            intakeUpperMotor.setNeutralMode(NeutralMode.Coast);
-            intakeLowerMotor.setNeutralMode(NeutralMode.Coast);
+            intakeMotor.setNeutralMode(NeutralMode.Coast);
             intakeBrakeStatus = "Intake Brake Off";
         }
     }
@@ -97,49 +72,22 @@ public class IntakeSubSys extends SubsystemBase {
     // ---------------- Intake Detect Methods -------------------------
     // ----------------------------------------------------------------
 
-    // --------- Cone Detects ----------
-    public boolean isConeDetected(){
-        if(getConeDetectValue() > IntakeConfig.coneDetectTrue) { return true; } 
+    // ---------- General Gamepiece Detects ----------
+    public boolean isGamepieceDetected() {
+        if (getSensorVal() > IntakeConfig.gamepieceDetectDistance) { return true; }
         return false;
     }
 
-    public double getConeDetectValue(){
-        return coneDetectSensor.getAverageVoltage();
-    }
-    public double getCubeDetectValue(){
-        return cubeDetectSensor.getAverageVoltage();
+    public boolean isGamepieceNotDetected() {
+        return !isGamepieceDetected();
     }
 
-
-    public String coneDetectStatus(){
-        if(isConeDetected())    { return "Detected"; } 
-        return "Not Detected";
+    public double getSensorVal() {
+        return gamepieceDetectSensor.getAverageVoltage();
     }
 
-    // --------- Cube Detects ----------
-    public boolean isCubeEjectDetected() {
-        // This range is further out, to make sure cube is ejected (true = cube still here)
-        if(cubeDetectSensor.getAverageVoltage() > IntakeConfig.cubeEjectDetectTrue) { return true; } 
-        return false;
-    }
-
-    public boolean isCubeRetractDetected() {
-        // This range is closer to make sure we have it sucked up far enough to hold
-        if(cubeDetectSensor.getAverageVoltage() > IntakeConfig.cubeRetractDetectTrue) { return true; } 
-        return false;
-    }
-
-    public boolean isCubeRetractNotDetected()   { return !isCubeRetractDetected(); }
-    public boolean isCubeEjectNotDetected()     { return !isCubeRetractDetected(); }
-
-    public String cubeEjectDetectStatus() {
-        if(isCubeEjectDetected()) { 
-            return "Detected"; } 
-        return "Not Detected";
-    }
-
-    public String cubeRetractDetectStatus() {
-        if(isCubeEjectDetected()) { 
+    public String gamepieceDetectStatus() {
+        if(isGamepieceDetected()) { 
             return "Detected"; } 
         return "Not Detected";
     }
@@ -148,21 +96,13 @@ public class IntakeSubSys extends SubsystemBase {
     // ---------------- Configure Intake Motor ------------------
     // ----------------------------------------------------------
     public void configureTalonSRXControllers(){
-        // This config is for the Talon SRX Controllers
+        // This config is for the Talon SRX Controller(s)
 
-        // Upper Motor
-        intakeUpperMotor.configFactoryDefault();
-        intakeUpperMotor.configAllSettings(IntakeConfig.intakeSRXConfig);
-        intakeUpperMotor.setInverted(IntakeConfig.upperIntakeMotorInvert);
-        intakeUpperMotor.setNeutralMode(IntakeConfig.intakeNeutralMode);
-        intakeUpperMotor.setSelectedSensorPosition(0);
-
-        // Lower Motor
-        intakeLowerMotor.configFactoryDefault();
-        intakeLowerMotor.configAllSettings(IntakeConfig.intakeSRXConfig);
-        intakeLowerMotor.setInverted(IntakeConfig.lowerIntakeMotorInvert);
-        intakeLowerMotor.setNeutralMode(IntakeConfig.intakeNeutralMode);
-        intakeLowerMotor.setSelectedSensorPosition(0);
-
+        // The only motor
+        intakeMotor.configFactoryDefault();
+        intakeMotor.configAllSettings(IntakeConfig.intakeSRXConfig);
+        intakeMotor.setInverted(IntakeConfig.intakeMotorInvert);
+        intakeMotor.setNeutralMode(IntakeConfig.intakeNeutralMode);
+        intakeMotor.setSelectedSensorPosition(0);
     }
 }

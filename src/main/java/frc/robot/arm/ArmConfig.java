@@ -2,6 +2,9 @@ package frc.robot.arm;
 
 public class ArmConfig {
 
+    // arm plantery order
+    // motor -> 5:1 -> encoder -> 7:1 -> 7:1 -> 2:1 -> arm
+
     // ------- Encoder Conversion Factor --------------
     // 1797.41176 cnts per degree tested 2/20/23
     public final static double kCntsPerDeg              = 625; //569;  // 1843;        // Convert cnt to degrees of angle (2/21/23)
@@ -31,22 +34,14 @@ public class ArmConfig {
     public final static double ArmAngleStorePos         = -45.0;        // Store for Travel
     public final static double ArmAngleFullRetractPos   = -89.0;        // Full retract
 
-    // These would be for separate values for Cone or Cube (May not be needed)
-    // public final static double ArmAngleConeLowPos       = -15.0;        // Angle to Eject Cone for Low Score 
-    // public final static double ArmAngleConeMidPos       = +20.0;
-    // public final static double ArmAngleConeHighPos      = +30.0;
-    // public final static double ArmAngleCubeLowPos       = +15.0;        // Angle to Eject Cube for Low Score
-    // public final static double ArmAngleCubeMidPos       = +20.0;
-    // public final static double ArmAngleCubeHighPos      = +25.0;
-
     // ------ Limit Switches ------
     public final static boolean RetractLimitSwitchTrue      = false;
-    public final static double  RetractLimitSwitchAngle     = -45;    // Max angle retract
+    public final static double  RetractLimitSwitchAngle     = -25;     // Max angle retract
     public final static boolean RetractSoftLimitSwitchEnable = false;
-    public final static int     RetractSoftLimitSwitchAngle = -45;      // Max angle retract
+    public final static int     RetractSoftLimitSwitchAngle = -25;     // Max angle retract
 
     public final static boolean ExtendLimitSwitchTrue       = false;
-    public final static double  ExtendLimitSwitchAngle      = +47.0;    // Max angle extended
+    public final static double  ExtendLimitSwitchAngle      = +90.0;   // Max angle extended
     public final static boolean ExtendSoftLimitSwitchEnable = false;
-    public final static int     ExtendSoftLimitSwitchAngle  = +44;      // Max angle extended
+    public final static int     ExtendSoftLimitSwitchAngle  = +90;     // Max angle extended
 }

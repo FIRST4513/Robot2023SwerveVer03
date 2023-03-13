@@ -38,19 +38,9 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
     OperatorGamepadConfig.armSpeedScaler,
     OperatorGamepadConfig.armSpeedDeadband);
 
-    // Test for auto balance
-    static PathPlannerTrajectory ctrTestPath1 = PathPlanner.loadPath(
-        "CtrScale1", 2.0 , 2.0);     // Max Vel , Max Accel
-    static PathPlannerTrajectory ctrTestPath2 = PathPlanner.loadPath(
-        "CtrScale2", 0.5 , 0.5);     // Max Vel , Max Accel
-    static PathPlannerTrajectory rightLongScaleTest1 = PathPlanner.loadPath(
-        "BlueRightLongScale1", 2.5 , 2.5);     // Max Vel , Max Accel
-    static PathPlannerTrajectory rightLongScaleTest2 = PathPlanner.loadPath(
-        "BlueRightLongScale2", 0.5 , 0.5);     // Max Vel , Max Accel
-    static PathPlannerTrajectory testPath03112023A = PathPlanner.loadPath(
-        "TestPath03112023A", 2.0, 1.0);
-    static PathPlannerTrajectory testPath03112023B = PathPlanner.loadPath(
-        "TestPath03112023B", 2.0, 1.0);
+    // path testing example
+    // static PathPlannerTrajectory ctrTestPath1 = PathPlanner.loadPath(
+    //     "CtrScale1", 2.0 , 2.0);     // Max Vel , Max Accel
 
     public OperatorGamepad() {
         super("Operator", OperatorGamepadConfig.port);
@@ -58,20 +48,13 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
     
     public void setupTeleopButtons() {
 
-        // gamepad.aButton     .onTrue(IntakeCmds.IntakeEjectCmd());
-        // gamepad.bButton     .onTrue(IntakeCmds.IntakeCubeCmd());
-        gamepad.yButton     .onTrue(IntakeCmds.IntakeConeCmd());
+        gamepad.aButton     .onTrue(IntakeCmds.IntakeEjectRunCmd());    // possible replace with until version of these?
+        gamepad.bButton     .onTrue(IntakeCmds.IntakeRetractRunCmd());
+        gamepad.yButton     .onTrue(IntakeCmds.IntakeHoldRunCmd());
         gamepad.xButton     .onTrue(IntakeCmds.IntakeStopCmd());
- 
-        //gamepad.aButton     .onTrue(OperatorGamepadCmds.runTestPathCmd());
-        // gamepad.aButton     .onTrue(runCtrTestPathCmd());
-        gamepad.aButton.onTrue(runTestPath03112023Cmd());
 
-        //gamepad.aButton     .onTrue(OperatorGamepadCmds.runTestPathCmd());
-        // gamepad.bButton     .onTrue(runRightLongScalePathCmd());
-
-        //gamepad.selectButton.onTrue(OperatorGamepadCmds.SetArmElevToFullRetractPosCmd());
-        gamepad.selectButton.onTrue(runBalanceTestCmd());
+        gamepad.selectButton.whileTrue(runBalanceTestCmd());        // keep as button???
+        gamepad.startButton .onTrue(ArmCmds.ResetArmEncoderCmd());
         
         gamepad.Dpad.Up     .onTrue(OperatorGamepadCmds.SetArmElevToEjectHighPosCmd());
         gamepad.Dpad.Down   .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
@@ -81,17 +64,12 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
         gamepad.rightBumper .onTrue(OperatorGamepadCmds.ControlArmElevByJoysticksCmd());
         gamepad.leftBumper  .whileTrue(IntakeCmds.IntakeByJoystickCmd());
 
-        gamepad.startButton .onTrue(ArmCmds.ResetArmEncoderCmd());
     }
 
     @Override
-    public void setupTestButtons() {
-        // gamepad.aButton     .onTrue(OperatorGamepadCmds.runTestPathCmd());
-    }
+    public void setupTestButtons() {}
 
-    public void setupDisabledButtons() {
-    }
-
+    public void setupDisabledButtons() {}
 
     public double getElevInput() {
         return elevThrottleCurve.calculateMappedVal(gamepad.rightStick.getY()) ;
@@ -120,44 +98,17 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
         return -getTriggerTwist();
     }
 
-    /* the sparkle */
+    /*   "the sparkle" -madi   */
 
     public void rumble(double intensity) {
         this.gamepad.setRumble(intensity, intensity);
     }
+    
     public boolean isArmAndElevAtPos() {
         if ((Robot.arm.isMMtargetReached()) && (Robot.elevator.isMMtargetReached())) {
             return true;
         }
         return false;
-    }
-
-    public static Command runCtrTestPathCmd() {
-        return new SequentialCommandGroup(
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(ctrTestPath1, 5.0),
-            new DelayCmd(0.25),
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(ctrTestPath2, 5.0),
-            //new AutoBalanceCommand(),            
-            new LockSwerve()
-        );
-    }
-    
-    public static Command runRightLongScalePathCmd() {
-        return new SequentialCommandGroup(
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(rightLongScaleTest1, 5.0),
-            new DelayCmd(0.25),
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(rightLongScaleTest2, 5.0),
-            //new AutoBalanceCommand(),            
-            new LockSwerve()
-        );
-    }
-
-    public static Command runTestPath03112023Cmd() {
-        return new SequentialCommandGroup(
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testPath03112023A, 5.0)
-            // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(testPath03112023B, 5.0)
-            // new PrintCommand("RUNNING!")
-        );
     }
 
     public static Command runBalanceTestCmd() {
@@ -166,4 +117,12 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
             new LockSwerve()
         );
     }
+
+    // path testing example
+    // public static Command runTestPathCmd() {
+    //     return new SequentialCommandGroup(
+    //         TrajectoriesCmds.IntializeRobotAndFollowPathCmd(ctrTestPath1, 5.0),
+    //         new LockSwerve()
+    //     );
+    // }
 }

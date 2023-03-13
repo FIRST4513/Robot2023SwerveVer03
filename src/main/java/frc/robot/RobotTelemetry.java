@@ -80,20 +80,18 @@ public class RobotTelemetry extends TelemetrySubsystem {
                 .withWidget("Simple Dial")
                 .withProperties(Map.of("Min", 0, "Max", 135));
 
-
         tab.addNumber("Elev Ht",          () -> Robot.elevator.getElevHeightInches())   .withPosition(3, 0).withSize(2, 1);
         tab.addString("Elev Bottom Sw",   () -> Robot.elevator.getLowerLimitSwStatus()) .withPosition(3, 2).withSize(2, 1);
         tab.addString("Elev Top Limit",   () -> Robot.elevator.getUpperLimitSwStatus()) .withPosition(3, 4).withSize(2, 1);
         tab.addString("Elev Brake",       () -> Robot.elevator.getBrakeStatus())        .withPosition(3, 6).withSize(2, 1);
 
-        tab.addNumber("Arm Angle",       () -> Robot.arm.getArmAngle())             .withPosition(5, 0).withSize(2, 1);
-        tab.addString("Arm Extend Sw",   () -> Robot.arm.extendLimitSwitchStatus()) .withPosition(5, 2).withSize(2, 1);
-        tab.addString("Arm Retract Sw",  () -> Robot.arm.retractLimitSwitchStatus()).withPosition(5, 4).withSize(2, 1);
-        tab.addString("Arm Brake",       () -> Robot.arm.getBrakeStatus())          .withPosition(5, 6).withSize(2, 1);        
+        tab.addNumber("Arm Angle",       () -> Robot.arm.getArmAngle())                 .withPosition(5, 0).withSize(2, 1);
+        tab.addString("Arm Extend Sw",   () -> Robot.arm.extendLimitSwitchStatus())     .withPosition(5, 2).withSize(2, 1);
+        tab.addString("Arm Retract Sw",  () -> Robot.arm.retractLimitSwitchStatus())    .withPosition(5, 4).withSize(2, 1);
+        tab.addString("Arm Brake",       () -> Robot.arm.getBrakeStatus())              .withPosition(5, 6).withSize(2, 1);        
 
-        tab.addNumber("Intake Cube",     () -> Robot.intake.getCubeDetectValue())   .withPosition(7, 0).withSize(2, 1);
-        tab.addNumber("Intake Cone",     () -> Robot.intake.getConeDetectValue())   .withPosition(7, 2).withSize(2, 1);
-        tab.addString("Intake Brake",    () -> Robot.intake.getBrakeStatus())       .withPosition(7, 4).withSize(2, 1);
+        tab.addNumber("Intake Sensor",   () -> Robot.intake.getSensorVal())             .withPosition(7, 0).withSize(2, 1);
+        tab.addString("Intake Brake",    () -> Robot.intake.getBrakeStatus())           .withPosition(7, 2).withSize(2, 1);
 
         // tab.addBoolean("Connected?", () -> flash())
         //         .withPosition(2, 0)
@@ -130,5 +128,4 @@ public class RobotTelemetry extends TelemetrySubsystem {
             System.out.println(output);
         }
     }
-
 }

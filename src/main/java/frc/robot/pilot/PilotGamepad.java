@@ -40,27 +40,29 @@ public class PilotGamepad extends Gamepad {
     }
 
     public void setupTeleopButtons() {
-        // "A" Button - Teleop Drive with Robot Perspective
-        gamepad.aButton.onTrue(IntakeCmds.IntakeEjectCmd());
-        gamepad.bButton.onTrue(OperatorGamepadCmds.IntakeCubeCmd());
-        gamepad.yButton.onTrue(OperatorGamepadCmds.IntakeConeCmd());
+        // "A-B-Y" Buttons - Set Intake Motors
+        gamepad.aButton.onTrue(IntakeCmds.IntakeEjectRunCmd());    // possible replace with until version of these?
+        gamepad.bButton.onTrue(IntakeCmds.IntakeRetractRunCmd());
+        // "X" Button - Teleop Drive with Robot Perspective
         gamepad.xButton.whileTrue(PilotGamepadCmds.RpvPilotSwerveCmd());
-
-        gamepad.leftBumper.onTrue(IntakeCmds.IntakeStopCmd());
-        // gamepad.rightBumper.onTrue(PilotGamepadCmds.BasicSnapCmd());  // basic snap (turn-in-place)
-         
+        
         // "Start" Button - Rest Gyro to 0
-        gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());
-        // gamepad.startButton.onTrue(SwerveCmds.ResetOdometryCmd());
-        // gamepad.selectButton.onTrue(PilotGamepadCmds.FpvDriveAndAutoRotateCmd());  // snap to angle while driving
-
+        gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());  // possible reset robo odo as well?
+        
+        // DPAD - Set Common Arm and Elev positions
         gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
         gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.SetArmElevToIntakeConePosCmd());
-        gamepad.Dpad.Left.onTrue(IntakeCmds.IntakeCubeHoldCmd());
+        gamepad.Dpad.Left.onTrue(IntakeCmds.IntakeHoldRunCmd());
+
+        // LEFT BUMPER - Stop Intake Motor(s)
+        gamepad.leftBumper.onTrue(IntakeCmds.IntakeStopCmd());
+        
+        // Disabled and non working buttons -> commands, will test in future:
+        // gamepad.rightBumper.onTrue(PilotGamepadCmds.BasicSnapCmd());  // basic snap (turn-in-place)
+        // gamepad.selectButton.onTrue(PilotGamepadCmds.FpvDriveAndAutoRotateCmd());  // snap to angle while driving
     }
 
-    public void setupDisabledButtons() {
-    }
+    public void setupDisabledButtons() {}
 
     public void setupTestButtons() {
         gamepad.aButton.whileTrue(SwerveCmds.TestWheelFwdCmd());
@@ -121,10 +123,10 @@ public class PilotGamepad extends Gamepad {
 
     public void setupSpeedMenu(){
             // Setup Speed Selector
-            speedChooser.addOption          ("1. SLOW",         "Slow");
-            speedChooser.addOption          ("2. MED. Slow",	"MedSlow");
-            speedChooser.setDefaultOption   ("3. MED. Fast", 	"MedFast");
-            speedChooser.addOption          ("4. Fast", 	    "Fast");
+            speedChooser.addOption        ("1. SLOW",      "Slow");
+            speedChooser.addOption        ("2. MED. Slow", "MedSlow");
+            speedChooser.setDefaultOption ("3. MED. Fast", "MedFast");
+            speedChooser.addOption        ("4. Fast", 	   "Fast");
             SmartDashboard.putData(speedChooser);
     }
     
@@ -168,8 +170,6 @@ public class PilotGamepad extends Gamepad {
                 break;
         }
     }
-
-
 
     public void rumble(double intensity) {
         this.gamepad.setRumble(intensity, intensity);

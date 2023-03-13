@@ -43,7 +43,7 @@ public class AutoCmds {
             return new SequentialCommandGroup(
                 ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
                 OperatorGamepadCmds.SetArmElevToEjectLowPosSafeCmd(),
-                IntakeCmds.IntakeEjectCubeCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
+                IntakeCmds.IntakeEjectUntilNoGamepieceCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
                 IntakeCmds.IntakeStopCmd(),
                 OperatorGamepadCmds.SetArmElevToStorePosFromLowSafeCmd()
             );
@@ -53,7 +53,7 @@ public class AutoCmds {
             return new SequentialCommandGroup(           
                 ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
                 OperatorGamepadCmds.SetArmElevToEjectMidPosSafeCmd(),
-                IntakeCmds.IntakeEjectCubeCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
+                IntakeCmds.IntakeEjectUntilNoGamepieceCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
                 IntakeCmds.IntakeStopCmd(),
                 OperatorGamepadCmds.SetArmElevToStorePosFromMidSafeCmd()
             );
