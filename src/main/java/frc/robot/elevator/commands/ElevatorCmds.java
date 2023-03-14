@@ -121,14 +121,14 @@ public class ElevatorCmds {
     }
 
     // --------- Elev to ArmRelease (Free Fall) Position Command ---------
-    public static Command InitialArmReleaseCmd() {
-        return new ParallelCommandGroup(
-            // Elev raises until falling arm clears retracted limit switch
-            // Then elev lowers to bottom, while arm settles at -20 degrees
-            new ElevReleaseArmCmd().withTimeout(5.0),
-            ArmCmds.ArmReleaseCmd().withTimeout(5.0)
+    // public static Command InitialArmReleaseCmd() {
+    //     return new ParallelCommandGroup(
+    //         // Elev raises until falling arm clears retracted limit switch
+    //         // Then elev lowers to bottom, while arm settles at -20 degrees
+    //         new ElevReleaseArmCmd().withTimeout(5.0),
+    //         ArmCmds.ArmReleaseCmd().withTimeout(5.0)
 
-        );
-    }
+    //     );
+    // }
 }
 

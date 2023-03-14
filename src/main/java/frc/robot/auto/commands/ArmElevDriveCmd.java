@@ -40,7 +40,7 @@ public class ArmElevDriveCmd extends CommandBase {
         currElevHt = Robot.elevator.getElevHeightInches();
         time = Rmath.mRound(cmdTmr.get(), 2);
 
-        Robot.arm.setMMangle(tgtArmAngle);
+        Robot.arm.setMMTargetAngle(tgtArmAngle);
         Robot.elevator.setMMheight(tgtElevHt);
 
         if (isElevAtPosition() && !elevTripped) {

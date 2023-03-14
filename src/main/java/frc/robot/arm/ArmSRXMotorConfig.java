@@ -27,7 +27,7 @@ public class ArmSRXMotorConfig {
      *               -45 degrees reverse requires -0.25 pwr to hold
     */
     //  public final double arbitraryFeedForwardScaler = 0.3536;
-     public final double arbitraryFeedForwardScaler = 0.27; //  0.486;  // 0.15;
+     public final double arbitraryFeedForwardScaler = 0.35; //  0.486;  // 0.15;
 
     /*
      * Cruise velocity Calculation: 1 degree = 1797 Counts     
@@ -36,12 +36,12 @@ public class ArmSRXMotorConfig {
      *                              1/100 second of travel ( 1.5 degrees )  = 2,700 counts
      */
 
-    public final double motionCruiseVelocity        = 10000;  // 6173;     // 30000;    // approx 15 degrees per second
-    public final double motionAcceleration          =  8000;  // 3704;     // 20000;    // approx 1 second to get up to cruise velocity
-    public static final int allowableError          = 610;
-    public final int    motionCurveStrength         = 2;        // 0 No smoothing to 8 Max smoothing
+    public final double motionCruiseVelocity        = 21592;  // 6173;     // 30000;    // approx 15 degrees per second
+    public final double motionAcceleration          =  4500;  // 3704;     // 20000;    // approx 1 second to get up to cruise velocity
+    public static final int allowableError          = 809;
+    public final int    motionCurveStrength         = 0;        // 0 No smoothing to 8 Max smoothing
 
-    public final double kP = 0.1;     // Needs to be Determined by testing
+    public final double kP = 0.3;     // Needs to be Determined by testing
     public final double kI = 0.0;     // could be 0
     public final double kD = 0.0;     // could be 0
     public final double kF = 0.0;     // 0 we will be using ArbitraryFeedForward for position control
@@ -64,7 +64,6 @@ public class ArmSRXMotorConfig {
     public final double kS = 0;
     public final double kV = 0; 
     public final double kA = 0;
-
 
     // --------------- Constuctor Setting Up Motor Config values -------------
     public ArmSRXMotorConfig(){
@@ -94,3 +93,5 @@ public class ArmSRXMotorConfig {
 
 }
 
+// 12 elev min
+// 15.5 elev max
