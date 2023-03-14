@@ -5,10 +5,12 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
 import frc.robot.Robot;
+import frc.robot.arm.ArmSubSys.ArmStates;
 import frc.robot.arm.commands.ArmCmds;
 import frc.robot.auto.commands.DelayCmd;
 import frc.robot.autoBalance.commands.AutoBalanceCommand;
@@ -53,7 +55,8 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
         gamepad.yButton     .onTrue(IntakeCmds.IntakeHoldRunCmd());
         gamepad.xButton     .onTrue(IntakeCmds.IntakeStopCmd());
 
-        gamepad.selectButton.whileTrue(runBalanceTestCmd());        // keep as button???
+        // gamepad.selectButton.whileTrue(runBalanceTestCmd());        // keep as button???
+        gamepad.selectButton.onTrue(new RunCommand(() -> Robot.arm.setArmMode(ArmStates.RUNNING)));
         gamepad.startButton .onTrue(ArmCmds.ResetArmEncoderCmd());
         
         gamepad.Dpad.Up     .onTrue(OperatorGamepadCmds.SetArmElevToEjectHighPosCmd());
@@ -84,10 +87,10 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
         return armThrottleCurve.calculateMappedVal(gamepad.leftStick.getY());
     }
 
-    public double getArmInputWFF() {
-        // calculate value with feed forward for arm
-        return getArmInput() + Robot.arm.getHoldPwr();
-    }
+    // public double getArmInputWFF() {
+    //     // calculate value with feed forward for arm
+    //     return getArmInput() + Robot.arm.getHoldPwr();
+    // }
 
     public double getTriggerTwist() {
         // return -gamepad.triggers.getTwist()/3;

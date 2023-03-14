@@ -7,7 +7,7 @@ public class ArmConfig {
 
     // ------- Encoder Conversion Factor --------------
     // 1797.41176 cnts per degree tested 2/20/23
-    public final static double kCntsPerDeg              = 625; //569;  // 1843;        // Convert cnt to degrees of angle (2/21/23)
+    public final static double kCntsPerDeg              = 809; //569;  // 1843;        // Convert cnt to degrees of angle (2/21/23)
     public final static double kDegsPerCnt              = 1 / kCntsPerDeg;   // Convert cnt to degrees of angle (2/21/23)
     public final static double KAngleDeadBand           = +3.0;        // Degrees close enough to Tgt
 
@@ -41,7 +41,16 @@ public class ArmConfig {
     public final static int     RetractSoftLimitSwitchAngle = -25;     // Max angle retract
 
     public final static boolean ExtendLimitSwitchTrue       = false;
-    public final static double  ExtendLimitSwitchAngle      = +90.0;   // Max angle extended
+    public final static double  ExtendLimitSwitchAngle      = +84.0;   // Max angle extended
     public final static boolean ExtendSoftLimitSwitchEnable = false;
-    public final static int     ExtendSoftLimitSwitchAngle  = +90;     // Max angle extended
+    public final static int     ExtendSoftLimitSwitchAngle  = +84;     // Max angle extended
 }
+
+// ground intake: elev 0 / arm 0 or 5
+// human player is stowed
+// low: stowed or ?
+// mid and high optimize for cone and see if it works for cube
+// mid: elev 27 arm 40
+// high: elev 28 arm full
+
+// bumper up, elev 28, arm forward

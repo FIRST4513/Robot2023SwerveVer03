@@ -51,7 +51,7 @@ public class PilotGamepad extends Gamepad {
         
         // DPAD - Set Common Arm and Elev positions
         gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
-        gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.SetArmElevToIntakeConePosCmd());
+        // gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.SetArmElevToIntakeConePosCmd());
         gamepad.Dpad.Left.onTrue(IntakeCmds.IntakeHoldRunCmd());
 
         // LEFT BUMPER - Stop Intake Motor(s)
@@ -68,7 +68,7 @@ public class PilotGamepad extends Gamepad {
         gamepad.aButton.whileTrue(SwerveCmds.TestWheelFwdCmd());
         gamepad.bButton.whileTrue(SwerveCmds.TestWheelFwdLeftCmd());
         gamepad.xButton.whileTrue(SwerveCmds.TestWheelFwdRightCmd());
-        gamepad.bButton.onTrue(ElevatorCmds.InitialArmReleaseCmd());
+        // gamepad.bButton.onTrue(ElevatorCmds.InitialArmReleaseCmd());
         gamepad.startButton.whileTrue(SwerveCmds.ResetFalconAnglesCmd());
     }
 

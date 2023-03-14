@@ -22,8 +22,8 @@ public class RobotTelemetry extends TelemetrySubsystem {
     private static boolean disablePrints = false;
 
     // Additional Shuffleboard Tabs
-    //public static ArmTelemetry             m_ArmTelemetry;
-    //public static ElevatorTelemetry        m_ElevTelemetry;
+    public static ArmTelemetry             m_ArmTelemetry;
+    public static ElevatorTelemetry        m_ElevTelemetry;
     //public static IntakeTelemetry          m_IntakeTelemetry;
     public static SwerveTelemetry          m_SwerveTelemetry;
     // public static PilotGamepadTelemetry    m_PilotTelemetry;
@@ -43,8 +43,8 @@ public class RobotTelemetry extends TelemetrySubsystem {
         layoutRobotTelemtryTab();   // Fill This Tab with data
 
         // Setup the rest of the Shuffleboard Tabs
-        //m_ArmTelemetry =            new ArmTelemetry(Robot.arm);
-        //m_ElevTelemetry =           new ElevatorTelemetry(Robot.elevator); ;
+        m_ArmTelemetry =            new ArmTelemetry(Robot.arm);
+        m_ElevTelemetry =           new ElevatorTelemetry(Robot.elevator); ;
         //m_IntakeTelemetry =         new IntakeTelemetry(Robot.intake); ;
         m_SwerveTelemetry =         new SwerveTelemetry(Robot.swerve); ;
         // m_PilotTelemetry =          new PilotGamepadTelemetry(Robot.pilotGamepad); ;
