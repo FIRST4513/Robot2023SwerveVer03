@@ -39,9 +39,9 @@ public class ArmTelemetry {
         
         SmartDashboard.putData("Release Arm", new ElevReleaseArmCmd());
 
-        tab.add("Set Mode STOP", new RunCommand(() -> Robot.arm.setArmMode(ArmStates.STOPPED))).withPosition(6, 0);
-        tab.add("Set Mode RUN", new RunCommand(() -> Robot.arm.setArmMode(ArmStates.RUNNING))).withPosition(6, 2);
-        tab.add("Arm State", Robot.arm.getArmMode()).withPosition(6, 4).withSize(2, 1);
+        tab.add("Set Mode STOP", new RunCommand(() -> Robot.arm.setArmState(ArmStates.STOPPED))).withPosition(6, 0);
+        tab.add("Set Mode RUN", new RunCommand(() -> Robot.arm.setArmState(ArmStates.RUNNING))).withPosition(6, 2);
+        tab.add("Arm State", Robot.arm.getArmState()).withPosition(6, 4).withSize(2, 1);
 
         tab.add("MM To 0", 
         new RunCommand( () -> Robot.arm.setMMTargetAngle( 0.0 ), Robot.arm))      .withPosition(8, 0).withSize(2, 1);

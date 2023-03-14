@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.arm.commands.ArmCmds;
 // import frc.robot.arm.commands.ArmHoldPositionCmd;
-import frc.robot.arm.commands.ArmReleaseCmd;
+// import frc.robot.arm.commands.ArmReleaseCmd;
 import frc.robot.auto.Auto;
 import frc.robot.elevator.commands.ElevReleaseArmCmd;
 import frc.robot.elevator.commands.ElevatorCmds;
@@ -41,21 +41,21 @@ public class AutoCmds {
         if (level == "Low") {
             // Set position and Gyro Heading based on position
             return new SequentialCommandGroup(
-                ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
-                OperatorGamepadCmds.SetArmElevToEjectLowPosSafeCmd(),
-                IntakeCmds.IntakeEjectUntilNoGamepieceCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
-                IntakeCmds.IntakeStopCmd(),
-                OperatorGamepadCmds.SetArmElevToStorePosFromLowSafeCmd()
+                // ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
+                // OperatorGamepadCmds.SetArmElevToEjectLowPosSafeCmd(),
+                // IntakeCmds.IntakeEjectUntilNoGamepieceCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
+                // IntakeCmds.IntakeStopCmd(),
+                // OperatorGamepadCmds.SetArmElevToStorePosFromLowSafeCmd()
             );
         }
         if (level == "Mid") {
             // Set position and Gyro Heading based on position
             return new SequentialCommandGroup(           
-                ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
-                OperatorGamepadCmds.SetArmElevToEjectMidPosSafeCmd(),
-                IntakeCmds.IntakeEjectUntilNoGamepieceCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
-                IntakeCmds.IntakeStopCmd(),
-                OperatorGamepadCmds.SetArmElevToStorePosFromMidSafeCmd()
+                // ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
+                // OperatorGamepadCmds.SetArmElevToEjectMidPosSafeCmd(),
+                // IntakeCmds.IntakeEjectUntilNoGamepieceCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
+                // IntakeCmds.IntakeStopCmd(),
+                // OperatorGamepadCmds.SetArmElevToStorePosFromMidSafeCmd()
             );
         }
         return new PrintCommand("Error on auto place only paramter");
@@ -102,8 +102,8 @@ public class AutoCmds {
 
     public static Command ArmParkedToStorePosCmd(){
         return new ParallelCommandGroup(
-            new ElevReleaseArmCmd(),
-            new ArmReleaseCmd()
+            new ElevReleaseArmCmd()
+            // new ArmReleaseCmd()
         );
     }
 

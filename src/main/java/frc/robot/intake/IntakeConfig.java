@@ -9,7 +9,7 @@ public class IntakeConfig {
 
     // retract/eject speeds
     public static double retractSpeed = -1.0;
-    public static double holdSpeed    = -0.15;
+    public static double holdSpeed    = -0.5;
     public static double ejectSpeed   =  1.0;
 
     /* Neutral Modes */

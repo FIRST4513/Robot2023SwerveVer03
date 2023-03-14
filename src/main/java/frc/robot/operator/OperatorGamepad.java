@@ -1,8 +1,11 @@
 package frc.robot.operator;
 
+import java.util.function.DoubleSupplier;
+
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -28,17 +31,17 @@ public class OperatorGamepad extends Gamepad {
         OperatorGamepadConfig.intakeSpeedScaler,
         OperatorGamepadConfig.intakeSpeedDeadband);
 
-public static ExpCurve elevThrottleCurve = new ExpCurve(
-    OperatorGamepadConfig.elevSpeedExp,
-    OperatorGamepadConfig.elevSpeedOffset,
-    OperatorGamepadConfig.elevSpeedScaler,
-    OperatorGamepadConfig.elevSpeedDeadband);
+    public static ExpCurve elevThrottleCurve = new ExpCurve(
+        OperatorGamepadConfig.elevSpeedExp,
+        OperatorGamepadConfig.elevSpeedOffset,
+        OperatorGamepadConfig.elevSpeedScaler,
+        OperatorGamepadConfig.elevSpeedDeadband);
 
-public static ExpCurve armThrottleCurve = new ExpCurve(
-    OperatorGamepadConfig.armSpeedExp,
-    OperatorGamepadConfig.armSpeedOffset,
-    OperatorGamepadConfig.armSpeedScaler,
-    OperatorGamepadConfig.armSpeedDeadband);
+    public static ExpCurve armThrottleCurve = new ExpCurve(
+        OperatorGamepadConfig.armSpeedExp,
+        OperatorGamepadConfig.armSpeedOffset,
+        OperatorGamepadConfig.armSpeedScaler,
+        OperatorGamepadConfig.armSpeedDeadband);
 
     // path testing example
     // static PathPlannerTrajectory ctrTestPath1 = PathPlanner.loadPath(
@@ -56,13 +59,14 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
         gamepad.xButton     .onTrue(IntakeCmds.IntakeStopCmd());
 
         // gamepad.selectButton.whileTrue(runBalanceTestCmd());        // keep as button???
-        gamepad.selectButton.onTrue(new RunCommand(() -> Robot.arm.setArmMode(ArmStates.RUNNING)));
+        gamepad.selectButton.onTrue(new RunCommand(() -> Robot.arm.setArmState(ArmStates.RUNNING)));
         gamepad.startButton .onTrue(ArmCmds.ResetArmEncoderCmd());
         
-        gamepad.Dpad.Up     .onTrue(OperatorGamepadCmds.SetArmElevToEjectHighPosCmd());
-        gamepad.Dpad.Down   .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
-        gamepad.Dpad.Left   .onTrue(OperatorGamepadCmds.SetArmElevToEjectMidPosCmd());
-        gamepad.Dpad.Right  .onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
+        gamepad.Dpad.Up     .onTrue(OperatorGamepadCmds.RunArmElevToHighPosCmd());
+        // gamepad.Dpad.Down   .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
+        gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.RunArmElevToIntakePosCmd());
+        gamepad.Dpad.Left   .onTrue(OperatorGamepadCmds.RunArmElevToMidPosCmd());
+        gamepad.Dpad.Right  .onTrue(OperatorGamepadCmds.RunArmElevToStowPosCmd());
 
         gamepad.rightBumper .onTrue(OperatorGamepadCmds.ControlArmElevByJoysticksCmd());
         gamepad.leftBumper  .whileTrue(IntakeCmds.IntakeByJoystickCmd());
@@ -105,6 +109,18 @@ public static ExpCurve armThrottleCurve = new ExpCurve(
 
     public void rumble(double intensity) {
         this.gamepad.setRumble(intensity, intensity);
+    }
+
+    public void rumble(DoubleSupplier intensityLeft, DoubleSupplier intensityRight) {
+        this.gamepad.setRumble(intensityLeft.getAsDouble(), intensityRight.getAsDouble());
+    }
+
+    public static double getLeftRumble() {
+        return 0;
+    }
+
+    public static double getRightRumble() {
+        return 0;
     }
     
     public boolean isArmAndElevAtPos() {

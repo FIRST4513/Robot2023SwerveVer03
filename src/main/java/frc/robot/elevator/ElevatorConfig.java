@@ -13,20 +13,21 @@ public class ElevatorConfig {
     public final static double KLimitElevTopSlowHt  = 28.0;		    // Start slowing the raise at this position   
     public final static double KLimitElevBottomSlowHt = 2.0;        // Start slowing the lower at this position
 
-    public final static double ElevIntakeConeHt     = 0.0;          // Position to intake Cone
-    public final static double ElevIntakeCubeHt     = 0.0;          // Position to intake Cube
+    public final static double ElevIntakeHt     = 0.0;          // Position to intake Cone
+    // public final static double ElevIntakeConeHt     = 0.0;          // Position to intake Cone
+    // public final static double ElevIntakeCubeHt     = 0.0;          // Position to intake Cube
 
-    public final static double ElevBumperClearHt    = 10.0;         // Position to raise to clear bumper with cube
+    public final static double ElevBumperClearHt    = 13;         // Position to raise to clear bumper with intake
     public final static double ElevStoreHt          = 0.0;          // Position to Store Cube/Cone retracted for motion
-    public final static double ElevRetractHt        = 0.0;          // Position to fully retract
-    public final static double ElevEjectLowHt       = 27.0;          // Position to Score a Cube/Cone in LOW Position  
+    // public final static double ElevRetractHt        = 0.0;          // Position to fully retract
+    public final static double ElevEjectLowHt       = 10;          // Position to Score a Cube/Cone in LOW Position  
     public final static double ElevEjectCubeLowSafeHt = 26.5;          // Position to Score a Cube/Cone in LOW Position 
     public final static double ElevEjectCubeMidSafeHt = KElevMaxTopHt;          // Position to Score a Cube/Cone in LOW Position 
     public final static double ElevEjectCubeHighSafeHt = KElevMaxTopHt;          // Position to Score a Cube/Cone in LOW Position 
     
-    public final static double ElevEjectMidHt       = KElevMaxTopHt;     // Position to Score a Cube/Cone in MID Position
-    public final static double ElevEjectHighHt      = 30.0;         // Position to Score a Cube/Cone in Hi Position
-    public final static double ElevArmReleaseHt     = 24.0;         // Position needed to release arm on startup
+    public final static double ElevEjectMidHt       = 27;     // Position to Score a Cube/Cone in MID Position
+    public final static double ElevEjectHighHt      = 28.0;         // Position to Score a Cube/Cone in Hi Position
+    public final static double ElevArmReleaseHt     = ElevBumperClearHt;         // Position needed to release arm on startup
 
     // ------ Elevator Speed Constants -----
     public final static double zeroPwr              = -0.10;
@@ -52,3 +53,12 @@ public class ElevatorConfig {
     public final static double  UpperSoftLimitSwitchHt      = 30;        // Min Height Lowered
     
 }
+
+// ground intake: elev 0 / arm 0 or 5
+// human player is stowed
+// low: stowed or ?
+// mid and high optimize for cone and see if it works for cube
+// mid: elev 27 arm 40
+// high: elev 28 arm full
+
+// bumper up, elev 28, arm forward

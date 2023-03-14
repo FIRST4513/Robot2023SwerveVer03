@@ -14,25 +14,31 @@ public class ArmConfig {
     // -------- Absolute Analog Angle Sensor ------------
     // 3.3 volts / 360 = 0.0091666     volts per degree
 
-    public final static double kAnalogVoltsToDegree      = -0.0091666;  //Invert Direction 
-    public final static double kabsoluteAngleOffset      = -20.0;       // Degrees encoder is offset
+    // public final static double kAnalogVoltsToDegree      = -0.0091666;  //Invert Direction 
+    // public final static double kabsoluteAngleOffset      = -20.0;       // Degrees encoder is offset
 
     // ------ Speed Constants ------
-    public final static double kDefaultExtendPwr        = +0.25;
+    // public final static double kDefaultExtendPwr        = +0.25;
     public final static double kExtendMaxPwr            = +0.75;
 
-    public final static double kDefaultRetractPwr       = -0.4;
+    // public final static double kDefaultRetractPwr       = -0.4;
     public final static double kRetractMaxPwr           = -0.75;
 
     // Arm Position Constants for single value for Cone or Cube
-    public final static double ArmAngleIntakeCubePos    = -10.0;        // Pickup Cube position
-    public final static double ArmAngleIntakeConePos    = -10.0;        // Pickup Cone position
-    public final static double ArmAngleEjectLowPos      =   0.0;        // Eject Low position
-    public final static double ArmAngleEjectMidPos      = +25.0;        // Eject Mid position
-    public final static double ArmAngleEjectHighPos     = +46.0;        // Eject High position
+    public final static double ArmAngleStowPos = -25;
+    public final static double ArmAngleIntakePos = 5;
+    public final static double ArmAngleEjectLowPos = 0;  // stow mainly used for low eject though
+    public final static double ArmAngleEjectMidPos = 40;
+    public final static double ArmAngleEjectHighPos = 84;
 
-    public final static double ArmAngleStorePos         = -45.0;        // Store for Travel
-    public final static double ArmAngleFullRetractPos   = -89.0;        // Full retract
+    // public final static double ArmAngleIntakeCubePos    = -10.0;        // Pickup Cube position
+    // public final static double ArmAngleIntakeConePos    = -10.0;        // Pickup Cone position
+    // public final static double ArmAngleEjectLowPos      =   0.0;        // Eject Low position
+    // public final static double ArmAngleEjectMidPos      = +25.0;        // Eject Mid position
+    // public final static double ArmAngleEjectHighPos     = +46.0;        // Eject High position
+
+    // public final static double ArmAngleStorePos         = -45.0;        // Store for Travel
+    // public final static double ArmAngleFullRetractPos   = -89.0;        // Full retract
 
     // ------ Limit Switches ------
     public final static boolean RetractLimitSwitchTrue      = false;

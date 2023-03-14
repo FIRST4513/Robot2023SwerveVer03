@@ -30,7 +30,7 @@ public class ArmSubSys extends SubsystemBase {
     public double mCurrArmAngle     = 0;
     // public double mCurrAbsoluteArmAngle = 0;
 
-    public static enum ArmStates { STOPPED, RUNNING }
+    public static enum ArmStates { STOPPED, RELAX, RUNNING }
     public ArmStates armState;
 
     public static String armBrakeStatus = "";
@@ -55,11 +55,266 @@ public class ArmSubSys extends SubsystemBase {
         updateCurrentArmPosition();
         if (isRetractLimitSwitchPressed() == true) { resetEncoderAngle(ArmConfig.RetractLimitSwitchAngle); }
         if (isExtendLimitSwitchPressed() == true)  { resetEncoderAngle(ArmConfig.ExtendLimitSwitchAngle); }
-        mCurrArmPwr = mArmMotor.get();
+        mCurrArmPwr = mArmMotor.get();  // not sure if this works?
         driveMotor();
     }
 
-    // -----------------------------------------------------
+    // -------------------------------------------------
+    // --------------- Main Drive Method ---------------
+    // -------------------------------------------------
+    public void driveMotor() {
+        // if arm is in stopped state, stop motor
+        if (armState == ArmStates.STOPPED) {
+            stopMotor();
+            setBrakeMode(false);
+            return;
+        }
+        // if arm is has target to go to and needs to, check conditions
+        if ((armState == ArmStates.RUNNING) || (armState == ArmStates.RELAX)) {
+            // first, make sure angle is capped/limited
+            mTargetArmAngle = limitArmAngle(mTargetArmAngle);
+            // next, check for inside conditions
+            if (isArmInside()) {
+                // stop motor if elevator is down, set to "relax" state
+                if (Robot.elevator.mCurrElevHt < 5) {
+                    setArmState(ArmStates.RELAX);
+                    return;
+                }
+                // move arm if elevator is high enough, set to normal running state
+                else {
+                    setArmState(ArmStates.RUNNING);
+                    driveMotorByMM();
+                    return;
+                }
+            }
+            // else, check for outside conditions
+            else {
+                setArmState(ArmStates.RUNNING);  // arm outside robot, make sure state is normal running not relax
+                // if target is inside robot
+                if (mTargetArmAngle < 0) {
+                    // check if elevator is too low, stop/"relax" arm
+                    if (Robot.elevator.mCurrElevHt < 5) {
+                        setArmState(ArmStates.RELAX);
+                        return;
+                    }
+                    // otherwise, elevator is high enough, drive arm back
+                    else {
+                        driveMotorByMM();
+                        return;
+                    }
+                }
+                // target outside robot, drive arm
+                driveMotorByMM();
+                return;
+            }
+        }
+    }
+
+    // ---------------------------------------------
+    // --------------- Motor Methods ---------------
+    // ---------------------------------------------
+    private void stopMotor() {
+        mArmMotor.stopMotor();
+    }
+
+    private void driveMotorByMM() {
+        // System.out.println("ARM - Moving arm by Motion Magic");
+        setBrakeMode(true);
+        mArmMotor.set( ControlMode.MotionMagic,         convertAngleToCnt(mTargetArmAngle),
+                       DemandType.ArbitraryFeedForward, getHoldPwr());
+    }
+
+    // ---------------------------------------------
+    // --------------- State Methods ---------------
+    // ---------------------------------------------
+    public void setArmState(ArmStates newArmState) {
+        if (newArmState == ArmStates.STOPPED) { stopMotor(); }
+        else if (newArmState == ArmStates.RELAX) { stopMotor(); }
+        else if (newArmState == ArmStates.RUNNING) { }  // do nothing, this does not have to be here but is :)
+        armState = newArmState;
+    }
+
+    // to be called by other subsystems to set arm to a stopped state without possible setArmState() confusion
+    public void stopArm() {
+        setArmState(ArmStates.STOPPED);
+    }
+
+    public String getArmState() {
+        if (armState == ArmStates.STOPPED) { return "STOPPED"; }
+        else { return "RUNNING"; }
+    }
+
+    // ----------------------------------------------------
+    // --------------- Motion Magic Methods ---------------
+    // ----------------------------------------------------
+    public void holdArmMM() {
+        setMMTargetAngle(mCurrArmAngle);
+    }
+
+    public void adjustMMTarget(double adjustAmount) {
+        double newTarget = mTargetArmAngle + adjustAmount;
+        newTarget = limitArmAngle(newTarget);
+        mTargetArmAngle = newTarget;
+    }
+
+    public void adjustMMTarget(DoubleSupplier adjustAmount) {
+        adjustMMTarget(adjustAmount.getAsDouble());
+    }
+
+    public void setMMTargetAngle(double angle) {
+        setArmState(ArmStates.RUNNING);  // set state to running in order to allow drive method to run arm if possible
+        angle = limitArmAngle( angle );     // Limit range to max allowed
+        mTargetArmAngle = angle;
+    }
+
+    public void setMMTargetAngle(DoubleSupplier angle) {
+        setMMTargetAngle(angle.getAsDouble());
+    }
+
+    public boolean isMMtargetReached(){
+        // If we are within the deadband of our target we can stop
+        if (Math.abs(mTargetArmAngle-mCurrArmAngle) <= ArmConfig.KAngleDeadBand) { return true; }
+        return false;
+    }
+
+    // --------------------------------------------------
+    // --------------- Brake Mode Methods ---------------
+    // --------------------------------------------------
+    public void setBrakeMode(Boolean enabled) {
+        if (enabled) {
+            mArmMotor.setNeutralMode(NeutralMode.Brake);
+            armBrakeStatus = "Arm Brake On";
+        } else {
+            mArmMotor.setNeutralMode(NeutralMode.Coast);
+            armBrakeStatus = "Arm Brake Off";
+        }
+    }
+
+    public String getBrakeStatus() {
+        return armBrakeStatus;
+    }
+
+    // ----------------------------------------------------
+    // --------------- Limit Switch Methods ---------------
+    // ----------------------------------------------------
+    public boolean isRetractLimitSwitchPressed() {
+        if (retractLimitSwitch.get() == ArmConfig.RetractLimitSwitchTrue) { return true; }
+        return false;
+    }
+
+    public boolean isExtendLimitSwitchPressed() {
+        if (extendLimitSwitch.get() == ArmConfig.ExtendLimitSwitchTrue)   { return true; }
+        return false;
+    }
+
+    public String retractLimitSwitchStatus(){
+        if (retractLimitSwitch.get() == ArmConfig.RetractLimitSwitchTrue) { return "Pressed"; }
+        return "Not Pressed";
+    }
+
+    public String extendLimitSwitchStatus() {
+        if (extendLimitSwitch.get() == ArmConfig.ExtendLimitSwitchTrue)   { return "Pressed"; }
+        return "Not Pressed";
+    }
+
+    // -----------------------------------------------
+    // --------------- Set Soft Limits ---------------
+    // -----------------------------------------------
+    public void softLimitsTrue() {
+        mArmMotor.configReverseSoftLimitEnable(true);   // ????????????
+        mArmMotor.configForwardSoftLimitEnable(true);   // ????????????
+    }
+
+    public void softLimitsFalse() {
+        mArmMotor.configReverseSoftLimitEnable(false);  // ?????????????
+        mArmMotor.configForwardSoftLimitEnable(false);  // ?????????????
+    }
+
+    // -----------------------------------------------
+    // --------------- Encoder Methods ---------------
+    // -----------------------------------------------
+    public void updateCurrentArmPosition() {
+        // Called from Periodic so only 1 CAN call is needed per command loop 20ms
+        mCurrEncoderCnt = mArmMotor.getSelectedSensorPosition();
+        mCurrArmAngle = Rmath.mRound((convertCntToAngle(mCurrEncoderCnt)) , 1);
+        // mCurrAbsoluteArmAngle = getAbsoluteArmAngle() ;
+     }
+
+    public double getEncoderCnt()   { return mCurrEncoderCnt; }
+    public double getArmAngle()     { return mCurrArmAngle;   }
+
+    public double convertAngleToCnt( double angle )   { return angle * ArmConfig.kCntsPerDeg; }
+    public double convertCntToAngle( double cnt )     { return cnt * ArmConfig.kDegsPerCnt; }
+
+
+    public void resetEncoder()                    { mArmMotor.setSelectedSensorPosition(0); }
+    public void resetEncoder( double position )   { mArmMotor.setSelectedSensorPosition(position); }
+    public void resetEncoderAngle( double angle ) { mArmMotor.setSelectedSensorPosition(convertAngleToCnt(angle)); }
+
+    // --------------------------------------------------
+    // --------------- Other Misc Methods ---------------
+    // --------------------------------------------------
+    public double getTargetAngle()         { return mTargetArmAngle; }
+    public double getArmMotorPwr()         { return mCurrArmPwr; }
+
+    public double limitArmAngle( double angle ){
+        if (angle > ArmConfig.ExtendLimitSwitchAngle)       { angle = ArmConfig.ExtendLimitSwitchAngle; }
+        if (angle < ArmConfig.RetractLimitSwitchAngle)      { angle = ArmConfig.RetractLimitSwitchAngle; }
+        return angle;
+    }
+
+    public boolean isArmInside() {
+        if (getArmAngle() < 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isArmOutside() { return !isArmInside(); }
+
+    // some possible unnecessary methods
+    public boolean isArmExtendedPast(double angle) {
+        if (mCurrArmAngle > angle) { return true; }
+        return false;
+    }
+
+    public boolean isArmRetractedPast(double angle) {
+        if (mCurrArmAngle < angle) { return true; }
+        return false;
+    }
+
+    public boolean isArmWithin(double deadband) {
+        if (Math.abs(mCurrArmAngle - mTargetArmAngle) < deadband) {
+            return true;
+        }
+        return false;
+    }
+
+    public double getHoldPwr(){
+        double pwr = Math.sin(Math.toRadians(mCurrArmAngle)) * motorConfig.arbitraryFeedForwardScaler;
+        if (mCurrArmAngle > 0) {
+            pwr *= 0.95;
+        }
+        return pwr;
+    }
+
+    // ---------------------------------------------------
+    // --------------- Configure Arm Motor ---------------
+    // ---------------------------------------------------
+    public void armMotorConfig(){
+        // This config is for the Talon SRX Controller
+        mArmMotor.configFactoryDefault();
+        mArmMotor.configAllSettings(ArmSRXMotorConfig.config);
+        mArmMotor.setInverted(ArmSRXMotorConfig.armMotorInvert);
+        mArmMotor.setSensorPhase(ArmSRXMotorConfig.armEncoderInvert);
+        mArmMotor.setNeutralMode(ArmSRXMotorConfig.armDefaultNeutralMode);
+        mArmMotor.setSelectedSensorPosition(0); // Zero Encoder
+        mArmMotor.enableCurrentLimit(true);
+    }
+
+    // commented code from old sub sys structure
+        // -----------------------------------------------------
     // ---------------- Arm Motor Methods ------------------
     // -----------------------------------------------------
     // public void raiseArm() { setArmMotor(ArmConfig.kDefaultExtendPwr); }
@@ -74,100 +329,6 @@ public class ArmSubSys extends SubsystemBase {
     //     mCurrArmPwr = getHoldPwr();
     //     // mArmMotor.set(mCurrArmPwr);
     // }
-
-    public void stopArm()   { 
-        mArmMotor.stopMotor();
-        armState = ArmStates.STOPPED;
-        System.out.println("ARM - Stopped Arm");
-        // mCurrArmPwr = 0.0;
-    }
-
-    public void holdArmMM() {
-        setMMTargetAngle(mCurrArmAngle);
-    }
-
-    public void adjustMMTarget(double amountAdded) {
-        double newTarget = mTargetArmAngle + amountAdded;
-        newTarget = limitArmAngle(newTarget);
-        mTargetArmAngle = newTarget;
-    }
-
-    public void adjustMMTarget(DoubleSupplier amountAdded) {
-        adjustMMTarget(amountAdded.getAsDouble());
-    }
-
-    // ------------  Set Arm to Angle by Motion Magic  ----------
-    public void setMMTargetAngle(double angle) {
-        angle = limitArmAngle( angle );     // Limit range to max allowed
-        mTargetArmAngle = angle;
-        armState = ArmStates.RUNNING;
-    }
-
-    public void setMMTargetAngle(DoubleSupplier angle) {
-        setMMTargetAngle(angle.getAsDouble());
-    }
-
-    public void setArmMode(ArmStates newState) {
-        armState = newState;
-    }
-
-    public String getArmMode() {
-        if (armState == ArmStates.STOPPED) { return "STOPPED"; }
-        else { return "RUNNING"; }
-    }
-
-    private void driveMotorByMM() {
-        System.out.println("ARM - Moving arm by Motion Magic");
-        setBrakeMode(true);
-        mArmMotor.set( ControlMode.MotionMagic,         convertAngleToCnt(mTargetArmAngle),
-                       DemandType.ArbitraryFeedForward, getHoldPwr());
-    }
-
-    public void driveMotor() {
-        // if arm is in stopped state, stop motor
-        if (armState == ArmStates.STOPPED) {
-            stopArm();
-            setBrakeMode(false);
-            return;
-        }
-        if (armState == ArmStates.RUNNING) {
-            // first, make sure angle is capped
-            mTargetArmAngle = limitArmAngle(mTargetArmAngle);
-            // next, check for inside conditions
-            if (isArmInside()) {
-                // stop motor if elevator is down
-                if (Robot.elevator.mCurrElevHt < 5) {
-                    stopArm();
-                    return;
-                }
-                // move arm if elevator is high enough
-                else {
-                    driveMotorByMM();
-                    return;
-                }
-            }
-            // else, check for outside conditions
-            else {
-                // if target is inside robot
-                if (mTargetArmAngle < 0) {
-                    // check if elevator is too low
-                    if (Robot.elevator.mCurrElevHt < 5) {
-                        stopArm();
-                        return;
-                    }
-                    // otherwise, elevator is high enough, drive arm back
-                    else {
-                        driveMotorByMM();
-                        return;
-                    }
-                }
-                // target outside robot, drive arm
-                driveMotorByMM();
-                return;
-            }
-        }
-        driveMotorByMM();
-    }
 
     // ------------  Set Arm Manually during TeleOP  ----------
     // public void setArmMotor( double pwr ) {
@@ -237,76 +398,21 @@ public class ArmSubSys extends SubsystemBase {
     // }
  
     // -------- Set Brake Mode ----------
-    public void setBrakeMode(Boolean enabled) {
-        if (enabled) {
-            mArmMotor.setNeutralMode(NeutralMode.Brake);
-            armBrakeStatus = "Arm Brake On";
-        } else {
-            mArmMotor.setNeutralMode(NeutralMode.Coast);
-            armBrakeStatus = "Arm Brake Off";
-        }
-    }
 
-    public String getBrakeStatus() {
-        return armBrakeStatus;
-    }
 
     // ------------------------------------------------------------
     // ---------------- Arm Limit Switch Methods ------------------
     // ------------------------------------------------------------
     
-    public boolean isRetractLimitSwitchPressed() {
-        if (retractLimitSwitch.get() == ArmConfig.RetractLimitSwitchTrue) { return true; }
-        return false;
-    }
 
-    public boolean isExtendLimitSwitchPressed() {
-        if (extendLimitSwitch.get() == ArmConfig.ExtendLimitSwitchTrue)   { return true; }
-        return false;
-    }
 
-    public String retractLimitSwitchStatus(){
-        if (retractLimitSwitch.get() == ArmConfig.RetractLimitSwitchTrue) { return "Pressed"; }
-        return "Not Pressed";
-    }
 
-    public String extendLimitSwitchStatus() {
-        if (extendLimitSwitch.get() == ArmConfig.ExtendLimitSwitchTrue)   { return "Pressed"; }
-        return "Not Pressed";
-    }
-
-    // --------------- Set Soft Limits -----------------
-    public void softLimitsTrue() {
-        mArmMotor.configReverseSoftLimitEnable(true);   // ????????????
-        mArmMotor.configForwardSoftLimitEnable(true);   // ????????????
-    }
-
-    public void softLimitsFalse() {
-        mArmMotor.configReverseSoftLimitEnable(false);  // ?????????????
-        mArmMotor.configForwardSoftLimitEnable(false);  // ?????????????
-    }
 
     // -------------------------------------------------------
     // ---------------- Arm Encoder Methods ------------------
     // -------------------------------------------------------
     
-    public void updateCurrentArmPosition() {
-        // Called from Periodic so only 1 CAN call is needed per command loop 20ms
-        mCurrEncoderCnt = mArmMotor.getSelectedSensorPosition();
-        mCurrArmAngle = Rmath.mRound((convertCntToAngle(mCurrEncoderCnt)) , 1);
-        // mCurrAbsoluteArmAngle = getAbsoluteArmAngle() ;
-     }
 
-    public double getEncoderCnt()   { return mCurrEncoderCnt; }
-    public double getArmAngle()     { return mCurrArmAngle;   }
-
-    public double convertAngleToCnt( double angle )   { return angle * ArmConfig.kCntsPerDeg; }
-    public double convertCntToAngle( double cnt )     { return cnt * ArmConfig.kDegsPerCnt; }
-
-
-    public void resetEncoder()                    { mArmMotor.setSelectedSensorPosition(0); }
-    public void resetEncoder( double position )   { mArmMotor.setSelectedSensorPosition(position); }
-    public void resetEncoderAngle( double angle ) { mArmMotor.setSelectedSensorPosition(convertAngleToCnt(angle)); }
 
 
 
@@ -341,52 +447,11 @@ public class ArmSubSys extends SubsystemBase {
     // }  
 
     // --------------- Misc Methods ------------------
-    public double getTargetAngle()         { return mTargetArmAngle; }
-    public double getArmMotorPwr()         { return mCurrArmPwr; }
 
-    public double limitArmAngle( double angle ){
-        if (angle > ArmConfig.ExtendLimitSwitchAngle)       { angle = ArmConfig.ExtendLimitSwitchAngle; }
-        if (angle < ArmConfig.RetractLimitSwitchAngle)      { angle = ArmConfig.RetractLimitSwitchAngle; }
-        return angle;
-    }
-
-    public boolean isMMtargetReached(){
-        // If we are within the deadband of our target we can stop
-        if (Math.abs(mTargetArmAngle-mCurrArmAngle) <= ArmConfig.KAngleDeadBand) { return true; }
-        return false;
-    }
-
-    public boolean isArmInside() {
-        if (getArmAngle() < 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean isArmOutside() { return !isArmInside(); }
-
-    public double getHoldPwr(){
-        double pwr = Math.sin(Math.toRadians(mCurrArmAngle)) * motorConfig.arbitraryFeedForwardScaler;
-        if (mCurrArmAngle > 0) {
-            pwr *= 0.95;
-        }
-        return pwr;
-    }
 
     // -------------------------------------------------------
     // ---------------- Configure Arm Motor ------------------
     // -------------------------------------------------------
-    public void armMotorConfig(){
-        // This config is for the Talon SRX Controller
-        mArmMotor.configFactoryDefault();
-        mArmMotor.configAllSettings(ArmSRXMotorConfig.config);
-        mArmMotor.setInverted(ArmSRXMotorConfig.armMotorInvert);
-        mArmMotor.setSensorPhase(ArmSRXMotorConfig.armEncoderInvert);
-        mArmMotor.setNeutralMode(ArmSRXMotorConfig.armDefaultNeutralMode);
-        mArmMotor.setSelectedSensorPosition(0); // Zero Encoder
-        mArmMotor.enableCurrentLimit(true);
-    }
 }
 
 // -3317, -5.3 code, -2 arm

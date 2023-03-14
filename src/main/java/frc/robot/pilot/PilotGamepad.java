@@ -50,7 +50,7 @@ public class PilotGamepad extends Gamepad {
         gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());  // possible reset robo odo as well?
         
         // DPAD - Set Common Arm and Elev positions
-        gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
+        // gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
         // gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.SetArmElevToIntakeConePosCmd());
         gamepad.Dpad.Left.onTrue(IntakeCmds.IntakeHoldRunCmd());
 
