@@ -4,9 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
-import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
-import frc.robot.operator.commands.ArmElevComboMoveCmds;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 import frc.robot.pilot.PilotGamepadConfig.MaxSpeeds;
 import frc.robot.pilot.commands.PilotGamepadCmds;
@@ -41,18 +39,16 @@ public class PilotGamepad extends Gamepad {
     }
 
     public void setupTeleopButtons() {
-        // "A-B-Y" Buttons - Set Intake Motors
-        gamepad.aButton.onTrue(IntakeCmds.IntakeEjectRunCmd());    // possible replace with until version of these?
-        // gamepad.bButton.onTrue(IntakeCmds.IntakeRetractRunCmd());
-        // "X" Button - Teleop Drive with Robot Perspective
-        gamepad.xButton.onTrue(PilotGamepadCmds.TogglePOV());
+        // "A" and "X" Button - intake eject and rpv
+        gamepad.aButton.onTrue(IntakeCmds.IntakeEjectRunCmd());
+        gamepad.xButton.onTrue(PilotGamepadCmds.RpvPilotSwerveCmd());
         
-        // "Start" Button - Rest Gyro to 0
+        // "Start" Button - Reset Gyro to 0
         gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());  // possible reset robo odo as well?
         
         // DPAD - Set Common Arm and Elev positions
         gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.RunArmElevToStowPosCmd());
-        // gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.SetArmElevToIntakeConePosCmd());
+        gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.RunArmElevToIntakePosCmd());
         gamepad.Dpad.Left.onTrue(IntakeCmds.IntakeHoldRunCmd());
 
         // LEFT BUMPER - Stop Intake Motor(s)
@@ -61,19 +57,11 @@ public class PilotGamepad extends Gamepad {
         // Disabled and non working buttons -> commands, will test in future:
         // gamepad.rightBumper.onTrue(PilotGamepadCmds.BasicSnapCmd());  // basic snap (turn-in-place)
         // gamepad.selectButton.onTrue(PilotGamepadCmds.FpvDriveAndAutoRotateCmd());  // snap to angle while driving
-
-        // 
     }
 
     public void setupDisabledButtons() {}
 
-    public void setupTestButtons() {
-        gamepad.aButton.whileTrue(SwerveCmds.TestWheelFwdCmd());
-        gamepad.bButton.whileTrue(SwerveCmds.TestWheelFwdLeftCmd());
-        gamepad.xButton.whileTrue(SwerveCmds.TestWheelFwdRightCmd());
-        // gamepad.bButton.onTrue(ElevatorCmds.InitialArmReleaseCmd());
-        gamepad.startButton.whileTrue(SwerveCmds.ResetFalconAnglesCmd());
-    }
+    public void setupTestButtons() {}
 
     // forward/backward down the field
     public double getDriveFwdPositive() {

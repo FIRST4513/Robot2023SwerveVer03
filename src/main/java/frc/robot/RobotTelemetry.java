@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.telemetry.Alert;
 import frc.lib.telemetry.Alert.AlertType;
 import frc.lib.telemetry.TelemetrySubsystem;
@@ -11,9 +10,6 @@ import frc.lib.util.Util;
 import frc.robot.arm.ArmTelemetry;
 import frc.robot.auto.Auto;
 import frc.robot.elevator.ElevatorTelemetry;
-import frc.robot.intake.IntakeTelemetry;
-import frc.robot.operator.OperatorGamepadTelemetry;
-import frc.robot.pilot.PilotGamepadTelemetry;
 import frc.robot.swerve.SwerveTelemetry;
 
 import java.util.Map;
@@ -44,9 +40,9 @@ public class RobotTelemetry extends TelemetrySubsystem {
 
         // Setup the rest of the Shuffleboard Tabs
         m_ArmTelemetry =            new ArmTelemetry(Robot.arm);
-        m_ElevTelemetry =           new ElevatorTelemetry(Robot.elevator); ;
-        //m_IntakeTelemetry =         new IntakeTelemetry(Robot.intake); ;
-        m_SwerveTelemetry =         new SwerveTelemetry(Robot.swerve); ;
+        m_ElevTelemetry =           new ElevatorTelemetry(Robot.elevator);
+        //m_IntakeTelemetry =         new IntakeTelemetry(Robot.intake);
+        // m_SwerveTelemetry =         new SwerveTelemetry(Robot.swerve);
         // m_PilotTelemetry =          new PilotGamepadTelemetry(Robot.pilotGamepad); ;
         //m_OperatorTelemetry =       new OperatorGamepadTelemetry(Robot.operatorGamepad); ;
     }
@@ -63,17 +59,28 @@ public class RobotTelemetry extends TelemetrySubsystem {
 
     public void layoutRobotTelemtryTab(){
         Auto.setupSelectors();
-        tab.add("Score Selection",      Auto.scoreChooser)      .withPosition(0, 0).withSize(3, 1);
-        tab.add("Cross Selection",      Auto.crossChooser)      .withPosition(0, 2).withSize(3, 1);
-        tab.add("Dock Selection",       Auto.dockChooser)       .withPosition(0, 4).withSize(3, 1);
-        tab.add("Level Selection", Auto.levelChooser) .withPosition(0, 8).withSize(3, 1);
+        tab.add("Score Selection",     Auto.scoreChooser)     .withPosition(0, 0).withSize(3, 1);
+        tab.add("Position Selection",  Auto.positionChooser)  .withPosition(0, 2).withSize(3, 1);
+        tab.add("Cross Selection",     Auto.crossChooser)     .withPosition(0, 4).withSize(3, 1);
+        tab.add("Dock Selection",      Auto.dockChooser)      .withPosition(0, 6).withSize(3, 1);
+        tab.add("Level Selection",     Auto.levelChooser)     .withPosition(0, 8).withSize(3, 1);
 
-        tab.add("Position Selection",   Auto.positionChooser)   .withPosition(0, 6).withSize(3, 1);
+        tab.addNumber("Elev Ht",         () -> Robot.elevator.getElevHeightInches())    .withPosition(3, 0).withSize(2, 1);
+        tab.addNumber("Elev MM Tgt",     () -> Robot.elevator.getTargetHeight())        .withPosition(3, 2).withSize(2, 1);
+        tab.addString("Elev Bottom Sw",  () -> Robot.elevator.getLowerLimitSwStatus())  .withPosition(3, 4).withSize(2, 1);
+        tab.addString("Elev Top Limit",  () -> Robot.elevator.getUpperLimitSwStatus())  .withPosition(3, 6).withSize(2, 1);
+        tab.addString("Elev Brake",      () -> Robot.elevator.getBrakeStatus())         .withPosition(3, 8).withSize(2, 1);
 
-        tab.add("Speed Selection",Robot.pilotGamepad.speedChooser).withPosition(10, 3).withSize(3, 1);
-        tab.add("Aliance Selection",        Auto.allianceChooser) .withPosition(10, 5).withSize(3, 1);
+        tab.addNumber("Arm Angle",       () -> Robot.arm.getArmAngle())               .withPosition(5, 0) .withSize(2, 1);
+        tab.addNumber("Arm MM Tgt",      () -> Robot.arm.getTargetAngle())            .withPosition(5, 2) .withSize(2, 1);
+        tab.addString("Arm Extend Sw",   () -> Robot.arm.extendLimitSwitchStatus())   .withPosition(5, 4) .withSize(2, 1);
+        tab.addString("Arm Retract Sw",  () -> Robot.arm.retractLimitSwitchStatus())  .withPosition(5, 6) .withSize(2, 1);
+        tab.addString("Arm Brake",       () -> Robot.arm.getBrakeStatus())            .withPosition(5, 8) .withSize(2, 1);        
+        tab.addString("Arm Ctrl State",  () -> Robot.arm.getArmState())               .withPosition(5, 10).withSize(2, 1);
 
-        //tab.add("Test Selection", Auto.testChooser)             .withPosition(20, 8).withSize(3, 2);
+        tab.addNumber("Intake Sensor",   () -> Robot.intake.getSensorVal())         .withPosition(7, 0).withSize(2, 1);
+        tab.addBoolean("Intake Detect",  () -> Robot.intake.isGamepieceDetected())  .withPosition(7, 2).withSize(2, 1);
+        tab.addString("Intake Brake",    () -> Robot.intake.getBrakeStatus())       .withPosition(7, 4).withSize(2, 1);
 
         tab.addNumber("Match Time", () -> Timer.getMatchTime())
                 .withPosition(10, 0)
@@ -81,18 +88,10 @@ public class RobotTelemetry extends TelemetrySubsystem {
                 .withWidget("Simple Dial")
                 .withProperties(Map.of("Min", 0, "Max", 135));
 
-        tab.addNumber("Elev Ht",          () -> Robot.elevator.getElevHeightInches())   .withPosition(3, 0).withSize(2, 1);
-        tab.addString("Elev Bottom Sw",   () -> Robot.elevator.getLowerLimitSwStatus()) .withPosition(3, 2).withSize(2, 1);
-        tab.addString("Elev Top Limit",   () -> Robot.elevator.getUpperLimitSwStatus()) .withPosition(3, 4).withSize(2, 1);
-        tab.addString("Elev Brake",       () -> Robot.elevator.getBrakeStatus())        .withPosition(3, 6).withSize(2, 1);
+        tab.add("Speed Selection",    Robot.pilotGamepad.speedChooser)  .withPosition(10, 3).withSize(3, 1);
+        tab.add("Aliance Selection",  Auto.allianceChooser)             .withPosition(10, 5).withSize(3, 1);
 
-        tab.addNumber("Arm Angle",       () -> Robot.arm.getArmAngle())                 .withPosition(5, 0).withSize(2, 1);
-        tab.addString("Arm Extend Sw",   () -> Robot.arm.extendLimitSwitchStatus())     .withPosition(5, 2).withSize(2, 1);
-        tab.addString("Arm Retract Sw",  () -> Robot.arm.retractLimitSwitchStatus())    .withPosition(5, 4).withSize(2, 1);
-        tab.addString("Arm Brake",       () -> Robot.arm.getBrakeStatus())              .withPosition(5, 6).withSize(2, 1);        
-
-        tab.addNumber("Intake Sensor",   () -> Robot.intake.getSensorVal())             .withPosition(7, 0).withSize(2, 1);
-        tab.addString("Intake Brake",    () -> Robot.intake.getBrakeStatus())           .withPosition(7, 2).withSize(2, 1);
+        //tab.add("Test Selection", Auto.testChooser)             .withPosition(20, 8).withSize(3, 2);
 
         // tab.addBoolean("Connected?", () -> flash())
         //         .withPosition(2, 0)

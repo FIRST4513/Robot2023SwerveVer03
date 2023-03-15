@@ -2,7 +2,6 @@ package frc.robot.operator.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.Rmath;
 import frc.robot.Robot;
 
 public class ArmElevDriveSafeCmd extends CommandBase {
@@ -91,7 +90,7 @@ public class ArmElevDriveSafeCmd extends CommandBase {
     @Override
     public boolean isFinished() {
         if (cmdState == CmdState.DONE) { System.out.println("cmd state done"); return true; }
-        if (runTimer.get() > timeout) { System.out.println("cmd state done"); return true; }
+        if (runTimer.get() > timeout)  { System.out.println("cmd state done"); return true; }
         return false;
     }
 }

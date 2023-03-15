@@ -7,9 +7,9 @@ public class ArmConfig {
 
     // ------- Encoder Conversion Factor --------------
     // 1797.41176 cnts per degree tested 2/20/23
-    public final static double kCntsPerDeg              = 809; //569;  // 1843;        // Convert cnt to degrees of angle (2/21/23)
-    public final static double kDegsPerCnt              = 1 / kCntsPerDeg;   // Convert cnt to degrees of angle (2/21/23)
-    public final static double KAngleDeadBand           = +3.0;        // Degrees close enough to Tgt
+    public final static double kCntsPerDeg    = 809;              // How many counts it take for the physical arm to rotate 1º
+    public final static double kDegsPerCnt    = 1 / kCntsPerDeg;  // How many degrees a single count represents
+    public final static double KAngleDeadBand = +3.0;             // Allowable error when evaulating "are we there yet??"
 
     // -------- Absolute Analog Angle Sensor ------------
     // 3.3 volts / 360 = 0.0091666     volts per degree
@@ -18,33 +18,24 @@ public class ArmConfig {
     // public final static double kabsoluteAngleOffset      = -20.0;       // Degrees encoder is offset
 
     // ------ Speed Constants ------
-    // public final static double kDefaultExtendPwr        = +0.25;
-    public final static double kExtendMaxPwr            = +0.75;
+    // public final static double kDefaultExtendPwr   = +0.25;
+    public final static double kExtendMaxPwr          = +0.75;
 
-    // public final static double kDefaultRetractPwr       = -0.4;
-    public final static double kRetractMaxPwr           = -0.75;
+    // public final static double kDefaultRetractPwr  = -0.4;
+    public final static double kRetractMaxPwr         = -0.75;
 
-    // Arm Position Constants for single value for Cone or Cube
-    public final static double ArmAngleStowPos = -25;
-    public final static double ArmAngleIntakePos = 1;  // 18.5;
-    public final static double ArmAngleEjectLowPos = 0;  // stow mainly used for low eject though
-    public final static double ArmAngleEjectMidPos = 24;
-    public final static double ArmAngleEjectHighPos = 70;
-
-    // public final static double ArmAngleIntakeCubePos    = -10.0;        // Pickup Cube position
-    // public final static double ArmAngleIntakeConePos    = -10.0;        // Pickup Cone position
-    // public final static double ArmAngleEjectLowPos      =   0.0;        // Eject Low position
-    // public final static double ArmAngleEjectMidPos      = +25.0;        // Eject Mid position
-    // public final static double ArmAngleEjectHighPos     = +46.0;        // Eject High position
-
-    // public final static double ArmAngleStorePos         = -45.0;        // Store for Travel
-    // public final static double ArmAngleFullRetractPos   = -89.0;        // Full retract
+    // Arm Position Constants, eject positions work for either cone or cube
+    public final static double ArmAngleStowPos      = -25.0;
+    public final static double ArmAngleIntakePos    =   1.0;  // 18.5;
+    public final static double ArmAngleEjectLowPos  =   0.0;  // stow mainly used for low eject though
+    public final static double ArmAngleEjectMidPos  =  24.0;
+    public final static double ArmAngleEjectHighPos =  70.0;
 
     // ------ Limit Switches ------
-    public final static boolean RetractLimitSwitchTrue      = false;
-    public final static double  RetractLimitSwitchAngle     = -25;     // Max angle retract
+    public final static boolean RetractLimitSwitchTrue       = false;
+    public final static double  RetractLimitSwitchAngle      = -25;     // Max angle retract
     public final static boolean RetractSoftLimitSwitchEnable = false;
-    public final static int     RetractSoftLimitSwitchAngle = -25;     // Max angle retract
+    public final static int     RetractSoftLimitSwitchAngle  = -25;     // Max angle retract
 
     public final static boolean ExtendLimitSwitchTrue       = false;
     public final static double  ExtendLimitSwitchAngle      = +84.0;   // Max angle extended
@@ -56,8 +47,7 @@ public class ArmConfig {
 // human player is stowed
 // low: stowed or ?
 // mid and high optimize for cone and see if it works for cube
-// mid: elev 27 arm 40
-// high: elev 28 arm full
+// mid: elev full arm 24
+// high: elev full arm 70
 
-// bumper up, elev 28, arm forward
-// arm 24 arm 70
+// score order: bumper up, elev 28, arm forward

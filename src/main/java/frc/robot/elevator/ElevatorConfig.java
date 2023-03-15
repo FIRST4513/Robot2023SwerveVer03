@@ -4,30 +4,21 @@ public class ElevatorConfig {
 
     // ------- Conversion Factor --------
     // Measured 2/18/23 25.375 inches = 84,139 sensor units
-    public final static double kCntsPerInch         = 3315.822;     // Convert cnt to inches of height
-    public final static double kInchesPerCnt        = 0.000301584;  // Convert inches of height to cnt
-    public final static double KheightDeadBand      = +0.75;        // How close to target is close enough (inches)      
+    public final static double kCntsPerInch           = 3315.822;     // Convert cnt to inches of height
+    public final static double kInchesPerCnt          = 0.000301584;  // Convert inches of height to cnt
+    public final static double KheightDeadBand        = +0.75;        // How close to target is close enough (inches)      
 
     // ------ Position Constatnts ------
-    public final static double KElevMaxTopHt        = 31.0;         // This is the top GO NO FURTHER!
-    public final static double KLimitElevTopSlowHt  = 28.0;		    // Start slowing the raise at this position   
-    public final static double KLimitElevBottomSlowHt = 1.0;        // Start slowing the lower at this position
+    public final static double KElevMaxTopHt          = 31.0;          // This is the top GO NO FURTHER!
+    public final static double KLimitElevTopSlowHt    = 28.0;		   // Start slowing the raise at this position
+    public final static double KLimitElevBottomSlowHt = 1.0;           // Start slowing the lower at this position
 
-    public final static double ElevIntakeHt     = 1.5;          // Position to intake Cone
-    // public final static double ElevIntakeConeHt     = 0.0;          // Position to intake Cone
-    // public final static double ElevIntakeCubeHt     = 0.0;          // Position to intake Cube
-
-    public final static double ElevBumperClearHt    = 13;         // Position to raise to clear bumper with intake
-    public final static double ElevStoreHt          = 1.0;          // Position to Store Cube/Cone retracted for motion
-    // public final static double ElevRetractHt        = 0.0;          // Position to fully retract
-    public final static double ElevEjectLowHt       = 10;          // Position to Score a Cube/Cone in LOW Position  
-    public final static double ElevEjectCubeLowSafeHt = 26.5;          // Position to Score a Cube/Cone in LOW Position 
-    public final static double ElevEjectCubeMidSafeHt = KElevMaxTopHt;          // Position to Score a Cube/Cone in LOW Position 
-    public final static double ElevEjectCubeHighSafeHt = KElevMaxTopHt;          // Position to Score a Cube/Cone in LOW Position 
-    
-    public final static double ElevEjectMidHt       = KElevMaxTopHt;     // Position to Score a Cube/Cone in MID Position
-    public final static double ElevEjectHighHt      = KElevMaxTopHt;         // Position to Score a Cube/Cone in Hi Position
-    public final static double ElevArmReleaseHt     = ElevBumperClearHt;         // Position needed to release arm on startup
+    public final static double ElevBumperClearHt      = 13;             // Position to raise to clear bumper with intake
+    public final static double ElevIntakeHt           = 1.5;            // Position to intake from ground
+    public final static double ElevStowHt             = 1.0;            // Position to Store Cube/Cone retracted for motion and low 
+    public final static double ElevEjectLowHt         = ElevStowHt;     // Position to Score a Cube/Cone in LOW Position (same as stow)
+    public final static double ElevEjectMidHt         = KElevMaxTopHt;  // Position to Score a Cube/Cone in MID Position
+    public final static double ElevEjectHighHt        = KElevMaxTopHt;  // Position to Score a Cube/Cone in HIGH Position
 
     // ------ Elevator Speed Constants -----
     public final static double zeroPwr              = -0.125;

@@ -5,13 +5,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.AnalogInput;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Rmath;
 import frc.robot.Robot;
-import frc.robot.RobotConfig.AnalogPorts;
 import frc.robot.RobotConfig.LimitSwitches;
 import frc.robot.RobotConfig.Motors;
 
@@ -38,11 +35,11 @@ public class ArmSubSys extends SubsystemBase {
 
     // ------------- Constructor ----------
     public ArmSubSys() {
-        motorConfig                 = new ArmSRXMotorConfig();
-        mArmMotor                   = new WPI_TalonSRX(Motors.armMotorID);
-        extendLimitSwitch           = new DigitalInput(LimitSwitches.armExtendLimitSw);
-        retractLimitSwitch          = new DigitalInput(LimitSwitches.armRetractLimitSw);
-        // armAbsoluteAngleSensor      = new AnalogInput(AnalogPorts.armAngleSensor);
+        motorConfig            = new ArmSRXMotorConfig();
+        mArmMotor              = new WPI_TalonSRX(Motors.armMotorID);
+        extendLimitSwitch      = new DigitalInput(LimitSwitches.armExtendLimitSw);
+        retractLimitSwitch     = new DigitalInput(LimitSwitches.armRetractLimitSw);
+        // armAbsoluteAngleSensor = new AnalogInput(AnalogPorts.armAngleSensor);
         armMotorConfig();
         stopArm();
         armState = ArmStates.STOPPED;
@@ -128,8 +125,8 @@ public class ArmSubSys extends SubsystemBase {
     // --------------- State Methods ---------------
     // ---------------------------------------------
     public void setArmState(ArmStates newArmState) {
-        if (newArmState == ArmStates.STOPPED) { stopMotor(); }
-        else if (newArmState == ArmStates.RELAX) { stopMotor(); }
+        if      (newArmState == ArmStates.STOPPED) { stopMotor(); }
+        else if (newArmState == ArmStates.RELAX)   { stopMotor(); }
         else if (newArmState == ArmStates.RUNNING) { }  // do nothing, this does not have to be here but is :)
         armState = newArmState;
     }
@@ -140,8 +137,9 @@ public class ArmSubSys extends SubsystemBase {
     }
 
     public String getArmState() {
-        if (armState == ArmStates.STOPPED) { return "STOPPED"; }
-        else { return "RUNNING"; }
+        if      (armState == ArmStates.STOPPED) { return "STOPPED"; }
+        else if (armState == ArmStates.RELAX)   { return "RELAX"; }
+        else                                    { return "RUNNING"; }
     }
 
     // ----------------------------------------------------
@@ -240,12 +238,11 @@ public class ArmSubSys extends SubsystemBase {
         // mCurrAbsoluteArmAngle = getAbsoluteArmAngle() ;
      }
 
-    public double getEncoderCnt()   { return mCurrEncoderCnt; }
-    public double getArmAngle()     { return mCurrArmAngle;   }
+    public double getEncoderCnt() { return mCurrEncoderCnt; }
+    public double getArmAngle()   { return mCurrArmAngle; }
 
-    public double convertAngleToCnt( double angle )   { return angle * ArmConfig.kCntsPerDeg; }
-    public double convertCntToAngle( double cnt )     { return cnt * ArmConfig.kDegsPerCnt; }
-
+    public double convertAngleToCnt( double angle ) { return angle * ArmConfig.kCntsPerDeg; }
+    public double convertCntToAngle( double cnt )   { return cnt * ArmConfig.kDegsPerCnt; }
 
     public void resetEncoder()                    { mArmMotor.setSelectedSensorPosition(0); }
     public void resetEncoder( double position )   { mArmMotor.setSelectedSensorPosition(position); }
@@ -254,12 +251,12 @@ public class ArmSubSys extends SubsystemBase {
     // --------------------------------------------------
     // --------------- Other Misc Methods ---------------
     // --------------------------------------------------
-    public double getTargetAngle()         { return mTargetArmAngle; }
-    public double getArmMotorPwr()         { return mCurrArmPwr; }
+    public double getTargetAngle() { return mTargetArmAngle; }
+    public double getArmMotorPwr() { return mCurrArmPwr; }
 
     public double limitArmAngle( double angle ){
-        if (angle > ArmConfig.ExtendLimitSwitchAngle)       { angle = ArmConfig.ExtendLimitSwitchAngle; }
-        if (angle < ArmConfig.RetractLimitSwitchAngle)      { angle = ArmConfig.RetractLimitSwitchAngle; }
+        if (angle > ArmConfig.ExtendLimitSwitchAngle)  { angle = ArmConfig.ExtendLimitSwitchAngle; }
+        if (angle < ArmConfig.RetractLimitSwitchAngle) { angle = ArmConfig.RetractLimitSwitchAngle; }
         return angle;
     }
 

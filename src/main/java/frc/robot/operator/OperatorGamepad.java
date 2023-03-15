@@ -1,13 +1,7 @@
 package frc.robot.operator;
 
 import java.util.function.DoubleSupplier;
-
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-
-import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.lib.gamepads.Gamepad;
@@ -15,15 +9,12 @@ import frc.lib.gamepads.mapping.ExpCurve;
 import frc.robot.Robot;
 import frc.robot.arm.ArmSubSys.ArmStates;
 import frc.robot.arm.commands.ArmCmds;
-import frc.robot.auto.commands.DelayCmd;
 import frc.robot.autoBalance.commands.AutoBalanceCommand;
 import frc.robot.elevator.ElevFXMotorConfig;
-import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
 import frc.robot.operator.commands.ArmElevComboMoveCmds;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 import frc.robot.swerve.commands.LockSwerve;
-import frc.robot.trajectories.commands.TrajectoriesCmds;
 
 public class OperatorGamepad extends Gamepad {
     public static ExpCurve intakeThrottleCurve = new ExpCurve(
@@ -54,23 +45,21 @@ public class OperatorGamepad extends Gamepad {
     
     public void setupTeleopButtons() {
 
-        gamepad.aButton     .onTrue(IntakeCmds.IntakeEjectRunCmd());    // possible replace with until version of these?
-        gamepad.bButton     .onTrue(IntakeCmds.IntakeRetractRunCmd());
-        gamepad.yButton     .onTrue(IntakeCmds.IntakeHoldRunCmd());
-        gamepad.xButton     .onTrue(IntakeCmds.IntakeStopCmd());
+        gamepad.aButton      .onTrue(IntakeCmds.IntakeEjectRunCmd());    // possible replace with until version of these?
+        gamepad.bButton      .onTrue(IntakeCmds.IntakeRetractRunCmd());
+        gamepad.yButton      .onTrue(IntakeCmds.IntakeHoldRunCmd());
+        gamepad.xButton      .onTrue(IntakeCmds.IntakeStopCmd());
 
-        // gamepad.selectButton.whileTrue(runBalanceTestCmd());        // keep as button???
-        gamepad.selectButton.onTrue(new RunCommand(() -> Robot.arm.setArmState(ArmStates.RUNNING)));
-        gamepad.startButton .onTrue(ArmCmds.ResetArmEncoderCmd());
+        gamepad.selectButton.whileTrue(runBalanceTestCmd());             // keep as button???
+        gamepad.startButton  .onTrue(ArmCmds.ResetArmEncoderCmd());
         
-        gamepad.Dpad.Up     .onTrue(ArmElevComboMoveCmds.SetArmRunElevHighPosCmd());
-        // gamepad.Dpad.Down   .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
-        gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.RunArmElevToIntakePosCmd());
-        gamepad.Dpad.Left   .onTrue(ArmElevComboMoveCmds.SetArmRunElevMidPosCmd());
-        gamepad.Dpad.Right  .onTrue(OperatorGamepadCmds.RunArmElevToStowPosCmd());
+        gamepad.Dpad.Right   .onTrue(OperatorGamepadCmds.RunArmElevToStowPosCmd());
+        gamepad.Dpad.Down    .onTrue(OperatorGamepadCmds.RunArmElevToIntakePosCmd());
+        gamepad.Dpad.Left    .onTrue(ArmElevComboMoveCmds.SetArmRunElevMidPosCmd());
+        gamepad.Dpad.Up      .onTrue(ArmElevComboMoveCmds.SetArmRunElevHighPosCmd());
 
-        gamepad.rightBumper .onTrue(OperatorGamepadCmds.ControlArmElevByJoysticksCmd());
-        gamepad.leftBumper  .whileTrue(IntakeCmds.IntakeByJoystickCmd());
+        gamepad.leftBumper   .whileTrue(IntakeCmds.IntakeByJoystickCmd());
+        gamepad.rightBumper  .onTrue(OperatorGamepadCmds.ControlArmElevByJoysticksCmd());
     }
 
     @Override
@@ -79,6 +68,7 @@ public class OperatorGamepad extends Gamepad {
     public void setupDisabledButtons() {}
 
     public double getElevInput() {
+        // throttle curves weren't working as I was needing, so this is- admittedly- a bandaid solution for it.
         // return elevThrottleCurve.calculateMappedVal(gamepad.rightStick.getY()) ;
         double input = gamepad.rightStick.getY();
         if (Math.abs(input) < OperatorGamepadConfig.elevSpeedDeadband) {
@@ -93,7 +83,7 @@ public class OperatorGamepad extends Gamepad {
     }
 
     public double getArmInput() {
-        // return gamepad.leftStick.getY();
+        // same here- bandaid solution :/
         double input = gamepad.leftStick.getY();
         if (Math.abs(input) < OperatorGamepadConfig.armSpeedDeadband) {
             input = 0;
@@ -102,6 +92,7 @@ public class OperatorGamepad extends Gamepad {
         // return armThrottleCurve.calculateMappedVal(gamepad.leftStick.getY());
     }
 
+    // irrelevant
     // public double getArmInputWFF() {
     //     // calculate value with feed forward for arm
     //     return getArmInput() + Robot.arm.getHoldPwr();
@@ -115,8 +106,6 @@ public class OperatorGamepad extends Gamepad {
     public double getTriggerTwistInvert() {
         return -getTriggerTwist();
     }
-
-    /*   "the sparkle" -madi   */
 
     public void rumble(double intensity) {
         this.gamepad.setRumble(intensity, intensity);
@@ -147,6 +136,8 @@ public class OperatorGamepad extends Gamepad {
             new LockSwerve()
         );
     }
+
+    /*   "the sparkle" -madi   */
 
     // path testing example
     // public static Command runTestPathCmd() {

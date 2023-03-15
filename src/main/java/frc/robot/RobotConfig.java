@@ -24,39 +24,43 @@ public final class RobotConfig {
     public static final boolean TUNING_MODE = false;
 
     public final class Motors {
-        public final static int FLdriveMotorID =     1;       // Can ID Falcon 500
-        public final static int FRdriveMotorID =     2;       // Can ID Falcon 500
-        public final static int BLdriveMotorID =     3;       // Can ID Falcon 500
-        public final static int BRdriveMotorID =     4;       // Can ID Falcon 500
+        public final static int FLdriveMotorID        =  1;  // Can ID Falcon 500
+        public final static int FRdriveMotorID        =  2;  // Can ID Falcon 500
+        public final static int BLdriveMotorID        =  3;  // Can ID Falcon 500
+        public final static int BRdriveMotorID        =  4;  // Can ID Falcon 500
 
-        public final static int FLangleMotorID =     5;       // Can ID Falcon 500
-        public final static int FRangleMotorID =     6;       // Can ID Falcon 500
-        public final static int BLangleMotorID =     7;       // Can ID Falcon 500
-        public final static int BRangleMotorID =     8;       // Can ID Falcon 500
+        public final static int FLangleMotorID        =  5;  // Can ID Falcon 500
+        public final static int FRangleMotorID        =  6;  // Can ID Falcon 500
+        public final static int BLangleMotorID        =  7;  // Can ID Falcon 500
+        public final static int BRangleMotorID        =  8;  // Can ID Falcon 500
 
-        public final static int armMotorID =         13;      // Can ID Talon SRX
-        public final static int intakeUpperMotorID = 14;      // Can ID Talon SRX
-        public final static int intakeLowerMotorID = 15;      // Can ID Talon SRX
-        public final static int elevatorMotorID =    16;      // Can ID Talon SRX
+        public final static int armMotorID            = 13;  // Can ID Talon SRX
+        public final static int intakeUpperMotorID    = 14;  // Can ID Talon SRX
+        public final static int intakeLowerMotorID    = 15;  // Can ID Talon SRX
+        public final static int elevatorMotorID       = 16;  // Can ID Talon SRX
     }
 
     public final class Encoders {
-        public final static int FLcanCoderID =        9;       // Cancorder CAN ID
-        public final static int FRcanCoderID =       10;       // Cancorder CAN ID
-        public final static int BLcanCoderID =       11;       // Cancorder CAN ID
-        public final static int BRcanCoderID =       12;       // Cancorder CAN ID
+        public final static int FLcanCoderID          =  9;  // Cancorder CAN ID
+        public final static int FRcanCoderID          = 10;  // Cancorder CAN ID
+        public final static int BLcanCoderID          = 11;  // Cancorder CAN ID
+        public final static int BRcanCoderID          = 12;  // Cancorder CAN ID
     }
 
     public final class LimitSwitches {
-        public final static int elevatorLowerLimitSw    = 0;   // DIO Port
-        public final static int elevatorUpperLimitSw    = 1;   // DIO Port
-        public final static int armRetractLimitSw       = 2;   // DIO Port
-        public final static int armExtendLimitSw        = 3;   // DIO Port
+        public final static int elevatorLowerLimitSw  =  0;  // DIO Port
+        public final static int elevatorUpperLimitSw  =  1;  // DIO Port
+        public final static int armRetractLimitSw     =  2;  // DIO Port
+        public final static int armExtendLimitSw      =  3;  // DIO Port
     } 
 
     public final class AnalogPorts {
-        public final static int intakeGamepieceSensor =   0;   //ANALOG Port
-        public final static int armAngleSensor        =   2;   //ANALOG Port
+        public final static int intakeGamepieceSensor =  0;  // ANALOG Port
+        public final static int armAngleSensor        =  2;  // ANALOG Port
+    }
+
+    public final class PWMPorts {
+        public final static int ledCtrlr              =  0;  // PWM PORT
     }
 
     //Check if we are FMSattached or Faking it

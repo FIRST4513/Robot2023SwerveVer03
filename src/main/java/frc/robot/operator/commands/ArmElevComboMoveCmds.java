@@ -6,22 +6,23 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.arm.ArmConfig;
-import frc.robot.arm.commands.ArmCmds;
 import frc.robot.auto.commands.DelayCmd;
 import frc.robot.elevator.ElevatorConfig;
 
 public class ArmElevComboMoveCmds{
+    // unreliable + untested after changes
     public static Command SetArmMoveElevStowPosCmd() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> Robot.arm.setMMTargetAngle(ArmConfig.ArmAngleStowPos), Robot.arm),
             new RunCommand(() -> Robot.elevator.setMMheight(ElevatorConfig.ElevBumperClearHt), Robot.elevator)
                 .until(() -> Robot.elevator.isMMtargetReached()).withTimeout(5.0),
             new DelayCmd(2).until(() -> Robot.arm.isArmInside()),
-            new RunCommand(() -> Robot.elevator.setMMheight(ElevatorConfig.ElevStoreHt), Robot.elevator)
-                .until(() -> Robot.elevator.isMMtargetReached()).withTimeout(5.0)
+            new RunCommand(() -> Robot.elevator.elevSetSpeed(ElevatorConfig.zeroPwr), Robot.elevator)
+                .until(() -> Robot.elevator.isLowerLimitSwitchPressed()).withTimeout(5.0)
         );
     }
-
+    
+    // unreliable + untested after changes
     public static Command SetArmMoveElevIntakePosCmd() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> Robot.arm.setMMTargetAngle(ArmConfig.ArmAngleIntakePos), Robot.arm),

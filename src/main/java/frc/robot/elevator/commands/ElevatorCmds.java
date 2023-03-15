@@ -2,11 +2,9 @@ package frc.robot.elevator.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
-import frc.robot.arm.commands.ArmCmds;
 import frc.robot.auto.commands.DelayCmd;
 import frc.robot.elevator.ElevatorConfig;
 
@@ -101,12 +99,12 @@ public class ElevatorCmds {
     }
 
     public static Command ElevToEjectCubeMidSafePosCmd() {
-        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevEjectCubeMidSafeHt);
+        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevEjectMidHt);
         // .withTimeout(4.0).until(() -> Robot.elevator.isMMtargetReached());
     }
 
     public static Command ElevToEjectCubeLowSafePosCmd() {
-        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevEjectCubeLowSafeHt);
+        return ElevatorCmds.setMMPosition(ElevatorConfig.ElevEjectLowHt);
         // .withTimeout(4.0).until(() -> Robot.elevator.isMMtargetReached());
     }
 
@@ -119,16 +117,5 @@ public class ElevatorCmds {
         return ElevatorCmds.setMMPosition(ElevatorConfig.ElevBumperClearHt);
         // .withTimeout(4.0).until(() -> Robot.elevator.isMMtargetReached());
     }
-
-    // --------- Elev to ArmRelease (Free Fall) Position Command ---------
-    // public static Command InitialArmReleaseCmd() {
-    //     return new ParallelCommandGroup(
-    //         // Elev raises until falling arm clears retracted limit switch
-    //         // Then elev lowers to bottom, while arm settles at -20 degrees
-    //         new ElevReleaseArmCmd().withTimeout(5.0),
-    //         ArmCmds.ArmReleaseCmd().withTimeout(5.0)
-
-    //     );
-    // }
 }
 

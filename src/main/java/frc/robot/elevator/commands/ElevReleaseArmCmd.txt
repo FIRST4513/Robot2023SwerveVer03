@@ -31,7 +31,7 @@ public class ElevReleaseArmCmd extends CommandBase {
         cmdTimer.start();
         cmdState = CmdState.ELEVRAISING;
         Robot.elevator.setBrakeMode(true);                              // Turn on brake mode
-        Robot.elevator.setMMheight(ElevatorConfig.ElevArmReleaseHt);    // Get Elev Moving up
+        Robot.elevator.setMMheight(ElevatorConfig.ElevBumperClearHt);    // Get Elev Moving up
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ElevReleaseArmCmd extends CommandBase {
         ht = Robot.elevator.getElevHeightInches();
 
         // Raise Elevator to let arm fall
-        Robot.elevator.setMMheight(ElevatorConfig.ElevArmReleaseHt);    // Move Elev up
+        Robot.elevator.setMMheight(ElevatorConfig.ElevBumperClearHt);    // Move Elev up
 
         // Lets look to see when arm reaches the retract switch on way down
         if ((cmdState == CmdState.ELEVRAISING) && (Robot.arm.isRetractLimitSwitchPressed())) {
