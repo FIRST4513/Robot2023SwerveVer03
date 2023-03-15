@@ -27,38 +27,16 @@ public class AutoConfig {
 
 
     // Auto Start Position Poses
-    public static final Rotation2d kLeftYaw         = Rotation2d.fromDegrees(-180.0);
-    public static final Rotation2d kRightYaw        = Rotation2d.fromDegrees(-180.0);
-    public static final Rotation2d kCenterYaw       = Rotation2d.fromDegrees(-180.0);
+    public static final Rotation2d kLeftYaw    = Rotation2d.fromDegrees(-180.0);
+    public static final Rotation2d kRightYaw   = Rotation2d.fromDegrees(-180.0);
+    public static final Rotation2d kCenterYaw  = Rotation2d.fromDegrees(-180.0);
 
-    public static final Pose2d kLeftPose            = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
-    public static final Pose2d kRightPose           = new Pose2d (new Translation2d( 2.0, 3.0), kRightYaw);
-    public static final Pose2d kCenterPose          = new Pose2d (new Translation2d( 2.0, 3.0), kCenterYaw);
-
-    // Arm Elev - Score Position values (for commands)
-    // Cube
-    public final static double cubeLowArmPos = 0.0;  // arm target pos
-    public final static double cubeLowElevStartPos = 0.0;  // elev pos for clearing bumbers/other obstacles
-    public final static double cubeLowElevEndPos = 0.0;  // final elev pos target
-    public final static double cubeMidArmPos = 0.0;
-    public final static double cubeMidElevStartPos = 0.0;
-    public final static double cubeMidElevEndPos = 0.0;
-    public final static double cubeHighArmPos = 0.0;
-    public final static double cubeHighElevStartPos = 0.0;
-    public final static double cubeHighElevEndPos = 0.0;
-    // Cone
-    public final static double coneLowArmPos = 0.0;  // arm target pos
-    public final static double coneLowElevStartPos = 0.0;  // elev pos for clearing bumbers/other obstacles
-    public final static double coneLowElevEndPos = 0.0;  // final elev pos target
-    public final static double coneMidArmPos = 0.0;
-    public final static double coneMidElevStartPos = 0.0;
-    public final static double coneMidElevEndPos = 0.0;
-    public final static double coneHighArmPos = 0.0;
-    public final static double coneHighElevStartPos = 0.0;
-    public final static double coneHighElevEndPos = 0.0;
+    public static final Pose2d kLeftPose       = new Pose2d (new Translation2d( 2.0, 3.0), kLeftYaw);
+    public static final Pose2d kRightPose      = new Pose2d (new Translation2d( 2.0, 3.0), kRightYaw);
+    public static final Pose2d kCenterPose     = new Pose2d (new Translation2d( 2.0, 3.0), kCenterYaw);
 
     // Elevator positions
-    public static final double kElevTop = 22.0;
+    public static final double kElevTop  = 22.0;
 
     // Max Speeds for Auto commands
     public static final double kMaxSpeed = 2.7;

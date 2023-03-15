@@ -1,6 +1,8 @@
 package frc.robot.pilot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Robot;
 import frc.robot.pilot.PilotGamepadConfig;
@@ -38,6 +40,17 @@ public class PilotGamepadCmds {
                         false,
                         false)
                 .withName("RpvPilotSwerveCmd");
+    }
+
+    public static Command ToggleBasedSwerveCmd() {
+        return new ConditionalCommand(
+            RpvPilotSwerveCmd(),
+            FpvPilotSwerveCmd(),
+            () -> Robot.swerve.getPilotPOV());
+    }
+
+    public static Command TogglePOV() {
+        return new InstantCommand(() -> Robot.swerve.togglePilotPOV());
     }
 
     /** Field Oriented Drive With Auto Rotate to Snapped 90 oreintation */

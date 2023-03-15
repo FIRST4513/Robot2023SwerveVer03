@@ -6,13 +6,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 import frc.robot.arm.commands.ArmCmds;
 // import frc.robot.arm.commands.ArmHoldPositionCmd;
 // import frc.robot.arm.commands.ArmReleaseCmd;
 import frc.robot.auto.Auto;
-import frc.robot.elevator.commands.ElevReleaseArmCmd;
+import frc.robot.autoBalance.commands.AutoBalanceCommand;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.elevator.commands.ElevatorHoldPosCmd;
 import frc.robot.intake.commands.IntakeCmds;
@@ -46,6 +47,9 @@ public class AutoCmds {
                 // IntakeCmds.IntakeEjectUntilNoGamepieceCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
                 // IntakeCmds.IntakeStopCmd(),
                 // OperatorGamepadCmds.SetArmElevToStorePosFromLowSafeCmd()
+                new InstantCommand(() -> Robot.intake.setMotorEject()),
+                new DelayCmd(1.0),
+                new InstantCommand(() -> Robot.intake.stopMotors())
             );
         }
         if (level == "Mid") {
@@ -56,6 +60,7 @@ public class AutoCmds {
                 // IntakeCmds.IntakeEjectUntilNoGamepieceCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
                 // IntakeCmds.IntakeStopCmd(),
                 // OperatorGamepadCmds.SetArmElevToStorePosFromMidSafeCmd()
+                new PrintCommand("Mid")
             );
         }
         return new PrintCommand("Error on auto place only paramter");
@@ -100,16 +105,9 @@ public class AutoCmds {
         );
     }
 
-    public static Command ArmParkedToStorePosCmd(){
-        return new ParallelCommandGroup(
-            new ElevReleaseArmCmd()
-            // new ArmReleaseCmd()
-        );
-    }
-
     public static Command AutoBalanceCmd(){
         return new SequentialCommandGroup(
-            //new AutoBalanceCommand(),
+            new AutoBalanceCommand(),
             new LockSwerve()
         ); 
     }

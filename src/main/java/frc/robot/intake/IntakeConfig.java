@@ -5,11 +5,11 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
 public class IntakeConfig {
     // IR Prox distance value for detection of a gamepiece
-    public static double gamepieceDetectDistance = .75;
+    public static double gamepieceDetectDistance = 1.0;
 
     // retract/eject speeds
     public static double retractSpeed = -1.0;
-    public static double holdSpeed    = -0.5;
+    public static double holdSpeed    = -0.25;
     public static double ejectSpeed   =  1.0;
 
     /* Neutral Modes */

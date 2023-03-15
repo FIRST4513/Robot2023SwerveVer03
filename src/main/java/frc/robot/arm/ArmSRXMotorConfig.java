@@ -36,10 +36,10 @@ public class ArmSRXMotorConfig {
      *                              1/100 second of travel ( 1.5 degrees )  = 2,700 counts
      */
 
-    public final double motionCruiseVelocity        = 24240;  // approx 30º per second (809*30)
-    public final double motionAcceleration          =  8080;  // approx 3 seconds to acquire cruise vel (24240/3sec)
-    public static final int allowableError          = 809;    // approx 1º
-    public final int    motionCurveStrength         = 0;      // 0 No smoothing to 8 Max smoothing
+    public final double motionCruiseVelocity = 24240;  // approx 30º per second (809*30)
+    public final double motionAcceleration   =  8080;  // approx 3 seconds to acquire cruise vel (24240/3sec)
+    public static final int allowableError   = 809;    // approx 1º allowable error for MM
+    public final int    motionCurveStrength  = 0;      // 0 No smoothing to 8 Max smoothing
 
     public final double kP = 0.4;     // Needs to be Determined by testing
     public final double kI = 0.0;     // could be 0
@@ -48,10 +48,10 @@ public class ArmSRXMotorConfig {
     public final double kIz = 0.0;
    
     /* Current Limiting */
-    public static final int     continuousCurrentLimit   = 30;       // Amps
-    public static final int     peakCurrentLimit         = 40;       // Amps
-    public static final int     peakCurrentDuration      = 200;      // Time in milliseconds
-    public final boolean        EnableCurrentLimit       = true;
+    public static final int continuousCurrentLimit = 30;       // Amps
+    public static final int peakCurrentLimit       = 40;       // Amps
+    public static final int peakCurrentDuration    = 200;      // Time in milliseconds
+    public final boolean    EnableCurrentLimit     = true;
 
     /* Voltage Compensation */
     public final double voltageCompSaturation = 12;
@@ -92,6 +92,3 @@ public class ArmSRXMotorConfig {
     }
 
 }
-
-// 12 elev min
-// 15.5 elev max

@@ -24,6 +24,8 @@ public class Swerve extends SubsystemBase {
     public      SwerveModule[] mSwerveMods;
     private     SwerveModuleState[] mSwerveModStates;
 
+    public      boolean pilotRobotPOV;
+
     // --------------------- Constructor ------------------
     public Swerve() {
         setName("Swerve");
@@ -40,6 +42,8 @@ public class Swerve extends SubsystemBase {
         odometry = new Odometry(this);
         Timer.delay(1.0);
         resetFalconAngles();
+
+        pilotRobotPOV = false;
     }
 
     @Override
@@ -278,6 +282,16 @@ public class Swerve extends SubsystemBase {
             positions[mod.moduleNumber] = mod.getPosition();
         }
         return positions;
+    }
+
+    // other misc methods
+    public void togglePilotPOV() {
+        pilotRobotPOV = !pilotRobotPOV;
+        System.out.println("Swerve - Toggled Pilot POV to " + pilotRobotPOV);
+    }
+
+    public boolean getPilotPOV() {
+        return pilotRobotPOV;
     }
 
 }

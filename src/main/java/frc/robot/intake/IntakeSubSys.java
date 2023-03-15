@@ -13,7 +13,7 @@ public class IntakeSubSys extends SubsystemBase {
     public static String intakeBrakeStatus = "";
     
     // Devices
-    public WPI_TalonSRX intakeMotor  = new WPI_TalonSRX(Motors.intakeUpperMotorID);
+    public WPI_TalonSRX intakeMotor = new WPI_TalonSRX(Motors.intakeUpperMotorID);
 
     public AnalogInput gamepieceDetectSensor = new AnalogInput(AnalogPorts.intakeGamepieceSensor);
 
@@ -29,11 +29,9 @@ public class IntakeSubSys extends SubsystemBase {
     // ---------------- Intake Motor Methods ------------------
     // --------------------------------------------------------
 
-    public void setMotor(double speed)     { intakeMotor.set(speed); }
-
+    public void setMotor(double speed)         { intakeMotor.set(speed); }
     public void setMotor(DoubleSupplier speed) { setMotor(speed.getAsDouble()); }
-
-    public double getMotorSpeed() { return intakeMotor.get(); }
+    public double getMotorSpeed()              { return intakeMotor.get(); }
 
     public void stopMotors() {
         setBrakeMode(true);
