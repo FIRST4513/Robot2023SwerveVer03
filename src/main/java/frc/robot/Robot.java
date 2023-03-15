@@ -13,6 +13,7 @@ import frc.robot.elevator.ElevatorSubSys;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.IntakeSubSys;
 import frc.robot.intake.commands.IntakeCmds;
+import frc.robot.leds.LedSubSys;
 import frc.robot.operator.OperatorGamepad;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 import frc.robot.pilot.PilotGamepad;
@@ -36,6 +37,7 @@ public class Robot extends TimedRobot {
     public static ArmSubSys arm;
     public static IntakeSubSys intake;
     public static RobotTelemetry telemetry;
+    public static LedSubSys leds;
     //public static Auto auto;
 
     public static String MAC = "";
@@ -77,6 +79,7 @@ public class Robot extends TimedRobot {
         arm = new ArmSubSys();
         intake = new IntakeSubSys();
         telemetry = new RobotTelemetry();
+        leds = new LedSubSys();
 
         // Set Default Commands, this method should exist for each subsystem that has commands
         SwerveCmds.setupDefaultCommand();
@@ -85,6 +88,7 @@ public class Robot extends TimedRobot {
         OperatorGamepadCmds.setupDefaultCommand();
         ArmCmds.setupDefaultCommand();
         IntakeCmds.setupDefaultCommand();
+        // leds
         //logger.startTimer();
     }
 

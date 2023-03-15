@@ -20,6 +20,7 @@ public class Auto {
     public static final SendableChooser<String> positionChooser = new SendableChooser<>();
     public static final SendableChooser<String> crossChooser = new SendableChooser<>();
     public static final SendableChooser<String> dockChooser = new SendableChooser<>();
+    public static final SendableChooser<String> levelChooser = new SendableChooser<>();
     public static final SendableChooser<String> testChooser = new SendableChooser<>();
     public static final SendableChooser<String> allianceChooser = new SendableChooser<>();
 
@@ -28,6 +29,7 @@ public class Auto {
     public static String positionSelect;
     public static String crossSelect;
     public static String dockSelect;
+    public static String levelSelect;
     public static String testSelect;
     public static String allianceSelect;
 
@@ -74,12 +76,17 @@ public class Auto {
 
         // Selector Score by placing Cube/Cone on selected Position
         scoreChooser.setDefaultOption(  "Do Nothing",   AutoConfig.kNoSelect);
-        scoreChooser.addOption(         "Cube Low",     AutoConfig.kLowSelect);
-        scoreChooser.addOption(         "Cube Mid",     AutoConfig.kMidSelect);
+        scoreChooser.addOption(         "Low",     AutoConfig.kLowSelect);
+        scoreChooser.addOption(         "Mid",     AutoConfig.kMidSelect);
+        scoreChooser.addOption(         "High",     AutoConfig.kHighSelect);
 
         // Selector for Getting on Charge Platform
         dockChooser.setDefaultOption(   "Do Nothing",   AutoConfig.kNoSelect);
         dockChooser.addOption(          "Dock",         AutoConfig.kYesSelect);
+
+        // Selector for leveling on charge platform
+        levelChooser.setDefaultOption("Do Nothing", AutoConfig.kNoSelect);
+        levelChooser.addOption("Auto Level", AutoConfig.kYesSelect);
 
         // Selector for Crossing the Line to score
         crossChooser.setDefaultOption(  "Do Nothing",   AutoConfig.kNoSelect);
@@ -103,6 +110,7 @@ public class Auto {
         positionSelect =    positionChooser.getSelected();
         crossSelect =       crossChooser.getSelected();
         dockSelect =        dockChooser.getSelected();
+        levelSelect = levelChooser.getSelected();
         //testSelect =        testChooser.getSelected();
         allianceSelect =    allianceChooser.getSelected();
 
@@ -110,6 +118,7 @@ public class Auto {
         System.out.println("Position Select = " +   positionSelect);
         System.out.println("Cross Select = " +      crossSelect);
         System.out.println("Dock Select = " +       dockSelect);
+        System.out.println("Level Select = " +       levelSelect);
         System.out.println("Alliance Select = " +   allianceSelect);
         //System.out.println("Test Select = " +       testSelect);
     }
@@ -144,7 +153,10 @@ public class Auto {
             } 
             if ( mid() ) {
                 return AutoCmds.PlaceCubeOnlyCmd("Mid");
-            } 
+            }
+            if ( high() ) {
+                return AutoCmds.PlaceCubeOnlyCmd("High");
+            }
             return new PrintCommand("ERROR: Invalid place only auto command");
         }
 
@@ -318,6 +330,11 @@ public class Auto {
 
     private static boolean mid() {
         if (scoreSelect.equals(AutoConfig.kMidSelect)) { return true; }
+        return false;
+    }
+
+    private static boolean high() {
+        if (scoreSelect.equals(AutoConfig.kHighSelect)) { return true; }
         return false;
     }
 

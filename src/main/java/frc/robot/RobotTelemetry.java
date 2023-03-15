@@ -66,6 +66,7 @@ public class RobotTelemetry extends TelemetrySubsystem {
         tab.add("Score Selection",      Auto.scoreChooser)      .withPosition(0, 0).withSize(3, 1);
         tab.add("Cross Selection",      Auto.crossChooser)      .withPosition(0, 2).withSize(3, 1);
         tab.add("Dock Selection",       Auto.dockChooser)       .withPosition(0, 4).withSize(3, 1);
+        tab.add("Level Selection", Auto.levelChooser) .withPosition(0, 8).withSize(3, 1);
 
         tab.add("Position Selection",   Auto.positionChooser)   .withPosition(0, 6).withSize(3, 1);
 

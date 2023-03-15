@@ -62,3 +62,6 @@ public class ElevatorConfig {
 // high: elev 28 arm full
 
 // bumper up, elev 28, arm forward
+
+// standing cone
+// height 10 -> 5 slow
