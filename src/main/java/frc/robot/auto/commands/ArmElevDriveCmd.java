@@ -20,7 +20,6 @@ public class ArmElevDriveCmd extends CommandBase {
         tgtArmAngle = armAngle;
         tgtElevHt = elevHt;
         timeOut = to;
-
     }
 
     @Override
