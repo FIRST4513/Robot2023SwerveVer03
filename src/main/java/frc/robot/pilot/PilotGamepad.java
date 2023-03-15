@@ -6,6 +6,7 @@ import frc.lib.gamepads.Gamepad;
 import frc.lib.gamepads.mapping.ExpCurve;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
+import frc.robot.operator.commands.ArmElevComboMoveCmds;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 import frc.robot.pilot.PilotGamepadConfig.MaxSpeeds;
 import frc.robot.pilot.commands.PilotGamepadCmds;
@@ -42,15 +43,15 @@ public class PilotGamepad extends Gamepad {
     public void setupTeleopButtons() {
         // "A-B-Y" Buttons - Set Intake Motors
         gamepad.aButton.onTrue(IntakeCmds.IntakeEjectRunCmd());    // possible replace with until version of these?
-        gamepad.bButton.onTrue(IntakeCmds.IntakeRetractRunCmd());
+        // gamepad.bButton.onTrue(IntakeCmds.IntakeRetractRunCmd());
         // "X" Button - Teleop Drive with Robot Perspective
-        gamepad.xButton.whileTrue(PilotGamepadCmds.RpvPilotSwerveCmd());
+        gamepad.xButton.onTrue(PilotGamepadCmds.TogglePOV());
         
         // "Start" Button - Rest Gyro to 0
         gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());  // possible reset robo odo as well?
         
         // DPAD - Set Common Arm and Elev positions
-        // gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.SetArmElevToStorePosCmd());
+        gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.RunArmElevToStowPosCmd());
         // gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.SetArmElevToIntakeConePosCmd());
         gamepad.Dpad.Left.onTrue(IntakeCmds.IntakeHoldRunCmd());
 
@@ -60,6 +61,8 @@ public class PilotGamepad extends Gamepad {
         // Disabled and non working buttons -> commands, will test in future:
         // gamepad.rightBumper.onTrue(PilotGamepadCmds.BasicSnapCmd());  // basic snap (turn-in-place)
         // gamepad.selectButton.onTrue(PilotGamepadCmds.FpvDriveAndAutoRotateCmd());  // snap to angle while driving
+
+        // 
     }
 
     public void setupDisabledButtons() {}

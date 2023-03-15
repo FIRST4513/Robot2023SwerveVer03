@@ -18,6 +18,6 @@ public class OperatorGamepadConfig {
 
     public static final double armSpeedExp = 15;
     public static final double armSpeedScaler = -0.75; // -4.8;  // max velocity? // ~4.9 robot max
-    public static final double armSpeedDeadband = 0.2;
+    public static final double armSpeedDeadband = 0.15;
     public static final double armSpeedOffset = 0;
 }

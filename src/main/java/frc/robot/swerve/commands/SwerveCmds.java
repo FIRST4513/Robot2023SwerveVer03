@@ -18,7 +18,7 @@ public class SwerveCmds {
     
     public static void setupDefaultCommand() {
         // Drive by joystick Field Point Of View
-        Robot.swerve.setDefaultCommand(PilotGamepadCmds.FpvPilotSwerveCmd());
+        Robot.swerve.setDefaultCommand(PilotGamepadCmds.ToggleBasedSwerveCmd());
     }
 
     // ----------------------- Drive Commands  ------------------------

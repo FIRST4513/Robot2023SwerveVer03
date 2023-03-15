@@ -15,21 +15,23 @@ import frc.robot.elevator.ElevatorConfig;
  */
 
 public class ArmToStowPosCmd extends CommandBase {
-    boolean readyToLower = false;
+    boolean readyToLower;
 
     public ArmToStowPosCmd(double timeout) {
         addRequirements(Robot.arm);
         addRequirements(Robot.elevator);
-        System.out.println("ArmDriveForSecondsCmd Called");
+        System.out.println("ArmToStowPosCmd - Called");
     }
 
     @Override
     public void initialize() {
-        System.out.println("ArmDriveForSecondsCmd Init");
+        System.out.println("ArmToStowPosCmd - Init");
+        readyToLower = false;
     }
 
     @Override
     public void execute() {
+        System.out.println("ArmToStowPosCmd - Execute, readyToLower: " + readyToLower);
         if (!readyToLower) {
             Robot.arm.setMMTargetAngle(ArmConfig.ArmAngleStowPos);
             Robot.elevator.setMMheight(ElevatorConfig.ElevBumperClearHt);
@@ -38,7 +40,8 @@ public class ArmToStowPosCmd extends CommandBase {
             }
         } else {
             if (Robot.arm.mCurrArmAngle < -22.5) {
-                Robot.elevator.setMMheight(ElevatorConfig.ElevStoreHt);
+                Robot.elevator.elevSetSpeed(ElevatorConfig.zeroPwr);
+                // Robot.elevator.setMMheight(ElevatorConfig.ElevStoreHt);
             } else {
                 Robot.elevator.setMMheight(ElevatorConfig.ElevBumperClearHt);
             }

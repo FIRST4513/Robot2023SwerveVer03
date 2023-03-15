@@ -72,7 +72,7 @@ public class OperatorGamepadCmds {
     }
 
     public static Command RunArmElevToHighPosCmd() {
-        return new ArmElevDriveSafeCmd(ArmConfig.ArmAngleIntakePos, ElevatorConfig.ElevBumperClearHt, ElevatorConfig.ElevEjectHighHt, 10.0);
+        return new ArmElevDriveSafeCmd(ArmConfig.ArmAngleEjectHighPos, ElevatorConfig.ElevBumperClearHt, ElevatorConfig.ElevEjectHighHt, 10.0);
     }
 
     // public static Command SetArmElevToEjectLowPosSafeCmd() {

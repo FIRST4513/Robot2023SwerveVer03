@@ -26,10 +26,10 @@ public class ArmConfig {
 
     // Arm Position Constants for single value for Cone or Cube
     public final static double ArmAngleStowPos = -25;
-    public final static double ArmAngleIntakePos = 5;
+    public final static double ArmAngleIntakePos = 1;  // 18.5;
     public final static double ArmAngleEjectLowPos = 0;  // stow mainly used for low eject though
-    public final static double ArmAngleEjectMidPos = 40;
-    public final static double ArmAngleEjectHighPos = 84;
+    public final static double ArmAngleEjectMidPos = 24;
+    public final static double ArmAngleEjectHighPos = 70;
 
     // public final static double ArmAngleIntakeCubePos    = -10.0;        // Pickup Cube position
     // public final static double ArmAngleIntakeConePos    = -10.0;        // Pickup Cone position
@@ -60,3 +60,4 @@ public class ArmConfig {
 // high: elev 28 arm full
 
 // bumper up, elev 28, arm forward
+// arm 24 arm 70

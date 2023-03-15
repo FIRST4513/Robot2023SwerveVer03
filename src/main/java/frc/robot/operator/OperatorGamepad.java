@@ -20,6 +20,7 @@ import frc.robot.autoBalance.commands.AutoBalanceCommand;
 import frc.robot.elevator.ElevFXMotorConfig;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.intake.commands.IntakeCmds;
+import frc.robot.operator.commands.ArmElevComboMoveCmds;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 import frc.robot.swerve.commands.LockSwerve;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
@@ -62,15 +63,14 @@ public class OperatorGamepad extends Gamepad {
         gamepad.selectButton.onTrue(new RunCommand(() -> Robot.arm.setArmState(ArmStates.RUNNING)));
         gamepad.startButton .onTrue(ArmCmds.ResetArmEncoderCmd());
         
-        gamepad.Dpad.Up     .onTrue(OperatorGamepadCmds.RunArmElevToHighPosCmd());
+        gamepad.Dpad.Up     .onTrue(ArmElevComboMoveCmds.SetArmRunElevHighPosCmd());
         // gamepad.Dpad.Down   .onTrue(OperatorGamepadCmds.SetArmElevToEjectLowPosCmd());
         gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.RunArmElevToIntakePosCmd());
-        gamepad.Dpad.Left   .onTrue(OperatorGamepadCmds.RunArmElevToMidPosCmd());
+        gamepad.Dpad.Left   .onTrue(ArmElevComboMoveCmds.SetArmRunElevMidPosCmd());
         gamepad.Dpad.Right  .onTrue(OperatorGamepadCmds.RunArmElevToStowPosCmd());
 
         gamepad.rightBumper .onTrue(OperatorGamepadCmds.ControlArmElevByJoysticksCmd());
         gamepad.leftBumper  .whileTrue(IntakeCmds.IntakeByJoystickCmd());
-
     }
 
     @Override
@@ -79,7 +79,12 @@ public class OperatorGamepad extends Gamepad {
     public void setupDisabledButtons() {}
 
     public double getElevInput() {
-        return elevThrottleCurve.calculateMappedVal(gamepad.rightStick.getY()) ;
+        // return elevThrottleCurve.calculateMappedVal(gamepad.rightStick.getY()) ;
+        double input = gamepad.rightStick.getY();
+        if (Math.abs(input) < OperatorGamepadConfig.elevSpeedDeadband) {
+            input = 0;
+        }
+        return input * OperatorGamepadConfig.elevSpeedScaler;
     }
 
     public double getElevInputWFF() {
@@ -88,7 +93,13 @@ public class OperatorGamepad extends Gamepad {
     }
 
     public double getArmInput() {
-        return armThrottleCurve.calculateMappedVal(gamepad.leftStick.getY());
+        // return gamepad.leftStick.getY();
+        double input = gamepad.leftStick.getY();
+        if (Math.abs(input) < OperatorGamepadConfig.armSpeedDeadband) {
+            input = 0;
+        }
+        return input * OperatorGamepadConfig.armSpeedScaler;
+        // return armThrottleCurve.calculateMappedVal(gamepad.leftStick.getY());
     }
 
     // public double getArmInputWFF() {
