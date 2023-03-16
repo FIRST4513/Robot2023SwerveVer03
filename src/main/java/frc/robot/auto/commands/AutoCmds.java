@@ -99,6 +99,22 @@ public class AutoCmds {
         );
     }
 
+    // -------------- Place, Cross Short Line and get on Charging Station Comands ---------------------
+    // This only used for short cross Red and Blue
+    public static Command PlaceAndCrossShortAndScaleCmd( String level,
+                                                          PathPlannerTrajectory pathA,
+                                                          PathPlannerTrajectory pathB ) {
+        return new SequentialCommandGroup(  
+            PlaceOnlyCmd(level),
+            new SequentialCommandGroup(  
+                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathA, 10.0),
+                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 5.0),
+                AutoBalanceCmd().withTimeout(3.0),
+                new LockSwerve()
+            )
+        );
+    }
+
     // ----------------------- Get on Charging Platform  -------------------
     public static Command GetOnChargingTableCmd( PathPlannerTrajectory pathA, PathPlannerTrajectory pathB, boolean autoLevel ) {
         if (autoLevel) {

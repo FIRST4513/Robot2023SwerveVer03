@@ -32,6 +32,7 @@ public class Auto {
     public static String levelSelect;
     public static String testSelect;
     public static String allianceSelect;
+    public static String level = "";
 
     public static double armPosition;
     public static double elevStartPos;
@@ -44,11 +45,23 @@ public class Auto {
     static PathPlannerTrajectory    blueRightCubeLongPath  = PathPlanner.loadPath(
                                     "BlueRightCubeLong", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);        
     static PathPlannerTrajectory    blueLeftCubeShortPath  = PathPlanner.loadPath(
-                                    "BlueLeftCubeShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);     
+                                    "BlueLeftCubeShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);    
+    // ----- Center Scale Paths ------                                     
     static PathPlannerTrajectory    CenterScalePathA  = PathPlanner.loadPath(
                                     "CtrScale1", 3.0, 3.0);
     static PathPlannerTrajectory    CenterScalePathB  = PathPlanner.loadPath(
                                     "CtrScale2", 0.5, 0.5);
+    // ----- Blue Short Cross and Scale Paths ------
+    static PathPlannerTrajectory    BlueShortCrossScalePathA  = PathPlanner.loadPath(
+                                    "BlueShortCrossScale1", 4.0, 4.0);
+    static PathPlannerTrajectory    BlueShortCrossScalePathB  = PathPlanner.loadPath(
+                                    "BlueShortCrossScale2", 0.5, 0.5);
+    // ----- Red Short Cross and Scale Paths ------
+    static PathPlannerTrajectory    RedShortCrossScalePathA  = PathPlanner.loadPath(
+                                    "RedShortCrossScale1", 4.0, 4.0);
+    static PathPlannerTrajectory    RedShortCrossScalePathB  = PathPlanner.loadPath(
+                                    "RedShortCrossScale2", 0.5, 0.5);
+    // ----- red Right Cube Old Paths ----
     static PathPlannerTrajectory    redRightCubeShortPath  = PathPlanner.loadPath(
                                     "RedRightCubeShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);        
     static PathPlannerTrajectory    redLeftCubeLongPath  = PathPlanner.loadPath(
@@ -211,14 +224,28 @@ public class Auto {
             );
         }
 
-        // ----------------------- Score and Get on Charging Platform  -------------------
+        // ----------------------- Score and Get on Charging Platform (Ctr Only)  -------------------
         if (place() && !cross() && dock()) {
-            System.out.println("********* Score and get on Platform Selection *********");
+            System.out.println("********* Score and get on Platform from CTR Only Selection *********");
             // if auto level
             if ( low() )    { return AutoCmds.PlaceAndChargingTableCmd( "Low",  CenterScalePathA, CenterScalePathB, autoLevel()); }
             if ( mid() )    { return AutoCmds.PlaceAndChargingTableCmd( "Mid",  CenterScalePathA, CenterScalePathB, autoLevel()); }
             if ( high() )   { return AutoCmds.PlaceAndChargingTableCmd( "High", CenterScalePathA, CenterScalePathB, autoLevel()); }
             return new PrintCommand("Error on auto place only paramter");
+        }
+
+        
+        // ----------------------- Score, Short Cross Line and Get on Charging Platform -------------------
+        if (place() && cross() && dock()) {
+            // This is only setup for the Sort line BlueLeft and RedRight position
+            // to avoid 4 mps over cable tray on long cross
+            System.out.println("********* Score cross line and get on Platform Selection *********");
+            if ( low() )      {level = "Low";}
+            if ( mid() )      {level = "Mid";}
+            if ( high() )     {level = "High";}
+            if ( blueLeft())  { return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  BlueShortCrossScalePathA, BlueShortCrossScalePathB); }
+            if ( redRight())  { return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  RedShortCrossScalePathA, RedShortCrossScalePathA); }
+            return new PrintCommand("Error on auto place cross short and dock paramter");
         }
 
         return new PrintCommand("Error on auto Commands Selection");
