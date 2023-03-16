@@ -66,17 +66,17 @@ public class RobotTelemetry extends TelemetrySubsystem {
         tab.add("Level Selection",     Auto.levelChooser)     .withPosition(0, 8).withSize(3, 1);
 
         tab.addNumber("Elev Ht",         () -> Robot.elevator.getElevHeightInches())    .withPosition(3, 0).withSize(2, 1);
-        tab.addNumber("Elev MM Tgt",     () -> Robot.elevator.getTargetHeight())        .withPosition(3, 2).withSize(2, 1);
-        tab.addString("Elev Bottom Sw",  () -> Robot.elevator.getLowerLimitSwStatus())  .withPosition(3, 4).withSize(2, 1);
-        tab.addString("Elev Top Limit",  () -> Robot.elevator.getUpperLimitSwStatus())  .withPosition(3, 6).withSize(2, 1);
-        tab.addString("Elev Brake",      () -> Robot.elevator.getBrakeStatus())         .withPosition(3, 8).withSize(2, 1);
+        tab.addNumber("Elev MM Tgt",     () -> Robot.elevator.getTargetHeight())        .withPosition(3, 1).withSize(2, 1);
+        tab.addString("Elev Bottom Sw",  () -> Robot.elevator.getLowerLimitSwStatus())  .withPosition(3, 2).withSize(2, 1);
+        tab.addString("Elev Top Limit",  () -> Robot.elevator.getUpperLimitSwStatus())  .withPosition(3, 3).withSize(2, 1);
+        tab.addString("Elev Brake",      () -> Robot.elevator.getBrakeStatus())         .withPosition(3, 4).withSize(2, 1);
 
         tab.addNumber("Arm Angle",       () -> Robot.arm.getArmAngle())               .withPosition(5, 0) .withSize(2, 1);
-        tab.addNumber("Arm MM Tgt",      () -> Robot.arm.getTargetAngle())            .withPosition(5, 2) .withSize(2, 1);
-        tab.addString("Arm Extend Sw",   () -> Robot.arm.extendLimitSwitchStatus())   .withPosition(5, 4) .withSize(2, 1);
-        tab.addString("Arm Retract Sw",  () -> Robot.arm.retractLimitSwitchStatus())  .withPosition(5, 6) .withSize(2, 1);
-        tab.addString("Arm Brake",       () -> Robot.arm.getBrakeStatus())            .withPosition(5, 8) .withSize(2, 1);        
-        tab.addString("Arm Ctrl State",  () -> Robot.arm.getArmState())               .withPosition(5, 10).withSize(2, 1);
+        tab.addNumber("Arm MM Tgt",      () -> Robot.arm.getTargetAngle())            .withPosition(5, 1) .withSize(2, 1);
+        tab.addString("Arm Extend Sw",   () -> Robot.arm.extendLimitSwitchStatus())   .withPosition(5, 2) .withSize(2, 1);
+        tab.addString("Arm Retract Sw",  () -> Robot.arm.retractLimitSwitchStatus())  .withPosition(5, 3) .withSize(2, 1);
+        tab.addString("Arm Brake",       () -> Robot.arm.getBrakeStatus())            .withPosition(5, 4) .withSize(2, 1);        
+        tab.addString("Arm Ctrl State",  () -> Robot.arm.getArmState())               .withPosition(5, 5) .withSize(2, 1);
 
         tab.addNumber("Intake Sensor",   () -> Robot.intake.getSensorVal())         .withPosition(7, 0).withSize(2, 1);
         tab.addBoolean("Intake Detect",  () -> Robot.intake.isGamepieceDetected())  .withPosition(7, 2).withSize(2, 1);

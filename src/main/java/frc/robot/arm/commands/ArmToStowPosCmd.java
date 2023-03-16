@@ -15,6 +15,7 @@ import frc.robot.elevator.ElevatorConfig;
 
 public class ArmToStowPosCmd extends CommandBase {
     boolean readyToLower;
+    boolean needsToBringArmBack;
 
     public ArmToStowPosCmd(double timeout) {
         addRequirements(Robot.arm);
@@ -25,24 +26,37 @@ public class ArmToStowPosCmd extends CommandBase {
     @Override
     public void initialize() {
         System.out.println("ArmToStowPosCmd - Init");
+        if (Robot.arm.isArmOutside()) {
+            needsToBringArmBack = true;
+        } else {
+            needsToBringArmBack = false;
+        }
         readyToLower = false;
     }
 
     @Override
     public void execute() {
         System.out.println("ArmToStowPosCmd - Execute, readyToLower: " + readyToLower);
-        if (!readyToLower) {
-            Robot.arm.setMMTargetAngle(ArmConfig.ArmAngleStowPos);
-            Robot.elevator.setMMheight(ElevatorConfig.ElevBumperClearHt);
-            if (Robot.elevator.isMMtargetReached()) {
-                readyToLower = true;
+        if (needsToBringArmBack) {
+            Robot.arm.setMMTargetAngle(0);
+            if (Robot.arm.getArmAngle() < 10) {
+                needsToBringArmBack = false;
             }
-        } else {
-            if (Robot.arm.mCurrArmAngle < -22.5) {
-                Robot.elevator.elevSetSpeed(ElevatorConfig.zeroPwr);
-                // Robot.elevator.setMMheight(ElevatorConfig.ElevStoreHt);
-            } else {
+        }
+        else {
+            if (!readyToLower) {
+                Robot.arm.setMMTargetAngle(ArmConfig.ArmAngleStowPos);
                 Robot.elevator.setMMheight(ElevatorConfig.ElevBumperClearHt);
+                if (Robot.elevator.isMMtargetReached()) {
+                    readyToLower = true;
+                }
+            } else {
+                if (Robot.arm.mCurrArmAngle < -22.5) {
+                    Robot.elevator.elevSetSpeed(ElevatorConfig.zeroPwr);
+                    // Robot.elevator.setMMheight(ElevatorConfig.ElevStoreHt);
+                } else {
+                    Robot.elevator.setMMheight(ElevatorConfig.ElevBumperClearHt);
+                }
             }
         }
     }
@@ -54,7 +68,7 @@ public class ArmToStowPosCmd extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if ((readyToLower) && Robot.elevator.mCurrElevHt < 2) {
+        if ((readyToLower) && Robot.elevator.mCurrElevHt < 0.5) {
             return true;
         }
         return false;

@@ -86,4 +86,7 @@ public class ArmCmds {
     public static Command ArmRunToHighPosCmd() {
         return new ArmDriveForSecondsCmd(ArmConfig.ArmAngleEjectHighPos, 5.0);
     }
+    public static Command ArmRunToZeroCmd() {
+        return new ArmDriveForSecondsCmd(0, 2.0);
+    }
 }

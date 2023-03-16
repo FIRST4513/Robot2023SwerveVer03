@@ -28,7 +28,7 @@ public class ArmConfig {
     public final static double ArmAngleStowPos      = -25.0;
     public final static double ArmAngleIntakePos    =   1.0;  // 18.5;
     public final static double ArmAngleEjectLowPos  =   0.0;  // stow mainly used for low eject though
-    public final static double ArmAngleEjectMidPos  =  24.0;
+    public final static double ArmAngleEjectMidPos  =  33.0;
     public final static double ArmAngleEjectHighPos =  70.0;
 
     // ------ Limit Switches ------

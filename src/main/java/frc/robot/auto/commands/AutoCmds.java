@@ -17,6 +17,7 @@ import frc.robot.autoBalance.commands.AutoBalanceCommand;
 import frc.robot.elevator.commands.ElevatorCmds;
 import frc.robot.elevator.commands.ElevatorHoldPosCmd;
 import frc.robot.intake.commands.IntakeCmds;
+import frc.robot.operator.commands.ArmElevComboMoveCmds;
 import frc.robot.operator.commands.OperatorGamepadCmds;
 import frc.robot.swerve.commands.LockSwerve;
 import frc.robot.trajectories.commands.TrajectoriesCmds;
@@ -30,15 +31,15 @@ public class AutoCmds {
     }
     
     // --------------- Place Cube Only Command ------------------
-    public static Command PlaceCubeOnlyCmd( String level) {
+    public static Command PlaceOnlyCmd( String level ) {
         return new SequentialCommandGroup(           
             IntializeRobotFromPoseCmd(Auto.startPose),
-            PlaceCubeCmd( level )
+            PlaceCmd( level )
         );
     }
 
     // ----------------- Place Cube Commands ---------------------
-    public static Command PlaceCubeCmd( String level ) {
+    public static Command PlaceCmd( String level ) {
         if (level == "Low") {
             // Set position and Gyro Heading based on position
             return new SequentialCommandGroup(
@@ -47,9 +48,7 @@ public class AutoCmds {
                 // IntakeCmds.IntakeEjectUntilNoGamepieceCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
                 // IntakeCmds.IntakeStopCmd(),
                 // OperatorGamepadCmds.SetArmElevToStorePosFromLowSafeCmd()
-                new InstantCommand(() -> Robot.intake.setMotorEject()),
-                new DelayCmd(1.0),
-                new InstantCommand(() -> Robot.intake.stopMotors())
+                IntakeCmds.IntakeEjectRunCmd().withTimeout(0.25)
             );
         }
         if (level == "Mid") {
@@ -60,7 +59,26 @@ public class AutoCmds {
                 // IntakeCmds.IntakeEjectUntilNoGamepieceCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
                 // IntakeCmds.IntakeStopCmd(),
                 // OperatorGamepadCmds.SetArmElevToStorePosFromMidSafeCmd()
-                new PrintCommand("Mid")
+                IntakeCmds.IntakeHoldRunCmd().withTimeout(.01),
+                ArmElevComboMoveCmds.SetArmRunElevMidPosCmd(),
+                new DelayCmd(3.0).until(() -> Robot.arm.isMMtargetReached()),
+                new DelayCmd(.25),
+                IntakeCmds.IntakeEjectRunCmd().withTimeout(0.25),
+                IntakeCmds.IntakeStopCmd(),
+                ArmCmds.ArmRunToZeroCmd().until(() -> Robot.arm.isMMtargetReached()),
+                OperatorGamepadCmds.RunArmElevToStowPosCmd()
+            );
+        }
+        if (level == "High") {
+            return new SequentialCommandGroup(
+                IntakeCmds.IntakeHoldRunCmd().withTimeout(.01),
+                ArmElevComboMoveCmds.SetArmRunElevHighPosCmd(),
+                new DelayCmd(3.0).until(() -> Robot.arm.isMMtargetReached()),
+                new DelayCmd(.25),
+                IntakeCmds.IntakeEjectRunCmd().withTimeout(0.25),
+                IntakeCmds.IntakeStopCmd(),
+                ArmCmds.ArmRunToZeroCmd().until(() -> Robot.arm.isMMtargetReached()),
+                OperatorGamepadCmds.RunArmElevToStowPosCmd()
             );
         }
         return new PrintCommand("Error on auto place only paramter");
@@ -76,24 +94,35 @@ public class AutoCmds {
     // -------------- Place and Cross Line Comands ---------------------
     public static Command PlaceAndCrossCmd( String level, PathPlannerTrajectory path ) {
         return new SequentialCommandGroup(  
-            PlaceCubeCmd(level),
+            PlaceOnlyCmd(level),
             CrossLineOnlyCmd(path)
         );
     }
 
     // ----------------------- Get on Charging Platform  -------------------
-    public static Command GetOnChargingTableCmd( PathPlannerTrajectory path ) {
-        return new SequentialCommandGroup(  
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path, 10.0),
-            AutoBalanceCmd()            
-        );
+    public static Command GetOnChargingTableCmd( PathPlannerTrajectory pathA, PathPlannerTrajectory pathB, boolean autoLevel ) {
+        if (autoLevel) {
+            return new SequentialCommandGroup(  
+                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathA, 10.0),
+                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 10.0),
+                AutoBalanceCmd().withTimeout(3.0),
+                new LockSwerve()
+            );
+        }
+        else {
+            return new SequentialCommandGroup(  
+                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathA, 10.0),
+                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 10.0),
+                new LockSwerve()
+            );
+        }
     }
 
     // ----------------------- Score and Get on Charging Platform  -------------------
-    public static Command PlaceAndChargingTableCmd( String level, PathPlannerTrajectory path ) {
+    public static Command PlaceAndChargingTableCmd( String level, PathPlannerTrajectory pathA, PathPlannerTrajectory pathB, boolean autoLevel ) {
         return new SequentialCommandGroup(  
-            PlaceCubeCmd(level),
-            GetOnChargingTableCmd( path )
+            PlaceCmd(level),
+            GetOnChargingTableCmd( pathA, pathB, autoLevel )
         );
     }
 

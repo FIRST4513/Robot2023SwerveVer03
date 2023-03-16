@@ -16,7 +16,7 @@ public class IntakeConfig {
     public static final NeutralMode intakeNeutralMode = NeutralMode.Coast;
 
     /* Inverts */
-    public static final boolean intakeMotorInvert = false;
+    public static final boolean intakeMotorInvert = true;
 
     // increase to reduce jitter
     public static final int intakeAllowableError = 0;

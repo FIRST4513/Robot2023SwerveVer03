@@ -21,7 +21,7 @@ public class ElevatorConfig {
     public final static double ElevEjectHighHt        = KElevMaxTopHt;  // Position to Score a Cube/Cone in HIGH Position
 
     // ------ Elevator Speed Constants -----
-    public final static double zeroPwr              = -0.125;
+    public final static double zeroPwr              = -0.15;
     public final static double kMaxPwr              = +1.0;
     public final static double lowerMaxPwr          = -0.20;
     public final static double raiseMaxPwr          = +0.60;

@@ -45,8 +45,10 @@ public class Auto {
                                     "BlueRightCubeLong", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);        
     static PathPlannerTrajectory    blueLeftCubeShortPath  = PathPlanner.loadPath(
                                     "BlueLeftCubeShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);     
-    static PathPlannerTrajectory    CenterScalePath  = PathPlanner.loadPath(
-                                    "CtrScale", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);
+    static PathPlannerTrajectory    CenterScalePathA  = PathPlanner.loadPath(
+                                    "CtrScale1", 3.0, 3.0);
+    static PathPlannerTrajectory    CenterScalePathB  = PathPlanner.loadPath(
+                                    "CtrScale2", 0.5, 0.5);
     static PathPlannerTrajectory    redRightCubeShortPath  = PathPlanner.loadPath(
                                     "RedRightCubeShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);        
     static PathPlannerTrajectory    redLeftCubeLongPath  = PathPlanner.loadPath(
@@ -106,21 +108,21 @@ public class Auto {
 
     // ------ Get operator selected responses from shuffleboard -----
     public static void getAutoSelections() {
-        scoreSelect =       scoreChooser.getSelected();
-        positionSelect =    positionChooser.getSelected();
-        crossSelect =       crossChooser.getSelected();
-        dockSelect =        dockChooser.getSelected();
-        levelSelect = levelChooser.getSelected();
-        //testSelect =        testChooser.getSelected();
-        allianceSelect =    allianceChooser.getSelected();
+        scoreSelect =     scoreChooser.getSelected();
+        positionSelect =  positionChooser.getSelected();
+        crossSelect =     crossChooser.getSelected();
+        dockSelect =      dockChooser.getSelected();
+        levelSelect =     levelChooser.getSelected();
+        // testSelect =      testChooser.getSelected();
+        allianceSelect =  allianceChooser.getSelected();
 
-        System.out.println("Score Select = " +      scoreSelect);
-        System.out.println("Position Select = " +   positionSelect);
-        System.out.println("Cross Select = " +      crossSelect);
-        System.out.println("Dock Select = " +       dockSelect);
-        System.out.println("Level Select = " +       levelSelect);
-        System.out.println("Alliance Select = " +   allianceSelect);
-        //System.out.println("Test Select = " +       testSelect);
+        System.out.println("Score Select = " +     scoreSelect);
+        System.out.println("Position Select = " +  positionSelect);
+        System.out.println("Cross Select = " +     crossSelect);
+        System.out.println("Dock Select = " +      dockSelect);
+        System.out.println("Level Select = " +     levelSelect);
+        System.out.println("Alliance Select = " +  allianceSelect);
+        // System.out.println("Test Select = " +      testSelect);
     }
 
     // ------------------------------------------------------------------------
@@ -149,13 +151,13 @@ public class Auto {
         if (placeOnly()) {
             System.out.println("********* Place Only Selection *********");
             if ( low() ) {
-                return AutoCmds.PlaceCubeOnlyCmd("Low");
+                return AutoCmds.PlaceOnlyCmd("Low");
             } 
             if ( mid() ) {
-                return AutoCmds.PlaceCubeOnlyCmd("Mid");
+                return AutoCmds.PlaceOnlyCmd("Mid");
             }
             if ( high() ) {
-                return AutoCmds.PlaceCubeOnlyCmd("High");
+                return AutoCmds.PlaceOnlyCmd("High");
             }
             return new PrintCommand("ERROR: Invalid place only auto command");
         }
@@ -164,9 +166,9 @@ public class Auto {
         if (crossOnly()) {
             System.out.println("********* Cross Line Only Selection *********");
             if (redRight())     { return AutoCmds.CrossLineOnlyCmd(redRightCubeShortPath); }
-            if (redLeft())      { return AutoCmds.CrossLineOnlyCmd(redLeftCubeLongPath); }
+            if (redLeft())      { return AutoCmds.CrossLineOnlyCmd(redLeftCubeLongPath);   }
             if (blueRight())    { return AutoCmds.CrossLineOnlyCmd(blueRightCubeLongPath); }
-            if (blueLeft())     {return AutoCmds.CrossLineOnlyCmd(blueLeftCubeShortPath);  }
+            if (blueLeft())     { return AutoCmds.CrossLineOnlyCmd(blueLeftCubeShortPath); }
             return new PrintCommand("ERROR: Invalid cross only auto command");
         }
     
@@ -187,6 +189,13 @@ public class Auto {
                 if ( blueLeft() )    { return AutoCmds.PlaceAndCrossCmd( "Mid", blueLeftCubeShortPath); }
                 return new PrintCommand("ERROR: Invalid place and cross auto command");
             }
+            if ( high() ){
+                if ( redRight() )    { return AutoCmds.PlaceAndCrossCmd( "High", redRightCubeShortPath); }
+                if ( redLeft() )     { return AutoCmds.PlaceAndCrossCmd( "High", redLeftCubeLongPath);   }
+                if ( blueRight() )   { return AutoCmds.PlaceAndCrossCmd( "High", blueRightCubeLongPath); }
+                if ( blueLeft() )    { return AutoCmds.PlaceAndCrossCmd( "High", blueLeftCubeShortPath); }
+                return new PrintCommand("ERROR: Invalid place and cross auto command");
+            }
             return new PrintCommand("Error on auto place and cross only paramter");
         }
 
@@ -194,20 +203,25 @@ public class Auto {
         if (dockOnly()) {
             System.out.println("********* Dock only Selection *********");
             return new SequentialCommandGroup(
-                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0),
-                AutoCmds.AutoBalanceCmd()
+                // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePath, 5.0),
+                // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePathA, 5.0),
+                // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePathB, 5.0)
+                // AutoCmds.AutoBalanceCmd()
+                AutoCmds.GetOnChargingTableCmd(CenterScalePathA, CenterScalePathB, autoLevel())
             );
         }
 
         // ----------------------- Score and Get on Charging Platform  -------------------
         if (place() && !cross() && dock()) {
             System.out.println("********* Score and get on Platform Selection *********");
-            if ( low() )    { return AutoCmds.PlaceAndChargingTableCmd( "Low", CenterScalePath); }
-            if ( mid() )    { return AutoCmds.PlaceAndChargingTableCmd( "Mid", CenterScalePath); }
+            // if auto level
+            if ( low() )    { return AutoCmds.PlaceAndChargingTableCmd( "Low",  CenterScalePathA, CenterScalePathB, autoLevel()); }
+            if ( mid() )    { return AutoCmds.PlaceAndChargingTableCmd( "Mid",  CenterScalePathA, CenterScalePathB, autoLevel()); }
+            if ( high() )   { return AutoCmds.PlaceAndChargingTableCmd( "High", CenterScalePathA, CenterScalePathB, autoLevel()); }
             return new PrintCommand("Error on auto place only paramter");
         }
 
-       return new PrintCommand("Error on auto Commands Selection");
+        return new PrintCommand("Error on auto Commands Selection");
     }
 
 
@@ -263,7 +277,7 @@ public class Auto {
     }
     
     private static boolean place() {
-        if (low() || mid() ) { return true; }
+        if (low() || mid() || high()) { return true; }
         return false;
     }
 
@@ -292,19 +306,24 @@ public class Auto {
         return false;
     }
 
+    private static boolean autoLevel() {
+        if (levelSelect.equals(AutoConfig.kYesSelect)) { return true; }
+        return false;
+    }
+
     private static boolean red() {
-        if (allianceSelect == AutoConfig.kAlianceAutoSelect) {
+        if (allianceSelect.equals(AutoConfig.kAlianceAutoSelect)) {
             if (DriverStation.getAlliance() == Alliance.Red) { return true; }
         }
-        if (allianceSelect == AutoConfig.kAlianceRedSelect)  { return true; }
+        if (allianceSelect.equals(AutoConfig.kAlianceRedSelect))  { return true; }
         return false;
     }
 
     private static boolean blue() {
-        if (allianceSelect == AutoConfig.kAlianceAutoSelect) {
+        if (allianceSelect.equals(AutoConfig.kAlianceAutoSelect)) {
             if (DriverStation.getAlliance() == Alliance.Blue) { return true; }
         }
-        if (allianceSelect == AutoConfig.kAlianceBlueSelect)  { return true; }
+        if (allianceSelect.equals(AutoConfig.kAlianceBlueSelect))  { return true; }
         return false;
     }
 
