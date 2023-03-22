@@ -42,7 +42,7 @@ public class RobotTelemetry extends TelemetrySubsystem {
         m_ArmTelemetry =            new ArmTelemetry(Robot.arm);
         m_ElevTelemetry =           new ElevatorTelemetry(Robot.elevator);
         //m_IntakeTelemetry =         new IntakeTelemetry(Robot.intake);
-        // m_SwerveTelemetry =         new SwerveTelemetry(Robot.swerve);
+        m_SwerveTelemetry =         new SwerveTelemetry(Robot.swerve);
         // m_PilotTelemetry =          new PilotGamepadTelemetry(Robot.pilotGamepad); ;
         //m_OperatorTelemetry =       new OperatorGamepadTelemetry(Robot.operatorGamepad); ;
     }

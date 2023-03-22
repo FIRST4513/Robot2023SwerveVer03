@@ -48,9 +48,9 @@ public class Auto {
                                     "BlueLeftCubeShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);    
     // ----- Center Scale Paths ------                                     
     static PathPlannerTrajectory    CenterScalePathA  = PathPlanner.loadPath(
-                                    "CtrScale1", 3.0, 3.0);
+                                    "CtrScale1", 3.0, 4.0);
     static PathPlannerTrajectory    CenterScalePathB  = PathPlanner.loadPath(
-                                    "CtrScale2", 0.5, 0.5);
+                                    "CtrScale2", 2.0, 1.0);
     // ----- Blue Short Cross and Scale Paths ------
     static PathPlannerTrajectory    BlueShortCrossScalePathA  = PathPlanner.loadPath(
                                     "BlueShortCrossScale1", 4.0, 4.0);
@@ -100,7 +100,7 @@ public class Auto {
         dockChooser.addOption(          "Dock",         AutoConfig.kYesSelect);
 
         // Selector for leveling on charge platform
-        levelChooser.setDefaultOption("Do Nothing", AutoConfig.kNoSelect);
+        levelChooser.setDefaultOption("No Auto Level", AutoConfig.kNoSelect);
         levelChooser.addOption("Auto Level", AutoConfig.kYesSelect);
 
         // Selector for Crossing the Line to score

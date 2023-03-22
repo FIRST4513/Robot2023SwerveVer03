@@ -41,7 +41,7 @@ public class PilotGamepad extends Gamepad {
     public void setupTeleopButtons() {
         // "A" and "X" Button - intake eject and rpv
         gamepad.aButton.onTrue(IntakeCmds.IntakeEjectRunCmd());
-        gamepad.xButton.onTrue(PilotGamepadCmds.RpvPilotSwerveCmd());
+        gamepad.xButton.whileTrue(PilotGamepadCmds.RpvPilotSwerveCmd());
         
         // "Start" Button - Reset Gyro to 0
         gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());  // possible reset robo odo as well?

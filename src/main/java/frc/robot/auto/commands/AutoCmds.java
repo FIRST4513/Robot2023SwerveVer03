@@ -119,16 +119,21 @@ public class AutoCmds {
     public static Command GetOnChargingTableCmd( PathPlannerTrajectory pathA, PathPlannerTrajectory pathB, boolean autoLevel ) {
         if (autoLevel) {
             return new SequentialCommandGroup(  
-                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathA, 10.0),
-                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 10.0),
-                AutoBalanceCmd().withTimeout(3.0),
+                // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathA, 10.0),
+                // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 10.0),
+                // AutoBalanceCmd().withTimeout(3.0),
+                // new LockSwerve()
+                new CenterDriveOnCmd(),
                 new LockSwerve()
             );
         }
         else {
-            return new SequentialCommandGroup(  
-                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathA, 10.0),
-                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 10.0),
+            return new SequentialCommandGroup(
+                // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathA, 10.0),
+                // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 10.0),
+                // new LockSwerve()
+                new CenterDriveOnCmd(),
+                // new AutoBalanceCommand(),
                 new LockSwerve()
             );
         }

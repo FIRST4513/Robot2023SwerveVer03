@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
+import frc.robot.Robot;
+
 import java.util.Map;
 
 public class SwerveTelemetry {
@@ -26,6 +28,9 @@ public class SwerveTelemetry {
 
         tab.addNumber("Gyro Incline Raw",   () -> swerve.gyro.getGyroInclineRaw()).withPosition(12, 4).withSize(2, 1);
         tab.addNumber("Gyro Incline Angle", () -> swerve.gyro.getGyroInclineAngle()).withPosition(12, 5).withSize(2, 1);
+
+        tab.addNumber("Pilot Input X", () -> Robot.pilotGamepad.getDriveFwdPositive()).withPosition(2,10).withSize(2, 1);
+        tab.addNumber("Pilot Input Y", () -> Robot.pilotGamepad.getDriveLeftPositive()).withPosition(2,11).withSize(2, 1);
 
         Mod0Name = swerve.mSwerveMods[0].getName();
         Mod1Name = swerve.mSwerveMods[1].getName();
