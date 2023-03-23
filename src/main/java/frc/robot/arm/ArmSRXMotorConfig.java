@@ -36,8 +36,8 @@ public class ArmSRXMotorConfig {
      *                              1/100 second of travel ( 1.5 degrees )  = 2,700 counts
      */
 
-    public final double motionCruiseVelocity = 24240;  // approx 30º per second (809*30)
-    public final double motionAcceleration   =  8080;  // approx 3 seconds to acquire cruise vel (24240/3sec)
+    public final double motionCruiseVelocity = 36405;  // 24240;  // approx 30º per second (809*30)
+    public final double motionAcceleration   = 12135;  // approx 3 seconds to acquire cruise vel (24240/3sec)
     public static final int allowableError   = 809;    // approx 1º allowable error for MM
     public final int    motionCurveStrength  = 0;      // 0 No smoothing to 8 Max smoothing
 

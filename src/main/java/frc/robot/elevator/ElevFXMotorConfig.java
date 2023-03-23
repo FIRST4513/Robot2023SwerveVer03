@@ -23,7 +23,7 @@ public class ElevFXMotorConfig {
      *                              1  inch in 1/100 second ( 100 ms = 3,316 cnts)
      *                              1 inch = 3,316 sensor units
      */
-    public final double motionCruiseVelocity        = 20000; // 10 inches per second
+    public final double motionCruiseVelocity        = 30000; // 10 inches per second
     public final double motionAcceleration          = 30000; // 1 second to get up to cruise velocity
     public final int    motionCurveStrength         = 0;    // 0 no smoothing to 8 max smoothing
 
