@@ -12,7 +12,7 @@ public class OperatorGamepadConfig {
     public static final double intakeSpeedOffset   = 0;
 
     public static final double elevSpeedExp        = 15;
-    public static final double elevSpeedScaler     = -0.5;
+    public static final double elevSpeedScaler     = -0.75;
     public static final double elevSpeedDeadband   = 0.07;
     public static final double elevSpeedOffset     = 0;
 

@@ -42,6 +42,7 @@ public class ElevatorSubSys extends SubsystemBase {
    @Override
    public void periodic() {
        updateCurrentElevPosition();
+       System.out.println(m_motor.get());
     }
 
     // --------------------------------------------
@@ -110,13 +111,18 @@ public class ElevatorSubSys extends SubsystemBase {
                 return;
             }
             //  This is for slowing down as we approach the bottom    		
-            if ( mCurrElevHt <= ElevatorConfig.KLimitElevBottomSlowHt ) {
-                speed = ElevatorConfig.KLowerSlowSpeed;
-            }
+            if (mCurrElevHt <= ElevatorConfig.KLimitElevBottomSlowHt1) { speed = ElevatorConfig.KLowerSlowSpeed1; }
+            if (mCurrElevHt <= ElevatorConfig.KLimitElevBottomSlowHt2) { speed = ElevatorConfig.KLowerSlowSpeed2; }
+            if (mCurrElevHt <= ElevatorConfig.KLimitElevBottomSlowHt3) { speed = ElevatorConfig.KLowerSlowSpeed3; }
+            // if ( mCurrElevHt <= ElevatorConfig.KLimitElevBottomSlowHt ) {
+            //     speed = ElevatorConfig.KLowerSlowSpeed;
+            // }
         }
 
         mCurrElevPwr = speed;
-        m_motor.set(mCurrElevPwr);              // Send Power to motor  
+        m_motor.set(mCurrElevPwr);              // Send Power to motor 
+        
+        // System.out.println("Speed = " + speed);
     }
 
     public void elevSetSpeed(DoubleSupplier speed) {

@@ -11,7 +11,9 @@ public class ElevatorConfig {
     // ------ Position Constatnts ------
     public final static double KElevMaxTopHt          = 31.0;          // This is the top GO NO FURTHER!
     public final static double KLimitElevTopSlowHt    = 28.0;		   // Start slowing the raise at this position
-    public final static double KLimitElevBottomSlowHt = 1.0;           // Start slowing the lower at this position
+    public final static double KLimitElevBottomSlowHt1 = 3.0;           // Start slowing the lower at this position
+    public final static double KLimitElevBottomSlowHt2 = 2.0;           // Start slowing the lower at this position
+    public final static double KLimitElevBottomSlowHt3 = 1.0;           // Start slowing the lower at this position
 
     public final static double ElevBumperClearHt      = 13;             // Position to raise to clear bumper with intake
     public final static double ElevIntakeHt           = 1.5;            // Position to intake from ground
@@ -23,7 +25,7 @@ public class ElevatorConfig {
     // ------ Elevator Speed Constants -----
     public final static double zeroPwr              = -0.15;
     public final static double kMaxPwr              = +1.0;
-    public final static double lowerMaxPwr          = -0.20;
+    public final static double lowerMaxPwr          = -0.30;
     public final static double raiseMaxPwr          = +0.60;
 
     // These are outside of Motion Magic control
@@ -31,7 +33,9 @@ public class ElevatorConfig {
     public final static double KRaiseSlowSpeed      = +0.15;
     public final static double KHoldSpeedDefault    = +0.08;
     
-    public final static double KLowerSlowSpeed      = -0.075;
+    public final static double KLowerSlowSpeed1     = -0.1;
+    public final static double KLowerSlowSpeed2     = -0.05;
+    public final static double KLowerSlowSpeed3     = -0.025;
     public final static double KLowerSpeedDefault   = -0.25;
     
     // ------ Limit Switches ------------
