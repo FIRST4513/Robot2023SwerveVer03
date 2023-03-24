@@ -1,5 +1,7 @@
 package frc.robot.auto.commands;
 
+import java.util.function.DoubleSupplier;
+
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -8,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.Rmath;
 import frc.robot.Robot;
 import frc.robot.arm.commands.ArmCmds;
 // import frc.robot.arm.commands.ArmHoldPositionCmd;
@@ -78,7 +81,8 @@ public class AutoCmds {
                 IntakeCmds.IntakeEjectRunCmd().withTimeout(0.25),
                 IntakeCmds.IntakeStopCmd(),
                 ArmCmds.ArmRunToZeroCmd().until(() -> Robot.arm.isMMtargetReached()),
-                OperatorGamepadCmds.RunArmElevToStowPosCmd()
+                OperatorGamepadCmds.RunArmElevToStowPosCmd(),
+                new PrintAutoTimeCmd("************* Score High Command Complete time = ")
             );
         }
         return new PrintCommand("Error on auto place only paramter");
@@ -87,7 +91,8 @@ public class AutoCmds {
     // -------------- Cross Line Only Comands ---------------------
     public static Command CrossLineOnlyCmd( PathPlannerTrajectory path) {
         return new SequentialCommandGroup(
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path, 10.0)
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path, 10.0),
+            new PrintAutoTimeCmd("************* Cross Line Command Complete time = ")
         );
     }
 
@@ -108,8 +113,11 @@ public class AutoCmds {
             PlaceOnlyCmd(level),
             new SequentialCommandGroup(  
                 TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathA, 10.0),
+                new PrintAutoTimeCmd("************* Cross and Scale Path A Command Complete time = "),
                 TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 5.0),
+                new PrintAutoTimeCmd("************* Cross and Scale Path B Command Complete time = "),
                 AutoBalanceCmd().withTimeout(3.0),
+                new PrintAutoTimeCmd("************* Cross and Scale AutoBalance Command Complete time = "),
                 new LockSwerve()
             )
         );

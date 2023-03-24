@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.Rmath;
 import frc.lib.util.Network;
 import frc.robot.arm.ArmSubSys;
 import frc.robot.arm.commands.ArmCmds;
@@ -42,13 +43,15 @@ public class Robot extends TimedRobot {
 
     public static String MAC = "";
     public static Timer sysTimer = new Timer();
-
+    public static Timer autoTimer = new Timer();
 
     // -----------------  Robot General Methods ------------------
     @Override
     public void robotInit() {
         sysTimer.reset();			// System timer for Competition run
     	sysTimer.start();
+        autoTimer.reset();			// Autonomous timer
+    	autoTimer.start();
         Timer.delay( 2.0 );         // Delay for 2 seconds for robot to come fully up
         MAC = Network.getMACaddress();
         PathPlannerServer.startServer( 5811 ); // 5811 = port number. adjust this according to your needs
@@ -112,13 +115,14 @@ public class Robot extends TimedRobot {
     // -----------------  Autonomous Mode Methods ------------------
     @Override
     public void autonomousInit() {
-        System.out.println("Starting Auto Init");
-        resetCommandsAndButtons();
-        swerve.setLastAngleToCurrentAngle();
+        autoTimer.reset();			// Autonomous timer
+    	autoTimer.start();
         sysTimer.reset();			// System timer for Competition run
     	sysTimer.start();
         //logger.startTimer();
-        
+        System.out.println("Starting Auto Init");
+        resetCommandsAndButtons();
+        swerve.setLastAngleToCurrentAngle();
         Command autoCommand = Auto.getAutonomousCommand();
         if (autoCommand != null) {
             System.out.println("Auto Command Not null");
@@ -179,6 +183,11 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().getActiveButtonLoop().clear();
         pilotGamepad.resetConfig();     // Reset Config for all gamepads and other button bindings
         operatorGamepad.resetConfig();
+    }
+
+    public static Double getAutoTime(){
+        //return 22.2;
+        return  Rmath.mRound(autoTimer.get(), 2);
     }
 
 }
