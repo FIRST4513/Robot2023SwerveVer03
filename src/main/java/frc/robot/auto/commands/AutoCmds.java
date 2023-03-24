@@ -132,6 +132,7 @@ public class AutoCmds {
                 // AutoBalanceCmd().withTimeout(3.0),
                 // new LockSwerve()
                 new CenterDriveOnCmd(),
+                new PrintAutoTimeCmd("************* Get On Charging table Command Complete time = "),
                 new LockSwerve()
             );
         }
@@ -141,7 +142,9 @@ public class AutoCmds {
                 // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 10.0),
                 // new LockSwerve()
                 new CenterDriveOnCmd(),
+                new PrintAutoTimeCmd("************* Get On Charging table Command Complete time = "),
                 // new AutoBalanceCommand(),
+                //new PrintAutoTimeCmd("************* Get On Charging table Autobalance Command Complete time = "),
                 new LockSwerve()
             );
         }
