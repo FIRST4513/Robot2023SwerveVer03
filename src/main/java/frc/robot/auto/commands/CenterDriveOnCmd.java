@@ -18,6 +18,9 @@ public class CenterDriveOnCmd extends CommandBase {
     private double avgRunningAngle = 0;
     private double maxAvgAngle = 0;
 
+    private double START_SPEED = -0.5;
+    private double LEVEL_SPEED = -0.5;
+
     private static enum DRIVE_STAGE { FLAT, RAISE, LOWER, CENTER }
     private DRIVE_STAGE driveStage;
 
@@ -28,6 +31,9 @@ public class CenterDriveOnCmd extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        System.out.println("Start speed: " + START_SPEED);
+        System.out.println("Level speed: " + LEVEL_SPEED);
+        System.out.println("CTR DRIVE - Initiated");
         Robot.swerve.setBrakeMode(true);
         driveStage = DRIVE_STAGE.FLAT;
     }
@@ -37,6 +43,7 @@ public class CenterDriveOnCmd extends CommandBase {
     public void execute() {
         // update gryo angle variables
         updateAverages();
+        System.out.println(avgRunningAngle);
         System.out.println("CTR DRIVE - drive state: " + driveStage + " ; gyro angle: " + avgRunningAngle);
 
         // first, check for FLAT stage
@@ -47,7 +54,7 @@ public class CenterDriveOnCmd extends CommandBase {
                 return;
             }
             // if flat, drive forward at slow-ish speed
-            Robot.swerve.drive(-2.0, 0, 0, false, false);
+            Robot.swerve.drive(START_SPEED, 0, 0, false, false);
             return;
         }
         if (driveStage == DRIVE_STAGE.RAISE) {
@@ -57,7 +64,7 @@ public class CenterDriveOnCmd extends CommandBase {
                 return;
             }
             // else, continue to drive slow-ish
-            Robot.swerve.drive(-2.0, 0, 0, false, false);
+            Robot.swerve.drive(START_SPEED, 0, 0, false, false);
             return;
         }
         if (driveStage == DRIVE_STAGE.LOWER) {
@@ -67,7 +74,7 @@ public class CenterDriveOnCmd extends CommandBase {
                 return;
             }
             // else, drive a little faster
-            Robot.swerve.drive(-2.0, 0, 0, false, false);
+            Robot.swerve.drive(LEVEL_SPEED, 0, 0, false, false);
         }
         if (driveStage == DRIVE_STAGE.CENTER) {
             // do nothing, is finished will call find it an exit the command

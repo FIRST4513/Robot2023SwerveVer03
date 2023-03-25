@@ -42,7 +42,7 @@ public class ElevatorSubSys extends SubsystemBase {
    @Override
    public void periodic() {
        updateCurrentElevPosition();
-       System.out.println(m_motor.get());
+    //    System.out.println(m_motor.get());
     }
 
     // --------------------------------------------
@@ -111,9 +111,9 @@ public class ElevatorSubSys extends SubsystemBase {
                 return;
             }
             //  This is for slowing down as we approach the bottom    		
-            if (mCurrElevHt <= ElevatorConfig.KLimitElevBottomSlowHt1) { speed = ElevatorConfig.KLowerSlowSpeed1; }
-            if (mCurrElevHt <= ElevatorConfig.KLimitElevBottomSlowHt2) { speed = ElevatorConfig.KLowerSlowSpeed2; }
-            if (mCurrElevHt <= ElevatorConfig.KLimitElevBottomSlowHt3) { speed = ElevatorConfig.KLowerSlowSpeed3; }
+            if (mCurrElevHt <= ElevatorConfig.KLimitElevBottomSlowHt1) { speed = Math.max(speed, ElevatorConfig.KLowerSlowSpeed1); }
+            if (mCurrElevHt <= ElevatorConfig.KLimitElevBottomSlowHt2) { speed = Math.max(speed, ElevatorConfig.KLowerSlowSpeed2); }
+            if (mCurrElevHt <= ElevatorConfig.KLimitElevBottomSlowHt3) { speed = Math.max(speed, ElevatorConfig.KLowerSlowSpeed3); }
             // if ( mCurrElevHt <= ElevatorConfig.KLimitElevBottomSlowHt ) {
             //     speed = ElevatorConfig.KLowerSlowSpeed;
             // }

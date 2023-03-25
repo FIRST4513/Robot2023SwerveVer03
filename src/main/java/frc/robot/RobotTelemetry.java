@@ -89,7 +89,7 @@ public class RobotTelemetry extends TelemetrySubsystem {
                 .withProperties(Map.of("Min", 0, "Max", 135));
 
         tab.add("Speed Selection",    Robot.pilotGamepad.speedChooser)  .withPosition(10, 3).withSize(3, 1);
-        tab.add("Aliance Selection",  Auto.allianceChooser)             .withPosition(10, 5).withSize(3, 1);
+        // tab.add("Aliance Selection",  Auto.allianceChooser)             .withPosition(10, 5).withSize(3, 1);
 
         //tab.add("Test Selection", Auto.testChooser)             .withPosition(20, 8).withSize(3, 2);
 

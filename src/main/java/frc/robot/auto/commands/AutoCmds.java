@@ -69,7 +69,8 @@ public class AutoCmds {
                 IntakeCmds.IntakeEjectRunCmd().withTimeout(0.25),
                 IntakeCmds.IntakeStopCmd(),
                 ArmCmds.ArmRunToZeroCmd().until(() -> Robot.arm.isMMtargetReached()),
-                OperatorGamepadCmds.RunArmElevToStowPosCmd()
+                OperatorGamepadCmds.RunArmElevToStowPosCmd(),
+                new PrintAutoTimeCmd("************* Score Mid Command Complete time = ")
             );
         }
         if (level == "High") {
@@ -101,6 +102,22 @@ public class AutoCmds {
         return new SequentialCommandGroup(  
             PlaceOnlyCmd(level),
             CrossLineOnlyCmd(path)
+        );
+    }
+
+    // -------------- Place, Cross Short Line and get on Charging Station Comands ---------------------
+    // This only used for short cross Red and Blue
+    public static Command CrossShortAndScaleCmd( String level,
+                                                 PathPlannerTrajectory pathA,
+                                                 PathPlannerTrajectory pathB ) {
+        return new SequentialCommandGroup(  
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathA, 10.0),
+            new PrintAutoTimeCmd("************* Cross and Scale Path A Command Complete time = "),
+            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 5.0),
+            new PrintAutoTimeCmd("************* Cross and Scale Path B Command Complete time = "),
+            AutoBalanceCmd().withTimeout(3.0),
+            new PrintAutoTimeCmd("************* Cross and Scale AutoBalance Command Complete time = "),
+            new LockSwerve()
         );
     }
 

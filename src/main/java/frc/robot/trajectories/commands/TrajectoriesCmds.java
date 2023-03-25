@@ -33,5 +33,4 @@ public class TrajectoriesCmds {
     public static Command ResetThetaControllerCmd() {
         return new InstantCommand(() -> Robot.trajectories.resetTheta(), Robot.trajectories);
     }
-
 }

@@ -9,6 +9,7 @@ import frc.lib.gamepads.mapping.ExpCurve;
 import frc.robot.Robot;
 import frc.robot.arm.ArmSubSys.ArmStates;
 import frc.robot.arm.commands.ArmCmds;
+import frc.robot.auto.commands.CenterDriveOnCmd;
 import frc.robot.autoBalance.commands.AutoBalanceCommand;
 import frc.robot.elevator.ElevFXMotorConfig;
 import frc.robot.intake.commands.IntakeCmds;
@@ -50,7 +51,7 @@ public class OperatorGamepad extends Gamepad {
         gamepad.yButton      .onTrue(IntakeCmds.IntakeHoldRunCmd());
         gamepad.xButton      .onTrue(IntakeCmds.IntakeStopCmd());
 
-        gamepad.selectButton.whileTrue(runBalanceTestCmd());             // keep as button???
+        gamepad.selectButton.whileTrue(new CenterDriveOnCmd());             // keep as button???
         gamepad.startButton  .onTrue(ArmCmds.ResetArmEncoderCmd());
         
         gamepad.Dpad.Right   .onTrue(OperatorGamepadCmds.RunArmElevToStowPosCmd());

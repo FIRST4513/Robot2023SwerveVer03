@@ -22,7 +22,7 @@ public class Auto {
     public static final SendableChooser<String> dockChooser = new SendableChooser<>();
     public static final SendableChooser<String> levelChooser = new SendableChooser<>();
     public static final SendableChooser<String> testChooser = new SendableChooser<>();
-    public static final SendableChooser<String> allianceChooser = new SendableChooser<>();
+    // public static final SendableChooser<String> allianceChooser = new SendableChooser<>();
 
     public static HashMap<String, Command> eventMap = new HashMap<>();
     public static String scoreSelect;
@@ -112,10 +112,10 @@ public class Auto {
         testChooser.addOption(         "Red 1 Meter",  "Red1Meter");
         testChooser.addOption(         "Blue 1 Meter", "Blue1Meter");
 
-        // Selector for Aliance Color
-        allianceChooser.setDefaultOption( "Automatic",    AutoConfig.kAlianceAutoSelect);
-        allianceChooser.addOption(        "Red",          AutoConfig.kAlianceRedSelect);
-        allianceChooser.addOption(        "Blue",         AutoConfig.kAlianceBlueSelect);
+        // // Selector for Aliance Color
+        // allianceChooser.setDefaultOption( "Automatic",    AutoConfig.kAlianceAutoSelect);
+        // allianceChooser.addOption(        "Red",          AutoConfig.kAlianceRedSelect);
+        // allianceChooser.addOption(        "Blue",         AutoConfig.kAlianceBlueSelect);
     }
 
 
@@ -127,7 +127,7 @@ public class Auto {
         dockSelect =      dockChooser.getSelected();
         levelSelect =     levelChooser.getSelected();
         // testSelect =      testChooser.getSelected();
-        allianceSelect =  allianceChooser.getSelected();
+        // allianceSelect =  allianceChooser.getSelected();
 
         System.out.println("Score Select = " +     scoreSelect);
         System.out.println("Position Select = " +  positionSelect);
@@ -186,7 +186,7 @@ public class Auto {
         }
     
         // ----------------------- Place and Cross Line  -------------------
-        if ( place() && cross() ) {
+        if ( place() && cross() && !dock() ) {
             System.out.println("********* Place and Cross Selection *********");
             if ( low() ){
                 if ( redRight() )    { return AutoCmds.PlaceAndCrossCmd( "Low", redRightCubeShortPath); }
@@ -234,7 +234,16 @@ public class Auto {
             return new PrintCommand("Error on auto place only paramter");
         }
 
-        
+        // ----------------------- No Score, Short Cross Line and Get on Charging Platform -------------------
+        if (!place() && cross() && dock()) {
+            // This is only setup for the Sort line BlueLeft and RedRight position
+            // to avoid 4 mps over cable tray on long cross
+            System.out.println("********* Score cross line and get on Platform Selection *********");
+            if ( blueLeft())  { return AutoCmds.CrossShortAndScaleCmd( level,  BlueShortCrossScalePathA, BlueShortCrossScalePathB); }
+            if ( redRight())  { return AutoCmds.CrossShortAndScaleCmd( level,  RedShortCrossScalePathA, RedShortCrossScalePathB); }
+            return new PrintCommand("Error on auto place cross short and dock paramter");
+        }
+
         // ----------------------- Score, Short Cross Line and Get on Charging Platform -------------------
         if (place() && cross() && dock()) {
             // This is only setup for the Sort line BlueLeft and RedRight position
@@ -244,7 +253,7 @@ public class Auto {
             if ( mid() )      {level = "Mid";}
             if ( high() )     {level = "High";}
             if ( blueLeft())  { return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  BlueShortCrossScalePathA, BlueShortCrossScalePathB); }
-            if ( redRight())  { return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  RedShortCrossScalePathA, RedShortCrossScalePathA); }
+            if ( redRight())  { return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  RedShortCrossScalePathA, RedShortCrossScalePathB); }
             return new PrintCommand("Error on auto place cross short and dock paramter");
         }
 
@@ -339,18 +348,12 @@ public class Auto {
     }
 
     private static boolean red() {
-        if (allianceSelect.equals(AutoConfig.kAlianceAutoSelect)) {
-            if (DriverStation.getAlliance() == Alliance.Red) { return true; }
-        }
-        if (allianceSelect.equals(AutoConfig.kAlianceRedSelect))  { return true; }
+        if (DriverStation.getAlliance() == Alliance.Red) { return true; }
         return false;
     }
 
     private static boolean blue() {
-        if (allianceSelect.equals(AutoConfig.kAlianceAutoSelect)) {
-            if (DriverStation.getAlliance() == Alliance.Blue) { return true; }
-        }
-        if (allianceSelect.equals(AutoConfig.kAlianceBlueSelect))  { return true; }
+        if (DriverStation.getAlliance() == Alliance.Blue) { return true; }
         return false;
     }
 

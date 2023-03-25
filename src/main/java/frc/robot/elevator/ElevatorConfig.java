@@ -23,7 +23,7 @@ public class ElevatorConfig {
     public final static double ElevEjectHighHt        = KElevMaxTopHt;  // Position to Score a Cube/Cone in HIGH Position
 
     // ------ Elevator Speed Constants -----
-    public final static double zeroPwr              = -0.15;
+    public final static double zeroPwr              = -0.20;
     public final static double kMaxPwr              = +1.0;
     public final static double lowerMaxPwr          = -0.30;
     public final static double raiseMaxPwr          = +0.60;
@@ -33,9 +33,9 @@ public class ElevatorConfig {
     public final static double KRaiseSlowSpeed      = +0.15;
     public final static double KHoldSpeedDefault    = +0.08;
     
-    public final static double KLowerSlowSpeed1     = -0.1;
-    public final static double KLowerSlowSpeed2     = -0.05;
-    public final static double KLowerSlowSpeed3     = -0.025;
+    public final static double KLowerSlowSpeed1     = -0.175;
+    public final static double KLowerSlowSpeed2     = -0.125;
+    public final static double KLowerSlowSpeed3     = -0.0625;
     public final static double KLowerSpeedDefault   = -0.25;
     
     // ------ Limit Switches ------------
