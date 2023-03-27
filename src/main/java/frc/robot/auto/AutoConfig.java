@@ -21,7 +21,7 @@ public class AutoConfig {
     public static final String kMidSelect           = "Mid";
     public static final String kHighSelect          = "High";
     public static final String kAlianceAutoSelect   = "Auto";
-    public static final String kAlianceRedSelect   = "Red";
+    public static final String kAlianceRedSelect    = "Red";
     public static final String kAlianceBlueSelect   = "Blue";
     public static final String kCubeSelect          = "Cube";
     public static final String kConeSelect          = "Cone";
