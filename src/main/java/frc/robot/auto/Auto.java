@@ -22,7 +22,7 @@ public class Auto {
     public static final SendableChooser<String> dockChooser = new SendableChooser<>();
     public static final SendableChooser<String> levelChooser = new SendableChooser<>();
     public static final SendableChooser<String> testChooser = new SendableChooser<>();
-    // public static final SendableChooser<String> allianceChooser = new SendableChooser<>();
+    public static final SendableChooser<String> cubeChooser = new SendableChooser<>();
 
     public static HashMap<String, Command> eventMap = new HashMap<>();
     public static String scoreSelect;
@@ -31,7 +31,7 @@ public class Auto {
     public static String dockSelect;
     public static String levelSelect;
     public static String testSelect;
-    public static String allianceSelect;
+    public static String cubeSelect;
     public static String level = "";
 
     public static double armPosition;
@@ -56,11 +56,16 @@ public class Auto {
                                     "BlueShortCrossScale1", 4.0, 4.0);
     static PathPlannerTrajectory    BlueShortCrossScalePathB  = PathPlanner.loadPath(
                                     "BlueShortCrossScale2", 0.5, 0.5);
+    static PathPlannerTrajectory    BlueConeShortCrossScalePathA  = PathPlanner.loadPath(
+                                    "BlueConeShortCrossScale1", 4.0, 4.0);
     // ----- Red Short Cross and Scale Paths ------
     static PathPlannerTrajectory    RedShortCrossScalePathA  = PathPlanner.loadPath(
                                     "RedShortCrossScale1", 4.0, 4.0);
     static PathPlannerTrajectory    RedShortCrossScalePathB  = PathPlanner.loadPath(
                                     "RedShortCrossScale2", 0.5, 0.5);
+    static PathPlannerTrajectory    RedConeShortCrossScalePathA  = PathPlanner.loadPath(
+                                   "RedConeShortCrossScale1", 4.0, 4.0);
+
     // ----- red Right Cube Old Paths ----
     static PathPlannerTrajectory    redRightCubeShortPath  = PathPlanner.loadPath(
                                     "RedRightCubeShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);        
@@ -112,10 +117,9 @@ public class Auto {
         testChooser.addOption(         "Red 1 Meter",  "Red1Meter");
         testChooser.addOption(         "Blue 1 Meter", "Blue1Meter");
 
-        // // Selector for Aliance Color
-        // allianceChooser.setDefaultOption( "Automatic",    AutoConfig.kAlianceAutoSelect);
-        // allianceChooser.addOption(        "Red",          AutoConfig.kAlianceRedSelect);
-        // allianceChooser.addOption(        "Blue",         AutoConfig.kAlianceBlueSelect);
+        // Selector for Aliance Color
+        cubeChooser.setDefaultOption( "Cube",          AutoConfig.kCubeSelect);
+        cubeChooser.addOption(        "Cone",          AutoConfig.kConeSelect);
     }
 
 
@@ -127,14 +131,14 @@ public class Auto {
         dockSelect =      dockChooser.getSelected();
         levelSelect =     levelChooser.getSelected();
         // testSelect =      testChooser.getSelected();
-        // allianceSelect =  allianceChooser.getSelected();
+        cubeSelect =      cubeChooser.getSelected();
 
         System.out.println("Score Select = " +     scoreSelect);
         System.out.println("Position Select = " +  positionSelect);
         System.out.println("Cross Select = " +     crossSelect);
         System.out.println("Dock Select = " +      dockSelect);
         System.out.println("Level Select = " +     levelSelect);
-        System.out.println("Alliance Select = " +  allianceSelect);
+        System.out.println("Cube Select = " +       cubeSelect);
         // System.out.println("Test Select = " +      testSelect);
     }
 
@@ -239,8 +243,20 @@ public class Auto {
             // This is only setup for the Sort line BlueLeft and RedRight position
             // to avoid 4 mps over cable tray on long cross
             System.out.println("********* Score cross line and get on Platform Selection *********");
-            if ( blueLeft())  { return AutoCmds.CrossShortAndScaleCmd( level,  BlueShortCrossScalePathA, BlueShortCrossScalePathB); }
-            if ( redRight())  { return AutoCmds.CrossShortAndScaleCmd( level,  RedShortCrossScalePathA, RedShortCrossScalePathB); }
+            if ( blueLeft())  {
+                if ( cube() ) {
+                    return AutoCmds.CrossShortAndScaleCmd( level,  BlueShortCrossScalePathA, BlueShortCrossScalePathB);
+                } else {
+                    return AutoCmds.CrossShortAndScaleCmd( level,  BlueConeShortCrossScalePathA, BlueShortCrossScalePathB);
+                }
+            }
+            if ( redRight())  {
+                if ( cube() ){
+                    return AutoCmds.CrossShortAndScaleCmd( level,  RedShortCrossScalePathA, RedShortCrossScalePathB);
+                } else {
+                    return AutoCmds.CrossShortAndScaleCmd( level,  RedConeShortCrossScalePathA, RedShortCrossScalePathB);
+                }
+            }
             return new PrintCommand("Error on auto place cross short and dock paramter");
         }
 
@@ -252,8 +268,20 @@ public class Auto {
             if ( low() )      {level = "Low";}
             if ( mid() )      {level = "Mid";}
             if ( high() )     {level = "High";}
-            if ( blueLeft())  { return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  BlueShortCrossScalePathA, BlueShortCrossScalePathB); }
-            if ( redRight())  { return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  RedShortCrossScalePathA, RedShortCrossScalePathB); }
+            if ( blueLeft())  {
+                if ( cube() ) {
+                    return AutoCmds.CrossShortAndScaleCmd( level,  BlueShortCrossScalePathA, BlueShortCrossScalePathB);
+                } else {
+                    return AutoCmds.CrossShortAndScaleCmd( level,  BlueConeShortCrossScalePathA, BlueShortCrossScalePathB);
+                }
+            }
+            if ( redRight())  {
+                if ( cube() ){
+                    return AutoCmds.CrossShortAndScaleCmd( level,  RedShortCrossScalePathA, RedShortCrossScalePathB);
+                } else {
+                    return AutoCmds.CrossShortAndScaleCmd( level,  RedConeShortCrossScalePathA, RedShortCrossScalePathB);
+                }
+            }
             return new PrintCommand("Error on auto place cross short and dock paramter");
         }
 
@@ -384,6 +412,15 @@ public class Auto {
 
     private static boolean high() {
         if (scoreSelect.equals(AutoConfig.kHighSelect)) { return true; }
+        return false;
+    }
+
+    private static boolean cube() {
+        if (cubeSelect.equals(AutoConfig.kCubeSelect)) { return true; }
+        return false;
+    }
+    private static boolean cone() {
+        if (cubeSelect.equals(AutoConfig.kConeSelect)) { return true; }
         return false;
     }
 
