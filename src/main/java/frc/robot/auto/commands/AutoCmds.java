@@ -105,7 +105,7 @@ public class AutoCmds {
         );
     }
 
-    // -------------- Place, Cross Short Line and get on Charging Station Comands ---------------------
+    // -------------- NO Place, Cross Short Line and get on Charging Station Comands ---------------------
     // This only used for short cross Red and Blue
     public static Command CrossShortAndScaleCmd( String level,
                                                  PathPlannerTrajectory pathA,
