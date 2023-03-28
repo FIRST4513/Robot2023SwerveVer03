@@ -46,22 +46,12 @@ public class AutoCmds {
         if (level == "Low") {
             // Set position and Gyro Heading based on position
             return new SequentialCommandGroup(
-                // ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
-                // OperatorGamepadCmds.SetArmElevToEjectLowPosSafeCmd(),
-                // IntakeCmds.IntakeEjectUntilNoGamepieceCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
-                // IntakeCmds.IntakeStopCmd(),
-                // OperatorGamepadCmds.SetArmElevToStorePosFromLowSafeCmd()
                 IntakeCmds.IntakeEjectRunCmd().withTimeout(0.25)
             );
         }
         if (level == "Mid") {
             // Set position and Gyro Heading based on position
             return new SequentialCommandGroup(           
-                // ArmParkedToStorePosCmd().withTimeout(6.0),  // Move Arm from parked to store pos
-                // OperatorGamepadCmds.SetArmElevToEjectMidPosSafeCmd(),
-                // IntakeCmds.IntakeEjectUntilNoGamepieceCmd().raceWith(IntakeCmds.holdArmAndElevCmd()),
-                // IntakeCmds.IntakeStopCmd(),
-                // OperatorGamepadCmds.SetArmElevToStorePosFromMidSafeCmd()
                 IntakeCmds.IntakeHoldRunCmd().withTimeout(.01),
                 ArmElevComboMoveCmds.SetArmRunElevMidPosCmd(),
                 new DelayCmd(3.0).until(() -> Robot.arm.isMMtargetReached()),
