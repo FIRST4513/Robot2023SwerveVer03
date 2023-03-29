@@ -53,18 +53,18 @@ public class Auto {
                                     "CtrScale2", 2.0, 1.0);
     // ----- Blue Short Cross and Scale Paths ------
     static PathPlannerTrajectory    BlueShortCrossScalePathA  = PathPlanner.loadPath(
-                                    "BlueShortCrossScale1", 4.0, 4.0);
+                                    "BlueShortCrossScale1", 4.5, 4.5);
     static PathPlannerTrajectory    BlueShortCrossScalePathB  = PathPlanner.loadPath(
                                     "BlueShortCrossScale2", 0.5, 0.5);
     static PathPlannerTrajectory    BlueConeShortCrossScalePathA  = PathPlanner.loadPath(
-                                    "BlueConeShortCrossScale1", 4.0, 4.0);
+                                    "BlueConeShortCrossScale1", 4.5, 4.5);
     // ----- Red Short Cross and Scale Paths ------
     static PathPlannerTrajectory    RedShortCrossScalePathA  = PathPlanner.loadPath(
-                                    "RedShortCrossScale1", 4.0, 4.0);
+                                    "RedShortCrossScale1", 4.5, 4.5);
     static PathPlannerTrajectory    RedShortCrossScalePathB  = PathPlanner.loadPath(
                                     "RedShortCrossScale2", 0.5, 0.5);
     static PathPlannerTrajectory    RedConeShortCrossScalePathA  = PathPlanner.loadPath(
-                                   "RedConeShortCrossScale1", 4.0, 4.0);
+                                   "RedConeShortCrossScale1", 4.5, 4.5);
 
     // ----- red Right Cube Old Paths ----
     static PathPlannerTrajectory    redRightCubeShortPath  = PathPlanner.loadPath(
@@ -270,16 +270,16 @@ public class Auto {
             if ( high() )     {level = "High";}
             if ( blueLeft())  {
                 if ( cube() ) {
-                    return AutoCmds.CrossShortAndScaleCmd( level,  BlueShortCrossScalePathA, BlueShortCrossScalePathB);
+                    return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  BlueShortCrossScalePathA, BlueShortCrossScalePathB);
                 } else {
-                    return AutoCmds.CrossShortAndScaleCmd( level,  BlueConeShortCrossScalePathA, BlueShortCrossScalePathB);
+                    return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  BlueConeShortCrossScalePathA, BlueShortCrossScalePathB);
                 }
             }
             if ( redRight())  {
                 if ( cube() ){
-                    return AutoCmds.CrossShortAndScaleCmd( level,  RedShortCrossScalePathA, RedShortCrossScalePathB);
+                    return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  RedShortCrossScalePathA, RedShortCrossScalePathB);
                 } else {
-                    return AutoCmds.CrossShortAndScaleCmd( level,  RedConeShortCrossScalePathA, RedShortCrossScalePathB);
+                    return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  RedConeShortCrossScalePathA, RedShortCrossScalePathB);
                 }
             }
             return new PrintCommand("Error on auto place cross short and dock paramter");

@@ -94,7 +94,7 @@ public class PilotGamepad extends Gamepad {
     }
 
     public double getDriveRotationCCWPositiveSlow() {
-        return getDriveRotationCCWPositive()/2;
+        return getDriveRotationCCWPositive()/4;
     }
 
     // Return the angle created by the left stick in radians, 0 is up, pi/2 is left

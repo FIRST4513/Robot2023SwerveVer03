@@ -51,7 +51,7 @@ public class OperatorGamepad extends Gamepad {
         gamepad.yButton      .onTrue(IntakeCmds.IntakeHoldRunCmd());
         gamepad.xButton      .onTrue(IntakeCmds.IntakeStopCmd());
 
-        gamepad.selectButton.whileTrue(new CenterDriveOnCmd());             // keep as button???
+        gamepad.selectButton.onTrue(new CenterDriveOnCmd());             // keep as button???
         gamepad.startButton  .onTrue(ArmCmds.ResetArmEncoderCmd());
         
         gamepad.Dpad.Right   .onTrue(OperatorGamepadCmds.RunArmElevToStowPosCmd());

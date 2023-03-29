@@ -64,6 +64,7 @@ public class RobotTelemetry extends TelemetrySubsystem {
         tab.add("Cross Selection",     Auto.crossChooser)     .withPosition(0, 4).withSize(3, 1);
         tab.add("Dock Selection",      Auto.dockChooser)      .withPosition(0, 6).withSize(3, 1);
         tab.add("Level Selection",     Auto.levelChooser)     .withPosition(0, 8).withSize(3, 1);
+        tab.add("Cube Selection",     Auto.cubeChooser)     .withPosition(3, 8).withSize(3, 1);
 
         tab.addNumber("Elev Ht",         () -> Robot.elevator.getElevHeightInches())    .withPosition(3, 0).withSize(2, 1);
         tab.addNumber("Elev MM Tgt",     () -> Robot.elevator.getTargetHeight())        .withPosition(3, 1).withSize(2, 1);

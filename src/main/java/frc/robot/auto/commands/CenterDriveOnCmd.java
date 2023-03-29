@@ -1,11 +1,15 @@
 package frc.robot.auto.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 
 public class CenterDriveOnCmd extends CommandBase {
     private double balanceEffort; // The effort the robot should use to balance
     private double currentIncline;
+    private Timer cmdTimer;
+    private double accelerationTime = 1.0;
+    private double settleTime = 1.0;  // 0.5;
 
     private double lastAngle1      = 0;
     private double lastAngle2      = 0;
@@ -14,11 +18,15 @@ public class CenterDriveOnCmd extends CommandBase {
     private double avgRunningAngle = 0;
     private double maxAvgAngle     = 0;
 
-    private double APPROACH_SPEED  = -0.5;
-    private double CLIMB_SPEED     = -0.5;
+    private double timesAngleAbove12 = 0;
 
-    private static enum DRIVE_STAGE { APPROACH, RAISE, CLIMB, CENTERED }
+    private double APPROACH_SPEED  = -1.4;
+    private double CLIMB_SPEED     = -1.4;
+
+    private static enum DRIVE_STAGE { TIME_DRIVE, ACCELERATION, APPROACH, SETTLE, CLIMB, CENTERED }
     private DRIVE_STAGE driveStage;
+
+    public double initRobotX;
 
     public CenterDriveOnCmd() {
         addRequirements(Robot.swerve);
@@ -29,55 +37,91 @@ public class CenterDriveOnCmd extends CommandBase {
     public void initialize() {
         System.out.println("CTR DRIVE - Initiated");
         Robot.swerve.setBrakeMode(true);
+        // driveStage = DRIVE_STAGE.TIME_DRIVE;
         driveStage = DRIVE_STAGE.APPROACH;
+        cmdTimer = new Timer();
+        cmdTimer.reset();
+        cmdTimer.start();
+        initRobotX = Robot.swerve.odometry.getPoseMeters().getX();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         // update gryo angle variables
-        updateAverages();
+        // updateAverages();
+        System.out.println(Robot.swerve.gyro.getGyroInclineAngle());
 
-        // first, check for FLAT stage
+        if (driveStage == DRIVE_STAGE.TIME_DRIVE) {
+            updateAverages();
+
+            if (cmdTimer.get() > 2.0) {
+                driveStage = DRIVE_STAGE.CENTERED;
+                System.out.println("CTR DRIVE - was time driving, now centered");
+                return;
+            }
+            Robot.swerve.drive(APPROACH_SPEED, 0, 0, false, false);
+            System.out.println("CTR DRIVE - time driving, avg angle: " + avgRunningAngle + ", ta12: " + timesAngleAbove12);
+            return;
+        }
+
+        if (driveStage == DRIVE_STAGE.ACCELERATION) {
+            if (cmdTimer.get() > accelerationTime) {
+                driveStage = DRIVE_STAGE.APPROACH;
+                System.out.println("CTR DRIVE - was accelerating, now approaching");
+                return;
+            }
+            System.out.println("CTR DRIVE - accelerating, timer: " + cmdTimer.get());
+            return;
+        }
+
         if (driveStage == DRIVE_STAGE.APPROACH) {
-            // check for gyro angle greater than a certain amount of degrees
-            if (avgRunningAngle > 3) {
-                driveStage = DRIVE_STAGE.RAISE;
-                System.out.println("CTR DRIVE - Was approaching, now raising");
+            updateAverages();
+            
+            // check if angle is consistently above 12
+            if (timesAngleAbove12 > 10) {
+                driveStage = DRIVE_STAGE.SETTLE;
+                cmdTimer.reset();
+                cmdTimer.start();
+                System.out.println("CTR DRIVE - was approaching, now settling");
                 return;
             }
-            // if flat, drive forward at slow-ish speed
+            // approaching
             Robot.swerve.drive(APPROACH_SPEED, 0, 0, false, false);
-            System.out.println("CTR DRIVE - Approaching, average angle: " + avgRunningAngle);
+            System.out.println("CTR DRIVE - approaching, avg angle: " + avgRunningAngle + ", ta12: " + timesAngleAbove12);
             return;
         }
-        else if (driveStage == DRIVE_STAGE.RAISE) {
-            // check if gyro angle is less than max degrees - 2
-            if (avgRunningAngle < (maxAvgAngle - 3)) {
+
+        if (driveStage == DRIVE_STAGE.SETTLE) {
+            updateAverages();
+
+            if (cmdTimer.get() > settleTime) {
                 driveStage = DRIVE_STAGE.CLIMB;
-                System.out.println("CTR DRIVE - Was raising, now climbing");
+                System.out.println("CTR DRIVE - was settling, now climbing");
                 return;
             }
-            // else, continue to drive slow-ish
-            Robot.swerve.drive(APPROACH_SPEED, 0, 0, false, false);
-            System.out.println("CTR DRIVE - Raising, average angle: " + avgRunningAngle);
+            System.out.println("CTR DRIVE - settling, timer: " + cmdTimer.get());
+            Robot.swerve.drive(0.1, 0, 0, false, false);
             return;
         }
-        else if (driveStage == DRIVE_STAGE.CLIMB) {
-            // check if drive angle is "starting" to fall down
+
+        if (driveStage == DRIVE_STAGE.CLIMB) {
+            updateAverages();
+
+            // check if angle is probably less than 10
             if (avgRunningAngle < 10) {
                 driveStage = DRIVE_STAGE.CENTERED;
-                System.out.println("CTR DRIVE - Was climbing, now centered");
+                System.out.println("CTR DRIVE - was climbing, now centered");
                 return;
             }
-            // else, drive a little faster
+            // climbing
             Robot.swerve.drive(CLIMB_SPEED, 0, 0, false, false);
-            System.out.println("CTR DRIVE - Climbing, average angle: " + avgRunningAngle);
+            System.out.println("CTR DRIVE - climbing, avg angle: " + avgRunningAngle);
             return;
         }
-        else if (driveStage == DRIVE_STAGE.CENTERED) {
-            // do nothing, is finished will call find it an exit the command
-            System.out.println("CTR DRIVE - Centered, average angle: " + avgRunningAngle);
+        
+        if (driveStage == DRIVE_STAGE.CENTERED) {
+            // nothing
         }
     }
 
@@ -93,6 +137,9 @@ public class CenterDriveOnCmd extends CommandBase {
     public boolean isFinished() {
         if (driveStage == DRIVE_STAGE.CENTERED) {
             System.out.println("CTR DRIVE - Centered, exiting");
+            return true;
+        }
+        if (avgRunningAngle < -10) {
             return true;
         }
         return false;
@@ -112,6 +159,12 @@ public class CenterDriveOnCmd extends CommandBase {
             if (avgRunningAngle > maxAvgAngle) {
                 maxAvgAngle = avgRunningAngle;
             }
+        }
+
+        if (avgRunningAngle > 12) {
+            timesAngleAbove12++;
+        } else {
+            timesAngleAbove12 = 0;
         }
     }
 }
