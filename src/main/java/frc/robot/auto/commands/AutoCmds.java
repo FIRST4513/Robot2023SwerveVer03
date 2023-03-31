@@ -98,15 +98,12 @@ public class AutoCmds {
     // -------------- NO Place, Cross Short Line and get on Charging Station Comands ---------------------
     // This only used for short cross Red and Blue
     public static Command CrossShortAndScaleCmd( String level,
-                                                 PathPlannerTrajectory pathA,
-                                                 PathPlannerTrajectory pathB ) {
+                                                 PathPlannerTrajectory pathA) {
         return new SequentialCommandGroup(  
             TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathA, 10.0),
-            new PrintAutoTimeCmd("************* Cross and Scale Path A Command Complete time = "),
-            TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 5.0),
-            new PrintAutoTimeCmd("************* Cross and Scale Path B Command Complete time = "),
-            AutoBalanceCmd().withTimeout(3.0),
-            new PrintAutoTimeCmd("************* Cross and Scale AutoBalance Command Complete time = "),
+            new PrintAutoTimeCmd("************* Cross and Scale Path Command Complete time = "),
+            new CenterDriveOnCmd(),
+            new PrintAutoTimeCmd("************* Cross and Scale Center Command Complete time = "),
             new LockSwerve()
         );
     }
@@ -114,32 +111,31 @@ public class AutoCmds {
     // -------------- Place, Cross Short Line and get on Charging Station Comands ---------------------
     // This only used for short cross Red and Blue
     public static Command PlaceAndCrossShortAndScaleCmd( String level,
-                                                          PathPlannerTrajectory pathA,
-                                                          PathPlannerTrajectory pathB ) {
+                                                          PathPlannerTrajectory pathA) {
         return new SequentialCommandGroup(  
             PlaceOnlyCmd(level),
             new SequentialCommandGroup(  
                 TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathA, 10.0),
-                new PrintAutoTimeCmd("************* Cross and Scale Path A Command Complete time = "),
-                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 5.0),
-                new PrintAutoTimeCmd("************* Cross and Scale Path B Command Complete time = "),
-                AutoBalanceCmd().withTimeout(3.0),
-                new PrintAutoTimeCmd("************* Cross and Scale AutoBalance Command Complete time = "),
+                new PrintAutoTimeCmd("************* Cross and Scale Path Command Complete time = "),
+                new CenterDriveOnCmd(),
+                new PrintAutoTimeCmd("************* Cross and Scale Center Command Complete time = "),
                 new LockSwerve()
             )
         );
     }
 
     // ----------------------- Get on Charging Platform  -------------------
-    public static Command GetOnChargingTableCmd( PathPlannerTrajectory pathA, PathPlannerTrajectory pathB, boolean autoLevel ) {
+    public static Command GetOnChargingTableCmd( PathPlannerTrajectory path, boolean autoLevel ) {
         if (autoLevel) {
-            return new SequentialCommandGroup(  
+            return new SequentialCommandGroup(
                 // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathA, 10.0),
                 // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 10.0),
                 // AutoBalanceCmd().withTimeout(3.0),
                 // new LockSwerve()
+                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path, 5),
+                new PrintAutoTimeCmd("************* Get On Charging table Command Path Complete time = "),
                 new CenterDriveOnCmd(),
-                new PrintAutoTimeCmd("************* Get On Charging table Command Complete time = "),
+                new PrintAutoTimeCmd("************* Get On Charging table Command Center Complete time = "),
                 new LockSwerve()
             );
         }
@@ -148,6 +144,7 @@ public class AutoCmds {
                 // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathA, 10.0),
                 // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(pathB, 10.0),
                 // new LockSwerve()
+                TrajectoriesCmds.IntializeRobotAndFollowPathCmd(path, 5),
                 new CenterDriveOnCmd(),
                 new PrintAutoTimeCmd("************* Get On Charging table Command Complete time = "),
                 // new AutoBalanceCommand(),
@@ -158,10 +155,10 @@ public class AutoCmds {
     }
 
     // ----------------------- Score and Get on Charging Platform  -------------------
-    public static Command PlaceAndChargingTableCmd( String level, PathPlannerTrajectory pathA, PathPlannerTrajectory pathB, boolean autoLevel ) {
+    public static Command PlaceAndChargingTableCmd( String level, PathPlannerTrajectory path, boolean autoLevel ) {
         return new SequentialCommandGroup(  
             PlaceCmd(level),
-            GetOnChargingTableCmd( pathA, pathB, autoLevel )
+            GetOnChargingTableCmd( path, autoLevel )
         );
     }
 

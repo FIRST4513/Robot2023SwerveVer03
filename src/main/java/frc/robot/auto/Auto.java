@@ -47,10 +47,13 @@ public class Auto {
     static PathPlannerTrajectory    blueLeftCubeShortPath  = PathPlanner.loadPath(
                                     "BlueLeftCubeShort", AutoConfig.kMaxSpeed, AutoConfig.kMaxAccel);    
     // ----- Center Scale Paths ------                                     
-    static PathPlannerTrajectory    CenterScalePathA  = PathPlanner.loadPath(
-                                    "CtrScale1", 3.0, 4.0);
-    static PathPlannerTrajectory    CenterScalePathB  = PathPlanner.loadPath(
-                                    "CtrScale2", 2.0, 1.0);
+    // static PathPlannerTrajectory    CenterScalePathA  = PathPlanner.loadPath(
+    //                                 "CtrScale1", 3.0, 4.0);
+    // static PathPlannerTrajectory    CenterScalePathB  = PathPlanner.loadPath(
+    //                                 "CtrScale2", 2.0, 1.0);
+    static PathPlannerTrajectory    CenterScalePath = PathPlanner.loadPath(
+                                    "CtrScale", 1.0, 1.0);
+
     // ----- Blue Short Cross and Scale Paths ------
     static PathPlannerTrajectory    BlueShortCrossScalePathA  = PathPlanner.loadPath(
                                     "BlueShortCrossScale1", 4.5, 4.5);
@@ -224,7 +227,7 @@ public class Auto {
                 // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePathA, 5.0),
                 // TrajectoriesCmds.IntializeRobotAndFollowPathCmd(CenterScalePathB, 5.0)
                 // AutoCmds.AutoBalanceCmd()
-                AutoCmds.GetOnChargingTableCmd(CenterScalePathA, CenterScalePathB, autoLevel())
+                AutoCmds.GetOnChargingTableCmd(CenterScalePath, autoLevel())
             );
         }
 
@@ -232,9 +235,9 @@ public class Auto {
         if (place() && !cross() && dock()) {
             System.out.println("********* Score and get on Platform from CTR Only Selection *********");
             // if auto level
-            if ( low() )    { return AutoCmds.PlaceAndChargingTableCmd( "Low",  CenterScalePathA, CenterScalePathB, autoLevel()); }
-            if ( mid() )    { return AutoCmds.PlaceAndChargingTableCmd( "Mid",  CenterScalePathA, CenterScalePathB, autoLevel()); }
-            if ( high() )   { return AutoCmds.PlaceAndChargingTableCmd( "High", CenterScalePathA, CenterScalePathB, autoLevel()); }
+            if ( low() )    { return AutoCmds.PlaceAndChargingTableCmd( "Low",  CenterScalePath, autoLevel()); }
+            if ( mid() )    { return AutoCmds.PlaceAndChargingTableCmd( "Mid",  CenterScalePath, autoLevel()); }
+            if ( high() )   { return AutoCmds.PlaceAndChargingTableCmd( "High", CenterScalePath, autoLevel()); }
             return new PrintCommand("Error on auto place only paramter");
         }
 
@@ -245,16 +248,16 @@ public class Auto {
             System.out.println("********* Score cross line and get on Platform Selection *********");
             if ( blueLeft())  {
                 if ( cube() ) {
-                    return AutoCmds.CrossShortAndScaleCmd( level,  BlueShortCrossScalePathA, BlueShortCrossScalePathB);
+                    return AutoCmds.CrossShortAndScaleCmd( level,  BlueShortCrossScalePathA);
                 } else {
-                    return AutoCmds.CrossShortAndScaleCmd( level,  BlueConeShortCrossScalePathA, BlueShortCrossScalePathB);
+                    return AutoCmds.CrossShortAndScaleCmd( level,  BlueConeShortCrossScalePathA);
                 }
             }
             if ( redRight())  {
                 if ( cube() ){
-                    return AutoCmds.CrossShortAndScaleCmd( level,  RedShortCrossScalePathA, RedShortCrossScalePathB);
+                    return AutoCmds.CrossShortAndScaleCmd( level,  RedShortCrossScalePathA);
                 } else {
-                    return AutoCmds.CrossShortAndScaleCmd( level,  RedConeShortCrossScalePathA, RedShortCrossScalePathB);
+                    return AutoCmds.CrossShortAndScaleCmd( level,  RedConeShortCrossScalePathA);
                 }
             }
             return new PrintCommand("Error on auto place cross short and dock paramter");
@@ -270,16 +273,16 @@ public class Auto {
             if ( high() )     {level = "High";}
             if ( blueLeft())  {
                 if ( cube() ) {
-                    return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  BlueShortCrossScalePathA, BlueShortCrossScalePathB);
+                    return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  BlueShortCrossScalePathA);
                 } else {
-                    return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  BlueConeShortCrossScalePathA, BlueShortCrossScalePathB);
+                    return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  BlueConeShortCrossScalePathA);
                 }
             }
             if ( redRight())  {
                 if ( cube() ){
-                    return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  RedShortCrossScalePathA, RedShortCrossScalePathB);
+                    return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  RedShortCrossScalePathA);
                 } else {
-                    return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  RedConeShortCrossScalePathA, RedShortCrossScalePathB);
+                    return AutoCmds.PlaceAndCrossShortAndScaleCmd( level,  RedConeShortCrossScalePathA);
                 }
             }
             return new PrintCommand("Error on auto place cross short and dock paramter");
