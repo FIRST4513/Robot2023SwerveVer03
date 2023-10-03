@@ -39,20 +39,11 @@ public class PilotGamepad extends Gamepad {
     }
 
     public void setupTeleopButtons() {
-        // "A" and "X" Button - intake eject and rpv
-        gamepad.aButton.onTrue(IntakeCmds.IntakeEjectRunCmd());
+        // "X" Button - Robot POV
         gamepad.xButton.whileTrue(PilotGamepadCmds.RpvPilotSwerveCmd());
         
         // "Start" Button - Reset Gyro to 0
         gamepad.startButton.onTrue(SwerveCmds.ZeroGyroHeadingCmd());  // possible reset robo odo as well?
-        
-        // DPAD - Set Common Arm and Elev positions
-        gamepad.Dpad.Down.onTrue(OperatorGamepadCmds.RunArmElevToStowPosCmd());
-        gamepad.Dpad.Up.onTrue(OperatorGamepadCmds.RunArmElevToIntakePosCmd());
-        gamepad.Dpad.Left.onTrue(IntakeCmds.IntakeHoldRunCmd());
-
-        // LEFT BUMPER - Stop Intake Motor(s)
-        gamepad.leftBumper.onTrue(IntakeCmds.IntakeStopCmd());
         
         // Disabled and non working buttons -> commands, will test in future:
         // gamepad.rightBumper.onTrue(PilotGamepadCmds.BasicSnapCmd());  // basic snap (turn-in-place)
@@ -107,16 +98,14 @@ public class PilotGamepad extends Gamepad {
     public MaxSpeeds getSelectedSpeed(){
         String speed = speedChooser.getSelected();;
         if ( speed == "Fast")    return MaxSpeeds.FAST;
-        if ( speed == "MedFast") return MaxSpeeds.MEDFAST;
-        if ( speed == "MedSlow") return MaxSpeeds.MEDSLOW;
+        if ( speed == "Medium") return MaxSpeeds.MEDIUM;
         return MaxSpeeds.SLOW;
     }
 
     public void setupSpeedMenu(){
             // Setup Speed Selector
-            speedChooser.addOption        ("1. SLOW",      "Slow");
-            speedChooser.addOption        ("2. MED. Slow", "MedSlow");
-            speedChooser.setDefaultOption ("3. MED. Fast", "MedFast");
+            speedChooser.addOption        ("1. Slow",      "Slow");
+            speedChooser.addOption        ("2. Medium", "Medium");
             speedChooser.addOption        ("4. Fast", 	   "Fast");
             SmartDashboard.putData(speedChooser);
     }
@@ -132,26 +121,17 @@ public class PilotGamepad extends Gamepad {
                 // sidewaysSpeedCurve.setExpVal(PilotGamepadConfig.FastSidewaysExp);
                 // rotationCurve.setExpVal(PilotGamepadConfig.FastRotationExp);
                 break;
-            case MEDFAST:
-                System.out.println("Driver Speeds set to MEDFAST !!!");
-                forwardSpeedCurve.setScalar(PilotGamepadConfig.MedFastforwardVelocity);
-                sidewaysSpeedCurve.setScalar(PilotGamepadConfig.MedFastsidewaysVelocity);
-                rotationCurve.setScalar(PilotGamepadConfig.MedFastsidewaysVelocity);
-                // forwardSpeedCurve.setExpVal(PilotGamepadConfig.MedFastForwardExp);
-                // sidewaysSpeedCurve.setExpVal(PilotGamepadConfig.MedFastSidewaysExp);
-                // rotationCurve.setExpVal(PilotGamepadConfig.MedFastRotationExp);
-                break;
-            case MEDSLOW:
-                System.out.println("Driver Speeds set to MEDSLOW !!!");
-                forwardSpeedCurve.setScalar(PilotGamepadConfig.MedSlowforwardVelocity);
-                sidewaysSpeedCurve.setScalar(PilotGamepadConfig.MedSlowsidewaysVelocity);
-                rotationCurve.setScalar(PilotGamepadConfig.MedSlowsidewaysVelocity);
+            case MEDIUM:
+                System.out.println("Driver Speeds set to MEDIUM !!!");
+                forwardSpeedCurve.setScalar(PilotGamepadConfig.MediumForwardVelocity);
+                sidewaysSpeedCurve.setScalar(PilotGamepadConfig.MediumSidewaysVelocity);
+                rotationCurve.setScalar(PilotGamepadConfig.MediumSidewaysVelocity);
                 // forwardSpeedCurve.setExpVal(PilotGamepadConfig.MedSlowForwardExp);
                 // sidewaysSpeedCurve.setExpVal(PilotGamepadConfig.MedSlowSidewaysExp);
                 // rotationCurve.setExpVal(PilotGamepadConfig.FastRotationExp);
                 break;
             default:
-                System.out.println("Driver Speeds set to Slow !!!");
+                System.out.println("Driver Speeds set to SLOW !!!");
                 forwardSpeedCurve.setScalar(PilotGamepadConfig.SlowforwardVelocity);
                 sidewaysSpeedCurve.setScalar(PilotGamepadConfig.SlowsidewaysVelocity);
                 rotationCurve.setScalar(PilotGamepadConfig.SlowsidewaysVelocity);

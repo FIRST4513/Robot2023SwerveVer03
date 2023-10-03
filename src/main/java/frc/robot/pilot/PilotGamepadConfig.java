@@ -6,29 +6,21 @@ import edu.wpi.first.math.geometry.Translation2d;
 public class PilotGamepadConfig {
     public static final int port = 0;
 
-    public static enum MaxSpeeds {FAST, MEDFAST, MEDSLOW, SLOW}
+    public static enum MaxSpeeds {FAST, MEDIUM, SLOW}
 
     // Selectable speeds
     //----Fast-----//
-    public static final double FastfowardVelocity       = -4.8;
-    public static final double FastsidewaysVelocity     = -4.8;
+    public static final double FastfowardVelocity       = -4.9;
+    public static final double FastsidewaysVelocity     = -4.9;
     public static final double FastrotationVelocity     = 0.25;
     public static final double FastForwardExp           = 30;
     public static final double FastSidewaysExp          = 30;
     public static final double FastRotationExp          = 20;
 
-    //---Medium Fast---///
-    public static final double MedFastforwardVelocity   = -4.9;
-    public static final double MedFastsidewaysVelocity  = -4.9;
-    public static final double MedFastrotationVelocity  = 0.25;
-    public static final double MedFastForwardExp        = 30;
-    public static final double MedFastSidewaysExp       = 30;
-    public static final double MedFastRotationExp       = 20;
-
-    //---Medium Slow--//
-    public static final double MedSlowforwardVelocity   = -1.5;
-    public static final double MedSlowsidewaysVelocity  = -1.5;
-    public static final double MedSlowrotationVelocity  = 0.25;
+    //---Medium--//
+    public static final double MediumForwardVelocity   = -2.0;
+    public static final double MediumSidewaysVelocity  = -2.0;
+    public static final double MediumRotationVelocity  = 0.25;
     public static final double MedSlowForwardExp        = 30;
     public static final double MedSlowSidewaysExp       = 30;
     public static final double MedSlowRotationExp       = 20;
