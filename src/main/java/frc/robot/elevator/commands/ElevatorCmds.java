@@ -16,7 +16,7 @@ public class ElevatorCmds {
 
     // Default Command
     public static void setupDefaultCommand() {
-        Robot.elevator.setDefaultCommand(ElevByJoystickCmd());
+        // Robot.elevator.setDefaultCommand(ElevByJoystickCmd());
     }
 
     // ---------------- Elev Motion Stop Commands --------------

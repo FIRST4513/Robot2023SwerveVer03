@@ -10,7 +10,7 @@ public class ArmCmds {
     // Default Command
     /** Set default command to turn off the rumble */
     public static void setupDefaultCommand() {
-        Robot.arm.setDefaultCommand(ArmByJoystickCmd());
+        // Robot.arm.setDefaultCommand(ArmByJoystickCmd());
     }
 
     // ---------------- Arm Motion Stop Commands --------------
