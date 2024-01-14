@@ -14,14 +14,14 @@ public class FollowTrajectoryCmd extends PPSwerveControllerCommand {
     /** Creates a new FollowTrajectory. */
     public FollowTrajectoryCmd(PathPlannerTrajectory trajectory) {
         super(
-                trajectory,
-                Robot.swerve::getPoseMeters,
-                SwerveConfig.swerveKinematics,
-                Robot.trajectories.xController,
-                Robot.trajectories.yController,
-                Robot.trajectories.thetaController,
-                Robot.swerve::setModuleStates,
-                Robot.swerve);
+                trajectory,                          // a path to follow
+                Robot.swerve::getPoseMeters,         // getter for current position
+                SwerveConfig.swerveKinematics,       // chassis dimensions/geometry
+                Robot.trajectories.xController,      // PID controller X
+                Robot.trajectories.yController,      // PID controller Y
+                Robot.trajectories.thetaController,  // PID controller rotation
+                Robot.swerve::setModuleStates,       // setter for driving wheels
+                Robot.swerve);                       // subsystem required for the command
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(Robot.swerve);
